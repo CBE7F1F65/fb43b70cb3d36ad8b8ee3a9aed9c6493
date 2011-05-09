@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="HelloWorld"
+	ProjectGUID="{A3361AA0-5925-4A8C-B63B-A9CB108DDFED}"
+	VCNestedProjectGUID="{B8BF9E81-35FD-4582-BA1C-B85FA365BABB}"
+	VCNestedProjectFileName="HelloWorld.win32.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

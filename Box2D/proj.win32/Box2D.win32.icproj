@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="libBox2D"
+	ProjectGUID="{5D91FD52-D7D1-44F0-8FB4-A25976130D87}"
+	VCNestedProjectGUID="{929480E7-23C0-4DF6-8456-096D71547116}"
+	VCNestedProjectFileName="Box2D.win32.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

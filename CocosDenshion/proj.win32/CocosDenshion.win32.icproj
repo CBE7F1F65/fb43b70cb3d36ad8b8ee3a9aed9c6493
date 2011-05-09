@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="libCocosDenshion"
+	ProjectGUID="{A0660655-9C89-4F65-B5F8-052C1A36CAAE}"
+	VCNestedProjectGUID="{F8EDD7FA-9A51-4E80-BAEB-860825D2EAC6}"
+	VCNestedProjectFileName="CocosDenshion.win32.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

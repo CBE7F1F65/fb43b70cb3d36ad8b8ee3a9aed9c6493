@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="libchipmunk"
+	ProjectGUID="{348B23B3-C9EB-49B7-933B-3F029EAA9E98}"
+	VCNestedProjectGUID="{207BC7A9-CCF1-4F2F-A04D-45F72242AE25}"
+	VCNestedProjectFileName="chipmunk.win32.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>
