@@ -1,23 +1,14 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 
-// Resource
+#include <stdio.h>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+#define GAME_VERSION	0x130
+#define GAME_SIGNATURE	"h5nc"
 
-#define RESOURCE_PATH	"..\\Game\\Resource\\"
-
-#else
-
-#define RESOURCE_PATH	""
-
-#endif	// CC_PLATFORM_WIN32
-
-#define RESOURCE_SCRIPT_PATH	"Script\\"
-#define RESOURCE_SCRIPTBINFILE	"Script.dat"
-#define RESOURCE_DATA_PATH		"Data\\"
-#define RESOURCE_DATATABLEFILE	"Data\\DataTable.table"
-#define RESOURCE_RESBINFILE		"Data\\Resource.bin"
+#define M_PATHMAX		_MAX_PATH
+#define M_STRMAX		0x80
+#define M_STRITOAMAX	0x10
 
 
 // Zorder
@@ -39,3 +30,6 @@ enum
 };
 
 #endif
+
+// Assert
+#define ASSERTSTR_SECONDSINGLETON	"Attempted to allocate a second instance of a singleton."

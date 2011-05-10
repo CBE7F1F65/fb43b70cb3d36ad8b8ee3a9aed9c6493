@@ -50,7 +50,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=".;.\win32;.\Classes;..\..\..\cocos2dx;..\..\..\cocos2dx\include;..\..\..\cocos2dx\platform;..\..\..\cocos2dx\platform\third_party\win32\OGLES;..\..\..\;..\..\..\Box2D;..\..\..\CocosDenshion\Include"
-				PreprocessorDefinitions="WIN32;_WINDOWS;STRICT;_DEBUG;COCOS2D_DEBUG=1"
+				PreprocessorDefinitions="__WIN32;WIN32;_WINDOWS;STRICT;_DEBUG;COCOS2D_DEBUG=1"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -138,7 +138,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories=".;.\win32;.\Classes;..\..\..\cocos2dx;..\..\..\cocos2dx\include;..\..\..\cocos2dx\platform;..\..\..\cocos2dx\platform\third_party\win32\OGLES;..\..\..\;..\..\..\Box2D;..\..\..\CocosDenshion\Include"
-				PreprocessorDefinitions="WIN32;_WINDOWS;STRICT;NDEBUG"
+				PreprocessorDefinitions="__WIN32;WIN32;_WINDOWS;STRICT;NDEBUG"
 				ExceptionHandling="0"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -187,7 +187,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Performing copy resource from Resource to OutDir..."
-				CommandLine="xcopy /E /Q /Y &quot;$(ProjectDir)Resource\*.*&quot; &quot;$(OutDir)&quot;"
+				CommandLine="echo xcopy /E /Q /Y &quot;$(ProjectDir)Resource\*.*&quot; &quot;$(OutDir)&quot;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -203,7 +203,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\BResource.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\DataTable.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\HelloWorldScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Classes\LoadingScene.cpp"
 				>
 			</File>
 			<File
@@ -220,7 +232,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\BResource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Header\Const.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\DataTable.h"
 				>
 			</File>
 			<File
@@ -228,7 +248,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Classes\LoadingScene.h"
+				>
+			</File>
+			<File
 				RelativePath=".\win32\main.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\MainDependency.h"
 				>
 			</File>
 			<File
