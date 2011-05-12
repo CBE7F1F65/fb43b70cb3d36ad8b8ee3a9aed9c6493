@@ -36,6 +36,7 @@ void LoadingScene::LoadingCallBackFunc()
 	if (nCallBackCount == 1)
 	{
 		BResource::getInstance()->ReadAllTable();
+		BResource::getInstance()->ReadAllScript();
 	}
 	else
 	{

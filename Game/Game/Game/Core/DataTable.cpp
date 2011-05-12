@@ -46,6 +46,11 @@ DataTable::DataTable()
 DataTable::~DataTable()
 {
 	ReleaseFile();
+	if (g_DataTableSingleton)
+	{
+		delete g_DataTableSingleton;
+		g_DataTableSingleton = NULL;
+	}
 }
 
 DataTable * DataTable::getInstance()
@@ -123,7 +128,7 @@ bool DataTable::CheckHeader(BYTE type)
 
 	std::string pathKey = BResource::getInstance()->GetDataPath();
 	pathKey += nowfilename;
-	CCFileUtils::ccRemoveHDSuffixFromFile(pathKey);
+//	CCFileUtils::ccRemoveHDSuffixFromFile(pathKey);
 	pathKey = CCFileUtils::fullPathFromRelativePath(pathKey.c_str());
 
 	file = fopen(pathKey.c_str(), "rb");

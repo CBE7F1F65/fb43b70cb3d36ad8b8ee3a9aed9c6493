@@ -203,11 +203,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\BIOInterface.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\BResource.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\Core\DataTable.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua.cpp"
 				>
 			</File>
 			<File
@@ -232,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\BIOInterface.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Header\BResource.h"
 				>
 			</File>
@@ -241,6 +253,14 @@
 			</File>
 			<File
 				RelativePath=".\Header\DataTable.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Const.h"
 				>
 			</File>
 			<File

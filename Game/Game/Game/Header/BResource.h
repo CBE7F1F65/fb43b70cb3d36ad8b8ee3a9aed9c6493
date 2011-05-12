@@ -14,6 +14,8 @@ public:
 
 	bool Init();
 
+	bool ReadAllScript();
+
 	bool ReadAllTable();
 	bool PackData();
 	bool GainData();
