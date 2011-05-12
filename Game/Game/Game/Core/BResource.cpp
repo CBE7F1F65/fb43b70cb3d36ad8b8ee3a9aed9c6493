@@ -19,8 +19,8 @@ using namespace cocos2d;
 #define RESOURCE_SCRIPT_PATH	"Script\\"
 #define RESOURCE_SCRIPTBINFILE	"Script.dat"
 #define RESOURCE_DATA_PATH		"Data\\"
-#define RESOURCE_DATADEFINEFILE	"Data\\DataDefine.table"
-#define RESOURCE_RESBINFILE		"Data\\Resource.bin"
+#define RESOURCE_DATADEFINEFILE	"DataDefine.table"
+#define RESOURCE_RESBINFILE		"Resource.bin"
 
 static BResource * g_BResourceSingleton = NULL;
 
@@ -29,6 +29,7 @@ BResource::BResource()
 {
 	CCAssert(g_BResourceSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
 	ZeroMemory(datatablefilename, sizeof(char)*DATATABLEMAX*M_STRMAX);
+	strcpy(datatablefilename[0], RESOURCE_DATADEFINEFILE);
 }
 
 BResource::~BResource()
@@ -56,6 +57,11 @@ BResource * BResource::getInstance()
 		g_BResourceSingleton = new BResource();
 	}
 	return g_BResourceSingleton;
+}
+
+const char * BResource::GetDataPath()
+{
+	return RESOURCE_DATA_PATH;
 }
 
 char * BResource::getTableFileName(int index)
@@ -90,4 +96,11 @@ bool BResource::LoadTexture(int texindex /* = -1 */)
 bool BResource::FreeTexture(int texindex /* = -1 */)
 {
 	return false;
+}
+
+#define RESOURCE_LOADINGFILENAME	"Loading.png"
+
+const char * BResource::getLoadingFileName()
+{
+	return RESOURCE_LOADINGFILENAME;
 }

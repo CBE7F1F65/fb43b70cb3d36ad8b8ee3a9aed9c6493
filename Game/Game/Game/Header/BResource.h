@@ -21,7 +21,10 @@ public:
 	bool LoadTexture(int texindex = -1);
 	bool FreeTexture(int texindex = -1);
 
+	const char * GetDataPath();
 	char * getTableFileName(int index);
+
+	const char * getLoadingFileName();
 
 public:
 	char datatablefilename[DATATABLEMAX][M_STRMAX];

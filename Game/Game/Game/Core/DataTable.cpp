@@ -8,7 +8,7 @@ using namespace cocos2d;
 static DataTable * g_DataTableSingleton = NULL;
 
 enum{
-	DATATYPE_DATADEFINE			= 50,
+	DATATYPE_DATADEFINE			= 0x50,
 };
 
 #define _EOF_DATATABLE	(feof(file))
@@ -121,7 +121,8 @@ bool DataTable::CheckHeader(BYTE type)
 
 	ReleaseFile();
 
-	std::string pathKey = nowfilename;
+	std::string pathKey = BResource::getInstance()->GetDataPath();
+	pathKey += nowfilename;
 	CCFileUtils::ccRemoveHDSuffixFromFile(pathKey);
 	pathKey = CCFileUtils::fullPathFromRelativePath(pathKey.c_str());
 
@@ -145,14 +146,19 @@ bool DataTable::CheckHeader(BYTE type)
 
 bool DataTable::ReadDataDefineTable()
 {
+	if (!CheckHeader(DATATYPE_DATADEFINE))
+	{
+		return false;
+	}
+
 	BResource * pbres = BResource::getInstance();
 
-	_READSTRINGBUFFERLINE(2);
+	_READSTRINGBUFFERLINE(3);
 	while (!_EOF_DATATABLE)
 	{
 		_INITTINT;
 		_BREAKCOMMENTBUFFER;
-		fscanf(file, "%d", &tindex);
+		fscanf(file, "%x", &tindex);
 
 		_CHECKEOF_DATATABLE;
 

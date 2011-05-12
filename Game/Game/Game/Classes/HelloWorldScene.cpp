@@ -45,6 +45,8 @@ bool HelloWorldScene::init()
 
 void HelloWorldScene::onEnter()
 {
+	CCLayer::onEnter();
+
 	CCScene *pScene = LoadingScene::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }

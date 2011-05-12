@@ -11,9 +11,16 @@ public:
 
 	virtual bool init();
 
+	virtual void onEnter();
+
 	static cocos2d::CCScene* scene();
 
 	LAYER_NODE_FUNC(LoadingScene);
+
+	void LoadingCallBackFunc();
+
+private:
+	int nCallBackCount;
 };
 
 #endif
