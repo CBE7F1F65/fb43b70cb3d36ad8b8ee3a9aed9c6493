@@ -6,6 +6,7 @@
 #endif // __WIN32
 #include <list>
 #include <vector>
+#include <math.h>
 
 #ifndef min
 #define min(x,y) ((x) < (y)) ? (x) : (y)
@@ -116,5 +117,40 @@ typedef QWORD ULONGLONG;
 #define M_FOLDER_SLASH			'/'
 #define M_FOLDER_SLASH_WRONG	'\\'
 #endif
+
+#define CINT(p)		(*(int *)(p))
+#define CUINT(p)	(*(DWORD *)(p))
+#define CFLOAT(p)	(*(float *)(p))
+#define CLONGLONG(p)	(*(LONGLONG *)(p))
+#define CULONGLONG(p)	(*(QWORD *)(p))
+#define CDOUBLE(p)		(*(double *)(p))
+
+#define CINTN(p)		(*(int *)(&(p)))
+#define CUINTN(p)		(*(DWORD *)(&(p)))
+#define CLONGLONGN(p)	(*(LONGLONG *)(&(p)))
+#define CULONGLONGN(p)	(*(QWORD *)(&(p)))
+#define CFLOATN(p)		(*(float *)(&(p)))
+#define CDOUBLEN(p)		(*(double *)(&(p)))
+
+
+#define ARGB(a,r,g,b)	((DWORD(a)<<24) + (DWORD(r)<<16) + (DWORD(g)<<8) + DWORD(b))
+#define GETA(col)		((col)>>24)
+#define GETR(col)		(((col)>>16) & 0xFF)
+#define GETG(col)		(((col)>>8) & 0xFF)
+#define GETB(col)		((col) & 0xFF)
+#define SETA(col,a)		(((col) & 0x00FFFFFF) + (DWORD(a)<<24))
+#define SETR(col,r)		(((col) & 0xFF00FFFF) + (DWORD(r)<<16))
+#define SETG(col,g)		(((col) & 0xFFFF00FF) + (DWORD(g)<<8))
+#define SETB(col,b)		(((col) & 0xFFFFFF00) + DWORD(b))
+
+#define ARC(X)		((X) * 0.0001745329251994329f)
+#define ANGLE(X)	(int)((X) * 5729.577951308232f)
+
+#define DIST(X1, Y1, X2, Y2)	(sqrtf(((X1)-(X2))*((X1)-(X2)) + ((Y1)-(Y2))*((Y1)-(Y2))))
+#define DIST2(X1, Y1, X2, Y2)	(((X1)-(X2))*((X1)-(X2)) + ((Y1)-(Y2))*((Y1)-(Y2)))
+#define SIGN(X)					((((X)&1)<<1)-1)
+#define ROLL(X, T)				(((X)%(2*(T)))/(T)*(T) - SIGN((X)%(2*(T))/(T)) * ((X)%(T)))
+#define INTER(A, B, X)			(((B)-(A))*(X)+(A))
+#define RANDA					((LONG)(randt()) * 36000 / RAND_MAX)
 
 #endif

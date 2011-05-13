@@ -6,33 +6,18 @@
 
 #include "../Header/BIOInterface.h"
 
-using namespace cocos2d;
+LuaState Export_Lua::state;
 
-static Export_Lua * g_pLua = NULL;
+using namespace cocos2d;
 
 Export_Lua::Export_Lua()
 {
-	CCAssert(g_pLua == NULL, ASSERTSTR_SECONDSINGLETON);
 	state->OpenLibs();
 }
 
 Export_Lua::~Export_Lua()
 {
 	Release();
-	if (g_pLua)
-	{
-		delete g_pLua;
-		g_pLua = NULL;
-	}
-}
-
-Export_Lua * Export_Lua::getInstance()
-{
-	if (!g_pLua)
-	{
-		g_pLua = new Export_Lua;
-	}
-	return g_pLua;
 }
 
 void Export_Lua::Release(LuaState * ls /* = NULL */)
@@ -271,7 +256,7 @@ int Export_Lua::LoadPackedLuaFiles(LuaState * ls)
 
 void Export_Lua::ShowError(int errortype, const char * err)
 {
-	char msgtitle[M_STRMAX*2];
+	char msgtitle[M_MESSAGESTRMAX];
 	switch (errortype)
 	{
 	case LUAERROR_LOADINGSCRIPT:

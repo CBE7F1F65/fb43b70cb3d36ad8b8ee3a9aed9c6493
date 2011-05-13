@@ -12,32 +12,77 @@ public:
 	~Export_Lua();
 public:
 
-	void Release(LuaState * ls = NULL);
+	static void Release(LuaState * ls = NULL);
 
-	int LoadLuaFile(LuaState * ls, const char * filename, bool bDoFile = false, int * filecount = NULL, FILE * outputfile = NULL);
+	static int LoadLuaFile(LuaState * ls, const char * filename, bool bDoFile = false, int * filecount = NULL, FILE * outputfile = NULL);
 private:
-	int _LoadLuaFile(LuaState * ls, const char * filename, bool bDoFile = false, int * filecount = NULL, FILE * outputfile = NULL);
+	static int _LoadLuaFile(LuaState * ls, const char * filename, bool bDoFile = false, int * filecount = NULL, FILE * outputfile = NULL);
 public:
-	int DoLuaFile(LuaState * ls, const char * filename){return LoadLuaFile(ls, filename, true);};
+	static int DoLuaFile(LuaState * ls, const char * filename){return LoadLuaFile(ls, filename, true);};
 
-	int DoLuaFileInMemroy(LuaState * ls, const char * buffer, DWORD size, const char * name);
+	static int DoLuaFileInMemroy(LuaState * ls, const char * buffer, DWORD size, const char * name);
 
-	bool CheckUseUnpackedFiles(LuaState * ls);
-	int PackLuaFiles(LuaState * ls = NULL);
-	int LoadPackedLuaFiles(LuaState * ls = NULL);
+	static bool CheckUseUnpackedFiles(LuaState * ls);
+	static int PackLuaFiles(LuaState * ls = NULL);
+	static int LoadPackedLuaFiles(LuaState * ls = NULL);
 
 	static int LuaChunkWriter(lua_State *L, const void* p, size_t sz, void* ud);
 
-	int ReadLuaFileTable(LuaState * ls = NULL);
+	static int ReadLuaFileTable(LuaState * ls = NULL);
 
-	void ShowError(int errortype, const char * err);
+	static void ShowError(int errortype, const char * err);
+
+
+	static bool LuaRegistFunction();
+	static bool _LuaRegistFunction(LuaObject * obj);
+
+	static bool LuaRegistConst();
+	static bool _LuaRegistConst(LuaObject * obj);
+	static bool _LuaRegistCustomConst(LuaObject * obj);
+
+	static DWORD _LuaHelper_GetColor(LuaObject * obj);
+	static void _LuaHelper_PushDWORD(LuaState * ls, DWORD dval);
+	static DWORD _LuaHelper_GetDWORD(LuaObject * obj);
+	static void _LuaHelper_PushLONGLONG(LuaState * ls, LONGLONG llval);
+	static LONGLONG _LuaHelper_GetLONGLONG(LuaObject * obj);
+	static void _LuaHelper_PushQWORD(LuaState * ls, QWORD qval);
+	static QWORD _LuaHelper_GetQWORD(LuaObject * obj);
+	static void _LuaHelper_PushString(LuaState * ls, const char * sval);
+
+	static void _LuaHelper_GetCalculateValue(LuaObject * obj, char calchar, bool buseq, void * val);
+
+	static int LuaFn_Global_Calculate(LuaState * ls);
+	static int LuaFn_Global_DIST(LuaState * ls);
+	static int LuaFn_Global_DIST2(LuaState * ls);
+	static int LuaFn_Global_SIGN(LuaState * ls);
+	static int LuaFn_Global_ROLL(LuaState * ls);
+	static int LuaFn_Global_INTER(LuaState * ls);
+	static int LuaFn_Global_ARGB(LuaState * ls);
+	static int LuaFn_Global_HSVA(LuaState * ls);
+	static int LuaFn_Global_GetARGB(LuaState * ls);
+	static int LuaFn_Global_SetARGB(LuaState * ls);
+	static int LuaFn_Global_GetLocalTime(LuaState * ls);
+	static int LuaFn_Global_GetClipBoard(LuaState * ls);
+	static int LuaFn_Global_GetPrivateProfileString(LuaState * ls);
+	static int LuaFn_Global_WritePrivateProfileString(LuaState * ls);
+	static int LuaFn_Global_MessageBox(LuaState * ls);
+
+	static int LuaFn_LuaState_DoFile(LuaState * ls);
+	static int LuaFn_LuaState_SetConst(LuaState * ls);
+	static int LuaFn_LuaState_GetConst(LuaState * ls);
+	static int LuaFn_LuaState_GetPointer(LuaState * ls);
+	static int LuaFn_LuaState_IntToDWORD(LuaState * ls);
+	static int LuaFn_LuaState_DWORDToInt(LuaState * ls);
+	static int LuaFn_LuaState_And(LuaState * ls);
+	static int LuaFn_LuaState_Or(LuaState * ls);
+	static int LuaFn_LuaState_Xor(LuaState * ls);
+	static int LuaFn_LuaState_Not(LuaState * ls);
+	static int LuaFn_LuaState_LShift(LuaState * ls);
+	static int LuaFn_LuaState_RShift(LuaState * ls);
+	static int LuaFn_LuaState_ReadLineInContent(LuaState * ls);
 
 public:
-
-	static Export_Lua * getInstance();
-
-public:
-	LuaStateOwner state;
+	static LuaStateOwner state;
 };
 
 #endif

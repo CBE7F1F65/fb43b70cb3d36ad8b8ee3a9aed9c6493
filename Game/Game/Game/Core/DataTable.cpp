@@ -1,6 +1,8 @@
 #include "../Header/DataTable.h"
 #include "../Header/BResource.h"
 
+#include "../Header/BIOInterface.h"
+
 #include "cocos2d.h"
 
 using namespace cocos2d;
@@ -39,7 +41,7 @@ enum{
 
 DataTable::DataTable()
 {
-	CCAssert(g_DataTableSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
+	BIOInterface::getInstance()->System_Assert(g_DataTableSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
 	file = NULL;
 }
 

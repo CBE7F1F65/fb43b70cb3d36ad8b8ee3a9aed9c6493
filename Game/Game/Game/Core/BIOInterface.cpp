@@ -3,6 +3,8 @@
 #include "cocos2d.h"
 using namespace cocos2d;
 
+#include "../Header/Const.h"
+
 static BIOInterface * g_BIOInterface = NULL;
 
 #define BIOINDERFACE_XORTABLE_SIZE	64
@@ -75,7 +77,7 @@ static DWORD g_BIOXORTable[] = {
 
 BIOInterface::BIOInterface()
 {
-	CCAssert(g_BIOInterface == NULL, ASSERTSTR_SECONDSINGLETON);
+	System_Assert(g_BIOInterface == NULL, ASSERTSTR_SECONDSINGLETON);
 	reslist = NULL;
 	hSearch = NULL;
 #ifdef __WIN32
@@ -87,6 +89,9 @@ BIOInterface::BIOInterface()
 	int i;
 	for(i=strlen(szResourcePath)-1; i>0; i--) if(szResourcePath[i]==M_FOLDER_SLASH) break;
 	szResourcePath[i+1]=0;
+
+	strcpy(szLogFile, "");
+	strcpy(szIniFile, "");
 }
 
 BIOInterface::~BIOInterface()
@@ -180,7 +185,7 @@ void BIOInterface::Resource_SetCurrentDirectory(const char *filename)
 
 void BIOInterface::_PostError(const char * str)
 {
-	CCLOG(str);
+	System_Log(str);
 }
 
 void BIOInterface::DoXOR(DWORD * data, int password, int index)

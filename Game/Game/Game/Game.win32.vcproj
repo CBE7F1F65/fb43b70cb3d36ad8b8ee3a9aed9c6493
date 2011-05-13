@@ -207,6 +207,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\BIOInterface_Ini.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\BIOInterface_Math.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\BIOInterface_System.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\BResource.cpp"
 				>
 			</File>
@@ -216,6 +228,14 @@
 			</File>
 			<File
 				RelativePath=".\Export\Export_Lua.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Const.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Function.cpp"
 				>
 			</File>
 			<File
@@ -249,6 +269,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\Const.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\DataStruct.h"
 				>
 			</File>
 			<File

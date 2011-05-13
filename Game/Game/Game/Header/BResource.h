@@ -3,6 +3,7 @@
 
 #include "Const.h"
 #include "MainDependency.h"
+#include "DataStruct.h"
 
 #define DATATABLEMAX	0x10
 
@@ -23,6 +24,9 @@ public:
 	bool LoadTexture(int texindex = -1);
 	bool FreeTexture(int texindex = -1);
 
+	void ReleaseCustomConst();
+	void MallocCustomConst();
+
 	const char * GetDataPath();
 	char * getTableFileName(int index);
 
@@ -30,6 +34,7 @@ public:
 
 public:
 	char datatablefilename[DATATABLEMAX][M_STRMAX];
+	customconstData * customconstdata;
 
 	static BResource * getInstance();
 };

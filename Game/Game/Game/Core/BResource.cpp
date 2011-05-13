@@ -26,18 +26,23 @@ using namespace cocos2d;
 #define RESOURCE_DATADEFINEFILE	"DataDefine.table"
 #define RESOURCE_RESBINFILE		"Resource.bin"
 
+#define LOG_FILENAME		"log.log"
+#define INI_FILENAME		"config.ini"
+
 static BResource * g_BResourceSingleton = NULL;
 
 
 BResource::BResource()
 {
-	CCAssert(g_BResourceSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
+	BIOInterface::getInstance()->System_Assert(g_BResourceSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
 	ZeroMemory(datatablefilename, sizeof(char)*DATATABLEMAX*M_STRMAX);
 	strcpy(datatablefilename[0], RESOURCE_DATADEFINEFILE);
+	customconstdata = NULL;
 }
 
 BResource::~BResource()
 {
+	ReleaseCustomConst();
 	if (g_BResourceSingleton)
 	{
 		delete g_BResourceSingleton;
@@ -52,13 +57,31 @@ bool BResource::Init()
 
 	CCFileUtils::setResourcePath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
 
-	BIOInterface::getInstance()->Resource_SetCurrentDirectory(RESOURCE_PATH);
-	BIOInterface::getInstance()->Resource_SetPath(RESOURCE_PATH);
+	BIOInterface * bio = BIOInterface::getInstance();
+	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);
+	bio->Resource_SetPath(RESOURCE_PATH);
+	bio->System_SetLogFile(LOG_FILENAME);
+	bio->Ini_SetIniFile(INI_FILENAME);
 
 #endif  // CC_PLATFORM_WIN32
 
 	return true;
 
+}
+
+void BResource::MallocCustomConst()
+{
+	ReleaseCustomConst();
+	customconstdata = (customconstData *)malloc(RSIZE_CUSTOMCONST);
+}
+
+void BResource::ReleaseCustomConst()
+{
+	if (customconstdata)
+	{
+		free(customconstdata);
+		customconstdata = NULL;
+	}
 }
 
 BResource * BResource::getInstance()
@@ -86,17 +109,16 @@ char * BResource::getTableFileName(int index)
 
 bool BResource::ReadAllScript()
 {
-	Export_Lua * pLua = Export_Lua::getInstance();
-	int iret = pLua->ReadLuaFileTable();
+	int iret = Export_Lua::ReadLuaFileTable();
 	if (iret == 0)
 	{
-		iret = pLua->PackLuaFiles();
+		iret = Export_Lua::PackLuaFiles();
 		if (iret != 0)
 		{
 			return false;
 		}
 	}
-	iret = pLua->LoadPackedLuaFiles();
+	iret = Export_Lua::LoadPackedLuaFiles();
 	if (iret != 0)
 	{
 		return false;
