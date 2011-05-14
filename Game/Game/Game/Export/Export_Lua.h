@@ -66,6 +66,7 @@ public:
 	static int LuaFn_Global_GetPrivateProfileString(LuaState * ls);
 	static int LuaFn_Global_WritePrivateProfileString(LuaState * ls);
 	static int LuaFn_Global_MessageBox(LuaState * ls);
+	static int LuaFn_Global_SystemLog(LuaState * ls);
 
 	static int LuaFn_LuaState_DoFile(LuaState * ls);
 	static int LuaFn_LuaState_SetConst(LuaState * ls);

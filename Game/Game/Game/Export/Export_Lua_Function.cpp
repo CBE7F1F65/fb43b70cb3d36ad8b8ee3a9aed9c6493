@@ -1,5 +1,7 @@
-#include "../Export/Export_Lua.h"
-#include "../Export/Export_Lua_Const.h"
+#include "Export_Lua.h"
+#include "Export_Lua_Const.h"
+#include "Export_Lua_Game.h"
+#include "Export_Lua_Scene.h"
 
 #include "../Header/MainDependency.h"
 #include "../Header/Const.h"
@@ -26,6 +28,7 @@ bool Export_Lua::_LuaRegistFunction(LuaObject * obj)
 	_globalobj.Register("GetPrivateProfileString", LuaFn_Global_GetPrivateProfileString);
 	_globalobj.Register("WritePrivateProfileString", LuaFn_Global_WritePrivateProfileString);
 	_globalobj.Register("MessageBox", LuaFn_Global_MessageBox);
+	_globalobj.Register("SystemLog", LuaFn_Global_SystemLog);
 
 	LuaObject _luastateobj = obj->CreateTable("luastate");
 	_luastateobj.Register("DoFile", LuaFn_LuaState_DoFile);
@@ -54,6 +57,16 @@ bool Export_Lua::LuaRegistFunction()
 		return false;
 	}
 
+	if (!Export_Lua_Game::_LuaRegistFunction(&obj))
+	{
+		return false;
+	}
+
+	if (!Export_Lua_Scene::_LuaRegistFunction(&obj))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -66,6 +79,16 @@ bool Export_Lua::LuaRegistConst()
 		return false;
 	}
 	if (!_LuaRegistCustomConst(&obj))
+	{
+		return false;
+	}
+
+	if (!Export_Lua_Game::_LuaRegistConst(&obj))
+	{
+		return false;
+	}
+
+	if (!Export_Lua_Scene::_LuaRegistConst(&obj))
 	{
 		return false;
 	}
@@ -588,6 +611,15 @@ int Export_Lua::LuaFn_Global_MessageBox(LuaState * ls)
 
 	ls->PushInteger(iret);
 	return 1;
+}
+
+int Export_Lua::LuaFn_Global_SystemLog(LuaState * ls)
+{
+	LuaStack args(ls);
+
+	BIOInterface::getInstance()->System_Log(args[1].GetString());
+
+	return 0;
 }
 
 int Export_Lua::LuaFn_LuaState_DoFile(LuaState * ls)

@@ -1,7 +1,7 @@
 #ifndef __NOTUSELUA
 
-#include "../Export/Export_Lua.h"
-#include "../Export/Export_Lua_Const.h"
+#include "Export_Lua.h"
+#include "Export_Lua_Const.h"
 #include "../Header/BResource.h"
 
 #include "../Header/DataStruct.h"

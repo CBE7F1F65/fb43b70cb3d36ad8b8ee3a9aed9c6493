@@ -27,6 +27,16 @@ public:
 	void ReleaseCustomConst();
 	void MallocCustomConst();
 
+	void ClearCustomConstData();
+	void ClearMusicData();
+	void ClearSEData();
+	void ClearTextureData();
+	void ClearSpriteData();
+	void ClearEffectData();
+	void ClearWeaponData();
+	void ClearItemData();
+	void ClearEnemyData();
+
 	const char * GetDataPath();
 	char * getTableFileName(int index);
 
@@ -34,7 +44,16 @@ public:
 
 public:
 	char datatablefilename[DATATABLEMAX][M_STRMAX];
+
 	customconstData * customconstdata;
+	musicData musdata[DATASTRUCT_MUSICMAX];
+	seData sedata[DATASTRUCT_SEMAX];
+	textureData texturedata[DATASTRUCT_TEXMAX];
+	spriteData spritedata[DATASTRUCT_SPRITEMAX];
+	effectData effdata[DATASTRUCT_EFFECTMAX];
+	weaponData weapondata[DATASTRUCT_WEAPONMAX];
+	itemData itemdata[DATASTRUCT_ITEMMAX];
+	enemyData enemydata[DATASTRUCT_ENEMYMAX];
 
 	static BResource * getInstance();
 };

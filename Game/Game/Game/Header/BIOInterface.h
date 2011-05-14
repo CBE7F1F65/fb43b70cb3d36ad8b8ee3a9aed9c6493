@@ -130,7 +130,7 @@ public:
 	void		System_SetLogFile(const char * filename);
 	void		System_Log(const char *format, ...);
 	void		System_Snapshot(const char *filename=0);
-	int			System_MessageBox(const char * text, const char * title, DWORD type);
+	int			System_MessageBox(const char * text, const char * title, DWORD type=MB_OK);
 	void		System_Assert(bool cond, const char * msg);
 
 	int				Random_Seed(int seed=0);

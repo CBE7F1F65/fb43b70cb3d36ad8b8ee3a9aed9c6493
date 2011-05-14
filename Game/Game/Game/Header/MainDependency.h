@@ -6,7 +6,8 @@
 #endif // __WIN32
 #include <list>
 #include <vector>
-#include <math.h>
+
+#include "BMath.h"
 
 #ifndef min
 #define min(x,y) ((x) < (y)) ? (x) : (y)

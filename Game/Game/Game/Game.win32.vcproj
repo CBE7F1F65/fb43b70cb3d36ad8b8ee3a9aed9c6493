@@ -219,6 +219,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\BMath.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\BResource.cpp"
 				>
 			</File>
@@ -236,6 +240,14 @@
 			</File>
 			<File
 				RelativePath=".\Export\Export_Lua_Function.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Game.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Scene.cpp"
 				>
 			</File>
 			<File
@@ -264,6 +276,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\BMath.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Header\BResource.h"
 				>
 			</File>
@@ -285,6 +301,14 @@
 			</File>
 			<File
 				RelativePath=".\Export\Export_Lua_Const.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Game.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Export\Export_Lua_Scene.h"
 				>
 			</File>
 			<File

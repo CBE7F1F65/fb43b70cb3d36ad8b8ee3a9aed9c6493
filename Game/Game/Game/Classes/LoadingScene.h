@@ -6,21 +6,17 @@
 class LoadingScene :public cocos2d::CCLayer
 {
 public:
-	LoadingScene(void);
-	~LoadingScene(void);
-
 	virtual bool init();
-
-	virtual void onEnter();
 
 	static cocos2d::CCScene* scene();
 
+	virtual void onEnter();
+
 	LAYER_NODE_FUNC(LoadingScene);
 
-	void LoadingCallBackFunc();
+	void LoadingCallbackFunc();
 
 private:
-	int nCallBackCount;
 };
 
 #endif

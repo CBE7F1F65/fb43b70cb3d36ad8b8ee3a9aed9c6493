@@ -263,7 +263,9 @@ BYTE * BIOInterface::Resource_Load(const char *filename, DWORD *size/* =0 */)
 				{
 					*size = memfile->size;
 				}
-				return memfile->data;
+				ptr = (BYTE *)malloc(memfile->size);
+				memcpy(ptr, memfile->data, memfile->size);
+				return ptr;
 			}
 		}
 		resItem=resItem->next;

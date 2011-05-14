@@ -2,16 +2,9 @@
 
 #include "../Header/BResource.h"
 
+#include "../Export/Export_Lua_Scene.h"
+
 using namespace cocos2d;
-
-LoadingScene::LoadingScene(void)
-{
-	nCallBackCount = 0;
-}
-
-LoadingScene::~LoadingScene(void)
-{
-}
 
 CCScene* LoadingScene::scene()
 {
@@ -30,18 +23,8 @@ CCScene* LoadingScene::scene()
 	return pScene;
 }
 
-void LoadingScene::LoadingCallBackFunc()
+void LoadingScene::LoadingCallbackFunc()
 {
-	nCallBackCount++;
-	if (nCallBackCount == 1)
-	{
-		BResource::getInstance()->ReadAllTable();
-		BResource::getInstance()->ReadAllScript();
-	}
-	else
-	{
-		BResource::getInstance()->LoadTexture(nCallBackCount-1);
-	}
 }
 
 bool LoadingScene::init()
@@ -64,13 +47,25 @@ bool LoadingScene::init()
 
 		CCActionInterval* color_sub_action = CCFadeTo::actionWithDuration(0.5f, 0xaf);
 		CCActionInterval* color_add_action = CCFadeTo::actionWithDuration(1.0f, 0xff);
-		CCFiniteTimeAction* color_seq = CCSequence::actions(color_sub_action, color_add_action, NULL);		CCActionInterval* time_action = CCActionInterval::actionWithDuration(0.01f);		CCFiniteTimeAction* time_seq = CCSequence::actions(time_action, CCCallFunc::actionWithTarget(this, callfunc_selector(LoadingCallBackFunc)), NULL);
+		CCFiniteTimeAction* color_seq = CCSequence::actions(color_sub_action, color_add_action, NULL);		CCActionInterval* time_action = CCActionInterval::actionWithDuration(0.01f);		CCFiniteTimeAction* time_seq = CCSequence::actions(time_action, CCCallFunc::actionWithTarget(this, callfunc_selector(LoadingCallbackFunc)), NULL);
 
 		this->addChild(pLoadingSprite, ZORDER_BG, 10);
 
 		pLoadingSprite->runAction(CCRepeatForever::actionWithAction((CCActionInterval*)color_seq));
 
-		runAction(CCRepeatForever::actionWithAction((CCActionInterval*)time_seq));
+		runAction((CCActionInterval*)time_seq);
+
+		BResource * pbres = BResource::getInstance();
+		/************************************************************************/
+		/*                                                                      */
+		/************************************************************************/
+		if (true)
+		{
+			pbres->ReadAllTable();
+			pbres->ReadAllScript();
+			pbres->PackData();
+		}
+		pbres->GainData();
 
 		bRet = true;
 
@@ -82,4 +77,6 @@ bool LoadingScene::init()
 void LoadingScene::onEnter()
 {
 	CCLayer::onEnter();
+
+	Export_Lua_Scene::ExecuteIOLoadingScene(LUASCENE_IOFLAG_ONENTER);
 }

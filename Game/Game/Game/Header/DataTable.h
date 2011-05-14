@@ -23,6 +23,7 @@ public:
 	bool ReadDataDefineTable();
 	bool ReadCustomConstTable();
 	bool ReadMusicDefineTable();
+	bool ReadSEDefineTable();
 	bool ReadTextureDefineTable();
 	bool ReadSpriteDefineTable();
 	bool ReadEffectDefineTable();
