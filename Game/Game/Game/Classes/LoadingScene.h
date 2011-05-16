@@ -2,6 +2,7 @@
 #define __LOADINGSCENE_H__
 
 #include "cocos2d.h"
+using namespace cocos2d;
 
 class LoadingScene :public cocos2d::CCLayer
 {
@@ -14,7 +15,12 @@ public:
 
 	LAYER_NODE_FUNC(LoadingScene);
 
-	void LoadingCallbackFunc();
+	LoadingScene * getThis();
+
+	static CCScene * thisScene;
+	static CCLayer * thisLayer;
+
+	void LoadingCallbackFunc(CCObject *sender);
 
 private:
 };

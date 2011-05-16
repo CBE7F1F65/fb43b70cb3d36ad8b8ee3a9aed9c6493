@@ -9,6 +9,8 @@
 
 #include "BMath.h"
 
+#include "../mmgr/mmgr.h"
+
 #ifndef min
 #define min(x,y) ((x) < (y)) ? (x) : (y)
 #endif

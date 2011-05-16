@@ -34,3 +34,6 @@ enum
 
 // Assert
 #define ASSERTSTR_SECONDSINGLETON	"Attempted to allocate a second instance of a singleton."
+
+#define M_SCREEN_WIDTH	960.0f
+#define M_SCREEN_HEIGHT	640.0f

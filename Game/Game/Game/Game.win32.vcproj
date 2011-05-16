@@ -199,7 +199,15 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath=".\Export\_LObjNode.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\AppDelegate.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\BGlobal.cpp"
 				>
 			</File>
 			<File
@@ -262,13 +270,29 @@
 				RelativePath=".\win32\main.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\mmgr\mmgr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\SpriteItemManager.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"
 			Filter="h;hpp;hxx;hm;inl;inc"
 			>
 			<File
+				RelativePath=".\Export\_LObjNode.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\AppDelegate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\BGlobal.h"
 				>
 			</File>
 			<File
@@ -316,6 +340,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\HTexture.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\LoadingScene.h"
 				>
 			</File>
@@ -328,7 +356,23 @@
 				>
 			</File>
 			<File
+				RelativePath=".\mmgr\mmgr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\mmgr\nommgr.h"
+				>
+			</File>
+			<File
 				RelativePath=".\win32\resource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\SceneConst.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\SpriteItemManager.h"
 				>
 			</File>
 		</Filter>

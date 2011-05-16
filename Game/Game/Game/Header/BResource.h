@@ -4,6 +4,7 @@
 #include "Const.h"
 #include "MainDependency.h"
 #include "DataStruct.h"
+#include "HTexture.h"
 
 #define DATATABLEMAX	0x10
 
@@ -21,6 +22,7 @@ public:
 	bool PackData();
 	bool GainData();
 
+	void InitTexinfo();
 	bool LoadTexture(int texindex = -1);
 	bool FreeTexture(int texindex = -1);
 
@@ -36,6 +38,10 @@ public:
 	void ClearWeaponData();
 	void ClearItemData();
 	void ClearEnemyData();
+
+	int Texture_GetWidth(HTEXTURE tex);
+	int Texture_GetHeight(HTEXTURE tex);
+	DWORD Texture_GetTexture(HTEXTURE tex);
 
 	const char * GetDataPath();
 	char * getTableFileName(int index);
@@ -54,6 +60,9 @@ public:
 	weaponData weapondata[DATASTRUCT_WEAPONMAX];
 	itemData itemdata[DATASTRUCT_ITEMMAX];
 	enemyData enemydata[DATASTRUCT_ENEMYMAX];
+
+	HTEXTURE tex[DATASTRUCT_TEXMAX];
+	hTextureInfo texinfo[DATASTRUCT_TEXMAX];
 
 	static BResource * getInstance();
 };

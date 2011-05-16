@@ -40,6 +40,8 @@ BResource::BResource()
 	BIOInterface::getInstance()->System_Assert(g_BResourceSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
 	ZeroMemory(datatablefilename, sizeof(char)*DATATABLEMAX*M_STRMAX);
 	strcpy(datatablefilename[0], RESOURCE_DATADEFINEFILE);
+	ZeroMemory(tex, sizeof(HTEXTURE) * DATASTRUCT_TEXMAX);
+	ZeroMemory(texinfo, sizeof(hTextureInfo) * DATASTRUCT_TEXMAX);
 	customconstdata = NULL;
 }
 
@@ -51,6 +53,7 @@ BResource::~BResource()
 		delete g_BResourceSingleton;
 		g_BResourceSingleton = NULL;
 	}
+	FreeTexture();
 }
 
 bool BResource::Init()
@@ -291,14 +294,117 @@ bool BResource::GainData()
 	return true;
 }
 
+void BResource::InitTexinfo()
+{
+	for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+	{
+		texinfo[i].tex = NULL;
+		texinfo[i].texw = texturedata[i].width;
+		texinfo[i].texh = texturedata[i].height;
+	}
+	for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+	{
+		tex[i].texindex = i;
+		texinfo[i].tex = &tex[i].tex;
+	}
+}
+
+
 bool BResource::LoadTexture(int texindex /* = -1 */)
 {
-	return false;
+	if (texindex < 0)
+	{
+		for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+		{
+			LoadTexture(i);
+		}
+		return true;
+	}
+
+	char tnbuffer[M_STRMAX];
+	CCTexture2D * ptex = (CCTexture2D *)tex[texindex].tex;
+	if (ptex)
+	{
+		ptex->release();
+		ptex = NULL;
+	}
+
+	strcpy(tnbuffer, texturedata[texindex].texfilename);
+	if(strlen(tnbuffer))
+	{
+		BYTE * content = NULL;
+		DWORD size;
+		content = BIOInterface::getInstance()->Resource_Load(tnbuffer, &size);
+		if (content)
+		{
+			ptex = new CCTexture2D;
+
+			CCImage image;
+			image.initWithImageData(content, size);
+			ptex->initWithImage(&image);
+
+			tex[texindex] = (DWORD)ptex;
+
+			BIOInterface::getInstance()->Resource_Free(content);
+		}
+	}
+
+	if(tex[texindex].tex == NULL)
+	{
+		return false;
+	}
+	tex[texindex].texindex = texindex;
+	return true;
 }
 
 bool BResource::FreeTexture(int texindex /* = -1 */)
 {
+	if (texindex < 0)
+	{
+		for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+		{
+			FreeTexture(i);
+		}
+		return true;
+	}
+
+	if (tex[texindex].tex)
+	{
+		CCTexture2D * ptex = (CCTexture2D *)tex[texindex].tex;
+		ptex->release();
+		tex[texindex] = NULL;
+		tex[texindex].texindex = texindex;
+		return true;
+	}
 	return false;
+}
+
+
+DWORD BResource::Texture_GetTexture(HTEXTURE tex)
+{
+	return tex.GetTexture(DATASTRUCT_TEXMAX, texinfo);
+}
+
+int BResource::Texture_GetWidth(HTEXTURE tex)
+{
+	DWORD ttex = Texture_GetTexture(tex);
+	if (!ttex)
+	{
+		return tex.GetTextureWidthByInfo(DATASTRUCT_TEXMAX, texinfo);
+	}
+	CCTexture2D * ptex = (CCTexture2D *)ttex;
+	return ptex->getContentSize().width;
+}
+
+int BResource::Texture_GetHeight(HTEXTURE tex)
+{
+	DWORD ttex = Texture_GetTexture(tex);
+	if (!ttex)
+	{
+		return tex.GetTextureWidthByInfo(DATASTRUCT_TEXMAX, texinfo);
+	}
+	CCTexture2D * ptex = (CCTexture2D *)ttex;
+	return ptex->getContentSize().height;
 }
 
 #define RESOURCE_LOADINGFILENAME	"Loading.png"

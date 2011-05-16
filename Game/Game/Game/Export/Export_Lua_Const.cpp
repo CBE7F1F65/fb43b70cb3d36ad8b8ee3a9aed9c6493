@@ -16,6 +16,9 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetBoolean("_DEBUG", false);
 #endif // _DEBUG
 
+	obj->SetNumber("ScreenWidth", M_SCREEN_WIDTH);
+	obj->SetNumber("ScreenHeight", M_SCREEN_HEIGHT);
+
 	return true;
 }
 
@@ -27,8 +30,7 @@ bool Export_Lua::_LuaRegistCustomConst(LuaObject * obj)
 	{
 		return false;
 	}
-	int customconstcount = DATASTRUCT_CUSTOMCONSTMAX;
-	for (int i=0; i<customconstcount; i++)
+	for (int i=0; i<DATASTRUCT_CUSTOMCONSTMAX; i++)
 	{
 		if (strlen(pbres->customconstdata[i].name))
 		{
@@ -36,6 +38,20 @@ bool Export_Lua::_LuaRegistCustomConst(LuaObject * obj)
 		}
 	}
 
+	return true;
+}
+
+bool Export_Lua::_LuaRegistSIID(LuaObject * obj)
+{
+	// SIID
+	BResource * pbres = BResource::getInstance();
+	for (int i=0; i<DATASTRUCT_SPRITEMAX; i++)
+	{
+		if (strlen(pbres->spritedata[i].spritename))
+		{
+			obj->SetInteger(pbres->spritedata[i].spritename, i);
+		}
+	}
 	return true;
 }
 

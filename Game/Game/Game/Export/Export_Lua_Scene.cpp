@@ -1,9 +1,12 @@
 #include "Export_Lua_Scene.h"
 #include "Export_Lua_Const.h"
 
+#include "../Header/SceneConst.h"
+
+#include "../Classes/LoadingScene.h"
+
 #define LUASCENE_LOADINGSCENE_IO	"LoadingScene_IO"
 #define LUASCENE_LOADINGSCENE_CB	"LoadingScene_CB"
-
 
 LuaFunction<bool> * Export_Lua_Scene::ioLoadingScene;
 LuaFunction<bool> * Export_Lua_Scene::cbLoadingScene;
@@ -16,6 +19,9 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("SceneIOFlag_OnExit", LUASCENE_IOFLAG_ONEXIT);
 	obj->SetInteger("SceneIOFlag_OnTouchBegin", LUASCENE_IOFLAG_ONTOUCHBEGIN);
 	obj->SetInteger("SceneIOFlag_OnTouchEnd", LUASCENE_IOFLAG_ONTOUCHEND);
+
+	obj->SetInteger("ktag_LoadingSceneLayer", KTAG_LOADINGSCENELAYER);
+
 	return true;
 }
 
@@ -51,6 +57,40 @@ bool Export_Lua_Scene::InitCallbacks()
 	return true;
 }
 
+void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc)
+{
+	scenetag = scenetag & KTAG_SCENELAYERMASK;
+	switch (scenetag)
+	{
+	case KTAG_LOADINGSCENELAYER:
+		if (proto)
+		{
+			*proto = LoadingScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(LoadingScene::LoadingCallbackFunc);
+		}
+		break;
+	}
+}
+
+CCNode * Export_Lua_Scene::_GetSceneNode(int * scenetag)
+{
+	if (!scenetag)
+	{
+		return NULL;
+	}
+	*scenetag = (*scenetag) & KTAG_SCENELAYERMASK;
+	switch (*scenetag)
+	{
+	case KTAG_LOADINGSCENELAYER:
+		return LoadingScene::thisLayer;
+		break;
+	}
+}
+
+
 bool Export_Lua_Scene::ExecuteIOLoadingScene(BYTE flag)
 {
 	LuaState * ls = state;
@@ -62,7 +102,7 @@ bool Export_Lua_Scene::ExecuteIOLoadingScene(BYTE flag)
 	return bret;
 }
 
-bool Export_Lua_Scene::ExceuteCBLoadingScene(int tag, int eventtag)
+bool Export_Lua_Scene::ExecuteCBLoadingScene(int tag, int eventtag)
 {
 	LuaState * ls = state;
 	bool bret = (*cbLoadingScene)(tag, eventtag);

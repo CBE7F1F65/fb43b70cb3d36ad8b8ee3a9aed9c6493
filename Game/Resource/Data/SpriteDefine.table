@@ -1,6 +1,17 @@
 130	h5nc	55					
 Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
-#		MainUI(0~29)					
+#		Default(0~9)					
 -	0	SI_Null	0	0	0	0	0
 -	1	SI_White	0	0	0	1	1
 -	2	SI_Empty	0	0	0	0	0
+#		TitleUI(10~59)					
+-	10	SI_TUI_Play	8	0	0	256	96
+-	11	SI_TUI_Play_Down	8	0	96	256	96
+-	12	SI_TUI_Hiscore	8	0	192	256	96
+-	13	SI_TUI_Hiscore_Down	8	0	288	256	96
+-	14	SI_TUI_Option	8	0	384	256	96
+-	15	SI_TUI_Option_Down	8	0	480	256	96
+-	16	SI_TUI_Online	8	0	576	256	96
+-	17	SI_TUI_Online_Down	8	0	672	256	96
+-	18	SI_TUI_Help	8	0	768	256	96
+-	19	SI_TUI_Help_Down	8	0	864	256	96

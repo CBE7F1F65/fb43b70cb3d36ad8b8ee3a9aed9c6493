@@ -259,6 +259,7 @@ bool DataTable::ReadCustomConstTable()
 	pbres->MallocCustomConst();
 //	pbres->ClearCustomConst();
 
+	char _tbuffer[M_STRMAX];
 	_READSTRINGBUFFERLINE(4);
 	while (!feof(file))
 	{
@@ -268,9 +269,18 @@ bool DataTable::ReadCustomConstTable()
 		_CHECKEOF_DATATABLE;
 
 		customconstData * item = &(pbres->customconstdata[tindex]);
-		fscanf(file, "%s%d", 
+		fscanf(file, "%s%s", 
 			item->name, 
-			&(item->value));
+			_tbuffer);
+
+		if (_tbuffer[0] == '0' && (_tbuffer[1] == 'x' || _tbuffer[1] == 'X'))
+		{
+			sscanf(_tbuffer, "%x", &(item->value));
+		}
+		else
+		{
+			sscanf(_tbuffer, "%d", &(item->value));
+		}
 
 		_DOSWAPTINT;
 		_INITTINT;

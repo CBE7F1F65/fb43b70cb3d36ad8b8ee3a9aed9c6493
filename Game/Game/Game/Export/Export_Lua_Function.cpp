@@ -82,6 +82,10 @@ bool Export_Lua::LuaRegistConst()
 	{
 		return false;
 	}
+	if (!_LuaRegistSIID(&obj))
+	{
+		return false;
+	}
 
 	if (!Export_Lua_Game::_LuaRegistConst(&obj))
 	{

@@ -3,6 +3,9 @@
 
 #include "Export_Lua.h"
 
+#include "cocos2d.h"
+using namespace cocos2d;
+
 #define LUASCENE_IOFLAG_ONINIT		0x01
 #define LUASCENE_IOFLAG_ONENTER		0x02
 #define LUASCENE_IOFLAG_ONENTERTDF	0x04
@@ -19,7 +22,10 @@ public:
 	static bool InitCallbacks();
 
 	static bool ExecuteIOLoadingScene(BYTE flag);
-	static bool ExceuteCBLoadingScene(int tag, int eventtag);
+	static bool ExecuteCBLoadingScene(int tag, int eventtag);
+
+	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc);
+	static CCNode * _GetSceneNode(int * scenetag);
 
 public:
 	static LuaFunction<bool> * ioLoadingScene;

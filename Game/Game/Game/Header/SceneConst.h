@@ -1,0 +1,7 @@
+#ifndef __SCENECONST_H__
+#define __SCENECONST_H__
+
+#define KTAG_LOADINGSCENELAYER	0x01000000
+#define KTAG_SCENELAYERMASK		0xff000000
+
+#endif
