@@ -22,6 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
+#include "windows.h"
+
+using namespace std;
+
 NS_CC_BEGIN;
 
 // record the resource path
@@ -105,7 +109,8 @@ const char* CCFileUtils::fullPathFromRelativePath(const char *pszRelativePath)
 const char *CCFileUtils::fullPathFromRelativeFile(const char *pszFilename, const char *pszRelativeFile)
 {
 	_CheckPath();
-	std::string relativeFile = fullPathFromRelativePath(pszRelativeFile);
+	// std::string relativeFile = fullPathFromRelativePath(pszRelativeFile);
+	std::string relativeFile = pszRelativeFile;
 	CCString *pRet = new CCString();
 	pRet->autorelease();
 	pRet->m_sString = relativeFile.substr(0, relativeFile.rfind('/')+1);
@@ -142,7 +147,7 @@ unsigned char* CCFileUtils::getFileData(const char* pszFileName, const char* psz
     return pBuffer;
 }
 
-void CCFileUtils::setResource(const char* pszZipFileName, const char* pszResPath)
+void CCFileUtils::setResource(const char* pszZipFileName)
 {
     CCAssert(0, "Have not implement!");
 }
@@ -156,6 +161,21 @@ const char* CCFileUtils::getResourcePath(void)
 void CCFileUtils::setRelativePath(const char* pszRelativePath)
 {
     CCAssert(0, "Have not implement!");
+}
+
+string CCFileUtils::getWriteablePath()
+{
+	// return the path that the exe file saved in
+
+	char full_path[_MAX_PATH + 1];
+	::GetModuleFileNameA(NULL, full_path, _MAX_PATH + 1);
+
+	string ret((char*)full_path);
+
+	// remove xxx.exe
+	ret =  ret.substr(0, ret.rfind("\\") + 1);
+
+	return ret;
 }
 
 NS_CC_END;

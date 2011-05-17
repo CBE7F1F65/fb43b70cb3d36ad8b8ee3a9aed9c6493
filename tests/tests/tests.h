@@ -21,6 +21,10 @@
 #include "TileMapTest/TileMapTest.h"
 #include "IntervalTest/IntervalTest.h"
 #include "LabelTest/LabelTest.h"
+// havn't implement on airplay
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_AIRPLAY)
+#include "TextInputTest/TextInputTest.h"
+#endif
 #include "SpriteTest/SpriteTest.h"
 #include "SchedulerTest/SchedulerTest.h"
 #include "RenderTextureTest/RenderTextureTest.h"
@@ -33,6 +37,8 @@
 #include "PerformanceTest/PerformanceTest.h"
 #include "ZwoptexTest/ZwoptexTest.h"
 #include "CocosDenshionTest/CocosDenshionTest.h"
+#include "CurlTest/CurlTest.h"
+#include "UserDefaultTest/UserDefaultTest.h"
 
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_AIRPLAY)
 	#include "ChipmunkTest/cocos2dChipmunkDemo.h"
@@ -42,7 +48,7 @@
 	#include "ChipmunkTest/cocos2dChipmunkDemo.h"
 #endif
 #endif
-#endif
+#endif // (CC_TARGET_PLATFORM != CC_PLATFORM_AIRPLAY)
 
 enum
 {
@@ -66,7 +72,8 @@ enum
     TEST_TILE_MAP,
     TEST_INTERVAL,
     TEST_CHIPMUNK,
-    TEST_ATLAS,
+    TEST_LABEL,
+    TEST_TEXT_INPUT,
     TEST_SPRITE,
     TEST_SCHEDULER,
     TEST_RENDERTEXTURE,
@@ -79,6 +86,8 @@ enum
 	TEST_COCOSDENSHION,
     TEST_PERFORMANCE,
     TEST_ZWOPTEX,
+	TEST_CURL,
+	TEST_USERDEFAULT,
 
     TESTS_COUNT,
 };
@@ -105,6 +114,7 @@ const std::string g_aTestNames[TESTS_COUNT] = {
     "IntervalTest",
     "ChipmunkTest",
     "LabelTest",
+    "TextInputTest",
     "SpriteTest",
     "SchdulerTest",
     "RenderTextureTest",
@@ -116,7 +126,9 @@ const std::string g_aTestNames[TESTS_COUNT] = {
     "KeypadTest",
 	"CocosDenshionTest",
     "PerformanceTest",
-    "ZwoptexTest"
+    "ZwoptexTest",
+	"CurlTest",
+	"UserDefaultTest"
 };
 
 #endif

@@ -316,7 +316,7 @@ namespace cocos2d {
         }
         return pBuffer;
     }
-    void CCFileUtils::setResource(const char* pszZipFileName, const char* pszResPath)
+    void CCFileUtils::setResource(const char* pszZipFileName)
     {
         CCAssert(0, "Have not implement!");
     }
@@ -336,6 +336,14 @@ namespace cocos2d {
     bool CCFileUtils::getIsPopupNotify()
     {
         return s_bPopupNotify;
+    }
+    
+    std::string CCFileUtils::getWriteablePath()
+    {
+        // save to document folder
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        return [documentsDirectory UTF8String];        
     }
 
 }//namespace cocos2d

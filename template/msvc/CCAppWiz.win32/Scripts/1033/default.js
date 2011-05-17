@@ -192,7 +192,7 @@ function AddConfigurations(proj, strProjectName) {
             strAddIncludeDir += ';..\\cocos2dx\\platform\\third_party\\win32\\OGLES';
             
             if (wizard.FindSymbol('CC_USE_BOX2D')) {
-                strAddIncludeDir += ';..\\;..\\Box2D';
+                strAddIncludeDir += ';..\\';
             }
             if (wizard.FindSymbol('CC_USE_CHIPMUNK')) {
                 strAddIncludeDir += ';..\\chipmunk\\include\\chipmunk';
@@ -205,14 +205,14 @@ function AddConfigurations(proj, strProjectName) {
             CLTool.UsePrecompiledHeader = pchNone;  // pchUseUsingSpecific;
             CLTool.WarningLevel = warningLevel_3;
             if (bDebug) {
-                CLTool.RuntimeLibrary = rtMultiThreadedDebug;
+                CLTool.RuntimeLibrary = rtMultiThreadedDebugDLL;
                 CLTool.MinimalRebuild = true;
                 CLTool.DebugInformationFormat = debugEditAndContinue;
                 CLTool.BasicRuntimeChecks = runtimeBasicCheckAll;
                 CLTool.Optimization = optimizeDisabled;
             }
             else {
-                CLTool.RuntimeLibrary = rtMultiThreaded;
+                CLTool.RuntimeLibrary = rtMultiThreadedDLL;
                 CLTool.ExceptionHandling = false;
                 CLTool.DebugInformationFormat = debugDisabled;
             }
