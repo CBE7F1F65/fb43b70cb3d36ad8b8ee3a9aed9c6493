@@ -6,13 +6,12 @@
 
 #include "../Header/BIOInterface.h"
 
-LuaState Export_Lua::state;
+LuaStateOwner Export_Lua::state;
 
 using namespace cocos2d;
 
 Export_Lua::Export_Lua()
 {
-	state->OpenLibs();
 }
 
 Export_Lua::~Export_Lua()
@@ -24,6 +23,10 @@ void Export_Lua::Release(LuaState * ls /* = NULL */)
 {
 }
 
+void Export_Lua::Init()
+{
+	state->OpenLibs();
+}
 
 int Export_Lua::ReadLuaFileTable(LuaState * ls)
 {

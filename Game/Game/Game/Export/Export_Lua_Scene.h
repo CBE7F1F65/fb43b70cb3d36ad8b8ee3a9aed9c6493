@@ -21,15 +21,16 @@ public:
 
 	static bool InitCallbacks();
 
-	static bool ExecuteIOLoadingScene(BYTE flag);
-	static bool ExecuteCBLoadingScene(int tag, int eventtag);
+	static bool ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag);
+	static bool ExecuteCBScene(int tag, int eventtag);
 
 	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc);
 	static CCNode * _GetSceneNode(int * scenetag);
+	static CCScene * _GetNewScene(int scenetag);
 
 public:
-	static LuaFunction<bool> * ioLoadingScene;
-	static LuaFunction<bool> * cbLoadingScene;
+	static LuaFunction<bool> * ioScene;
+	static LuaFunction<bool> * cbScene;
 };
 
 #endif

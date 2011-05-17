@@ -24,15 +24,18 @@ CCScene* LoadingScene::scene()
 		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_LOADINGSCENELAYER);
+
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
+
 	} while (0);
 
 	return pScene;
 }
 
-void LoadingScene::LoadingCallbackFunc(CCObject * sender)
+void LoadingScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
-	Export_Lua_Scene::ExecuteCBLoadingScene(nSender->getTag(), 0);
+	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
 }
 
 bool LoadingScene::init()
@@ -49,9 +52,10 @@ bool LoadingScene::init()
 		CCSize size = CCDirector::sharedDirector()->getWinSize();
 		CCSprite * pLoadingSprite = CCSprite::spriteWithFile(BResource::getInstance()->getLoadingFileName());
 
-		pLoadingSprite->setPositionInPixels(ccp(size.width/2, size.height/2));
-		pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSizeInPixels().width);
-		pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSizeInPixels().height);
+		pLoadingSprite->setPosition(ccp(size.width/2, size.height/2));
+		pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSize().width);
+		pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSize().height);
+//		pLoadingSprite->setContentSize(CCSizeMake(size.width, size.height));
 
 
 		CCActionInterval* color_sub_action = CCFadeTo::actionWithDuration(0.5f, 0xaf);
@@ -117,7 +121,7 @@ void LoadingScene::onEnter()
 	*/
 	
 
-	Export_Lua_Scene::ExecuteIOLoadingScene(LUASCENE_IOFLAG_ONENTER);
+	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
 /*
 	CCMutableArray<CCNode*> *pChildren = thisLayer->getChildren();
 

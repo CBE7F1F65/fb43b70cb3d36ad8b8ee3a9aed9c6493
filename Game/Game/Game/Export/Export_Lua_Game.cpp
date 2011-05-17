@@ -28,6 +28,8 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("FreeTexture", LuaFn_Game_LoadTexture);
 	_gameobj.Register("FreeTexture", LuaFn_Game_FreeTexture);
 
+	// Scene
+	_gameobj.Register("ReplaceScene", LuaFn_Game_ReplaceScene);
 	// Sprite
 	_gameobj.Register("CreateSprite", LuaFn_Game_CreateSprite);
 	_gameobj.Register("AddSpriteChild", LuaFn_Game_AddSpriteChild);
@@ -255,6 +257,43 @@ bool Export_Lua_Game::_GetXYZT(_LObjNode * cnode, float *x/* =NULL */, float *y/
 /* Func                                                                 */
 /************************************************************************/
 
+/************************************************************************/
+/* Scene                                                                */
+/************************************************************************/
+
+int Export_Lua_Game::LuaFn_Game_ReplaceScene(LuaState * ls)
+{
+	// toptag
+
+	_ENTERFUNC_LUA(1);
+
+	int _tag = node.iNextGet();
+	float _duration = 0.0f;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_duration = node.fGet();
+	}
+	CCScene * pScene = Export_Lua_Scene::_GetNewScene(_tag);
+	if (pScene)
+	{
+		if (_duration)
+		{
+			CCDirector::sharedDirector()->replaceScene(CCTransitionCrossFade::transitionWithDuration(_duration, pScene));
+		}
+		else
+		{
+			CCDirector::sharedDirector()->replaceScene(pScene);
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+/************************************************************************/
+/* Sprite                                                               */
+/************************************************************************/
+
 int Export_Lua_Game::LuaFn_Game_CreateSprite(LuaState * ls)
 {
 	// (siid, {x, y, angle, hscale, vscale}, tag)
@@ -362,8 +401,9 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 	_ENTERFUNC_LUA(4);
 
 	// ({nodelist}, {XYZT}, spnormal, spselected, spdisabled)
+	// ({nodelist}, {XYZT}, labelstr, fontsize, font)
 
-	CCMenuItemSprite * item = NULL;
+	CCMenuItem * item = NULL;
 
 	// nodelist
 	node.jNextGet();
@@ -383,6 +423,11 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 		CCSprite * _spnormal = NULL;
 		CCSprite * _spselected = NULL;
 		CCSprite * _spdisabled = NULL;
+
+		char * _labelstr = NULL;
+		char * _fontname = NULL;
+		float _fontsize = 0;
+
 		float _x = 0.0f;
 		float _y = 0.0f;
 		int _zOrder = 0;
@@ -399,27 +444,52 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 			node.jNextGet();
 			if (node.bhavenext)
 			{
-				_spnormal = (CCSprite *)node.dGet();
-				node.jNextGet();
-				if (node.bhavenext)
+				if (node.ObjIsString())
 				{
-					_spselected = (CCSprite *)node.dGet();
+					_labelstr = (char *)node.sGet();
 					node.jNextGet();
 					if (node.bhavenext)
 					{
-						_spdisabled = (CCSprite *)node.dGet();
+						_fontsize = node.fGet();
+						node.jNextGet();
+						if (node.bhavenext)
+						{
+							_fontname = (char *)node.sGet();
+						}
+					}
+				}
+				else
+				{
+					_spnormal = (CCSprite *)node.dGet();
+					node.jNextGet();
+					if (node.bhavenext)
+					{
+						_spselected = (CCSprite *)node.dGet();
+						node.jNextGet();
+						if (node.bhavenext)
+						{
+							_spdisabled = (CCSprite *)node.dGet();
+						}
 					}
 				}
 			}
 
 		}
-		if (_spdisabled)
+		if (_labelstr)
 		{
-			item = CCMenuItemSprite::itemFromNormalSprite(_spnormal, _spselected, _spdisabled, proto, cbfunc);
+			CCLabelTTF* label = CCLabelTTF::labelWithString(_labelstr, _fontname?_fontname:M_DEFAULT_FONTNAME, _fontsize);
+			item = CCMenuItemLabel::itemWithLabel(label, proto, cbfunc);
 		}
 		else
 		{
-			item = CCMenuItemSprite::itemFromNormalSprite(_spnormal, _spselected, proto, cbfunc);
+			if (_spdisabled)
+			{
+				item = CCMenuItemSprite::itemFromNormalSprite(_spnormal, _spselected, _spdisabled, proto, cbfunc);
+			}
+			else
+			{
+				item = CCMenuItemSprite::itemFromNormalSprite(_spnormal, _spselected, proto, cbfunc);
+			}
 		}
 		item->setPosition(BGlobal::TranslatePosition(_x, _y));
 		item->setTag(_tag);

@@ -207,6 +207,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Classes\BaseScene.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\BGlobal.cpp"
 				>
 			</File>
@@ -278,6 +282,10 @@
 				RelativePath=".\Core\SpriteItemManager.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Classes\TitleScene.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="include"
@@ -289,6 +297,10 @@
 			</File>
 			<File
 				RelativePath=".\Classes\AppDelegate.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Classes\BaseScene.h"
 				>
 			</File>
 			<File
@@ -375,6 +387,10 @@
 				RelativePath=".\Header\SpriteItemManager.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Classes\TitleScene.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="resource"
@@ -389,6 +405,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\cocos2dx\proj.win32\cocos2d-win32.vcproj"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

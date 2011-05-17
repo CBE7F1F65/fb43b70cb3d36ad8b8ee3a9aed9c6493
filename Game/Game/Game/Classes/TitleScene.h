@@ -1,9 +1,9 @@
-#ifndef __LOADINGSCENE_H__
-#define __LOADINGSCENE_H__
+#ifndef __TITLESCENE_H__
+#define __TITLESCENE_H__
 
 #include "BaseScene.h"
 
-class LoadingScene :public BaseScene
+class TitleScene :public BaseScene
 {
 public:
 	virtual bool init();
@@ -12,7 +12,7 @@ public:
 
 	virtual void onEnter();
 
-	LAYER_NODE_FUNC(LoadingScene);
+	LAYER_NODE_FUNC(TitleScene);
 
 	static CCScene * thisScene;
 	static CCLayer * thisLayer;

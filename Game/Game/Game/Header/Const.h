@@ -37,3 +37,5 @@ enum
 
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f
+
+#define M_DEFAULT_FONTNAME	"Arial"

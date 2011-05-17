@@ -12,6 +12,7 @@ public:
 	~Export_Lua();
 public:
 
+	static void Init();
 	static void Release(LuaState * ls = NULL);
 
 	static int LoadLuaFile(LuaState * ls, const char * filename, bool bDoFile = false, int * filecount = NULL, FILE * outputfile = NULL);

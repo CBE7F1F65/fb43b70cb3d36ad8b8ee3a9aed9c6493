@@ -38,6 +38,7 @@ public:
 	void _init(LuaState * ls, LuaObject *obj, LuaStack *args, _LObjNode *root);
 
 	bool ObjIsTable();
+	bool ObjIsString();
 
 public:
 	bool bhavenext;

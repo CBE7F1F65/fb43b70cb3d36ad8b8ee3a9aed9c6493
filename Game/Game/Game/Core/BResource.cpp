@@ -158,6 +158,7 @@ char * BResource::getTableFileName(int index)
 
 bool BResource::ReadAllScript()
 {
+	Export_Lua::Init();
 	Export_Lua::LuaRegistConst();
 	Export_Lua::LuaRegistFunction();
 	int iret = Export_Lua::ReadLuaFileTable();

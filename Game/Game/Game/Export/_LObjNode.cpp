@@ -42,6 +42,11 @@ bool _LObjNode::ObjIsTable()
 	return _obj.IsTable();
 }
 
+bool _LObjNode::ObjIsString()
+{
+	return _obj.IsString();
+}
+
 bool _LObjNode::_isStack()
 {
 	if (argsbase)

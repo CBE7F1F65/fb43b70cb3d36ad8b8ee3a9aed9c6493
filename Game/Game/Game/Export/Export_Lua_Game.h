@@ -34,6 +34,8 @@ public:
 	static int LuaFn_Game_LoadTexture(LuaState * ls);
 	static int LuaFn_Game_FreeTexture(LuaState * ls);
 
+	static int LuaFn_Game_ReplaceScene(LuaState * ls);
+
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
 

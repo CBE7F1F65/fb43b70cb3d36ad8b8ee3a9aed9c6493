@@ -180,6 +180,16 @@ bool SpriteItemManager::SetSpriteTextureRect(CCSprite * sprite, float texx, floa
 	{
 		return false;
 	}
+	BResource * pbres = BResource::getInstance();
+	HTEXTURE tex = (DWORD)sprite->getTexture();
+	if (texw < 0)
+	{
+		texw = pbres->Texture_GetWidth(tex);
+	}
+	if (texh < 0)
+	{
+		texh = pbres->Texture_GetHeight(tex);
+	}
 	sprite->setTextureRect(CCRectMake(texx, texy, texw, texh));
 	return true;
 }
@@ -272,12 +282,15 @@ bool SpriteItemManager::SetRenderEx(CCSprite * sprite, float x, float y, int ang
 	}
 	sprite->setPosition(BGlobal::TranslatePosition(x, y));
 	sprite->setRotation(ARC(angle));
-	sprite->setScaleX(BGlobal::ScalerX(hscale));
 	if (vscale == 0.0f)
 	{
 		vscale = hscale;
 	}
-	sprite->setScaleY(BGlobal::ScalerY(vscale));
+	hscale = BGlobal::ScalerX(hscale);
+	vscale = BGlobal::ScalerY(vscale);
+	sprite->setScaleX(hscale);
+	sprite->setScaleY(vscale);
+//	sprite->setContentSize(CCSizeMake(sprite->getContentSize().width*hscale, sprite->getContentSize().height*vscale));
 	return true;
 }
 
