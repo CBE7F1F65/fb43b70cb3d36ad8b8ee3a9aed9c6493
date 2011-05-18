@@ -161,7 +161,7 @@ typedef QWORD ULONGLONG;
 
 #ifndef __WIN32
 #ifndef strupr
-#ifdef __IPHONE
+#ifndef __IPHONE
 char * strupr(char *str)
 {
 	if (str && strlen(str))
