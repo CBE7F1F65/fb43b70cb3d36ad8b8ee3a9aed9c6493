@@ -52,6 +52,7 @@ int BIOInterface::System_MessageBox(const char * text, const char * title, DWORD
 	return IDOK;
 #elif defined __IPHONE
 	printf("%s\n%s\n", title, text);
+	CCMessageBox(text, title);
 	return 0;
 #endif // __WIN32
 }

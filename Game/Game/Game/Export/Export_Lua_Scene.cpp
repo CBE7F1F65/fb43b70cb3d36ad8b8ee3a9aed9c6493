@@ -5,6 +5,13 @@
 
 #include "../Classes/LoadingScene.h"
 #include "../Classes/TitleScene.h"
+#include "../Classes/HiScoreScene.h"
+#include "../Classes/OptionScene.h"
+#include "../Classes/OnlineScene.h"
+#include "../Classes/HelpScene.h"
+#include "../Classes/StageSelectScene.h"
+#include "../Classes/MissionSelectScene.h"
+#include "../Classes/PlayScene.h"
 
 #define LUASCENE_SCENE_IO	"Scene_IO"
 #define LUASCENE_SCENE_CB	"Scene_CB"
@@ -23,7 +30,18 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 
 	obj->SetInteger("ktag_BaseSceneLayer", KTAG_BASESCENELAYER);
 	obj->SetInteger("ktag_LoadingSceneLayer", KTAG_LOADINGSCENELAYER);
+
 	obj->SetInteger("ktag_TitleSceneLayer", KTAG_TITLESCENELAYER);
+
+	obj->SetInteger("ktag_HiScoreSceneLayer", KTAG_HISCORESCENELAYER);
+	obj->SetInteger("ktag_OptionSceneLayer", KTAG_OPTIONSCENELAYER);
+	obj->SetInteger("ktag_OnlineSceneLayer", KTAG_ONLINESCENELAYER);
+	obj->SetInteger("ktag_HelpSceneLayer", KTAG_HELPSCENELAYER);
+
+	obj->SetInteger("ktag_StageSelectSceneLayer", KTAG_STAGESELECTSCENELAYER);
+	obj->SetInteger("ktag_MissionSelectSceneLayer", KTAG_MISSIONSELECTSCENELAYER);
+
+	obj->SetInteger("ktag_PlaySceneLayer", KTAG_PLAYSCENELAYER);
 
 	return true;
 }
@@ -88,6 +106,76 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 			*cbfunc = menu_selector(TitleScene::MenuCallbackFunc);
 		}
 		break;
+	case KTAG_HISCORESCENELAYER:
+		if (proto)
+		{
+			*proto = HiScoreScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(HiScoreScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_OPTIONSCENELAYER:
+		if (proto)
+		{
+			*proto = OptionScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(OptionScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_ONLINESCENELAYER:
+		if (proto)
+		{
+			*proto = OnlineScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(OnlineScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_HELPSCENELAYER:
+		if (proto)
+		{
+			*proto = HelpScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(HelpScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_STAGESELECTSCENELAYER:
+		if (proto)
+		{
+			*proto = StageSelectScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(StageSelectScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_MISSIONSELECTSCENELAYER:
+		if (proto)
+		{
+			*proto = MissionSelectScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(MissionSelectScene::MenuCallbackFunc);
+		}
+		break;
+	case KTAG_PLAYSCENELAYER:
+		if (proto)
+		{
+			*proto = PlayScene::thisLayer;
+		}
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(PlayScene::MenuCallbackFunc);
+		}
+		break;
 	}
 }
 
@@ -106,6 +194,27 @@ CCNode * Export_Lua_Scene::_GetSceneNode(int * scenetag)
 	case KTAG_TITLESCENELAYER:
 		return TitleScene::thisLayer;
 		break;
+	case KTAG_HISCORESCENELAYER:
+		return HiScoreScene::thisLayer;
+		break;
+	case KTAG_OPTIONSCENELAYER:
+		return OptionScene::thisLayer;
+		break;
+	case KTAG_ONLINESCENELAYER:
+		return OnlineScene::thisLayer;
+		break;
+	case KTAG_HELPSCENELAYER:
+		return HelpScene::thisLayer;
+		break;
+	case KTAG_STAGESELECTSCENELAYER:
+		return StageSelectScene::thisLayer;
+		break;
+	case KTAG_MISSIONSELECTSCENELAYER:
+		return MissionSelectScene::thisLayer;
+		break;
+	case KTAG_PLAYSCENELAYER:
+		return PlayScene::thisLayer;
+		break;
 	}
 	return NULL;
 }
@@ -120,6 +229,27 @@ CCScene * Export_Lua_Scene::_GetNewScene(int scenetag)
 		break;
 	case KTAG_TITLESCENELAYER:
 		return TitleScene::scene();
+		break;
+	case KTAG_HISCORESCENELAYER:
+		return HiScoreScene::scene();
+		break;
+	case KTAG_OPTIONSCENELAYER:
+		return OptionScene::scene();
+		break;
+	case KTAG_ONLINESCENELAYER:
+		return OnlineScene::scene();
+		break;
+	case KTAG_HELPSCENELAYER:
+		return HelpScene::scene();
+		break;
+	case KTAG_STAGESELECTSCENELAYER:
+		return StageSelectScene::scene();
+		break;
+	case KTAG_MISSIONSELECTSCENELAYER:
+		return MissionSelectScene::scene();
+		break;
+	case KTAG_PLAYSCENELAYER:
+		return PlayScene::scene();
 		break;
 	}
 	return NULL;
