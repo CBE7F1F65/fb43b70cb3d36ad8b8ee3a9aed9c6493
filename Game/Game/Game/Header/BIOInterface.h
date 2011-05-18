@@ -3,7 +3,7 @@
 
 #include "MainDependency.h"
 
-#define BIO_PATHMAX		0x80
+#define BIO_PATHMAX		0x100
 #define BIO_STRINGMAX	0x100
 
 struct BIOMemoryFile 

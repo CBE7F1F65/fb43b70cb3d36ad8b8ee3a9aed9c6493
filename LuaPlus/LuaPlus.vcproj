@@ -500,10 +500,6 @@
 				>
 			</File>
 			<File
-				RelativePath="LuaPlus\src\lua.c"
-				>
-			</File>
-			<File
 				RelativePath="LuaPlus\src\lua.h"
 				>
 			</File>

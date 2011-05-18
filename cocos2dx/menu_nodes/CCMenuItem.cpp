@@ -382,7 +382,8 @@ namespace cocos2d{
         setSelectedImage(selectedSprite);
         setDisabledImage(disabledSprite);
 
-		this->setContentSize(m_pNormalImage->getContentSize());
+		this->setContentSize(m_pNormalImage->boundingBox().size);
+//		this->setContentSize(m_pNormalImage->getContentSize());
 		return true;
 	}
 

@@ -5,7 +5,6 @@ function Scene_IO(eventtype, toplayer, toptag)
 			Debug_AddReloadMenu(toplayer, toptag);
 		end
 	end
-	
 	for i, it in pairs(g_SceneFunctions) do
 		if it[1] == toptag then
 			return it[2](eventtype, toplayer, toptag);
