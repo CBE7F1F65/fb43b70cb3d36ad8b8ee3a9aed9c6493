@@ -63,7 +63,7 @@ bool BResource::Init()
 	
 	BIOInterface * bio = BIOInterface::getInstance();
 	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);
-	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
+	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(""));
 	bio->System_SetLogFile(LOG_FILENAME);
 	bio->Ini_SetIniFile(INI_FILENAME);
 	

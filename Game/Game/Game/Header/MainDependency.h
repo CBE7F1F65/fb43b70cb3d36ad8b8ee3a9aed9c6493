@@ -159,9 +159,9 @@ typedef QWORD ULONGLONG;
 #define _MAX_PATH 260
 #endif
 
-
+#ifndef __WIN32
 #ifndef strupr
-#ifndef __IPHONE
+#ifdef __IPHONE
 char * strupr(char *str)
 {
 	if (str && strlen(str))
@@ -176,6 +176,7 @@ char * strupr(char *str)
 }
 #else
 #define strupr(str) (#str)
+#endif
 #endif
 #endif
 
