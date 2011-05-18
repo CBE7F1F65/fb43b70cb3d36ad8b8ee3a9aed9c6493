@@ -43,6 +43,7 @@ void BIOInterface::System_Snapshot(const char *filename/* =0 */)
 
 int BIOInterface::System_MessageBox(const char * text, const char * title, DWORD type)
 {
+	System_Log("%s\t%s", title, text);
 #if defined __WIN32
 	return MessageBoxA(NULL, text, title, type);
 #elif defined __PSP

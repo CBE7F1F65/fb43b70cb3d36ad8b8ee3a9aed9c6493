@@ -65,11 +65,14 @@ bool BResource::Init()
 	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);
 #if defined __WIN32
 	bio->Resource_SetPath(RESOURCE_PATH);
-#elif defined __IPHONE
-	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
-#endif
 	bio->System_SetLogFile(LOG_FILENAME);
 	bio->Ini_SetIniFile(INI_FILENAME);
+#elif defined __IPHONE
+	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
+	std::string writablepath = CCFileUtils::getWriteablePath();
+	bio->System_SetLogFile((writablepath+LOG_FILENAME).c_str());
+	bio->Ini_SetIniFile((writablepath+INI_FILENAME).c_str());
+#endif
 	
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
 
