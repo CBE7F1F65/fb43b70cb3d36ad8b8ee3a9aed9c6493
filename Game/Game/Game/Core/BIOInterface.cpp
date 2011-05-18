@@ -79,8 +79,8 @@ BIOInterface::BIOInterface()
 {
 	System_Assert(g_BIOInterface == NULL, ASSERTSTR_SECONDSINGLETON);
 	reslist = NULL;
-	hSearch = NULL;
 #ifdef __WIN32
+	hSearch = NULL;
 	GetModuleFileNameA(GetModuleHandle(NULL), szResourcePath, sizeof(szResourcePath));
 #else
 	strcpy(szResourcePath, "");

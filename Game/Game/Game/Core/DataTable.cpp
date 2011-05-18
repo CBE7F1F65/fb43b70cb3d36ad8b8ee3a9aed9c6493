@@ -198,12 +198,13 @@ bool DataTable::CheckHeader(BYTE type)
 
 	ReleaseFile();
 
-	std::string pathKey = BResource::getInstance()->GetDataPath();
-	pathKey += nowfilename;
-//	CCFileUtils::ccRemoveHDSuffixFromFile(pathKey);
-	pathKey = CCFileUtils::fullPathFromRelativePath(pathKey.c_str());
-
-	file = fopen(pathKey.c_str(), "rb");
+	BResource * pbres = BResource::getInstance();
+	char tablefilename[M_PATHMAX];
+	strcpy(tablefilename, pbres->GetDataPath());
+	strcat(tablefilename, nowfilename);
+	
+	BIOInterface * bio = BIOInterface::getInstance();
+	file = fopen(bio->Resource_MakePath(tablefilename), "rb");
 	if (!file)
 	{
 		return false;

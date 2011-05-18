@@ -3,20 +3,15 @@
 
 #ifdef __WIN32
 #include <windows.h>
+#include "../mmgr/mmgr.h"
 #endif // __WIN32
 #include <list>
 #include <vector>
 
 #include "BMath.h"
 
-#include "../mmgr/mmgr.h"
-
-#ifndef min
-#define min(x,y) ((x) < (y)) ? (x) : (y)
-#endif
-#ifndef max
-#define max(x,y) ((x) > (y)) ? (x) : (y)
-#endif
+#define M_MIN(x,y) ((x) < (y)) ? (x) : (y)
+#define M_MAX(x,y) ((x) > (y)) ? (x) : (y)
 
 #ifndef ZeroMemory
 #define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
@@ -48,9 +43,9 @@ typedef uint64_t QWORD;
 #ifndef LONGLONG
 #if defined __WIN32
 typedef __int64			LONGLONG;
-#elif __PSP
+#elif defined __PSP
 typedef s64	LONGLONG;
-#elif __IPHONE
+#elif defined __IPHONE
 typedef int64_t LONGLONG;
 
 #endif // __WIN32
@@ -155,5 +150,33 @@ typedef QWORD ULONGLONG;
 #define ROLL(X, T)				(((X)%(2*(T)))/(T)*(T) - SIGN((X)%(2*(T))/(T)) * ((X)%(T)))
 #define INTER(A, B, X)			(((B)-(A))*(X)+(A))
 #define RANDA					((LONG)(randt()) * 36000 / RAND_MAX)
+
+#ifndef MB_OK
+#define MB_OK 0
+#endif
+
+#ifndef _MAX_PATH
+#define _MAX_PATH 260
+#endif
+
+
+#ifndef strupr
+#ifndef __IPHONE
+char * strupr(char *str)
+{
+	if (str && strlen(str))
+	{
+		for (int i=0; i<strlen(str); i++) {
+			if (str[i] >= 'a' && str[i] <= 'z') {
+				str[i] += 'A' - 'a';
+			}
+		}
+	}
+	return str;
+}
+#else
+#define strupr(str) (#str)
+#endif
+#endif
 
 #endif

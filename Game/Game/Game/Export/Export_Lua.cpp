@@ -277,5 +277,5 @@ void Export_Lua::ShowError(int errortype, const char * err)
 	default:
 		strcpy(msgtitle, "Error!");
 	}
-	CCMessageBox(err, msgtitle);
+	BIOInterface::getInstance()->System_MessageBox(err, msgtitle);
 }

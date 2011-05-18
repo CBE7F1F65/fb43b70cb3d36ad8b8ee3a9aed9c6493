@@ -48,8 +48,10 @@ int BIOInterface::System_MessageBox(const char * text, const char * title, DWORD
 #elif defined __PSP
 	pspDebugScreenPrintf("%s\n%s", title, text);
 	return IDOK;
+#elif defined __IPHONE
+	printf("%s\n%s\n", title, text);
+	return 0;
 #endif // __WIN32
-	CCMessageBox(text, title);
 }
 
 void BIOInterface::System_Assert(bool cond, const char * msg)

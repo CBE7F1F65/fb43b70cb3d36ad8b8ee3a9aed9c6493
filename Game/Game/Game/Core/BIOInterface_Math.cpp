@@ -335,8 +335,8 @@ void BIOInterface::Math_ARGBtoHSVA(DWORD col, float *_h, float *_s, float *_v, f
 	g = ((col>>8)  & 0xFF) / 255.0f;
 	b = (col       & 0xFF) / 255.0f;
 
-	minv = min(min(r, g), b);
-	maxv = max(max(r, g), b);
+	minv = M_MIN(M_MIN(r, g), b);
+	maxv = M_MAX(M_MAX(r, g), b);
 	delta = maxv - minv;
 
 	v = maxv;

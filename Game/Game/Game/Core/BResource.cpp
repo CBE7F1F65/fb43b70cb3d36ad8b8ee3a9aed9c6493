@@ -17,7 +17,7 @@ using namespace cocos2d;
 
 #else
 
-#define RESOURCE_PATH	""
+#define RESOURCE_PATH	"Resource"
 
 #endif	// CC_PLATFORM_WIN32
 
@@ -58,16 +58,19 @@ BResource::~BResource()
 
 bool BResource::Init()
 {
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-
+	
 	CCFileUtils::setResourcePath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
-
+	
 	BIOInterface * bio = BIOInterface::getInstance();
 	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);
-	bio->Resource_SetPath(RESOURCE_PATH);
+	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
 	bio->System_SetLogFile(LOG_FILENAME);
 	bio->Ini_SetIniFile(INI_FILENAME);
+	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+
+	
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #endif  // CC_PLATFORM_WIN32
 
@@ -161,7 +164,9 @@ bool BResource::ReadAllScript()
 	Export_Lua::Init();
 	Export_Lua::LuaRegistConst();
 	Export_Lua::LuaRegistFunction();
-	int iret = Export_Lua::ReadLuaFileTable();
+	int iret = 0;
+#ifdef __WIN32
+	iret = Export_Lua::ReadLuaFileTable();
 	if (iret == 0)
 	{
 		iret = Export_Lua::PackLuaFiles();
@@ -170,6 +175,7 @@ bool BResource::ReadAllScript()
 			return false;
 		}
 	}
+#endif
 	iret = Export_Lua::LoadPackedLuaFiles();
 	if (iret != 0)
 	{

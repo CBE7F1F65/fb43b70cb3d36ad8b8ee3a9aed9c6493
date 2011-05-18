@@ -72,11 +72,13 @@ bool LoadingScene::init()
 		/************************************************************************/
 		if (true)
 		{
+#ifdef __WIN32
 			pbres->ReadAllTable();
-			pbres->ReadAllScript();
 			pbres->PackData();
+#endif
 		}
 		pbres->GainData();
+		pbres->ReadAllScript();
 
 		pbres->InitTexinfo();
 		
