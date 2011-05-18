@@ -3,6 +3,7 @@
 void BIOInterface::Ini_SetIniFile(const char * filename)
 {
 	strcpy(szIniFile, filename);
+	Resource_DeleteFile(szIniFile);
 }
 
 void BIOInterface::Ini_SetInt(const char *section, const char *name, int value, char * inifilename/* =NULL */)

@@ -6,6 +6,7 @@
 #include "../Header/SceneConst.h"
 
 #include "../Header/SpriteItemManager.h"
+#include "../Header/BIOInterface.h"
 
 CCScene * LoadingScene::thisScene = NULL;
 CCLayer * LoadingScene::thisLayer = NULL;
@@ -44,29 +45,29 @@ bool LoadingScene::init()
 	do 
 	{
 		CC_BREAK_IF(! CCLayer::init());
-
+		
 		/************************************************************************/
 		/* Show Loading                                                         */
 		/************************************************************************/
-
-		CCSize size = CCDirector::sharedDirector()->getWinSize();
-		CCSprite * pLoadingSprite = CCSprite::spriteWithFile(BResource::getInstance()->getLoadingFileName());
-
-		pLoadingSprite->setPosition(ccp(size.width/2, size.height/2));
-		pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSize().width);
-		pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSize().height);
-//		pLoadingSprite->setContentSize(CCSizeMake(size.width, size.height));
-
-
-		CCActionInterval* color_sub_action = CCFadeTo::actionWithDuration(0.5f, 0xaf);
-		CCActionInterval* color_add_action = CCFadeTo::actionWithDuration(1.0f, 0xff);
-		CCFiniteTimeAction* color_seq = CCSequence::actions(color_sub_action, color_add_action, NULL);
-		addChild(pLoadingSprite, ZORDER_BG);
-
-		pLoadingSprite->runAction(CCRepeatForever::actionWithAction((CCActionInterval*)color_seq));
-
-
+		
 		BResource * pbres = BResource::getInstance();
+		BIOInterface * bio = BIOInterface::getInstance();
+		CCSize size = CCDirector::sharedDirector()->getWinSize();
+		CCSprite * pLoadingSprite = CCSprite::spriteWithFile(bio->Resource_MakePath(pbres->getLoadingFileName()));
+		
+		if (pLoadingSprite) {
+			pLoadingSprite->setPosition(ccp(size.width/2, size.height/2));
+			pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSize().width);
+			pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSize().height);
+			CCActionInterval* color_sub_action = CCFadeTo::actionWithDuration(0.5f, 0xaf);
+			CCActionInterval* color_add_action = CCFadeTo::actionWithDuration(1.0f, 0xff);
+			CCFiniteTimeAction* color_seq = CCSequence::actions(color_sub_action, color_add_action, NULL);
+			addChild(pLoadingSprite, ZORDER_BG);
+			
+			pLoadingSprite->runAction(CCRepeatForever::actionWithAction((CCActionInterval*)color_seq));
+		}
+
+
 		/************************************************************************/
 		/*                                                                      */
 		/************************************************************************/

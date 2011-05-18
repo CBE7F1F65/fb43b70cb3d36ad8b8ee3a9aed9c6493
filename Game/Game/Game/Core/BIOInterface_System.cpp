@@ -12,6 +12,7 @@ using namespace cocos2d;
 void BIOInterface::System_SetLogFile(const char * filename)
 {
 	strcpy(szLogFile, filename);
+	Resource_DeleteFile(szLogFile);
 }
 
 void BIOInterface::System_Log(const char *szFormat, ...)
