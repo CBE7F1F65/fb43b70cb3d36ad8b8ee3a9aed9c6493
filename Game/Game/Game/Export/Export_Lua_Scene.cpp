@@ -81,7 +81,7 @@ bool Export_Lua_Scene::InitCallbacks()
 /************************************************************************/
 /* SceneGet                                                             */
 /************************************************************************/
-void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc)
+void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc, SEL_CallFuncND * cbndfunc)
 {
 	scenetag = scenetag & KTAG_SCENELAYERMASK;
 	switch (scenetag)
@@ -95,6 +95,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		{
 			*cbfunc = menu_selector(LoadingScene::MenuCallbackFunc);
 		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(LoadingScene::NodeCallbackFunc);
+		}
 		break;
 	case KTAG_TITLESCENELAYER:
 		if (proto)
@@ -104,6 +108,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(TitleScene::MenuCallbackFunc);
+		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(TitleScene::NodeCallbackFunc);
 		}
 		break;
 	case KTAG_HISCORESCENELAYER:
@@ -115,6 +123,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		{
 			*cbfunc = menu_selector(HiScoreScene::MenuCallbackFunc);
 		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(HiScoreScene::NodeCallbackFunc);
+		}
 		break;
 	case KTAG_OPTIONSCENELAYER:
 		if (proto)
@@ -124,6 +136,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(OptionScene::MenuCallbackFunc);
+		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(OptionScene::NodeCallbackFunc);
 		}
 		break;
 	case KTAG_ONLINESCENELAYER:
@@ -135,6 +151,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		{
 			*cbfunc = menu_selector(OnlineScene::MenuCallbackFunc);
 		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(OnlineScene::NodeCallbackFunc);
+		}
 		break;
 	case KTAG_HELPSCENELAYER:
 		if (proto)
@@ -144,6 +164,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(HelpScene::MenuCallbackFunc);
+		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(HelpScene::NodeCallbackFunc);
 		}
 		break;
 	case KTAG_STAGESELECTSCENELAYER:
@@ -155,6 +179,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		{
 			*cbfunc = menu_selector(StageSelectScene::MenuCallbackFunc);
 		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(StageSelectScene::NodeCallbackFunc);
+		}
 		break;
 	case KTAG_MISSIONSELECTSCENELAYER:
 		if (proto)
@@ -165,6 +193,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		{
 			*cbfunc = menu_selector(MissionSelectScene::MenuCallbackFunc);
 		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(MissionSelectScene::NodeCallbackFunc);
+		}
 		break;
 	case KTAG_PLAYSCENELAYER:
 		if (proto)
@@ -174,6 +206,10 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(PlayScene::MenuCallbackFunc);
+		}
+		if (cbfunc)
+		{
+			*cbndfunc = callfuncND_selector(PlayScene::NodeCallbackFunc);
 		}
 		break;
 	}

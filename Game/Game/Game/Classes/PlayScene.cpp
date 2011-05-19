@@ -22,6 +22,9 @@ CCScene* PlayScene::scene()
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_PLAYSCENELAYER);
 
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
+		
+		pLayer->toenter = true;
+		pLayer->toentertdf = true;
 
 	} while (0);
 
@@ -32,6 +35,11 @@ void PlayScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
 	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
+}
+
+void PlayScene::NodeCallbackFunc(CCNode *sender, void *data)
+{
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), 0);
 }
 
 bool PlayScene::init()
@@ -51,5 +59,9 @@ void PlayScene::onEnter()
 {
 	CCLayer::onEnter();
 
-	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+	if (toenter)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+		toenter = false;
+	}
 }

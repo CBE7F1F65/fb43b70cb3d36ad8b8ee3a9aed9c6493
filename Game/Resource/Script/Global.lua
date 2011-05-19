@@ -53,3 +53,5 @@ function Debug_AddReloadMenu_Callback(selitemtag, eventtag, toptag)
 		game.ReplaceScene(ktag_LoadingSceneLayer);
 	end
 end
+
+g_SceneTransTime = 0.2

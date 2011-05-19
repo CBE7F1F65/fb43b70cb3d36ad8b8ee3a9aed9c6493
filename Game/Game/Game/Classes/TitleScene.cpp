@@ -23,6 +23,9 @@ CCScene* TitleScene::scene()
 
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
 
+		pLayer->toenter = true;
+		pLayer->toentertdf = true;
+
 	} while (0);
 
 	return pScene;
@@ -32,6 +35,11 @@ void TitleScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
 	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
+}
+
+void TitleScene::NodeCallbackFunc(CCNode *sender, void *data)
+{
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), 0);
 }
 
 bool TitleScene::init()
@@ -51,5 +59,20 @@ void TitleScene::onEnter()
 {
 	CCLayer::onEnter();
 
-	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+	if (toenter)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+		toenter = false;
+	}
+}
+
+void TitleScene::onEnterTransitionDidFinish()
+{
+	CCLayer::onEnterTransitionDidFinish();
+
+	if (toentertdf)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERTDF, thisLayer, thisLayer->getTag());
+		toentertdf = false;
+	}
 }

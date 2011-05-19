@@ -24,7 +24,7 @@ public:
 	static bool ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag);
 	static bool ExecuteCBScene(int tag, int eventtag);
 
-	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc);
+	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto=NULL, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
 	static CCNode * _GetSceneNode(int * scenetag);
 	static CCScene * _GetNewScene(int scenetag);
 

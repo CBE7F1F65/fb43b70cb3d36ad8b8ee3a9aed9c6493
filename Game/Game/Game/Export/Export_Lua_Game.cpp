@@ -29,13 +29,35 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("FreeTexture", LuaFn_Game_FreeTexture);
 
 	// Scene
+	_gameobj.Register("PushScene", LuaFn_Game_PushScene);
+	_gameobj.Register("PopScene", LuaFn_Game_PopScene);
 	_gameobj.Register("ReplaceScene", LuaFn_Game_ReplaceScene);
+
+	// Node
+	_gameobj.Register("GetNode", LuaFn_Game_GetNode);
+
+	_gameobj.Register("AddNullChild", LuaFn_Game_AddNullChild);
+
 	// Sprite
 	_gameobj.Register("CreateSprite", LuaFn_Game_CreateSprite);
 	_gameobj.Register("AddSpriteChild", LuaFn_Game_AddSpriteChild);
-	//Menu
+	// Menu
 	_gameobj.Register("CreateMenuItem", LuaFn_Game_CreateMenuItem);
 	_gameobj.Register("AddMenuChild", LuaFn_Game_AddMenuChild);
+
+	// Action
+	_gameobj.Register("RunAction", LuaFn_Game_RunAction);
+
+	_gameobj.Register("ActionMove", LuaFn_Game_ActionMove);
+	_gameobj.Register("ActionRotate", LuaFn_Game_ActionRotate);
+	_gameobj.Register("ActionScale", LuaFn_Game_ActionScale);
+	_gameobj.Register("ActionEase", LuaFn_Game_ActionEase);
+	_gameobj.Register("ActionFade", LuaFn_Game_ActionFade);
+	_gameobj.Register("ActionSequence", LuaFn_Game_ActionSequence);
+	_gameobj.Register("ActionSpawm", LuaFn_Game_ActionSpawn);
+	_gameobj.Register("ActionRepeat", LuaFn_Game_ActionRepeat);
+	_gameobj.Register("ActionDelay", LuaFn_Game_ActionDelay);
+	_gameobj.Register("ActionCallFunc", LuaFn_Game_ActionCallFunc);
 
 	return true;
 }
@@ -261,12 +283,53 @@ bool Export_Lua_Game::_GetXYZT(_LObjNode * cnode, float *x/* =NULL */, float *y/
 /* Scene                                                                */
 /************************************************************************/
 
-int Export_Lua_Game::LuaFn_Game_ReplaceScene(LuaState * ls)
+int Export_Lua_Game::LuaFn_Game_PushScene(LuaState * ls)
 {
-	// toptag
-
 	_ENTERFUNC_LUA(1);
 
+	// toptag
+
+	int _tag = node.iNextGet();
+	float _duration = 0.0f;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_duration = node.fGet();
+	}
+	CCScene * pScene = Export_Lua_Scene::_GetNewScene(_tag);
+	if (pScene)
+	{
+		if (_duration)
+		{
+			CCDirector::sharedDirector()->pushScene(CCTransitionCrossFade::transitionWithDuration(_duration, pScene));
+		}
+		else
+		{
+			CCDirector::sharedDirector()->pushScene(pScene);
+		}
+		BGlobal::pushedscenecount++;
+	}
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_PopScene(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	if (BGlobal::pushedscenecount)
+	{
+		BGlobal::pushedscenecount--;
+		CCDirector::sharedDirector()->popScene();
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ReplaceScene(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// toptag
 	int _tag = node.iNextGet();
 	float _duration = 0.0f;
 	node.jNextGet();
@@ -284,6 +347,58 @@ int Export_Lua_Game::LuaFn_Game_ReplaceScene(LuaState * ls)
 		else
 		{
 			CCDirector::sharedDirector()->replaceScene(pScene);
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		CCNode * retval = _GetNowNode(&cnode);
+		node.PDword((DWORD)retval);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+
+int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// {nodelist} {XYZT}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		CCNode * nownode = _GetNowNode(&cnode);
+		if (!nownode)
+		{
+			break;
+		}
+
+		node.jNextGet();
+		if (node.ObjIsTable())
+		{
+			float _x = 0.0f;
+			float _y = 0.0f;
+			int _zOrder = 0;
+			int _tag = kCCNodeTagInvalid;
+			_LObjNode tcnode(ls, &(node._obj), &node);
+			_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
+
+			CCNode * ccnode = CCNode::node();
+			ccnode->setPosition(BGlobal::TranslatePosition(_x, _y));
+			nownode->addChild(ccnode, _zOrder, _tag);
+
+			node.PDword((DWORD)ccnode);
 		}
 	}
 
@@ -440,10 +555,10 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 			_LObjNode cnode(ls, &(node._obj), &node);
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 
-			// sprites
 			node.jNextGet();
 			if (node.bhavenext)
 			{
+				// string
 				if (node.ObjIsString())
 				{
 					_labelstr = (char *)node.sGet();
@@ -460,6 +575,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 				}
 				else
 				{
+					// sprites
 					_spnormal = (CCSprite *)node.dGet();
 					node.jNextGet();
 					if (node.bhavenext)
@@ -514,43 +630,428 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 		CCMenuItem * _item = (CCMenuItem *)cnode.dNextGet();
 		CCMenu * menu = CCMenu::menuWithItems(_item, NULL);
 
-		if (menu)
+		if (!menu)
 		{
-			do 
-			{
-				cnode.jNextGet();
-				if (cnode.bhavenext)
-				{
-					CCMenuItem * _titem = (CCMenuItem *)cnode.dGet();
-					menu->addChild(_titem, _titem->getZOrder());
-				}
-			} while (cnode.bhavenext);
+			break;
+		}
 
-			// nodelist
+		do 
+		{
+			cnode.jNextGet();
+			if (cnode.bhavenext)
+			{
+				CCMenuItem * _titem = (CCMenuItem *)cnode.dGet();
+				menu->addChild(_titem, _titem->getZOrder());
+			}
+		} while (cnode.bhavenext);
+
+		// nodelist
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_LObjNode _ttcnode(ls, &(node._obj), &node);
+			CCNode * nownode = _GetNowNode(&_ttcnode);
+
+			if (!nownode)
+			{
+				break;
+			}
+
+			float _x = 0.0f;
+			float _y = 0.0f;
+			int _zOrder = 0;
+			int _tag = kCCNodeTagInvalid;
+
+			// XYZT
+			node.jNextGet();
+			if (node.bhavenext && node.ObjIsTable())
+			{
+				_LObjNode tcnode(ls, &(node._obj), &node);
+				_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
+			}
+			nownode->addChild(menu, _zOrder, _tag);
+			menu->setPosition(BGlobal::TranslatePosition(_x, _y));
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_RunAction(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// item, action
+
+	CCNode * _item = (CCNode *)node.dNextGet();
+
+	if (!_item)
+	{
+		break;
+	}
+
+	CCAction * _action = (CCAction *)node.dNextGet();
+
+	if (!_action)
+	{
+		break;
+	}
+
+	bool _repeatforever = false;
+
+	CCAction * retval = NULL;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_repeatforever = node.bGet();
+	}
+	if (_repeatforever)
+	{
+		retval = _item->runAction(CCRepeatForever::actionWithAction((CCActionInterval *)_action));
+	}
+	else
+	{
+		retval = _item->runAction(_action);
+	}
+
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionMove(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// x y time relative
+
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	float _time = 0;
+	bool  _relative = false;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_time = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_relative = node.bGet();
+		}
+	}
+
+	CCAction * retval = NULL;
+	if (_relative)
+	{
+		retval = CCMoveBy::actionWithDuration(_time, BGlobal::TranslatePosition(_x, _y));
+	}
+	else
+	{
+		retval = CCMoveTo::actionWithDuration(_time, BGlobal::TranslatePosition(_x, _y));
+	}
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionRotate(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// angle time relative
+
+	int _angle = node.iNextGet();
+	float _time = 0;
+	bool _relative = false;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_time = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_relative = node.bGet();
+		}
+	}
+
+	CCAction * retval = NULL;
+	if (_relative)
+	{
+		retval = CCRotateBy::actionWithDuration(_time, ARC(_angle));
+	}
+	else
+	{
+		retval = CCRotateTo::actionWithDuration(_time, ARC(_angle));
+	}
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// sx sy time relative
+
+	float _scalex = node.fNextGet();
+	float _scaley = _scalex;
+	float _time = 0;
+	bool _relative = false;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_scaley = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_time = node.fGet();
 			node.jNextGet();
 			if (node.bhavenext)
 			{
-				_LObjNode _ttcnode(ls, &(node._obj), &node);
-				CCNode * nownode = _GetNowNode(&_ttcnode);
-				if (nownode)
-				{
-					float _x = 0.0f;
-					float _y = 0.0f;
-					int _zOrder = 0;
-					int _tag = kCCNodeTagInvalid;
-
-					// XYZT
-					node.jNextGet();
-					if (node.bhavenext && node.ObjIsTable())
-					{
-						_LObjNode tcnode(ls, &(node._obj), &node);
-						_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
-					}
-					nownode->addChild(menu, _zOrder, _tag);
-					menu->setPosition(BGlobal::TranslatePosition(_x, _y));
-				}
+				_relative = node.bGet();
 			}
 		}
+	}
+
+	CCAction * retval = NULL;
+	if (_relative)
+	{
+		retval = CCScaleBy::actionWithDuration(_time, _scalex, _scaley);
+	}
+	else
+	{
+		retval = CCScaleTo::actionWithDuration(_time, _scalex, _scaley);
+	}
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionEase(LuaState * ls)
+{
+	_ENTERFUNC_LUA(3);
+
+	// flag action rate
+
+	int _flag = node.iNextGet();
+	CCAction * _action = (CCAction *)node.dNextGet();
+	if (!_action)
+	{
+		break;
+	}
+	float _rate = node.fNextGet();
+
+	CCAction * retval = NULL;
+
+	switch (_flag)
+	{
+	case M_CCACTIONFLAG_IN:
+		retval = CCEaseIn::actionWithAction((CCActionInterval *)_action, _rate);
+		break;
+	case M_CCACTIONFLAG_OUT:
+		retval = CCEaseOut::actionWithAction((CCActionInterval *)_action, _rate);
+		break;
+	case M_CCACTIONFLAG_INOUT:
+		retval = CCEaseInOut::actionWithAction((CCActionInterval *)_action, _rate);
+		break;
+	}
+
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionFade(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// flag toval time
+	int _flag = node.iNextGet();
+	int _toval = -1;
+	float _time = 0;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_toval = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_time = node.fGet();
+		}
+	}
+
+	CCAction * retval = NULL;
+	switch (_flag)
+	{
+	case M_CCACTIONFLAG_IN:
+		retval = CCFadeIn::actionWithDuration(_time);
+		break;
+	case M_CCACTIONFLAG_OUT:
+		retval = CCFadeOut::actionWithDuration(_time);
+		break;
+	default:
+		retval = CCFadeTo::actionWithDuration(_time, _toval);
+		break;
+	}
+
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionSequence(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// {actionlist}
+
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		cnode.jNextGet();
+		if (!cnode.bhavenext)
+		{
+			break;
+		}
+		CCFiniteTimeAction * _pPrev = (CCFiniteTimeAction *)cnode.dGet();
+		if (!_pPrev)
+		{
+			break;
+		}
+
+		cnode.jNextGet();
+		while (cnode.bhavenext)
+		{
+			CCFiniteTimeAction * _pNow = (CCFiniteTimeAction *)cnode.dGet();
+			if (!_pNow)
+			{
+				break;
+			}
+			_pPrev = CCSequence::actionOneTwo(_pPrev, _pNow);
+			cnode.jNextGet();
+		}
+		node.PDword((DWORD)_pPrev);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionSpawn(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// {actionlist}
+
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		cnode.jNextGet();
+		if (!cnode.bhavenext)
+		{
+			break;
+		}
+		CCFiniteTimeAction * _pPrev = (CCFiniteTimeAction *)cnode.dGet();
+		if (!_pPrev)
+		{
+			break;
+		}
+
+		cnode.jNextGet();
+		while (cnode.bhavenext)
+		{
+			CCFiniteTimeAction * _pNow = (CCFiniteTimeAction *)cnode.dGet();
+			if (!_pNow)
+			{
+				break;
+			}
+			_pPrev = CCSpawn::actionOneTwo(_pPrev, _pNow);
+			cnode.jNextGet();
+		}
+		node.PDword((DWORD)_pPrev);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionRepeat(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// action, repeattime
+
+	CCFiniteTimeAction * _action = (CCFiniteTimeAction *)node.dNextGet();
+	if (!_action)
+	{
+		break;
+	}
+	int _repeattime = -1;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_repeattime = node.iGet();
+	}
+
+	CCAction * retval = NULL;
+//	if (_repeattime < 0)
+//	{
+//		retval = CCRepeatForever::actionWithAction((CCActionInterval *)_action);
+//	}
+//	else
+//	{
+		retval = CCRepeat::actionWithAction(_action, _repeattime);
+//	}
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionDelay(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// time
+
+	float _time = node.fNextGet();
+	CCAction * retval = CCDelayTime::actionWithDuration(_time);
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// {nodelist}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		int scenetag = kCCNodeTagInvalid;
+		_LObjNode tcnode(ls, &(node._obj), &node);
+		CCNode * nownode = _GetNowNode(&tcnode, false, &scenetag);
+		if (!nownode)
+		{
+			break;
+		}
+		SelectorProtocol * proto = NULL;
+		SEL_MenuHandler cbfunc = NULL;
+		SEL_CallFuncND cbndfunc = NULL;
+		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &proto, &cbfunc, &cbndfunc);
+		if (!proto || !cbfunc)
+		{
+			break;
+		}
+		CCAction * retval = CCCallFuncND::actionWithTarget(proto, (SEL_CallFuncND)cbndfunc, NULL);
+		node.PDword((DWORD)retval);
 	}
 
 	_LEAVEFUNC_LUA;

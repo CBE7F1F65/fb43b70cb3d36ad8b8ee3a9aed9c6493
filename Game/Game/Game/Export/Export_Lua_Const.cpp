@@ -19,6 +19,13 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetNumber("ScreenWidth", M_SCREEN_WIDTH);
 	obj->SetNumber("ScreenHeight", M_SCREEN_HEIGHT);
 
+	obj->SetInteger("CCAF_Null", M_CCACTIONFLAG_NULL);
+	obj->SetInteger("CCAF_In", M_CCACTIONFLAG_IN);
+	obj->SetInteger("CCAF_Out", M_CCACTIONFLAG_OUT);
+	obj->SetInteger("CCAF_InOut", M_CCACTIONFLAG_INOUT);
+	obj->SetInteger("CCAF_To", M_CCACTIONFLAG_TO);
+	obj->SetInteger("CCAF_By", M_CCACTIONFLAG_BY);
+
 	return true;
 }
 

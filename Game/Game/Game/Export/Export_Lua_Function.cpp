@@ -102,6 +102,7 @@ bool Export_Lua::LuaRegistConst()
 
 DWORD Export_Lua::_LuaHelper_GetDWORD(LuaObject * obj)
 {
+	BIOInterface::getInstance()->System_Assert(!obj->IsNil(), ASSERTSTR_NILCHECK);
 	DWORD dret;
 	if (obj->IsString())
 	{
@@ -123,6 +124,7 @@ void Export_Lua::_LuaHelper_PushDWORD(LuaState * ls, DWORD dval)
 
 LONGLONG Export_Lua::_LuaHelper_GetLONGLONG(LuaObject * obj)
 {
+	BIOInterface::getInstance()->System_Assert(!obj->IsNil(), ASSERTSTR_NILCHECK);
 	LONGLONG llret;
 	if (obj->IsString())
 	{
@@ -144,6 +146,7 @@ void Export_Lua::_LuaHelper_PushLONGLONG(LuaState * ls, LONGLONG llval)
 
 QWORD Export_Lua::_LuaHelper_GetQWORD(LuaObject * obj)
 {
+	BIOInterface::getInstance()->System_Assert(!obj->IsNil(), ASSERTSTR_NILCHECK);
 	QWORD qret;
 	if (obj->IsString())
 	{
@@ -177,6 +180,7 @@ void Export_Lua::_LuaHelper_PushString(LuaState * ls, const char * sval)
 
 DWORD Export_Lua::_LuaHelper_GetColor(LuaObject * obj)
 {
+	BIOInterface::getInstance()->System_Assert(!obj->IsNil(), ASSERTSTR_NILCHECK);
 	DWORD dret = 0;
 	if (obj->IsTable())
 	{
@@ -195,6 +199,7 @@ DWORD Export_Lua::_LuaHelper_GetColor(LuaObject * obj)
 
 void Export_Lua::_LuaHelper_GetCalculateValue(LuaObject * obj, char calchar, bool buseq, void * val)
 {
+	BIOInterface::getInstance()->System_Assert(!obj->IsNil(), ASSERTSTR_NILCHECK);
 	int _int;
 	DWORD _dword;
 	LONGLONG _longlong;

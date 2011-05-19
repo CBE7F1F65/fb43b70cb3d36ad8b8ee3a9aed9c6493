@@ -23,6 +23,9 @@ CCScene* MissionSelectScene::scene()
 
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
 
+		pLayer->toenter = true;
+		pLayer->toentertdf = true;
+
 	} while (0);
 
 	return pScene;
@@ -32,6 +35,11 @@ void MissionSelectScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
 	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
+}
+
+void MissionSelectScene::NodeCallbackFunc(CCNode *sender, void *data)
+{
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), 0);
 }
 
 bool MissionSelectScene::init()
@@ -51,5 +59,9 @@ void MissionSelectScene::onEnter()
 {
 	CCLayer::onEnter();
 
-	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+	if (toenter)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+		toenter = false;
+	}
 }

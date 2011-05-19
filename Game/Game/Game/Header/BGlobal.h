@@ -10,6 +10,7 @@ public:
 	static CCPoint TranslatePosition(float x, float y);
 	static float ScalerX(float val);
 	static float ScalerY(float val);
+	static int pushedscenecount;
 };
 
 #endif

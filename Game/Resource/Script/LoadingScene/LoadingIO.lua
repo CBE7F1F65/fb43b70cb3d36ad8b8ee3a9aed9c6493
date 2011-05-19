@@ -29,7 +29,7 @@ function LoadingScene_OnEnter(toplayer, toptag)
 --	local menu3 = game.CreateMenuItem({toptag}, {480, 600, 0, toptag+3}, "AAAAAAA", 20)
 --	game.AddMenuChild({menu, menu2, menu3}, {toptag}, {0, 0, 0, toptag+10});
 
-	game.ReplaceScene(ktag_TitleSceneLayer, 0.2)
+	game.ReplaceScene(ktag_TitleSceneLayer, g_SceneTransTime)
 	
 end
 function LoadingScene_OnEnterTDF(toplayer, toptag)

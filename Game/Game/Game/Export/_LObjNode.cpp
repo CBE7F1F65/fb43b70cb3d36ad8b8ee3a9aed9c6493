@@ -1,4 +1,5 @@
 #include "_LObjNode.h"
+#include "../Header/BIOInterface.h"
 
 _LObjNode::_LObjNode()
 {
@@ -78,6 +79,7 @@ LuaObject _LObjNode::jNextGet()
 
 int _LObjNode::iGet()
 {
+	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
 	return _obj.GetInteger();
 }
 
@@ -89,6 +91,7 @@ int _LObjNode::iNextGet()
 
 float _LObjNode::fGet()
 {
+	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
 	return _obj.GetFloat();
 }
 
@@ -100,6 +103,7 @@ float _LObjNode::fNextGet()
 
 bool _LObjNode::bGet()
 {
+	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
 	return _obj.GetBoolean();
 }
 
@@ -111,6 +115,7 @@ bool _LObjNode::bNextGet()
 
 const char * _LObjNode::sGet()
 {
+	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
 	return _obj.GetString();
 }
 

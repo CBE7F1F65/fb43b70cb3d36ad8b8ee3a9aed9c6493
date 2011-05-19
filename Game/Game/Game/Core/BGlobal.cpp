@@ -1,6 +1,8 @@
 #include "../Header/BGlobal.h"
 #include "../Header/Const.h"
 
+int BGlobal::pushedscenecount = 0;
+
 CCPoint BGlobal::TranslatePosition(float x, float y)
 {
 	CCSize size = CCDirector::sharedDirector()->getWinSize();

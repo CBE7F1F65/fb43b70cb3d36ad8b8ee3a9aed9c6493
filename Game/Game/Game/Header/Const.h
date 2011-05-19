@@ -34,8 +34,16 @@ enum
 
 // Assert
 #define ASSERTSTR_SECONDSINGLETON	"Attempted to allocate a second instance of a singleton."
+#define ASSERTSTR_NILCHECK			"Nil value!"
 
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f
 
 #define M_DEFAULT_FONTNAME	"Arial"
+
+#define M_CCACTIONFLAG_NULL		0x0000
+#define M_CCACTIONFLAG_IN		0x0001
+#define M_CCACTIONFLAG_OUT		0x0002
+#define M_CCACTIONFLAG_INOUT	(M_CCACTIONFLAG_IN|M_CCACTIONFLAG_OUT)
+#define M_CCACTIONFLAG_TO		0x0010
+#define M_CCACTIONFLAG_BY		0x0020

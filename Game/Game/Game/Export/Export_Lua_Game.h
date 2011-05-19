@@ -34,13 +34,32 @@ public:
 	static int LuaFn_Game_LoadTexture(LuaState * ls);
 	static int LuaFn_Game_FreeTexture(LuaState * ls);
 
+	static int LuaFn_Game_PushScene(LuaState * ls);
+	static int LuaFn_Game_PopScene(LuaState * ls);
 	static int LuaFn_Game_ReplaceScene(LuaState * ls);
+
+	static int LuaFn_Game_GetNode(LuaState * ls);
+
+	static int LuaFn_Game_AddNullChild(LuaState * ls);
 
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
 
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
+
+	static int LuaFn_Game_RunAction(LuaState * ls);
+
+	static int LuaFn_Game_ActionMove(LuaState * ls);
+	static int LuaFn_Game_ActionRotate(LuaState * ls);
+	static int LuaFn_Game_ActionScale(LuaState * ls);
+	static int LuaFn_Game_ActionEase(LuaState * ls);
+	static int LuaFn_Game_ActionFade(LuaState * ls);
+	static int LuaFn_Game_ActionSequence(LuaState * ls);
+	static int LuaFn_Game_ActionSpawn(LuaState * ls);
+	static int LuaFn_Game_ActionRepeat(LuaState * ls);
+	static int LuaFn_Game_ActionDelay(LuaState * ls);
+	static int LuaFn_Game_ActionCallFunc(LuaState * ls);
 
 	static CCNode * _GetNowNode(_LObjNode * cnode, bool topnode=false, int * scenetag=NULL);
 	static bool _GetXYZT(_LObjNode * cnode, float *x=NULL, float *y=NULL, int *zOrder=NULL, int *tag=NULL);

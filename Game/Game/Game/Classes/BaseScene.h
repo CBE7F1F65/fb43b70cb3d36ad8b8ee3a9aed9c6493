@@ -6,6 +6,12 @@ using namespace cocos2d;
 
 class BaseScene : public CCLayer
 {
+public:
+	BaseScene();
+	~BaseScene();
+
+	bool toenter;
+	bool toentertdf;
 };
 
 #endif

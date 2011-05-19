@@ -28,6 +28,9 @@ CCScene* LoadingScene::scene()
 
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
 
+		pLayer->toenter = true;
+		pLayer->toentertdf = true;
+
 	} while (0);
 
 	return pScene;
@@ -37,6 +40,11 @@ void LoadingScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
 	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
+}
+
+void LoadingScene::NodeCallbackFunc(CCNode *sender, void *data)
+{
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), 0);
 }
 
 bool LoadingScene::init()
@@ -99,32 +107,54 @@ void LoadingScene::onEnter()
 {
 	CCLayer::onEnter();
 
+
 	/*
-	CCSprite * sp1 = SpriteItemManager::CreateSprite(10);
+	CCSprite * sp1 = SpriteItemManager::CreateSprite(11);
 	sp1->setColor(ccc3(0xff, 0xff, 0xff));
 
-	CCSprite * sp2 = SpriteItemManager::CreateSprite(11);
+	CCSprite * sp2 = SpriteItemManager::CreateSprite(12);
 	sp2->setColor(ccc3(0x00, 0xff, 0xff));
 
-	CCSprite * sp3 = SpriteItemManager::CreateSprite(10);
+	CCSprite * sp3 = SpriteItemManager::CreateSprite(11);
 	sp3->setColor(ccc3(0xff, 0x00, 0xff));
 
 	sp1->setScale(0.5f);
 	sp2->setScale(0.5f);
 	sp3->setScale(0.5f);
 
+//	sp1->setOpacity(0);
 
-	CCMenuItemSprite * item = CCMenuItemSprite::itemFromNormalSprite(sp1, sp2, sp3, thisLayer, menu_selector(LoadingScene::LoadingCallbackFunc));
-	item->setPosition(ccp(120, 120));
+	CCMenuItemSprite * item = CCMenuItemSprite::itemFromNormalSprite(sp1, sp2, sp3, thisLayer, menu_selector(LoadingScene::MenuCallbackFunc));
+	item->setPosition(ccp(480, 120));
 
 	CCMenu *menu = CCMenu::menuWithItems(item, NULL);
 	menu->setPosition(ccp(0, 0));
 
-	((CCNode*)thisLayer)->addChild(menu);
-	*/
-	
+	CCActionInterval * moveaction = CCMoveTo::actionWithDuration(1, ccp(400, 120));
+//	CCActionInterval * moveeased = CCEaseIn::actionWithAction(moveaction, 0.5f);
+	CCActionInterval * moveeased = CCEaseExponentialOut::actionWithAction(moveaction);
 
-	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+	CCActionInterval * movealpha = CCFadeIn::actionWithDuration(1);
+	CCActionInterval * alphapre = CCFadeTo::actionWithDuration(0.3f, 0x7f);
+	CCActionInterval * alphapost = CCFadeTo::actionWithDuration(0.7f, 0xff);
+	CCActionInterval * alphaseq = CCSequence::actionOneTwo(alphapre, alphapost);
+	CCActionInterval * alpharepeat = CCRepeat::actionWithAction(alphaseq, -1);
+	CCActionInterval * totalseq = CCSequence::actionOneTwo(movealpha, alpharepeat);
+
+	CCFiniteTimeAction * seq = CCSequence::actions(moveeased, NULL);
+//	CCFiniteTimeAction * spawn = CCSpawn::actions(seq, movealpha, NULL);
+
+	item->runAction(seq);
+	sp1->runAction(totalseq);
+
+	((CCNode*)thisLayer)->addChild(menu);
+*/
+
+	if (toenter)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+		toenter = false;
+	}
 /*
 	CCMutableArray<CCNode*> *pChildren = thisLayer->getChildren();
 

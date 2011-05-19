@@ -18,6 +18,7 @@ public:
 	static CCLayer * thisLayer;
 
 	void MenuCallbackFunc(CCObject *sender);
+	void NodeCallbackFunc(CCNode *sender, void *data);
 
 private:
 };
