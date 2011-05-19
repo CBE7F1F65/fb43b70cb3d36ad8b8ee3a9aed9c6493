@@ -20,11 +20,19 @@
 		50F4144810692EE7002A0D5E /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144310692EE7002A0D5E /* blocks.png */; };
 		50F4144910692EE7002A0D5E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144410692EE7002A0D5E /* Default.png */; };
 		50F4144B10692EE7002A0D5E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144610692EE7002A0D5E /* Icon.png */; };
-		71EF552F1383453A00B242B4 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55251383453A00B242B4 /* AppDelegate.cpp */; };
-		71EF55301383453A00B242B4 /* BaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55271383453A00B242B4 /* BaseScene.cpp */; };
-		71EF55311383453A00B242B4 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55291383453A00B242B4 /* HelloWorldScene.cpp */; };
-		71EF55321383453A00B242B4 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF552B1383453A00B242B4 /* LoadingScene.cpp */; };
-		71EF55331383453A00B242B4 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF552D1383453A00B242B4 /* TitleScene.cpp */; };
+		71AC30801385C6C60029F185 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71AC307F1385C6C60029F185 /* RootViewController.mm */; };
+		71AC310A1385C9900029F185 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC30FE1385C9900029F185 /* AppDelegate.cpp */; };
+		71AC310B1385C9900029F185 /* BaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC30FF1385C9900029F185 /* BaseScene.cpp */; };
+		71AC310C1385C9900029F185 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31001385C9900029F185 /* HelloWorldScene.cpp */; };
+		71AC310D1385C9900029F185 /* HelpScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31011385C9900029F185 /* HelpScene.cpp */; };
+		71AC310E1385C9900029F185 /* HiScoreScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31021385C9900029F185 /* HiScoreScene.cpp */; };
+		71AC310F1385C9900029F185 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31031385C9900029F185 /* LoadingScene.cpp */; };
+		71AC31101385C9900029F185 /* MissionSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31041385C9900029F185 /* MissionSelectScene.cpp */; };
+		71AC31111385C9900029F185 /* OnlineScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31051385C9900029F185 /* OnlineScene.cpp */; };
+		71AC31121385C9900029F185 /* OptionScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31061385C9900029F185 /* OptionScene.cpp */; };
+		71AC31131385C9900029F185 /* PlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31071385C9900029F185 /* PlayScene.cpp */; };
+		71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31081385C9900029F185 /* StageSelectScene.cpp */; };
+		71AC31151385C9900029F185 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31091385C9900029F185 /* TitleScene.cpp */; };
 		71EF555A1383455400B242B4 /* BGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55351383455400B242B4 /* BGlobal.cpp */; };
 		71EF555B1383455400B242B4 /* BIOInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55361383455400B242B4 /* BIOInterface.cpp */; };
 		71EF555C1383455400B242B4 /* BIOInterface_Ini.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55371383455400B242B4 /* BIOInterface_Ini.cpp */; };
@@ -263,16 +271,32 @@
 		50F4144310692EE7002A0D5E /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		50F4144410692EE7002A0D5E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		50F4144610692EE7002A0D5E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		71EF55251383453A00B242B4 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
-		71EF55261383453A00B242B4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		71EF55271383453A00B242B4 /* BaseScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseScene.cpp; sourceTree = "<group>"; };
-		71EF55281383453A00B242B4 /* BaseScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseScene.h; sourceTree = "<group>"; };
-		71EF55291383453A00B242B4 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorldScene.cpp; sourceTree = "<group>"; };
-		71EF552A1383453A00B242B4 /* HelloWorldScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldScene.h; sourceTree = "<group>"; };
-		71EF552B1383453A00B242B4 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
-		71EF552C1383453A00B242B4 /* LoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScene.h; sourceTree = "<group>"; };
-		71EF552D1383453A00B242B4 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
-		71EF552E1383453A00B242B4 /* TitleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScene.h; sourceTree = "<group>"; };
+		71AC307E1385C6C60029F185 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ios/RootViewController.h; sourceTree = "<group>"; };
+		71AC307F1385C6C60029F185 /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RootViewController.mm; path = ios/RootViewController.mm; sourceTree = "<group>"; };
+		71AC30F21385C9900029F185 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		71AC30F31385C9900029F185 /* BaseScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseScene.h; sourceTree = "<group>"; };
+		71AC30F41385C9900029F185 /* HelloWorldScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldScene.h; sourceTree = "<group>"; };
+		71AC30F51385C9900029F185 /* HelpScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpScene.h; sourceTree = "<group>"; };
+		71AC30F61385C9900029F185 /* HiScoreScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiScoreScene.h; sourceTree = "<group>"; };
+		71AC30F71385C9900029F185 /* LoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScene.h; sourceTree = "<group>"; };
+		71AC30F81385C9900029F185 /* MissionSelectScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionSelectScene.h; sourceTree = "<group>"; };
+		71AC30F91385C9900029F185 /* OnlineScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlineScene.h; sourceTree = "<group>"; };
+		71AC30FA1385C9900029F185 /* OptionScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionScene.h; sourceTree = "<group>"; };
+		71AC30FB1385C9900029F185 /* PlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayScene.h; sourceTree = "<group>"; };
+		71AC30FC1385C9900029F185 /* StageSelectScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageSelectScene.h; sourceTree = "<group>"; };
+		71AC30FD1385C9900029F185 /* TitleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScene.h; sourceTree = "<group>"; };
+		71AC30FE1385C9900029F185 /* AppDelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
+		71AC30FF1385C9900029F185 /* BaseScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseScene.cpp; sourceTree = "<group>"; };
+		71AC31001385C9900029F185 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorldScene.cpp; sourceTree = "<group>"; };
+		71AC31011385C9900029F185 /* HelpScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelpScene.cpp; sourceTree = "<group>"; };
+		71AC31021385C9900029F185 /* HiScoreScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HiScoreScene.cpp; sourceTree = "<group>"; };
+		71AC31031385C9900029F185 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
+		71AC31041385C9900029F185 /* MissionSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MissionSelectScene.cpp; sourceTree = "<group>"; };
+		71AC31051385C9900029F185 /* OnlineScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OnlineScene.cpp; sourceTree = "<group>"; };
+		71AC31061385C9900029F185 /* OptionScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OptionScene.cpp; sourceTree = "<group>"; };
+		71AC31071385C9900029F185 /* PlayScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayScene.cpp; sourceTree = "<group>"; };
+		71AC31081385C9900029F185 /* StageSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageSelectScene.cpp; sourceTree = "<group>"; };
+		71AC31091385C9900029F185 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
 		71EF55351383455400B242B4 /* BGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BGlobal.cpp; sourceTree = "<group>"; };
 		71EF55361383455400B242B4 /* BIOInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BIOInterface.cpp; sourceTree = "<group>"; };
 		71EF55371383455400B242B4 /* BIOInterface_Ini.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BIOInterface_Ini.cpp; sourceTree = "<group>"; };
@@ -718,6 +742,8 @@
 			isa = PBXGroup;
 			children = (
 				D408240F132F437D00F44E75 /* Game_Xcode_Prefix.pch */,
+				71AC307E1385C6C60029F185 /* RootViewController.h */,
+				71AC307F1385C6C60029F185 /* RootViewController.mm */,
 				D40823BD132F415F00F44E75 /* Game_XcodeAppController.h */,
 				D40823BE132F415F00F44E75 /* Game_XcodeAppController.mm */,
 				D40823BF132F415F00F44E75 /* main.m */,
@@ -770,16 +796,30 @@
 		71EF55241383453A00B242B4 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				71EF55251383453A00B242B4 /* AppDelegate.cpp */,
-				71EF55261383453A00B242B4 /* AppDelegate.h */,
-				71EF55271383453A00B242B4 /* BaseScene.cpp */,
-				71EF55281383453A00B242B4 /* BaseScene.h */,
-				71EF55291383453A00B242B4 /* HelloWorldScene.cpp */,
-				71EF552A1383453A00B242B4 /* HelloWorldScene.h */,
-				71EF552B1383453A00B242B4 /* LoadingScene.cpp */,
-				71EF552C1383453A00B242B4 /* LoadingScene.h */,
-				71EF552D1383453A00B242B4 /* TitleScene.cpp */,
-				71EF552E1383453A00B242B4 /* TitleScene.h */,
+				71AC30F21385C9900029F185 /* AppDelegate.h */,
+				71AC30F31385C9900029F185 /* BaseScene.h */,
+				71AC30F41385C9900029F185 /* HelloWorldScene.h */,
+				71AC30F51385C9900029F185 /* HelpScene.h */,
+				71AC30F61385C9900029F185 /* HiScoreScene.h */,
+				71AC30F71385C9900029F185 /* LoadingScene.h */,
+				71AC30F81385C9900029F185 /* MissionSelectScene.h */,
+				71AC30F91385C9900029F185 /* OnlineScene.h */,
+				71AC30FA1385C9900029F185 /* OptionScene.h */,
+				71AC30FB1385C9900029F185 /* PlayScene.h */,
+				71AC30FC1385C9900029F185 /* StageSelectScene.h */,
+				71AC30FD1385C9900029F185 /* TitleScene.h */,
+				71AC30FE1385C9900029F185 /* AppDelegate.cpp */,
+				71AC30FF1385C9900029F185 /* BaseScene.cpp */,
+				71AC31001385C9900029F185 /* HelloWorldScene.cpp */,
+				71AC31011385C9900029F185 /* HelpScene.cpp */,
+				71AC31021385C9900029F185 /* HiScoreScene.cpp */,
+				71AC31031385C9900029F185 /* LoadingScene.cpp */,
+				71AC31041385C9900029F185 /* MissionSelectScene.cpp */,
+				71AC31051385C9900029F185 /* OnlineScene.cpp */,
+				71AC31061385C9900029F185 /* OptionScene.cpp */,
+				71AC31071385C9900029F185 /* PlayScene.cpp */,
+				71AC31081385C9900029F185 /* StageSelectScene.cpp */,
+				71AC31091385C9900029F185 /* TitleScene.cpp */,
 			);
 			name = Classes;
 			path = ../Game/Game/Game/Classes;
@@ -1607,11 +1647,6 @@
 			files = (
 				D40823C0132F415F00F44E75 /* Game_XcodeAppController.mm in Sources */,
 				D40823C1132F415F00F44E75 /* main.m in Sources */,
-				71EF552F1383453A00B242B4 /* AppDelegate.cpp in Sources */,
-				71EF55301383453A00B242B4 /* BaseScene.cpp in Sources */,
-				71EF55311383453A00B242B4 /* HelloWorldScene.cpp in Sources */,
-				71EF55321383453A00B242B4 /* LoadingScene.cpp in Sources */,
-				71EF55331383453A00B242B4 /* TitleScene.cpp in Sources */,
 				71EF555A1383455400B242B4 /* BGlobal.cpp in Sources */,
 				71EF555B1383455400B242B4 /* BIOInterface.cpp in Sources */,
 				71EF555C1383455400B242B4 /* BIOInterface_Ini.cpp in Sources */,
@@ -1726,6 +1761,19 @@
 				71EF60D01383835800B242B4 /* CCTMXXMLParser.cpp in Sources */,
 				71EF60D11383835800B242B4 /* CCTouchDispatcher.cpp in Sources */,
 				71EF60D21383835800B242B4 /* CCTouchHandler.cpp in Sources */,
+				71AC30801385C6C60029F185 /* RootViewController.mm in Sources */,
+				71AC310A1385C9900029F185 /* AppDelegate.cpp in Sources */,
+				71AC310B1385C9900029F185 /* BaseScene.cpp in Sources */,
+				71AC310C1385C9900029F185 /* HelloWorldScene.cpp in Sources */,
+				71AC310D1385C9900029F185 /* HelpScene.cpp in Sources */,
+				71AC310E1385C9900029F185 /* HiScoreScene.cpp in Sources */,
+				71AC310F1385C9900029F185 /* LoadingScene.cpp in Sources */,
+				71AC31101385C9900029F185 /* MissionSelectScene.cpp in Sources */,
+				71AC31111385C9900029F185 /* OnlineScene.cpp in Sources */,
+				71AC31121385C9900029F185 /* OptionScene.cpp in Sources */,
+				71AC31131385C9900029F185 /* PlayScene.cpp in Sources */,
+				71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */,
+				71AC31151385C9900029F185 /* TitleScene.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,7 @@
 #import "cocos2d.h"
 #import "EAGLView.h"
 #import "AppDelegate.h"
+#import "RootViewController.h"
 
 @implementation Game_XcodeAppController
 
@@ -25,6 +26,11 @@ static AppDelegate s_sharedApplication;
 
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
+    
+    // Init the View Controller
+	viewController = [[RootViewController alloc] initWithNibName:nil bundle:nil];
+	viewController.wantsFullScreenLayout = YES;
+	
     EAGLView *__glView = [EAGLView viewWithFrame: [window bounds]
                                      pixelFormat: kEAGLColorFormatRGBA8
                                      depthFormat: GL_DEPTH_COMPONENT16_OES
@@ -32,10 +38,16 @@ static AppDelegate s_sharedApplication;
                                       sharegroup: nil
 								   multiSampling: NO
 								 numberOfSamples:0 ];
-    [window addSubview: __glView];
+    [__glView setMultipleTouchEnabled:YES];
+	
+    // make the OpenGLView a child of the view controller
+	[viewController setView:__glView];
+	
+	// make the View Controller a child of the main window
+	[window addSubview: viewController.view];
     [window makeKeyAndVisible];
 
-    [[UIApplication sharedApplication] setStatusBarHidden: YES];
+    [[UIApplication sharedApplication] setStatusBarHidden: true];
     
     cocos2d::CCApplication::sharedApplication().run();
     return YES;
