@@ -16,6 +16,9 @@ function HiScoreScene_IO(eventtype, toplayer, toptag)
 end
 
 function HiScoreScene_OnInit(toplayer, toptag)
+	
+	local layertag = toptag + CCTag_Layer_00;
+	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_00, layertag});
 end
 
 function HiScoreScene_OnEnter(toplayer, toptag)

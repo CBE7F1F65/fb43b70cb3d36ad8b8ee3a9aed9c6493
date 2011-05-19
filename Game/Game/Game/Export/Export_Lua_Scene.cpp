@@ -309,7 +309,7 @@ bool Export_Lua_Scene::ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag)
 bool Export_Lua_Scene::ExecuteCBScene(int tag, int eventtag)
 {
 	LuaState * ls = state;
-	bool bret = (*cbScene)(tag, eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
+	bool bret = (*cbScene)(tag, eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

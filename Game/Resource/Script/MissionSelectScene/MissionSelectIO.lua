@@ -16,6 +16,9 @@ function MissionSelectScene_IO(eventtype, toplayer, toptag)
 end
 
 function MissionSelectScene_OnInit(toplayer, toptag)
+	
+	local layertag = toptag + CCTag_Layer_00;
+	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_00, layertag});
 end
 
 function MissionSelectScene_OnEnter(toplayer, toptag)

@@ -16,6 +16,8 @@ function HelpScene_IO(eventtype, toplayer, toptag)
 end
 
 function HelpScene_OnInit(toplayer, toptag)
+	local layertag = toptag + CCTag_Layer_00;
+	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_00, layertag});
 end
 
 function HelpScene_OnEnter(toplayer, toptag)
@@ -27,13 +29,17 @@ function HelpScene_OnEnter(toplayer, toptag)
 	local spTitleMenus = {};
 	local spTitleSelectedMenus = {};
 	local menus = {};
-	local grouptag = toptag+CCTag_Menu_00;
-	for i=0, 1 do
+	local layertag = toptag + CCTag_Layer_00;
+	local grouptag = layertag + CCTag_Menu_00;
+	for i=0, 2 do
 		local y = ybegin - i*yoffset;
+		if i == 2 then
+			y = y-yoffset
+		end
 		
 		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Back+i*2, {}, grouptag+CCTag_MenuSub_00+i+1);
 		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Back_Down+i*2, {}, grouptag+CCTag_MenuSub_01+i+1);
-		menus[i+1] = game.CreateMenuItem({toptag}, {xorig, y, CCZOrder_Menu_00, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({layertag}, {xorig, y, CCTag_Menu_00, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(xcen, y, fadetime);
@@ -62,7 +68,7 @@ function HelpScene_OnEnter(toplayer, toptag)
 		
 	end
 	
-	game.AddMenuChild(menus, {toptag}, {0, 0, CCZOrder_Menu_00, grouptag});
+	game.AddMenuChild(menus, {layertag}, {0, 0, CCTag_Menu_00, grouptag});
 	
 end
 function HelpScene_OnEnterTDF(toplayer, toptag)

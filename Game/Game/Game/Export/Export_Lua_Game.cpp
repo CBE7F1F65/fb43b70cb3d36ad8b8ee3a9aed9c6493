@@ -1037,7 +1037,7 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 	{
 		int scenetag = kCCNodeTagInvalid;
 		_LObjNode tcnode(ls, &(node._obj), &node);
-		CCNode * nownode = _GetNowNode(&tcnode, false, &scenetag);
+		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
 		if (!nownode)
 		{
 			break;

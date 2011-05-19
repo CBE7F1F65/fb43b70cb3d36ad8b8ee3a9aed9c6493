@@ -44,12 +44,15 @@ RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;
 
 function Debug_AddReloadMenu(toplayer, toptag)
-	local menu = game.CreateMenuItem({toptag}, {100, 480, 0, toptag+CCTAG_Debug_ReloadItem}, "Reload", 20);
-	game.AddMenuChild({menu}, {toptag}, {0, 0, CCZOrder_Debug_Reload, toptag+CCTAG_Debug_ReloadMenu});
+	local layertag = toptag + CCTag_Layer_14;
+	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_14, layertag});
+	
+	local menu = game.CreateMenuItem({toptag}, {100, 480, CCTag_Debug_ReloadMenu, layertag+CCTag_Debug_ReloadMenu+1}, "Reload", 20);
+	game.AddMenuChild({menu}, {layertag}, {0, 0, CCTag_Debug_ReloadMenu, toptag+CCTag_Debug_ReloadMenu});
 end
 
 function Debug_AddReloadMenu_Callback(selitemtag, eventtag, toptag)
-	if selitemtag == CCTAG_Debug_ReloadItem-CCTAG_Debug_ReloadMenu then
+	if selitemtag == 1 then
 		game.ReplaceScene(ktag_LoadingSceneLayer);
 	end
 end
