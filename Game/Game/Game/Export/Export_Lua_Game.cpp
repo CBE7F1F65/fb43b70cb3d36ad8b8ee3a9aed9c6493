@@ -54,7 +54,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("ActionEase", LuaFn_Game_ActionEase);
 	_gameobj.Register("ActionFade", LuaFn_Game_ActionFade);
 	_gameobj.Register("ActionSequence", LuaFn_Game_ActionSequence);
-	_gameobj.Register("ActionSpawm", LuaFn_Game_ActionSpawn);
+	_gameobj.Register("ActionSpawn", LuaFn_Game_ActionSpawn);
 	_gameobj.Register("ActionRepeat", LuaFn_Game_ActionRepeat);
 	_gameobj.Register("ActionDelay", LuaFn_Game_ActionDelay);
 	_gameobj.Register("ActionCallFunc", LuaFn_Game_ActionCallFunc);
@@ -577,14 +577,26 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 				{
 					// sprites
 					_spnormal = (CCSprite *)node.dGet();
+					if (_spnormal)
+					{
+						_spnormal->setContentSize(_spnormal->boundingBox().size);
+					}
 					node.jNextGet();
 					if (node.bhavenext)
 					{
 						_spselected = (CCSprite *)node.dGet();
+						if (_spselected)
+						{
+							_spselected->setContentSize(_spselected->boundingBox().size);
+						}
 						node.jNextGet();
 						if (node.bhavenext)
 						{
 							_spdisabled = (CCSprite *)node.dGet();
+							if (_spdisabled)
+							{
+								_spdisabled->setContentSize(_spdisabled->boundingBox().size);
+							}
 						}
 					}
 				}

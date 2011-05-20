@@ -41,34 +41,27 @@ function TitleScene_OnEnterTDF(toplayer, toptag)
 	for i=0, 4 do
 		local y = ybegin - i*yoffset;
 		
-		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2, {}, grouptag+CCTag_MenuSub_00+i+1);
-		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2, {}, grouptag+CCTag_MenuSub_01+i+1);
+		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);--, {}, grouptag+CCTag_MenuSub_00+i+1);
+		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);--, {}, grouptag+CCTag_MenuSub_01+i+1);
 		menus[i+1] = game.CreateMenuItem({layertag}, {xorig, y, CCTag_Menu_00, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(xcen, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local spritealphaaction = {};
-		local spritefadeinaction = {};
-		local spriterepeatactionpre = {};
-		local spriterepeatactionpost = {};
-		local spriterepeataction = {};
-		local spritealphaaction = {};
 		local blinktimepre = 0.5;
 		local blinktimepost = 0.9;
-		for j=0, 1 do
-			spritefadeinaction[j+1] = game.ActionFade(CCAF_In, 0xff, fadetime);
-			spriterepeatactionpre[j+1] = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
-			spriterepeatactionpost[j+1] = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
-			spriterepeataction[j+1] = game.ActionSequence({spriterepeatactionpre[j+1], spriterepeatactionpost[j+1]});
-			spriterepeataction[j+1] = game.ActionRepeat(spriterepeataction[j+1]);
-			spritealphaaction[j+1] = game.ActionSequence({spritefadeinaction[j+1], spriterepeataction[j+1]});
-		end
-		game.RunAction(spTitleMenus[i+1], spritealphaaction[1]);
-		game.RunAction(spTitleSelectedMenus[i+1], spritealphaaction[2]);
 		
-		game.RunAction(menus[i+1], menumoveaction);
+		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
+		local menurepeataction = game.ActionRepeat(menurepeataction);
+		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
+		
+		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+		
+		game.RunAction(menus[i+1], menuaction);
 		
 	end
 	

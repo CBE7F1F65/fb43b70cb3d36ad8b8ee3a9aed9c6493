@@ -71,7 +71,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
 
     // sets landscape mode
-//    pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+#if defined __WIN32
+    pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+#endif
 
     // turn on display FPS
     pDirector->setDisplayFPS(true);
