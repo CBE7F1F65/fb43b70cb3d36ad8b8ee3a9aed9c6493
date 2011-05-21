@@ -48,7 +48,7 @@ enum
 #define M_CCACTIONFLAG_TO		0x0010
 #define M_CCACTIONFLAG_BY		0x0020
 
-#define M_USERNAMEMAX	0x20
+#define M_USERNAMEMAX	0x10
 #define M_HISCOREMAX	0x10
 
 

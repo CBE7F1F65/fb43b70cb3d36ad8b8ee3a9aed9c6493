@@ -111,7 +111,6 @@ void BIOInterface::Ini_SetString(const char *section, const char *name, const ch
 char* BIOInterface::Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename/* =NULL */)
 {
 	char buf[M_STRMAX];
-	GetCurrentDirectoryA(M_STRMAX, buf);
 	char * filename = inifilename;
 	if (!filename)
 	{

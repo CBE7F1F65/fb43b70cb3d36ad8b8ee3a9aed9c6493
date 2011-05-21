@@ -4,6 +4,8 @@
 #include "cocos2d.h"
 using namespace cocos2d;
 
+#include "MainDependency.h"
+
 class BGlobal
 {
 public:

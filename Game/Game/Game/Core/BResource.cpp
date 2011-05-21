@@ -71,7 +71,7 @@ bool BResource::Init()
 	writablepath += M_FOLDER_SLASH;
 	bio->System_SetLogFile((writablepath+LOG_FILENAME).c_str());
 	bio->Ini_SetIniFile((writablepath+INI_FILENAME).c_str());
-	bio->Data_SetIniFile((writablepath+DATA_FILENAME).c_str());
+	bio->Data_SetDataFile((writablepath+DATA_FILENAME).c_str());
 #endif
 	
 	return true;

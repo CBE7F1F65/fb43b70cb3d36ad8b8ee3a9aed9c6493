@@ -20,6 +20,8 @@
 		50F4144810692EE7002A0D5E /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144310692EE7002A0D5E /* blocks.png */; };
 		50F4144910692EE7002A0D5E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144410692EE7002A0D5E /* Default.png */; };
 		50F4144B10692EE7002A0D5E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144610692EE7002A0D5E /* Icon.png */; };
+		71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */; };
+		71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */; };
 		71AC30801385C6C60029F185 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71AC307F1385C6C60029F185 /* RootViewController.mm */; };
 		71AC310A1385C9900029F185 /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC30FE1385C9900029F185 /* AppDelegate.cpp */; };
 		71AC310B1385C9900029F185 /* BaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC30FF1385C9900029F185 /* BaseScene.cpp */; };
@@ -271,6 +273,10 @@
 		50F4144310692EE7002A0D5E /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		50F4144410692EE7002A0D5E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		50F4144610692EE7002A0D5E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		71A9A29B13885B3B00BBA5B4 /* GameMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMain.h; sourceTree = "<group>"; };
+		71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMain.cpp; sourceTree = "<group>"; };
+		71A9A29E13885B6400BBA5B4 /* InputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputLayer.h; sourceTree = "<group>"; };
+		71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputLayer.cpp; sourceTree = "<group>"; };
 		71AC307E1385C6C60029F185 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RootViewController.h; path = ios/RootViewController.h; sourceTree = "<group>"; };
 		71AC307F1385C6C60029F185 /* RootViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = RootViewController.mm; path = ios/RootViewController.mm; sourceTree = "<group>"; };
 		71AC30F21385C9900029F185 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -802,6 +808,8 @@
 				71AC30F51385C9900029F185 /* HelpScene.h */,
 				71AC30F61385C9900029F185 /* HiScoreScene.h */,
 				71AC30F71385C9900029F185 /* LoadingScene.h */,
+				71A9A29E13885B6400BBA5B4 /* InputLayer.h */,
+				71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */,
 				71AC30F81385C9900029F185 /* MissionSelectScene.h */,
 				71AC30F91385C9900029F185 /* OnlineScene.h */,
 				71AC30FA1385C9900029F185 /* OptionScene.h */,
@@ -834,6 +842,7 @@
 				71EF55381383455400B242B4 /* BIOInterface_Math.cpp */,
 				71EF55391383455400B242B4 /* BIOInterface_System.cpp */,
 				71EF553A1383455400B242B4 /* BMath.cpp */,
+				71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */,
 				71EF553B1383455400B242B4 /* BResource.cpp */,
 				71EF553C1383455400B242B4 /* DataTable.cpp */,
 				71EF553D1383455400B242B4 /* SpriteItemManager.cpp */,
@@ -873,6 +882,7 @@
 				71EF55511383455400B242B4 /* DataTable.h */,
 				71EF55521383455400B242B4 /* HTexture.h */,
 				71EF55531383455400B242B4 /* MainDependency.h */,
+				71A9A29B13885B3B00BBA5B4 /* GameMain.h */,
 				71EF55541383455400B242B4 /* SceneConst.h */,
 				71EF55551383455400B242B4 /* SpriteItemManager.h */,
 			);
@@ -1774,6 +1784,8 @@
 				71AC31131385C9900029F185 /* PlayScene.cpp in Sources */,
 				71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */,
 				71AC31151385C9900029F185 /* TitleScene.cpp in Sources */,
+				71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */,
+				71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

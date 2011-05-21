@@ -10,11 +10,11 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 {
 	// System
 	obj->SetInteger("NULL",	NULL);
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	obj->SetBoolean("_DEBUG", true);
-//#else
-//	obj->SetBoolean("_DEBUG", false);
-//#endif // _DEBUG
+#else
+	obj->SetBoolean("_DEBUG", false);
+#endif // _DEBUG
 
 	obj->SetNumber("ScreenWidth", M_SCREEN_WIDTH);
 	obj->SetNumber("ScreenHeight", M_SCREEN_HEIGHT);

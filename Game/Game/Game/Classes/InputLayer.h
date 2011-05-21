@@ -5,6 +5,7 @@
 using namespace cocos2d;
 
 #include "../Header/Const.h"
+#include "../Header/MainDependency.h"
 
 class InputLayer : public CCLayer, public CCIMEDelegate, public CCTextFieldDelegate
 {
