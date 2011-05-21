@@ -39,7 +39,7 @@ enum
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f
 
-#define M_DEFAULT_FONTNAME	"Arial"
+#define M_DEFAULT_FONTNAME	"Arial-BoldMT"
 
 #define M_CCACTIONFLAG_NULL		0x0000
 #define M_CCACTIONFLAG_IN		0x0001

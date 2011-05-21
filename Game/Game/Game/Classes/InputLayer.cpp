@@ -85,9 +85,11 @@ bool InputLayer::onTextFieldAttachWithIME(CCTextFieldTTF * pSender)
 	{
 		m_pTextField->runAction(
 			CCRepeatForever::actionWithAction(
-				(CCActionInterval*)CCSequence::actions(
-					CCFadeTo::actionWithDuration(0.5f, 0xaf),
-					CCFadeTo::actionWithDuration(1.0f, 0xff),
+			(CCActionInterval*)CCSequence::actions(
+					CCScaleTo::actionWithDuration(0.3f, 1.05f, 1.05f),
+					CCScaleTo::actionWithDuration(0.3f, 1.0f, 1.0f),
+//					CCFadeTo::actionWithDuration(0.5f, 0xaf),
+//					CCFadeTo::actionWithDuration(1.0f, 0xff),
 					NULL
 					)
 				)
@@ -115,9 +117,14 @@ void InputLayer::onEnter()
 //	registerWithTouchDispatcher();
 	if (!m_pTextField)
 	{
-		m_pTextField = CCTextFieldTTF::textFieldWithPlaceHolder(strlen(text)?text:defaulttext, fontname, fontsize);
+		m_pTextField = CCTextFieldTTF::textFieldWithPlaceHolder(defaulttext, fontname, fontsize);
+		if (strlen(text))
+		{
+			m_pTextField->setString(text);
+		}
 		m_pTextField->setDelegate(this);
 		addChild(m_pTextField, this->getZOrder(), this->getTag());
 		m_pTextField->setPosition(ccp(touchrect.origin.x+touchrect.size.width/2, touchrect.origin.y+touchrect.size.height/2));
+		m_pTextField->setColorSpaceHolder(ccc3(0xff, 0xff, 0xff));
 	}
 }
