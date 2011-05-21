@@ -2,8 +2,7 @@
 
 void BIOInterface::Ini_SetIniFile(const char * filename)
 {
-	strcpy(szIniFile, filename);
-	Resource_DeleteFile(szIniFile);
+	strcpy(szIniFile, Resource_MakePath(filename));
 }
 
 void BIOInterface::Ini_SetInt(const char *section, const char *name, int value, char * inifilename/* =NULL */)
@@ -111,6 +110,8 @@ void BIOInterface::Ini_SetString(const char *section, const char *name, const ch
 
 char* BIOInterface::Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename/* =NULL */)
 {
+	char buf[M_STRMAX];
+	GetCurrentDirectoryA(M_STRMAX, buf);
 	char * filename = inifilename;
 	if (!filename)
 	{

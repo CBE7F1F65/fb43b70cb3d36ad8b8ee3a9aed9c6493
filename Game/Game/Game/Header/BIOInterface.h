@@ -142,6 +142,11 @@ public:
 	LONGLONG		Timer_GetCurrentSystemTime();
 	LONGLONG		Timer_GetPerformanceFrequency();
 
+	void	Data_SetDataFile(const char * filename);
+	bool	Data_Save(BYTE * data, DWORD size);
+	BYTE *	Data_Read(DWORD * size=NULL);
+	void	Data_Free(BYTE * data);
+
 	/************************************************************************/
 	/* Ini                                                                  */
 	/************************************************************************/
@@ -153,6 +158,8 @@ public:
 	float		Ini_GetFloat(const char *section, const char *name, float def_val, char * inifilename=NULL);
 	void		Ini_SetString(const char *section, const char *name, const char *value, char * inifilename=NULL);
 	char*		Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename=NULL);
+
+
 private:
 
 	DWORD	_IniGetPrivateProfileString(const char * appname, const char * keyname, const char * defval, char * retstr, DWORD size, const char * filename);
@@ -179,6 +186,7 @@ private:
 
 	char			szIniFile[BIO_PATHMAX];
 	char			szLogFile[BIO_PATHMAX];
+	char			szDataFile[BIO_PATHMAX];
 
 	char			szIniString[BIO_STRINGMAX];
 

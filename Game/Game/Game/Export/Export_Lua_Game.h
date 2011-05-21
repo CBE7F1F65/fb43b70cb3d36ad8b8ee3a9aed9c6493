@@ -48,6 +48,10 @@ public:
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
 
+	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
+	static int LuaFn_Game_GetUsername(LuaState * ls);
+	static int LuaFn_Game_SetUsername(LuaState * ls);
+
 	static int LuaFn_Game_RunAction(LuaState * ls);
 
 	static int LuaFn_Game_ActionMove(LuaState * ls);
@@ -63,6 +67,7 @@ public:
 
 	static CCNode * _GetNowNode(_LObjNode * cnode, bool topnode=false, int * scenetag=NULL);
 	static bool _GetXYZT(_LObjNode * cnode, float *x=NULL, float *y=NULL, int *zOrder=NULL, int *tag=NULL);
+	static CCRect _GetRect(_LObjNode* cnode);
 
 public:
 

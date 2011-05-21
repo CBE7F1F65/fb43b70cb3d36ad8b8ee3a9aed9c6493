@@ -92,6 +92,7 @@ BIOInterface::BIOInterface()
 
 	strcpy(szLogFile, "");
 	strcpy(szIniFile, "");
+	strcpy(szDataFile, "");
 }
 
 BIOInterface::~BIOInterface()

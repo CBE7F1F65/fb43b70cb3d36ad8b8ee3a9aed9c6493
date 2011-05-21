@@ -27,7 +27,7 @@ enum
 	ZORDER_MENU_2,
 	ZORDER_MENU_1,
 	ZORDER_MENU_0,
-	ZORDER_FG		= 1000,
+	ZORDER_FG		= 0x7fffffff,
 };
 
 #endif
@@ -47,3 +47,14 @@ enum
 #define M_CCACTIONFLAG_INOUT	(M_CCACTIONFLAG_IN|M_CCACTIONFLAG_OUT)
 #define M_CCACTIONFLAG_TO		0x0010
 #define M_CCACTIONFLAG_BY		0x0020
+
+#define M_USERNAMEMAX	0x20
+#define M_HISCOREMAX	0x10
+
+
+#define LOG_FILENAME		"log.log"
+#define INI_FILENAME		"config.ini"
+#define DATA_FILENAME		"data.dat"
+
+#define M_TOUCH_ALLOWABLEMOVEMENT		10.0f
+#define M_TOUCH_MINIMUMPRESSDURATION	0.5f

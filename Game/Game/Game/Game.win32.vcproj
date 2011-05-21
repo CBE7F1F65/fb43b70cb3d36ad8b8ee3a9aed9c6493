@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\GameMain.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\HelloWorldScene.cpp"
 				>
 			</File>
@@ -272,6 +276,10 @@
 			</File>
 			<File
 				RelativePath=".\Classes\HiScoreScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Classes\InputLayer.cpp"
 				>
 			</File>
 			<File
@@ -376,6 +384,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\GameMain.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\HelloWorldScene.h"
 				>
 			</File>
@@ -389,6 +401,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\HTexture.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Classes\InputLayer.h"
 				>
 			</File>
 			<File

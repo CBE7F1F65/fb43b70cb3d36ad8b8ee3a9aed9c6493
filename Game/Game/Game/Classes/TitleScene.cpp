@@ -73,6 +73,7 @@ void TitleScene::onEnterTransitionDidFinish()
 	if (toentertdf)
 	{
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERTDF, thisLayer, thisLayer->getTag());
+
 		toentertdf = false;
 	}
 }

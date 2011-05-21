@@ -15,9 +15,11 @@
 
 #define LUASCENE_SCENE_IO	"Scene_IO"
 #define LUASCENE_SCENE_CB	"Scene_CB"
+#define LUASCENE_INPUTLAYER_CB	"InputLayer_CB"
 
 LuaFunction<bool> * Export_Lua_Scene::ioScene;
 LuaFunction<bool> * Export_Lua_Scene::cbScene;
+LuaFunction<bool> * Export_Lua_Scene::cbInputLayer;
 
 bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 {
@@ -61,9 +63,9 @@ bool Export_Lua_Scene::InitCallbacks()
 		ShowError(LUAERROR_NOTFUNCTION, LUASCENE_SCENE_IO);
 		return false;
 	}
-	static LuaFunction<bool> _fioLoading = _obj;
-	_fioLoading = _obj;
-	ioScene = &_fioLoading;
+	static LuaFunction<bool> _fsceneio = _obj;
+	_fsceneio = _obj;
+	ioScene = &_fsceneio;
 
 	_obj = ls->GetGlobal(LUASCENE_SCENE_CB);
 	if (!_obj.IsFunction())
@@ -71,9 +73,19 @@ bool Export_Lua_Scene::InitCallbacks()
 		ShowError(LUAERROR_NOTFUNCTION, LUASCENE_SCENE_CB);
 		return false;
 	}
-	static LuaFunction<bool> _fcbLoading = _obj;
-	_fcbLoading = _obj;
-	cbScene = &_fcbLoading;
+	static LuaFunction<bool> _fscenecb = _obj;
+	_fscenecb = _obj;
+	cbScene = &_fscenecb;
+
+	_obj = ls->GetGlobal(LUASCENE_INPUTLAYER_CB);
+	if (!_obj.IsFunction())
+	{
+		ShowError(LUAERROR_NOTFUNCTION, LUASCENE_INPUTLAYER_CB);
+		return false;
+	}
+	static LuaFunction<bool> _finputlayercb = _obj;
+	_finputlayercb = _obj;
+	cbInputLayer = &_finputlayercb;
 
 	return true;
 }
@@ -310,6 +322,17 @@ bool Export_Lua_Scene::ExecuteCBScene(int tag, int eventtag)
 {
 	LuaState * ls = state;
 	bool bret = (*cbScene)(tag, eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
+	if (state->CheckError())
+	{
+		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());
+	}
+	return bret;
+}
+
+bool Export_Lua_Scene::ExecuteCBInputLayer(int tag, const char * text)
+{
+	LuaState * ls = state;
+	bool bret = (*cbInputLayer)(tag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, text);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

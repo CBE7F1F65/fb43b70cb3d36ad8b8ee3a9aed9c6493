@@ -2,6 +2,7 @@
 #include "HelloWorldScene.h"
 
 #include "../Header/BResource.h"
+#include "../Header/GameMain.h"
 
 #include "LoadingScene.h"
 
@@ -35,6 +36,7 @@ bool HelloWorldScene::init()
 		/* Init Only                                                            */
 		/************************************************************************/
 		BResource::getInstance()->Init();
+		GameMain::getInstance()->Init();
 
         bRet = true;
 

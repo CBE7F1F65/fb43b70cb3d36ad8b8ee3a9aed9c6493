@@ -8,6 +8,10 @@
 
 #include "../Header/BGlobal.h"
 
+#include "../Classes/InputLayer.h"
+
+#include "../Header/GameMain.h"
+
 using namespace cocos2d;
 
 _LObjNode Export_Lua_Game::node;
@@ -44,6 +48,11 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	// Menu
 	_gameobj.Register("CreateMenuItem", LuaFn_Game_CreateMenuItem);
 	_gameobj.Register("AddMenuChild", LuaFn_Game_AddMenuChild);
+	
+	// Input
+	_gameobj.Register("AddInputLayerChild", LuaFn_Game_AddInputLayerChild);
+	_gameobj.Register("GetUsername", LuaFn_Game_GetUsername);
+	_gameobj.Register("SetUsername", LuaFn_Game_SetUsername);
 
 	// Action
 	_gameobj.Register("RunAction", LuaFn_Game_RunAction);
@@ -273,6 +282,40 @@ bool Export_Lua_Game::_GetXYZT(_LObjNode * cnode, float *x/* =NULL */, float *y/
 	}
 
 	return true;
+}
+
+CCRect Export_Lua_Game::_GetRect(_LObjNode* cnode)
+{
+	if (!cnode)
+	{
+		return CCRectZero;
+	}
+
+	float x=0;
+	float y=0;
+	float width=0;
+	float height=0;
+	cnode->jNextGet();
+	if (cnode->bhavenext)
+	{
+		x = cnode->fGet();
+		cnode->jNextGet();
+		if (cnode->bhavenext)
+		{
+			y = cnode->fGet();
+			cnode->jNextGet();
+			if (cnode->bhavenext)
+			{
+				width = cnode->fGet();
+				cnode->jNextGet();
+				if (cnode->bhavenext)
+				{
+					height = cnode->fGet();
+				}
+			}
+		}
+	}
+	return BGlobal::ScalerRect(CCRectMake(x, y, width, height));
 }
 
 /************************************************************************/
@@ -566,6 +609,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 					if (node.bhavenext)
 					{
 						_fontsize = node.fGet();
+						_fontsize = BGlobal::Scaler(_fontsize);
 						node.jNextGet();
 						if (node.bhavenext)
 						{
@@ -685,6 +729,78 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 			menu->setPosition(BGlobal::TranslatePosition(_x, _y));
 		}
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// {Rect, text, fontname, fontsize, inputmax, defaulttext}, {nodelist}, {XYZT}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		cnode.jNextGet();
+		if (cnode.bhavenext && cnode.ObjIsTable())
+		{
+			_LObjNode ccnode(ls, &(cnode._obj), &node);
+			CCRect _rect = _GetRect(&ccnode);
+
+			const char * _text = cnode.sNextGet();
+			const char * _fontname = cnode.sNextGet();
+			float _fontsize = BGlobal::Scaler(cnode.fNextGet());
+			int _inputmax = cnode.iNextGet();
+			const char * _defaulttext = cnode.sNextGet();
+
+			node.jNextGet();
+			_LObjNode tcnode(ls, &(node._obj), &node);
+			CCNode * nownode = _GetNowNode(&tcnode);
+
+			InputLayer * pInputLayer = NULL;
+			if (nownode)
+			{
+				float _x = 0;
+				float _y = 0;
+				int _zOrder = 0;
+				int _tag = kCCNodeTagInvalid;
+
+				node.jNextGet();
+				if (node.bhavenext)
+				{
+					_LObjNode ttcnode(ls, &(node._obj), &node);
+					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
+				}
+
+				pInputLayer = new InputLayer(_rect, _text, strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME, _fontsize, _inputmax, _defaulttext);
+				pInputLayer->autorelease();
+				nownode->addChild(pInputLayer, _zOrder, _tag);
+				pInputLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
+			}
+
+			node.PDword((DWORD)pInputLayer);
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetUsername(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	node.PString(GameMain::getInstance()->username);
+	node.PInt(M_USERNAMEMAX-1);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetUsername(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	GameMain::getInstance()->SetUsername(node.sNextGet());
 
 	_LEAVEFUNC_LUA;
 }

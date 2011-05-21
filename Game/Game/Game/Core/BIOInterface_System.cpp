@@ -11,7 +11,7 @@ using namespace cocos2d;
 
 void BIOInterface::System_SetLogFile(const char * filename)
 {
-	strcpy(szLogFile, filename);
+	strcpy(szLogFile, Resource_MakePath(filename));
 	Resource_DeleteFile(szLogFile);
 }
 
@@ -325,4 +325,36 @@ LONGLONG BIOInterface::Timer_GetFileTime()
 	return 0;
 
 #endif
+}
+
+#define DATA_PASSWORD	0x3786dc8a
+
+void BIOInterface::Data_SetDataFile(const char * filename)
+{
+	strcpy(szDataFile, Resource_MakePath(filename));
+}
+
+bool BIOInterface::Data_Save(BYTE * data, DWORD size)
+{
+	BIOMemoryFile memfile;
+	strcpy(memfile.filename, DATA_FILENAME);
+	memfile.data = data;
+	memfile.size = size;
+	return Resource_CreatePack(szDataFile, DATA_PASSWORD, &memfile, NULL);
+}
+
+BYTE * BIOInterface::Data_Read(DWORD * size/* =NULL */)
+{
+	BYTE * _data = NULL;
+	if (Resource_AttachPack(szDataFile))
+	{
+		_data = Resource_Load(DATA_FILENAME, size);
+		Resource_RemovePack(szDataFile);
+	}
+	return _data;
+}
+
+void BIOInterface::Data_Free(BYTE * data)
+{
+	Resource_Free(data);
 }

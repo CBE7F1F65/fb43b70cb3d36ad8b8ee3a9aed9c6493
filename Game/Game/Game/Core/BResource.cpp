@@ -27,9 +27,6 @@ using namespace cocos2d;
 #define RESOURCE_DATADEFINEFILE	"DataDefine.table"
 #define RESOURCE_RESBINFILE		"Resource.bin"
 
-#define LOG_FILENAME		"log.log"
-#define INI_FILENAME		"config.ini"
-
 #define RESOURCE_RESBINPASSWORD	0x8f4b2491
 
 static BResource * g_BResourceSingleton = NULL;
@@ -67,21 +64,16 @@ bool BResource::Init()
 	bio->Resource_SetPath(RESOURCE_PATH);
 	bio->System_SetLogFile(LOG_FILENAME);
 	bio->Ini_SetIniFile(INI_FILENAME);
+	bio->Data_SetDataFile(DATA_FILENAME);
 #elif defined __IPHONE
 	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
 	std::string writablepath = CCFileUtils::getWriteablePath();
 	writablepath += M_FOLDER_SLASH;
 	bio->System_SetLogFile((writablepath+LOG_FILENAME).c_str());
 	bio->Ini_SetIniFile((writablepath+INI_FILENAME).c_str());
+	bio->Data_SetIniFile((writablepath+DATA_FILENAME).c_str());
 #endif
 	
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-
-	
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#endif  // CC_PLATFORM_WIN32
-
 	return true;
 
 }

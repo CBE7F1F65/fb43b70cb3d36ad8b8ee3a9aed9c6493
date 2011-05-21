@@ -1,0 +1,1 @@
+LConst_FontSize = 40;

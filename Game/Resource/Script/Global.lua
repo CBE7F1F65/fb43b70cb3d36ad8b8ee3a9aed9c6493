@@ -47,7 +47,7 @@ function Debug_AddReloadMenu(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_14;
 	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_14, layertag});
 	
-	local menu = game.CreateMenuItem({toptag}, {100, 480, CCTag_Debug_ReloadMenu, layertag+CCTag_Debug_ReloadMenu+1}, "Reload", 20);
+	local menu = game.CreateMenuItem({toptag}, {100, 380, CCTag_Debug_ReloadMenu, layertag+CCTag_Debug_ReloadMenu+1}, "Reload", LConst_FontSize);
 	game.AddMenuChild({menu}, {layertag}, {0, 0, CCTag_Debug_ReloadMenu, toptag+CCTag_Debug_ReloadMenu});
 end
 

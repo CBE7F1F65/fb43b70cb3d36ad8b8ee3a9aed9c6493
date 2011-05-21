@@ -16,18 +16,26 @@ function TitleScene_IO(eventtype, toplayer, toptag)
 end
 
 function TitleScene_OnInit(toplayer, toptag)
+	
+	-- menus layer
 	local layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
 	local spTitle = game.CreateSprite(SI_TitleScene, {480, 320});
 	game.AddSpriteChild(spTitle, {layertag});
 	
+	-- input layer
+	layertag = toptag + CCTag_Layer_13;
+	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_13, layertag});
+	
+	
 end
 
 function TitleScene_OnEnter(toplayer, toptag)
 end
 
-function TitleScene_OnEnterTDF(toplayer, toptag)
+function _TitleScene_AddMenus(toptag)
+	
 	local xorig = 1180;
 	local xcen = 780;
 	local ybegin = 500;
@@ -66,6 +74,33 @@ function TitleScene_OnEnterTDF(toplayer, toptag)
 	end
 	
 	game.AddMenuChild(menus, {layertag}, {0, 0, CCTag_Menu_00, grouptag});
+	
+end
+
+function _TitleScene_AddInputLayer(toptag)
+	
+	local x = 200;
+	local y = 480;
+	local width = 320;
+	local height = 20;
+	local layertag = toptag + CCTag_Layer_13;
+	
+	local text, inputmax = game.GetUsername();
+	local defaulttext = "Your Name";
+	
+	local inputlayer = game.AddInputLayerChild(
+			{{x-width/2, y-height/2, width, height}, text, "",  LConst_FontSize, inputmax, defaulttext},
+			{layertag},
+			{0, 0, CCTag_Layer_13, layertag+CCTag_Menu_00}
+		);
+end
+
+function TitleScene_OnEnterTDF(toplayer, toptag)
+	
+	_TitleScene_AddMenus(toptag);
+	_TitleScene_AddInputLayer(toptag);
+	
+	
 	
 end
 function TitleScene_OnExit(toplayer, toptag)
