@@ -56,12 +56,22 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	// Action
 	_gameobj.Register("RunAction", LuaFn_Game_RunAction);
+	_gameobj.Register("StopAction", LuaFn_Game_StopAction);
+
+	// Layer
+	_gameobj.Register("SetTouchEnabled", LuaFn_Game_SetTouchEnabled);
+	_gameobj.Register("SetIsVisible", LuaFn_Game_SetIsVisible);
+
+	// Color
+	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
+	_gameobj.Register("GetColor", LuaFn_Game_GetColor);
 
 	_gameobj.Register("ActionMove", LuaFn_Game_ActionMove);
 	_gameobj.Register("ActionRotate", LuaFn_Game_ActionRotate);
 	_gameobj.Register("ActionScale", LuaFn_Game_ActionScale);
 	_gameobj.Register("ActionEase", LuaFn_Game_ActionEase);
 	_gameobj.Register("ActionFade", LuaFn_Game_ActionFade);
+	_gameobj.Register("ActionTint", LuaFn_Game_ActionTint);
 	_gameobj.Register("ActionSequence", LuaFn_Game_ActionSequence);
 	_gameobj.Register("ActionSpawn", LuaFn_Game_ActionSpawn);
 	_gameobj.Register("ActionRepeat", LuaFn_Game_ActionRepeat);
@@ -201,9 +211,23 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 		return NULL;
 	}
 
+	CCLayer * toplayer = (CCLayer *)cnode->dGet();
+	if (!toplayer)
+	{
+		return NULL;
+	}
+	nownode = toplayer;
+
+	cnode->jNextGet();
+	if (!cnode->bhavenext)
+	{
+		return NULL;
+	}
+
 	int _ktag = cnode->iGet();
-	int _ktagtop = _ktag;
-	nownode = Export_Lua_Scene::_GetSceneNode(&_ktagtop);
+	int _ktagtop = Export_Lua_Scene::_GetTopTag(_ktag);
+//	nownode = toplayer->getChildByTag(_ktagtop);
+
 	if (scenetag)
 	{
 		*scenetag = _ktagtop;
@@ -437,11 +461,11 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 			_LObjNode tcnode(ls, &(node._obj), &node);
 			_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
 
-			CCNode * ccnode = CCNode::node();
-			ccnode->setPosition(BGlobal::TranslatePosition(_x, _y));
-			nownode->addChild(ccnode, _zOrder, _tag);
+			CCNode * addednode = CCNode::node();
+			addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
+			nownode->addChild(addednode, _zOrder, _tag);
 
-			node.PDword((DWORD)ccnode);
+			node.PDword((DWORD)addednode);
 		}
 	}
 
@@ -573,6 +597,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 		SelectorProtocol * proto = NULL;
 		SEL_MenuHandler cbfunc = NULL;
 		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &proto, &cbfunc);
+		proto = nownode;
 		if (!proto || !cbfunc)
 		{
 			break;
@@ -742,12 +767,16 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 	if (node.ObjIsTable())
 	{
 		_LObjNode cnode(ls, &(node._obj), &node);
+		CCLayer * _toplayer = (CCLayer *)cnode.dNextGet();
+		if (!_toplayer)
+		{
+			break;
+		}
 		cnode.jNextGet();
 		if (cnode.bhavenext && cnode.ObjIsTable())
 		{
 			_LObjNode ccnode(ls, &(cnode._obj), &node);
 			CCRect _rect = _GetRect(&ccnode);
-
 			const char * _text = cnode.sNextGet();
 			const char * _fontname = cnode.sNextGet();
 			float _fontsize = BGlobal::Scaler(cnode.fNextGet());
@@ -773,10 +802,13 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
 				}
 
-				pInputLayer = new InputLayer(_rect, _text, strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME, _fontsize, _inputmax, _defaulttext);
-				pInputLayer->autorelease();
-				nownode->addChild(pInputLayer, _zOrder, _tag);
-				pInputLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
+				InputLayer * pInputLayer = InputLayer::node();
+				if (pInputLayer)
+				{
+					pInputLayer->initWithInputData(_toplayer, _rect, _text, strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME, _fontsize, _inputmax, _defaulttext);
+					nownode->addChild(pInputLayer, _zOrder, _tag);
+					pInputLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
+				}
 			}
 
 			node.PDword((DWORD)pInputLayer);
@@ -790,6 +822,7 @@ int Export_Lua_Game::LuaFn_Game_GetUsername(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
+	// -> username, inputmax
 	node.PString(GameMain::getInstance()->username);
 	node.PInt(M_USERNAMEMAX-1);
 
@@ -800,6 +833,7 @@ int Export_Lua_Game::LuaFn_Game_SetUsername(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
+	// username
 	GameMain::getInstance()->SetUsername(node.sNextGet());
 
 	_LEAVEFUNC_LUA;
@@ -809,7 +843,7 @@ int Export_Lua_Game::LuaFn_Game_RunAction(LuaState * ls)
 {
 	_ENTERFUNC_LUA(2);
 
-	// item, action
+	// item, action bRepeatForever
 
 	CCNode * _item = (CCNode *)node.dNextGet();
 
@@ -848,36 +882,140 @@ int Export_Lua_Game::LuaFn_Game_RunAction(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_StopAction(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item action
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (_item)
+	{
+		CCAction * _action = NULL;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_action = (CCAction *)node.dNextGet();
+		}
+		if (_action)
+		{
+			_item->stopAction(_action);
+		}
+		else
+		{
+			_item->stopAllActions();
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetTouchEnabled(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item benabled
+	CCLayer * _item = (CCLayer *)node.dNextGet();
+	if (_item)
+	{
+		bool _touchenabled = true;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_touchenabled = node.bGet();
+		}
+		_item->setIsTouchEnabled(_touchenabled);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetIsVisible(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item bvisible
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (_item)
+	{
+		bool _visible = true;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_visible = node.bGet();
+		}
+		_item->setIsVisible(_visible);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetColor(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item color
+	CCNode * _item = (CCNode *)node.dNextGet();
+	DWORD _col = 0xffffffff;
+
+	if (_item)
+	{
+		CCRGBAProtocol * pRGBAProtocol = _item->convertToRGBAProtocol();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_col = _LuaHelper_GetColor(&(node._obj));
+		}
+		pRGBAProtocol->setOpacity(GETA(_col));
+		pRGBAProtocol->setColor(ccc3(GETR(_col), GETG(_col), GETB(_col)));
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetColor(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item -> alpha color
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (_item)
+	{
+		CCRGBAProtocol * pRGBAProtocol = _item->convertToRGBAProtocol();
+		node.PInt(pRGBAProtocol->getOpacity());
+		ccColor3B col3b = pRGBAProtocol->getColor();
+		node.PInt(ARGB(0, col3b.r, col3b.g, col3b.b));
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_ActionMove(LuaState * ls)
 {
-	_ENTERFUNC_LUA(2);
+	_ENTERFUNC_LUA(3);
 
-	// x y time relative
+	// flag x y time
 
+	int _flag = node.iNextGet();
 	float _x = node.fNextGet();
 	float _y = node.fNextGet();
 	float _time = 0;
-	bool  _relative = false;
 
 	node.jNextGet();
 	if (node.bhavenext)
 	{
 		_time = node.fGet();
 		node.jNextGet();
-		if (node.bhavenext)
-		{
-			_relative = node.bGet();
-		}
 	}
 
 	CCAction * retval = NULL;
-	if (_relative)
+	switch (_flag)
 	{
-		retval = CCMoveBy::actionWithDuration(_time, BGlobal::TranslatePosition(_x, _y));
-	}
-	else
-	{
+	case M_CCACTIONFLAG_TO:
 		retval = CCMoveTo::actionWithDuration(_time, BGlobal::TranslatePosition(_x, _y));
+		break;
+	case M_CCACTIONFLAG_BY:
+		retval = CCMoveBy::actionWithDuration(_time, BGlobal::TranslatePosition(_x, _y));
+		break;
 	}
 	node.PDword((DWORD)retval);
 
@@ -886,10 +1024,11 @@ int Export_Lua_Game::LuaFn_Game_ActionMove(LuaState * ls)
 
 int Export_Lua_Game::LuaFn_Game_ActionRotate(LuaState * ls)
 {
-	_ENTERFUNC_LUA(1);
+	_ENTERFUNC_LUA(2);
 
-	// angle time relative
+	// flag angle time relative
 
+	int _flag = node.iNextGet();
 	int _angle = node.iNextGet();
 	float _time = 0;
 	bool _relative = false;
@@ -899,20 +1038,17 @@ int Export_Lua_Game::LuaFn_Game_ActionRotate(LuaState * ls)
 	{
 		_time = node.fGet();
 		node.jNextGet();
-		if (node.bhavenext)
-		{
-			_relative = node.bGet();
-		}
 	}
 
 	CCAction * retval = NULL;
-	if (_relative)
+	switch (_flag)
 	{
-		retval = CCRotateBy::actionWithDuration(_time, ARC(_angle));
-	}
-	else
-	{
+	case M_CCACTIONFLAG_TO:
 		retval = CCRotateTo::actionWithDuration(_time, ARC(_angle));
+		break;
+	case M_CCACTIONFLAG_BY:
+		retval = CCRotateBy::actionWithDuration(_time, ARC(_angle));
+		break;
 	}
 	node.PDword((DWORD)retval);
 
@@ -921,10 +1057,11 @@ int Export_Lua_Game::LuaFn_Game_ActionRotate(LuaState * ls)
 
 int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 {
-	_ENTERFUNC_LUA(1);
+	_ENTERFUNC_LUA(2);
 
-	// sx sy time relative
+	// flag sx sy time relative
 
+	int _flag = node.iNextGet();
 	float _scalex = node.fNextGet();
 	float _scaley = _scalex;
 	float _time = 0;
@@ -939,21 +1076,18 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 		{
 			_time = node.fGet();
 			node.jNextGet();
-			if (node.bhavenext)
-			{
-				_relative = node.bGet();
-			}
 		}
 	}
 
 	CCAction * retval = NULL;
-	if (_relative)
+	switch (_flag)
 	{
-		retval = CCScaleBy::actionWithDuration(_time, _scalex, _scaley);
-	}
-	else
-	{
+	case M_CCACTIONFLAG_TO:
 		retval = CCScaleTo::actionWithDuration(_time, _scalex, _scaley);
+		break;
+	case M_CCACTIONFLAG_BY:
+		retval = CCScaleBy::actionWithDuration(_time, _scalex, _scaley);
+		break;
 	}
 	node.PDword((DWORD)retval);
 
@@ -1029,6 +1163,43 @@ int Export_Lua_Game::LuaFn_Game_ActionFade(LuaState * ls)
 	}
 
 	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionTint(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// flag toval time
+	int _flag = node.iNextGet();
+	int _toval = -1;
+	float _time = 0;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_toval = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_time = node.fGet();
+		}
+	}
+
+	CCAction * retval = NULL;
+	switch (_flag)
+	{
+	case M_CCACTIONFLAG_TO:
+		retval = CCTintTo::actionWithDuration(_time, GETR(_toval), GETG(_toval), GETB(_toval));
+		break;
+	case M_CCACTIONFLAG_BY:
+		retval = CCTintBy::actionWithDuration(_time, GETR(_toval), GETG(_toval), GETB(_toval));
+		break;
+	}
+
+	node.PDword((DWORD)retval);
+
 
 	_LEAVEFUNC_LUA;
 }
@@ -1174,6 +1345,7 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 		SEL_MenuHandler cbfunc = NULL;
 		SEL_CallFuncND cbndfunc = NULL;
 		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &proto, &cbfunc, &cbndfunc);
+		proto = nownode;
 		if (!proto || !cbfunc)
 		{
 			break;

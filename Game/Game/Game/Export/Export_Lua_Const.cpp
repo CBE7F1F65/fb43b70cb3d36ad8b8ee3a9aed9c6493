@@ -26,6 +26,10 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("CCAF_To", M_CCACTIONFLAG_TO);
 	obj->SetInteger("CCAF_By", M_CCACTIONFLAG_BY);
 
+	obj->SetInteger("CCET_Null", M_CCEVENTTAG_NULL);
+	obj->SetInteger("CCET_Enter", M_CCEVENTTAG_ENTER);
+	obj->SetInteger("CCET_Leave", M_CCEVENTTAG_LEAVE);
+
 	return true;
 }
 

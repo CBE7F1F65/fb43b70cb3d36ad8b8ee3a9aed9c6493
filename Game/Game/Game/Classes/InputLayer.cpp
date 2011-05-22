@@ -7,8 +7,14 @@
 
 #include "../Export/Export_Lua_Scene.h"
 
-InputLayer::InputLayer(CCRect rect, const char * _text, const char * _fontname, float _fontsize, int _inputmax, const char * _defaulttext)
+InputLayer::InputLayer()
 {
+	initWithInputData(NULL, CCRectZero, "", "", 0, 0, "");
+}
+
+void InputLayer::initWithInputData(CCLayer * _toplayer, CCRect rect, const char * _text, const char * _fontname, float _fontsize, int _inputmax, const char * _defaulttext)
+{
+	toplayer = _toplayer;
 	touchrect = rect;//BGlobal::ScalerRect(rect);
 	if (strlen(_fontname))
 	{
@@ -36,7 +42,7 @@ InputLayer::~InputLayer()
 
 void InputLayer::registerWithTouchDispatcher()
 {
-	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);
+	CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, false);
 }
 
 bool InputLayer::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
@@ -93,7 +99,8 @@ bool InputLayer::onTextFieldAttachWithIME(CCTextFieldTTF * pSender)
 					NULL
 					)
 				)
-			);
+				);
+		Export_Lua_Scene::ExecuteCBInputLayer(pSender->getTag(), toplayer, M_CCEVENTTAG_ENTER, m_pTextField->getString());
 	}
 	return false;
 }
@@ -104,7 +111,7 @@ bool InputLayer::onTextFieldDetachWithIME(CCTextFieldTTF * pSender)
 	{
 		m_pTextField->stopAllActions();
 		m_pTextField->setOpacity(0xff);
-		Export_Lua_Scene::ExecuteCBInputLayer(pSender->getTag(), m_pTextField->getString());
+		Export_Lua_Scene::ExecuteCBInputLayer(pSender->getTag(), toplayer, M_CCEVENTTAG_LEAVE, m_pTextField->getString());
 	}
 	return false;
 }

@@ -20,15 +20,6 @@ end
 
 function LoadingScene_OnEnter(toplayer, toptag)
 	
---	local sprite = game.CreateSprite(SI_TUI_Play);
---	local sprite2 = game.CreateSprite(SI_TUI_Play_Down);
---	local menu = game.CreateMenuItem({toptag}, {240, 240, 0, toptag+1}, sprite, sprite2);
---	local sprite21 = game.CreateSprite(SI_TUI_Play);
---	local sprite22 = game.CreateSprite(SI_TUI_Play_Down);
---	local menu2 = game.CreateMenuItem({toptag}, {240, 600, 0, toptag+2}, sprite21, sprite22);
---	local menu3 = game.CreateMenuItem({toptag}, {480, 600, 0, toptag+3}, "AAAAAAA", 20)
---	game.AddMenuChild({menu, menu2, menu3}, {toptag}, {0, 0, 0, toptag+10});
-
 	game.ReplaceScene(ktag_TitleSceneLayer, g_SceneTransTime)
 	
 end

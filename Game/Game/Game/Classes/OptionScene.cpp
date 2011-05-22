@@ -21,7 +21,7 @@ CCScene* OptionScene::scene()
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_OPTIONSCENELAYER);
 
-		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, thisLayer, thisLayer->getTag());
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, pLayer, pLayer->getTag());
 
 		pLayer->toenter = true;
 		pLayer->toentertdf = true;
@@ -34,12 +34,12 @@ CCScene* OptionScene::scene()
 void OptionScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
-	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), 0);
+	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), this);
 }
 
 void OptionScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), 0);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
 }
 
 bool OptionScene::init()
@@ -61,7 +61,7 @@ void OptionScene::onEnter()
 
 	if (toenter)
 	{
-		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, thisLayer, thisLayer->getTag());
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, this, this->getTag());
 		toenter = false;
 	}
 }

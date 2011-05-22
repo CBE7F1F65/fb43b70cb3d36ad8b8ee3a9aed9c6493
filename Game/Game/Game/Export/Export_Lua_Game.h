@@ -53,12 +53,20 @@ public:
 	static int LuaFn_Game_SetUsername(LuaState * ls);
 
 	static int LuaFn_Game_RunAction(LuaState * ls);
+	static int LuaFn_Game_StopAction(LuaState * ls);
+
+	static int LuaFn_Game_SetTouchEnabled(LuaState * ls);
+	static int LuaFn_Game_SetIsVisible(LuaState * ls);
+
+	static int LuaFn_Game_SetColor(LuaState * ls);
+	static int LuaFn_Game_GetColor(LuaState * ls);
 
 	static int LuaFn_Game_ActionMove(LuaState * ls);
 	static int LuaFn_Game_ActionRotate(LuaState * ls);
 	static int LuaFn_Game_ActionScale(LuaState * ls);
 	static int LuaFn_Game_ActionEase(LuaState * ls);
 	static int LuaFn_Game_ActionFade(LuaState * ls);
+	static int LuaFn_Game_ActionTint(LuaState * ls);
 	static int LuaFn_Game_ActionSequence(LuaState * ls);
 	static int LuaFn_Game_ActionSpawn(LuaState * ls);
 	static int LuaFn_Game_ActionRepeat(LuaState * ls);

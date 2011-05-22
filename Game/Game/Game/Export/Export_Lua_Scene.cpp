@@ -227,44 +227,9 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 	}
 }
 
-CCNode * Export_Lua_Scene::_GetSceneNode(int * scenetag)
+int Export_Lua_Scene::_GetTopTag(int scenetag)
 {
-	if (!scenetag)
-	{
-		return NULL;
-	}
-	*scenetag = (*scenetag) & KTAG_SCENELAYERMASK;
-	switch (*scenetag)
-	{
-	case KTAG_LOADINGSCENELAYER:
-		return LoadingScene::thisLayer;
-		break;
-	case KTAG_TITLESCENELAYER:
-		return TitleScene::thisLayer;
-		break;
-	case KTAG_HISCORESCENELAYER:
-		return HiScoreScene::thisLayer;
-		break;
-	case KTAG_OPTIONSCENELAYER:
-		return OptionScene::thisLayer;
-		break;
-	case KTAG_ONLINESCENELAYER:
-		return OnlineScene::thisLayer;
-		break;
-	case KTAG_HELPSCENELAYER:
-		return HelpScene::thisLayer;
-		break;
-	case KTAG_STAGESELECTSCENELAYER:
-		return StageSelectScene::thisLayer;
-		break;
-	case KTAG_MISSIONSELECTSCENELAYER:
-		return MissionSelectScene::thisLayer;
-		break;
-	case KTAG_PLAYSCENELAYER:
-		return PlayScene::thisLayer;
-		break;
-	}
-	return NULL;
+	return scenetag & KTAG_SCENELAYERMASK;
 }
 
 CCScene * Export_Lua_Scene::_GetNewScene(int scenetag)
@@ -307,10 +272,10 @@ CCScene * Export_Lua_Scene::_GetNewScene(int scenetag)
 /* Callback                                                             */
 /************************************************************************/
 
-bool Export_Lua_Scene::ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag)
+bool Export_Lua_Scene::ExecuteIOScene(BYTE flag, CCLayer *toplayer, int toptag)
 {
 	LuaState * ls = state;
-	bool bret = (*ioScene)(flag, topnode, toptag);
+	bool bret = (*ioScene)(flag, CDOUBLEN(toplayer), toptag);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());
@@ -318,10 +283,10 @@ bool Export_Lua_Scene::ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag)
 	return bret;
 }
 
-bool Export_Lua_Scene::ExecuteCBScene(int tag, int eventtag)
+bool Export_Lua_Scene::ExecuteCBScene(int tag, CCLayer * toplayer)
 {
 	LuaState * ls = state;
-	bool bret = (*cbScene)(tag, eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
+	bool bret = (*cbScene)(tag, CDOUBLEN(toplayer), tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());
@@ -329,10 +294,10 @@ bool Export_Lua_Scene::ExecuteCBScene(int tag, int eventtag)
 	return bret;
 }
 
-bool Export_Lua_Scene::ExecuteCBInputLayer(int tag, const char * text)
+bool Export_Lua_Scene::ExecuteCBInputLayer(int tag, CCLayer * toplayer, int eventtag, const char * text)
 {
 	LuaState * ls = state;
-	bool bret = (*cbInputLayer)(tag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, text);
+	bool bret = (*cbInputLayer)(tag, CDOUBLEN(toplayer), eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, text);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

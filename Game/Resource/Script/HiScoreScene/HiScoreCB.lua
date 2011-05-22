@@ -1,5 +1,5 @@
-function HiScoreScene_CB(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag)
+function HiScoreScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	if selgrouptag == CCTag_Debug_ReloadMenu then
-		return Debug_AddReloadMenu_Callback(selitemtag, eventtag, toptag);
+		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 	end
 end

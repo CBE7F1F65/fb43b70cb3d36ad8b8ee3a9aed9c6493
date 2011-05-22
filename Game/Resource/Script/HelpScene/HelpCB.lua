@@ -1,15 +1,19 @@
-function HelpScene_CB(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag)
-	if selgrouptag == CCTag_Debug_ReloadMenu then
-		return Debug_AddReloadMenu_Callback(selitemtag, eventtag, toptag);
+function HelpScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	if sublayertag == CCTag_Layer_14 then
+		if selgrouptag == CCTag_Debug_ReloadMenu then
+			return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
+		end
 		
-	elseif selgrouptag == CCTag_Menu_00 then
-		return HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag);
-	elseif selgrouptag == CCTag_Menu_14 then
-		return HelpScene_PopScene(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag);
+	elseif sublayertag == CCTag_Layer_01 then
+		if selgrouptag == CCTag_Menu_01 then
+			return HelpScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_14 then
+			return HelpScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		end
 	end
 end
 
-function HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag)
+function HelpScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	if selitemtag == 3 then
 		
 		local layertag = toptag+sublayertag;
@@ -21,13 +25,13 @@ function HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag,
 		for i=0, 2 do
 			local spritealphaaction = {};
 	
-			menus[i+1] = game.GetNode({layertag, grouptag, grouptag+i+1});
-			spTitleMenus[i+1] = game.GetNode({layertag, grouptag, grouptag+i+1, grouptag+CCTag_MenuSub_00+i+1});
-			spTitleMenusSelected[i+1] = game.GetNode({layertag, grouptag, grouptag+i+1, grouptag+CCTag_MenuSub_01+i+1});
+			menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+			spTitleMenus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1, grouptag+CCTag_MenuSub_00+i+1});
+			spTitleMenusSelected[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1, grouptag+CCTag_MenuSub_01+i+1});
 		
 			local fadetime = 0.3+(4-i)*0.05;
 			if i+1 ~= selitemtag then
-				local menumoveaction = game.ActionMove(xmove, 0, fadetime, true);
+				local menumoveaction = game.ActionMove(CCAF_By, xmove, 0, fadetime);
 				menumoveaction = game.ActionEase(CCAF_Out, menumoveaction, 0.25);
 				game.RunAction(menus[i+1], menumoveaction);
 			
@@ -41,8 +45,8 @@ function HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag,
 			
 				local selectedalphaaction = {};
 				local scaleval = 1.05;
-				local selectedscaleactionpre = game.ActionScale(scaleval, scaleval, 0.1);
-				local selectedscaleactionpost = game.ActionScale(1, 1, 0.1);
+				local selectedscaleactionpre = game.ActionScale(CCAF_To, scaleval, scaleval, 0.1);
+				local selectedscaleactionpost = game.ActionScale(CCAF_To, 1, 1, 0.1);
 				local selectedscaleaction = game.ActionSequence({selectedscaleactionpre, selectedscaleactionpost});
 			
 				for j=0, 1 do
@@ -55,9 +59,9 @@ function HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag,
 				game.RunAction(menus[i+1], selectedscaleaction);
 			
 				local delayaction = game.ActionDelay(0.3);
-				local callfuncaction = game.ActionCallFunc({layertag, grouptag, grouptag+i+1});
+				local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
 				local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
-				local callnode = game.AddNullChild({layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
 				game.RunAction(callnode, delayreplacesceneaction);
 			
 			end
@@ -66,6 +70,6 @@ function HelpScene_MainMenu(itemtag, eventtag, toptag, sublayertag, selgrouptag,
 	
 end
 
-function HelpScene_PopScene(itemtag, eventtag, toptag, sublayertag, selgrouptag, selitemtag)
+function HelpScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	game.PopScene();
 end

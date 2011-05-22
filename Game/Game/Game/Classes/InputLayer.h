@@ -10,8 +10,12 @@ using namespace cocos2d;
 class InputLayer : public CCLayer, public CCIMEDelegate, public CCTextFieldDelegate
 {
 public:
-	InputLayer(CCRect rect, const char * text, const char * fontname, float fontsize, int inputmax, const char * defaulttext);
+	InputLayer();
 	~InputLayer();
+
+	void initWithInputData(CCLayer * toplayer, CCRect rect, const char * text, const char * fontname, float fontsize, int inputmax, const char * defaulttext);
+
+	LAYER_NODE_FUNC(InputLayer);
 
 	virtual void registerWithTouchDispatcher();
 
@@ -27,6 +31,8 @@ public:
 	virtual void onEnter();
 
 public:
+
+	CCLayer * toplayer;
 
 	CCRect touchrect;
 	char defaulttext[M_STRMAX];

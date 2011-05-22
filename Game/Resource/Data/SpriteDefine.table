@@ -36,3 +36,4 @@ Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
 -	38	SI_TUI_BGMSE_Bar	8	528	54	224	36
 -	39	SI_TUI_BGM	8	512	96	128	48
 -	40	SI_TUI_SE	8	640	96	128	48
+-	41	SI_TUI_InputHint	8	512	128	256	64

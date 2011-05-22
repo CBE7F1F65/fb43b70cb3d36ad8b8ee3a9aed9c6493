@@ -1,5 +1,4 @@
 function Scene_IO(eventtype, toplayer, toptag)
-	
 	if eventtype == SceneIOFlag_OnInit then
 		if _DEBUG then
 			Debug_AddReloadMenu(toplayer, toptag);

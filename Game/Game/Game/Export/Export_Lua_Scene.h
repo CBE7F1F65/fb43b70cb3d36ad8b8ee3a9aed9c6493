@@ -21,12 +21,12 @@ public:
 
 	static bool InitCallbacks();
 
-	static bool ExecuteIOScene(BYTE flag, CCNode *topnode, int toptag);
-	static bool ExecuteCBScene(int tag, int eventtag);
-	static bool ExecuteCBInputLayer(int tag, const char * text);
+	static bool ExecuteIOScene(BYTE flag, CCLayer *toplayer, int toptag);
+	static bool ExecuteCBScene(int tag, CCLayer * toplayer);
+	static bool ExecuteCBInputLayer(int tag, CCLayer * toplayer, int eventtag, const char * text);
 
 	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto=NULL, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
-	static CCNode * _GetSceneNode(int * scenetag);
+	static int _GetTopTag(int scenetag);
 	static CCScene * _GetNewScene(int scenetag);
 
 public:

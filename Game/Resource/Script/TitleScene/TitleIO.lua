@@ -17,16 +17,22 @@ end
 
 function TitleScene_OnInit(toplayer, toptag)
 	
-	-- menus layer
-	local layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_00, layertag});
+	local layertag = toptag;
+	
+	-- bg layer
+	layertag = toptag + CCTag_Layer_00;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
 	local spTitle = game.CreateSprite(SI_TitleScene, {480, 320});
-	game.AddSpriteChild(spTitle, {layertag});
+	game.AddSpriteChild(spTitle, {toplayer, layertag});
+	
+	-- menu layer
+	layertag = toptag + CCTag_Layer_01;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
 	
 	-- input layer
 	layertag = toptag + CCTag_Layer_13;
-	game.AddNullChild({toptag}, {0, 0, CCTag_Layer_13, layertag});
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
 	
 	
 end
@@ -34,7 +40,7 @@ end
 function TitleScene_OnEnter(toplayer, toptag)
 end
 
-function _TitleScene_AddMenus(toptag)
+function _TitleScene_AddMenus(toplayer, toptag)
 	
 	local xorig = 1180;
 	local xcen = 780;
@@ -44,17 +50,18 @@ function _TitleScene_AddMenus(toptag)
 	local spTitleMenus = {};
 	local spTitleSelectedMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_00;
-	local grouptag = layertag + CCTag_Menu_00;
+	local layertag = toptag + CCTag_Layer_01;
+	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 4 do
 		local y = ybegin - i*yoffset;
 		
-		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);--, {}, grouptag+CCTag_MenuSub_00+i+1);
-		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);--, {}, grouptag+CCTag_MenuSub_01+i+1);
-		menus[i+1] = game.CreateMenuItem({layertag}, {xorig, y, CCTag_Menu_00, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
-		
+		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);
+		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);
+
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
+
 		local fadetime = 0.3+i*0.05;
-		local menumoveaction = game.ActionMove(xcen, y, fadetime);
+		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
 		local blinktimepre = 0.5;
@@ -68,39 +75,77 @@ function _TitleScene_AddMenus(toptag)
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
 		
 		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
-		
+
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	
-	game.AddMenuChild(menus, {layertag}, {0, 0, CCTag_Menu_00, grouptag});
+	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 	
 end
 
-function _TitleScene_AddInputLayer(toptag)
+function _TitleScene_RunInputHintAction(toplayer, layertag)
+	local spritehint = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_13});
+	local inputhintactionpre = game.ActionTint(CCAF_To, 0xff7f7f, 0.3);
+	local inputhintactionpost = game.ActionTint(CCAF_To, 0xffffff, 0.5);
+	local inputhintaction = game.ActionSequence({inputhintactionpre, inputhintactionpost});
+	game.RunAction(spritehint, inputhintaction, true);
+end
+
+function _TitleScene_StopInputHintAction(toplayer, layertag)
+	local spritehint = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_13});
+	game.StopAction(spritehint);
+	game.SetColor(spritehint, global.ARGB(0xff, 0xffffff));
+end
+
+function _TitleScene_AddInputLayer(toplayer, toptag)
 	
-	local x = 200;
-	local y = 480;
-	local width = 320;
-	local height = 20;
+	local xcen = 200;
+	local ycen = 450;
+	local width = 336;
+	local height = 30;
+	local x = xcen - width / 2;
+	local y = ycen - height / 2;
 	local layertag = toptag + CCTag_Layer_13;
 	
 	local text, inputmax = game.GetUsername();
 	local defaulttext = "Your Name";
 	
+	local spritebg = game.CreateSprite(SI_White, {xcen, ycen, 0, width, height});
+	game.AddSpriteChild(spritebg, {toplayer, layertag});
+	game.SetColor(spritebg, global.ARGB(0x1f, 0xffffff));
+		
 	local inputlayer = game.AddInputLayerChild(
-			{{x-width/2, y-height/2, width, height}, text, "",  LConst_FontSize, inputmax, defaulttext},
-			{layertag},
-			{0, 0, CCTag_Layer_13, layertag+CCTag_Menu_00}
+			{toplayer, {x, y, width, height}, text, "",  LConst_FontSize, inputmax, defaulttext},
+			{toplayer, layertag},
+			{0, 0, CCTag_Layer_13, layertag+CCTag_Menu_01}
 		);
+		
+	local spritehint = game.CreateSprite(SI_TUI_InputHint, {480, 450}, layertag+CCTag_Menu_13);
+	game.AddSpriteChild(spritehint, {toplayer, layertag});
+	if text == "" then
+		_TitleScene_RunInputHintAction(toplayer, layertag);
+	end
+	
+end
+
+function _TitleScene_PauseMenuLayer(toplayer, toptag)
+	local layertag = toptag + CCTag_Layer_01;
+	local grouptag = layertag + CCTag_Menu_01;
+	local menulayer = game.GetNode({toplayer, layertag, grouptag});
+	game.SetTouchEnabled(menulayer, false);
+end
+
+function _TitleScene_ResumeMenuLayer(toplayer, toptag)
+	local layertag = toptag + CCTag_Layer_01;
+	local grouptag = layertag + CCTag_Menu_01;
+	local menulayer = game.GetNode({toplayer, layertag, grouptag});
+	game.SetTouchEnabled(menulayer, true);
 end
 
 function TitleScene_OnEnterTDF(toplayer, toptag)
 	
-	_TitleScene_AddMenus(toptag);
-	_TitleScene_AddInputLayer(toptag);
-	
-	
+	_TitleScene_AddMenus(toplayer, toptag);
+	_TitleScene_AddInputLayer(toplayer, toptag);	
 	
 end
 function TitleScene_OnExit(toplayer, toptag)
