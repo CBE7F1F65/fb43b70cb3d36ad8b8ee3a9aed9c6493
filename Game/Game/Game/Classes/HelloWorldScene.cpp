@@ -3,6 +3,7 @@
 
 #include "../Header/BResource.h"
 #include "../Header/GameMain.h"
+#include "../Export/Export_Lua_Scene.h"
 
 #include "LoadingScene.h"
 
@@ -24,6 +25,18 @@ CCScene* HelloWorldScene::scene()
 
     return pScene;
 }
+
+void HelloWorldScene::MenuCallbackFunc(CCObject * sender)
+{
+	CCNode * nSender = (CCNode *)sender;
+	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), this);
+}
+
+void HelloWorldScene::NodeCallbackFunc(CCNode *sender, void *data)
+{
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+}
+
 
 bool HelloWorldScene::init()
 {

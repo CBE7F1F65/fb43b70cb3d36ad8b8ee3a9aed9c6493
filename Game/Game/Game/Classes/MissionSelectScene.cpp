@@ -3,9 +3,6 @@
 #include "../Export/Export_Lua_Scene.h"
 #include "../Header/SceneConst.h"
 
-CCScene * MissionSelectScene::thisScene = NULL;
-CCLayer * MissionSelectScene::thisLayer = NULL;
-
 CCScene* MissionSelectScene::scene()
 {
 	CCScene * pScene = NULL;
@@ -13,11 +10,9 @@ CCScene* MissionSelectScene::scene()
 	{
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
-		thisScene = pScene;
 
 		MissionSelectScene *pLayer = MissionSelectScene::node();
 		CC_BREAK_IF(! pLayer);
-		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_MISSIONSELECTSCENELAYER);
 

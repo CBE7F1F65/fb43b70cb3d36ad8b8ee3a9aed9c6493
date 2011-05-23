@@ -3,9 +3,6 @@
 #include "../Export/Export_Lua_Scene.h"
 #include "../Header/SceneConst.h"
 
-CCScene * OnlineScene::thisScene = NULL;
-CCLayer * OnlineScene::thisLayer = NULL;
-
 CCScene* OnlineScene::scene()
 {
 	CCScene * pScene = NULL;
@@ -13,11 +10,9 @@ CCScene* OnlineScene::scene()
 	{
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
-		thisScene = pScene;
 
 		OnlineScene *pLayer = OnlineScene::node();
 		CC_BREAK_IF(! pLayer);
-		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_ONLINESCENELAYER);
 

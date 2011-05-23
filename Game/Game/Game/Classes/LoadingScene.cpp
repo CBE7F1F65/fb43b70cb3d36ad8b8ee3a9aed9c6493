@@ -8,9 +8,6 @@
 #include "../Header/SpriteItemManager.h"
 #include "../Header/BIOInterface.h"
 
-CCScene * LoadingScene::thisScene = NULL;
-CCLayer * LoadingScene::thisLayer = NULL;
-
 CCScene* LoadingScene::scene()
 {
 	CCScene * pScene = NULL;
@@ -18,11 +15,9 @@ CCScene* LoadingScene::scene()
 	{
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
-		thisScene = pScene;
 
 		LoadingScene *pLayer = LoadingScene::node();
 		CC_BREAK_IF(! pLayer);
-		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_LOADINGSCENELAYER);
 
@@ -124,7 +119,7 @@ void LoadingScene::onEnter()
 
 //	sp1->setOpacity(0);
 
-	CCMenuItemSprite * item = CCMenuItemSprite::itemFromNormalSprite(sp1, sp2, sp3, thisLayer, menu_selector(LoadingScene::MenuCallbackFunc));
+	CCMenuItemSprite * item = CCMenuItemSprite::itemFromNormalSprite(sp1, sp2, sp3, this, menu_selector(LoadingScene::MenuCallbackFunc));
 	item->setPosition(ccp(480, 120));
 
 	CCMenu *menu = CCMenu::menuWithItems(item, NULL);
@@ -147,7 +142,7 @@ void LoadingScene::onEnter()
 	item->runAction(seq);
 	sp1->runAction(totalseq);
 
-	((CCNode*)thisLayer)->addChild(menu);
+	((CCNode*)this)->addChild(menu);
 */
 
 	if (toenter)
@@ -156,7 +151,7 @@ void LoadingScene::onEnter()
 		toenter = false;
 	}
 /*
-	CCMutableArray<CCNode*> *pChildren = thisLayer->getChildren();
+	CCMutableArray<CCNode*> *pChildren = this->getChildren();
 
 	CCNode * item = NULL;
 	if (pChildren && pChildren->count() > 0)

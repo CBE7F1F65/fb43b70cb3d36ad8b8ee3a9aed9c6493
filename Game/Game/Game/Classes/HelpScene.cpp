@@ -3,9 +3,6 @@
 #include "../Export/Export_Lua_Scene.h"
 #include "../Header/SceneConst.h"
 
-CCScene * HelpScene::thisScene = NULL;
-CCLayer * HelpScene::thisLayer = NULL;
-
 CCScene* HelpScene::scene()
 {
 	CCScene * pScene = NULL;
@@ -13,11 +10,9 @@ CCScene* HelpScene::scene()
 	{
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
-		thisScene = pScene;
 
 		HelpScene *pLayer = HelpScene::node();
 		CC_BREAK_IF(! pLayer);
-		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_HELPSCENELAYER);
 

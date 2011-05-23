@@ -174,7 +174,7 @@ void _LObjNode::PBoolean(bool bval)
 	}
 }
 
-void _LObjNode::PString(char * sval)
+void _LObjNode::PString(const char * sval)
 {
 	if (ls && root)
 	{

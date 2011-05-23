@@ -12,6 +12,9 @@ public:
 
 	bool toenter;
 	bool toentertdf;
+
+	virtual void MenuCallbackFunc(CCObject *sender) = 0;
+	virtual void NodeCallbackFunc(CCNode *sender, void * data) = 0;
 };
 
 #endif

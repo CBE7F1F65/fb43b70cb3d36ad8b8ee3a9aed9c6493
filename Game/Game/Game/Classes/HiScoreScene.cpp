@@ -3,9 +3,6 @@
 #include "../Export/Export_Lua_Scene.h"
 #include "../Header/SceneConst.h"
 
-CCScene * HiScoreScene::thisScene = NULL;
-CCLayer * HiScoreScene::thisLayer = NULL;
-
 CCScene* HiScoreScene::scene()
 {
 	CCScene * pScene = NULL;
@@ -13,11 +10,9 @@ CCScene* HiScoreScene::scene()
 	{
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
-		thisScene = pScene;
 
 		HiScoreScene *pLayer = HiScoreScene::node();
 		CC_BREAK_IF(! pLayer);
-		thisLayer = pLayer;
 
 		pScene->addChild(pLayer, ZORDER_BG, KTAG_HISCORESCENELAYER);
 

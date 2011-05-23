@@ -31,7 +31,7 @@ public:
 	void PInt(int ival);
 	void PFloat(float fval);
 	void PBoolean(bool bval);
-	void PString(char * sval);
+	void PString(const char * sval);
 	void PDword(DWORD dval);
 
 	bool _isStack();

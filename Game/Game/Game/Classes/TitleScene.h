@@ -15,11 +15,8 @@ public:
 
 	LAYER_NODE_FUNC(TitleScene);
 
-	static CCScene * thisScene;
-	static CCLayer * thisLayer;
-
-	void MenuCallbackFunc(CCObject *sender);
-	void NodeCallbackFunc(CCNode *sender, void * data);
+	virtual void MenuCallbackFunc(CCObject *sender);
+	virtual void NodeCallbackFunc(CCNode *sender, void * data);
 
 private:
 };

@@ -41,6 +41,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("GetNode", LuaFn_Game_GetNode);
 
 	_gameobj.Register("AddNullChild", LuaFn_Game_AddNullChild);
+	_gameobj.Register("RemoveAllChildren", LuaFn_Game_RemoveAllChildren);
 
 	// Sprite
 	_gameobj.Register("CreateSprite", LuaFn_Game_CreateSprite);
@@ -53,6 +54,10 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("AddInputLayerChild", LuaFn_Game_AddInputLayerChild);
 	_gameobj.Register("GetUsername", LuaFn_Game_GetUsername);
 	_gameobj.Register("SetUsername", LuaFn_Game_SetUsername);
+
+	// Data
+	_gameobj.Register("GetHiScoreData", LuaFn_Game_GetHiScoreData);
+	_gameobj.Register("InsertHiScore", LuaFn_Game_InsertHiScore);
 
 	// Action
 	_gameobj.Register("RunAction", LuaFn_Game_RunAction);
@@ -472,6 +477,33 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// {nodelist}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		CCNode * nownode = _GetNowNode(&cnode);
+		if (!nownode)
+		{
+			break;
+		}
+
+		bool _bcleanup = true;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_bcleanup = node.bGet();
+		}
+		nownode->removeAllChildrenWithCleanup(_bcleanup);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 /************************************************************************/
 /* Sprite                                                               */
 /************************************************************************/
@@ -572,8 +604,10 @@ int Export_Lua_Game::LuaFn_Game_AddSpriteChild(LuaState * ls)
 				_zOrder = node.iGet();
 			}
 			nownode->addChild(sprite, _zOrder);
+
 		}
 	}
+	node.PDword((DWORD)sprite);
 
 	_LEAVEFUNC_LUA;
 }
@@ -596,7 +630,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
 		SelectorProtocol * proto = NULL;
 		SEL_MenuHandler cbfunc = NULL;
-		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &proto, &cbfunc);
+		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &cbfunc);
 		proto = nownode;
 		if (!proto || !cbfunc)
 		{
@@ -752,7 +786,9 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 			}
 			nownode->addChild(menu, _zOrder, _tag);
 			menu->setPosition(BGlobal::TranslatePosition(_x, _y));
+
 		}
+		node.PDword((DWORD)menu);
 	}
 
 	_LEAVEFUNC_LUA;
@@ -835,6 +871,39 @@ int Export_Lua_Game::LuaFn_Game_SetUsername(LuaState * ls)
 
 	// username
 	GameMain::getInstance()->SetUsername(node.sNextGet());
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetHiScoreData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// -> count
+	if (!node.argscount)
+	{
+		node.PInt(M_HISCOREMAX);
+	}
+	// i -> username, hiscore
+	else
+	{
+		int _index = node.iNextGet();
+		node.PString(GameMain::getInstance()->GetHiScoreUsername(_index));
+		node.PInt(GameMain::getInstance()->GetHiScore(_index));
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_InsertHiScore(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// hiscore
+	int _hiscore = node.iNextGet();
+	bool retval = GameMain::getInstance()->InsertScore(_hiscore);
+
+	node.PBoolean(retval);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1344,7 +1413,7 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 		SelectorProtocol * proto = NULL;
 		SEL_MenuHandler cbfunc = NULL;
 		SEL_CallFuncND cbndfunc = NULL;
-		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &proto, &cbfunc, &cbndfunc);
+		Export_Lua_Scene::_GetSceneMenuCallback(scenetag, &cbfunc, &cbndfunc);
 		proto = nownode;
 		if (!proto || !cbfunc)
 		{

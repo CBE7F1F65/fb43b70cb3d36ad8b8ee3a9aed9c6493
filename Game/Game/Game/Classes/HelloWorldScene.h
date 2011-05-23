@@ -12,7 +12,10 @@ public:
 
 	virtual void onEnter();
     
-    LAYER_NODE_FUNC(HelloWorldScene);
+	LAYER_NODE_FUNC(HelloWorldScene);
+
+	virtual void MenuCallbackFunc(CCObject *sender);
+	virtual void NodeCallbackFunc(CCNode *sender, void * data);
 };
 
 #endif  // __HELLOWORLD_SCENE_H__

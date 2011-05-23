@@ -92,7 +92,7 @@ bool GameMain::InsertScore(int score)
 	{
 		if (score > gamedata.hiscores[i].hiscore)
 		{
-			for (int j=M_HISCOREMAX; j>i; j--)
+			for (int j=M_HISCOREMAX-1; j>i; j--)
 			{
 				memcpy(&(gamedata.hiscores[j]), &(gamedata.hiscores[j-1]), sizeof(HiScoreData));
 			}
@@ -140,3 +140,20 @@ void GameMain::SetUsername(const char * _username)
 	SaveIni();
 }
 
+int GameMain::GetHiScore(int index)
+{
+	if (index < 0 || index >= M_HISCOREMAX)
+	{
+		return 0;
+	}
+	return gamedata.hiscores[index].hiscore;
+}
+
+const char * GameMain::GetHiScoreUsername(int index)
+{
+	if (index < 0 || index >= M_HISCOREMAX)
+	{
+		return NULL;
+	}
+	return gamedata.hiscores[index].username;
+}

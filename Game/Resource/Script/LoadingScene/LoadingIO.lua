@@ -20,7 +20,7 @@ end
 
 function LoadingScene_OnEnter(toplayer, toptag)
 	
-	game.ReplaceScene(ktag_TitleSceneLayer, g_SceneTransTime)
+	game.ReplaceScene(ktag_TitleSceneLayer, LConst_SceneTransTime)
 	
 end
 function LoadingScene_OnEnterTDF(toplayer, toptag)

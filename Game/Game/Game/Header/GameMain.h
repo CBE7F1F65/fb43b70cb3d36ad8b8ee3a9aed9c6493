@@ -28,6 +28,9 @@ public:
 	void SaveHiScore();
 	void ReportHiScore();
 
+	int GetHiScore(int index);
+	const char * GetHiScoreUsername(int index);
+
 	bool SaveIni();
 
 	void SetBGMVol(int bgmvol);

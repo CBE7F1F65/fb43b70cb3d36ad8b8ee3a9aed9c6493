@@ -25,7 +25,7 @@ public:
 	static bool ExecuteCBScene(int tag, CCLayer * toplayer);
 	static bool ExecuteCBInputLayer(int tag, CCLayer * toplayer, int eventtag, const char * text);
 
-	static void _GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto=NULL, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
+	static void _GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
 	static int _GetTopTag(int scenetag);
 	static CCScene * _GetNewScene(int scenetag);
 

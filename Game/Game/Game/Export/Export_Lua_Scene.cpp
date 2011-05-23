@@ -93,16 +93,12 @@ bool Export_Lua_Scene::InitCallbacks()
 /************************************************************************/
 /* SceneGet                                                             */
 /************************************************************************/
-void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** proto, SEL_MenuHandler * cbfunc, SEL_CallFuncND * cbndfunc)
+void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbfunc, SEL_CallFuncND * cbndfunc)
 {
 	scenetag = scenetag & KTAG_SCENELAYERMASK;
 	switch (scenetag)
 	{
 	case KTAG_LOADINGSCENELAYER:
-		if (proto)
-		{
-			*proto = LoadingScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(LoadingScene::MenuCallbackFunc);
@@ -113,10 +109,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_TITLESCENELAYER:
-		if (proto)
-		{
-			*proto = TitleScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(TitleScene::MenuCallbackFunc);
@@ -127,10 +119,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_HISCORESCENELAYER:
-		if (proto)
-		{
-			*proto = HiScoreScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(HiScoreScene::MenuCallbackFunc);
@@ -141,10 +129,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_OPTIONSCENELAYER:
-		if (proto)
-		{
-			*proto = OptionScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(OptionScene::MenuCallbackFunc);
@@ -155,10 +139,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_ONLINESCENELAYER:
-		if (proto)
-		{
-			*proto = OnlineScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(OnlineScene::MenuCallbackFunc);
@@ -169,10 +149,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_HELPSCENELAYER:
-		if (proto)
-		{
-			*proto = HelpScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(HelpScene::MenuCallbackFunc);
@@ -183,10 +159,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_STAGESELECTSCENELAYER:
-		if (proto)
-		{
-			*proto = StageSelectScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(StageSelectScene::MenuCallbackFunc);
@@ -197,10 +169,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_MISSIONSELECTSCENELAYER:
-		if (proto)
-		{
-			*proto = MissionSelectScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(MissionSelectScene::MenuCallbackFunc);
@@ -211,10 +179,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SelectorProtocol ** p
 		}
 		break;
 	case KTAG_PLAYSCENELAYER:
-		if (proto)
-		{
-			*proto = PlayScene::thisLayer;
-		}
 		if (cbfunc)
 		{
 			*cbfunc = menu_selector(PlayScene::MenuCallbackFunc);

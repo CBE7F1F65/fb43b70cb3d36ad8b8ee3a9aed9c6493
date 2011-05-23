@@ -41,6 +41,7 @@ public:
 	static int LuaFn_Game_GetNode(LuaState * ls);
 
 	static int LuaFn_Game_AddNullChild(LuaState * ls);
+	static int LuaFn_Game_RemoveAllChildren(LuaState * ls);
 
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
@@ -51,6 +52,9 @@ public:
 	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
 	static int LuaFn_Game_GetUsername(LuaState * ls);
 	static int LuaFn_Game_SetUsername(LuaState * ls);
+
+	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
+	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 
 	static int LuaFn_Game_RunAction(LuaState * ls);
 	static int LuaFn_Game_StopAction(LuaState * ls);
