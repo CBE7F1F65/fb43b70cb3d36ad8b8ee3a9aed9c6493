@@ -69,7 +69,9 @@ function Debug_Log(str, toplayer, toptag)
 		
 		Debug_LogMoveup(toplayer, layertag);
 		local item = game.AddTextChild({toplayer, layertag}, {0, LGlobal_LogLineHeight, 0, LGlobal_LogLineCount}, str, LConst_FontSize*0.5);
-		game.SetAnchor(item, 0, 0)
+		if item ~= nil then
+			game.SetAnchor(item, 0, 0)
+		end
 	end
 end
 
