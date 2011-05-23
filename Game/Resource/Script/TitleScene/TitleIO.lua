@@ -16,7 +16,7 @@ function TitleScene_IO(eventtype, toplayer, toptag)
 end
 
 function TitleScene_OnInit(toplayer, toptag)
-		
+	
 	local layertag = toptag;
 	
 	-- bg layer

@@ -68,7 +68,7 @@ bool BResource::Init()
 #elif defined __IPHONE
 	bio->Resource_SetPath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
 	std::string writablepath = CCFileUtils::getWriteablePath();
-	writablepath += M_FOLDER_SLASH;
+//	writablepath += M_FOLDER_SLASH;
 	bio->System_SetLogFile((writablepath+LOG_FILENAME).c_str());
 	bio->Ini_SetIniFile((writablepath+INI_FILENAME).c_str());
 	bio->Data_SetDataFile((writablepath+DATA_FILENAME).c_str());

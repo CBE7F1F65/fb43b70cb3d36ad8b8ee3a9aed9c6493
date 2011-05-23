@@ -346,7 +346,7 @@ bool BIOInterface::Data_Save(BYTE * data, DWORD size)
 BYTE * BIOInterface::Data_Read(DWORD * size/* =NULL */)
 {
 	BYTE * _data = NULL;
-	if (Resource_AttachPack(szDataFile))
+	if (Resource_AttachPack(szDataFile, DATA_PASSWORD))
 	{
 		_data = Resource_Load(DATA_FILENAME, size);
 		Resource_RemovePack(szDataFile);
