@@ -235,7 +235,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..' '..hiscoretext;
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, y, CCTag_Menu_03, layertag+CCTag_Menu_03+i+1}, text, LConst_FontSize*0.8, "");
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, y, CCTag_Menu_03, layertag+CCTag_Menu_03+i+1}, text, LConst_FontSize*0.8);
 		game.SetAnchor(menus[i+1], 0, 0);
 	end
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_03, layertag+CCTag_Menu_03});
