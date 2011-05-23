@@ -1,6 +1,5 @@
 #include "../Classes/InputLayer.h"
 
-#include "../Header/Const.h"
 #include "../Header/BGlobal.h"
 
 #include "../Header/BIOInterface.h"

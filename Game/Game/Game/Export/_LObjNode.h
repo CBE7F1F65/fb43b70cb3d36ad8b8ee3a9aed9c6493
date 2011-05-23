@@ -33,6 +33,7 @@ public:
 	void PBoolean(bool bval);
 	void PString(const char * sval);
 	void PDword(DWORD dval);
+	void PLongLong(LONGLONG llval);
 
 	bool _isStack();
 	void _init(LuaState * ls, LuaObject *obj, LuaStack *args, _LObjNode *root);

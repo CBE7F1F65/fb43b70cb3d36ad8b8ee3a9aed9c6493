@@ -9,6 +9,7 @@
 #include "../Header/BGlobal.h"
 
 #include "../Classes/InputLayer.h"
+#include "../Classes/TouchLayer.h"
 
 #include "../Header/GameMain.h"
 
@@ -65,6 +66,10 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	// Data
 	_gameobj.Register("GetHiScoreData", LuaFn_Game_GetHiScoreData);
 	_gameobj.Register("InsertHiScore", LuaFn_Game_InsertHiScore);
+
+	// Touch
+	_gameobj.Register("AddTouchLayerChild", LuaFn_Game_AddTouchLayerChild);
+	_gameobj.Register("GetTouchInfo", LuaFn_Game_GetTouchInfo);
 
 	// Action
 	_gameobj.Register("RunAction", LuaFn_Game_RunAction);
@@ -806,7 +811,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 {
 	_ENTERFUNC_LUA(2);
 
-	// {Rect, text, fontname, fontsize, inputmax, defaulttext}, {nodelist}, {XYZT}
+	// {toplayer, Rect, text, fontname, fontsize, inputmax, defaulttext}, {nodelist}, {XYZT}
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
@@ -846,7 +851,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
 				}
 
-				InputLayer * pInputLayer = InputLayer::node();
+				pInputLayer = InputLayer::node();
 				if (pInputLayer)
 				{
 					pInputLayer->initWithInputData(_toplayer, _rect, _text, strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME, _fontsize, _inputmax, _defaulttext);
@@ -898,6 +903,116 @@ int Export_Lua_Game::LuaFn_Game_GetHiScoreData(LuaState * ls)
 		int _index = node.iNextGet();
 		node.PString(GameMain::getInstance()->GetHiScoreUsername(_index));
 		node.PInt(GameMain::getInstance()->GetHiScore(_index));
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// {toplayer, Rect}, {nodelist}, {XYZT}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		CCLayer * _toplayer = (CCLayer *)cnode.dNextGet();
+		if (!_toplayer)
+		{
+			break;
+		}
+		cnode.jNextGet();
+		if (cnode.bhavenext && cnode.ObjIsTable())
+		{
+			_LObjNode ccnode(ls, &(cnode._obj), &node);
+			CCRect _rect = _GetRect(&ccnode);
+
+			node.jNextGet();
+			_LObjNode tcnode(ls, &(node._obj), &node);
+			CCNode * nownode = _GetNowNode(&tcnode);
+
+			TouchLayer * pTouchLayer = NULL;
+			if (nownode)
+			{
+				float _x = 0;
+				float _y = 0;
+				int _zOrder = 0;
+				int _tag = kCCNodeTagInvalid;
+
+				node.jNextGet();
+				if (node.bhavenext)
+				{
+					_LObjNode ttcnode(ls, &(node._obj), &node);
+					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
+				}
+
+				pTouchLayer = TouchLayer::node();
+				if (pTouchLayer)
+				{
+					pTouchLayer->initWithRect(_toplayer, _rect);
+					nownode->addChild(pTouchLayer, _zOrder, _tag);
+					pTouchLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
+				}
+				node.PDword((DWORD)pTouchLayer);
+			}
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// touches -> touchescount
+	// touches, touchlayer, i, ccti -> x, y, time
+	CCSet * pTouches = (CCSet *)node.dNextGet();
+	if (!pTouches)
+	{
+		break;
+	}
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		TouchLayer * _touchlayer = (TouchLayer *)node.dGet();
+		if (!_touchlayer)
+		{
+			break;
+		}
+
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			int _index = node.iGet();
+			int _flag = M_CCTOUCHINDICATOR_BEGAN;
+
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_flag = node.iGet();
+			}
+
+			float x;
+			float y;
+			LONGLONG time;
+			_touchlayer->GetTouchData(_index, _flag, &x, &y, &time);
+
+			node.PFloat(x);
+			node.PFloat(y);
+			node.PLongLong(time);
+		}
+	}
+	else
+	{
+		int touchescount = pTouches->count();
+		if (touchescount > M_TOUCHMAX)
+		{
+			touchescount = M_TOUCHMAX;
+		}
+		node.PInt(touchescount);
 	}
 
 	_LEAVEFUNC_LUA;

@@ -30,6 +30,11 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("CCET_Enter", M_CCEVENTTAG_ENTER);
 	obj->SetInteger("CCET_Leave", M_CCEVENTTAG_LEAVE);
 
+	obj->SetInteger("CCTI_Began", M_CCTOUCHINDICATOR_BEGAN);
+	obj->SetInteger("CCTI_Moved", M_CCTOUCHINDICATOR_MOVED);
+	obj->SetInteger("CCTI_Ended", M_CCTOUCHINDICATOR_ENDED);
+	obj->SetInteger("CCTI_Canceled", M_CCTOUCHINDICATOR_CANCELED);
+
 	return true;
 }
 

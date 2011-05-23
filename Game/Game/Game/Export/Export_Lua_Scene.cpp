@@ -16,10 +16,12 @@
 #define LUASCENE_SCENE_IO	"Scene_IO"
 #define LUASCENE_SCENE_CB	"Scene_CB"
 #define LUASCENE_INPUTLAYER_CB	"InputLayer_CB"
+#define LUASCENE_TOUCHLAYER_CB	"TouchLayer_CB"
 
 LuaFunction<bool> * Export_Lua_Scene::ioScene;
 LuaFunction<bool> * Export_Lua_Scene::cbScene;
 LuaFunction<bool> * Export_Lua_Scene::cbInputLayer;
+LuaFunction<bool> * Export_Lua_Scene::cbTouchLayer;
 
 bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 {
@@ -86,6 +88,16 @@ bool Export_Lua_Scene::InitCallbacks()
 	static LuaFunction<bool> _finputlayercb = _obj;
 	_finputlayercb = _obj;
 	cbInputLayer = &_finputlayercb;
+
+	_obj = ls->GetGlobal(LUASCENE_TOUCHLAYER_CB);
+	if (!_obj.IsFunction())
+	{
+		ShowError(LUAERROR_NOTFUNCTION, LUASCENE_TOUCHLAYER_CB);
+		return false;
+	}
+	static LuaFunction<bool> _ftouchlayercb = _obj;
+	_ftouchlayercb = _obj;
+	cbTouchLayer = &_ftouchlayercb;
 
 	return true;
 }
@@ -262,6 +274,17 @@ bool Export_Lua_Scene::ExecuteCBInputLayer(int tag, CCLayer * toplayer, int even
 {
 	LuaState * ls = state;
 	bool bret = (*cbInputLayer)(tag, CDOUBLEN(toplayer), eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, text);
+	if (state->CheckError())
+	{
+		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());
+	}
+	return bret;
+}
+
+bool Export_Lua_Scene::ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCSet * pTouches, CCLayer * thislayer)
+{
+	LuaState * ls = state;
+	bool bret = (*cbTouchLayer)(tag, CDOUBLEN(toplayer), eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, CDOUBLEN(pTouches), CDOUBLEN(thislayer));
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

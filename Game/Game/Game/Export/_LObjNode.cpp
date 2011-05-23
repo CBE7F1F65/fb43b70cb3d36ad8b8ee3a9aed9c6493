@@ -191,3 +191,12 @@ void _LObjNode::PDword(DWORD dval)
 		root->retcount++;
 	}
 }
+
+void _LObjNode::PLongLong(LONGLONG llval)
+{
+	if (ls && root)
+	{
+		Export_Lua::_LuaHelper_PushLONGLONG(ls, llval);
+		root->retcount++;
+	}
+}

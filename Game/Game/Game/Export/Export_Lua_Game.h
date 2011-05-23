@@ -56,6 +56,9 @@ public:
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
 	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 
+	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
+	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
+
 	static int LuaFn_Game_RunAction(LuaState * ls);
 	static int LuaFn_Game_StopAction(LuaState * ls);
 
