@@ -279,11 +279,11 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 		if (cnode->bhavenext)
 		{
 			_ktag = cnode->iGet();
-			nownode = nownode->getChildByTag(_ktag);
 			if (!nownode)
 			{
 				return NULL;
 			}
+			nownode = nownode->getChildByTag(_ktag);
 		}
 	} while (cnode->bhavenext);
 

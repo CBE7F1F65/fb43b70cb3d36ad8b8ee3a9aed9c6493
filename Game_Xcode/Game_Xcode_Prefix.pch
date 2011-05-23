@@ -8,3 +8,8 @@
 #endif
 
 #define __IPHONE
+
+
+#define _DEBUG
+#define COCOS2D_DEBUG	1
+#define CD_DEBUG	1

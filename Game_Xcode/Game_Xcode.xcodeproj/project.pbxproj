@@ -20,6 +20,7 @@
 		50F4144810692EE7002A0D5E /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144310692EE7002A0D5E /* blocks.png */; };
 		50F4144910692EE7002A0D5E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144410692EE7002A0D5E /* Default.png */; };
 		50F4144B10692EE7002A0D5E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144610692EE7002A0D5E /* Icon.png */; };
+		71A14F29138AFF9A009B6F40 /* TouchLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */; };
 		71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */; };
 		71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */; };
 		71AC30801385C6C60029F185 /* RootViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 71AC307F1385C6C60029F185 /* RootViewController.mm */; };
@@ -273,6 +274,8 @@
 		50F4144310692EE7002A0D5E /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		50F4144410692EE7002A0D5E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		50F4144610692EE7002A0D5E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		71A14F27138AFF9A009B6F40 /* TouchLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchLayer.h; sourceTree = "<group>"; };
+		71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TouchLayer.cpp; sourceTree = "<group>"; };
 		71A9A29B13885B3B00BBA5B4 /* GameMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMain.h; sourceTree = "<group>"; };
 		71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameMain.cpp; sourceTree = "<group>"; };
 		71A9A29E13885B6400BBA5B4 /* InputLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputLayer.h; sourceTree = "<group>"; };
@@ -816,6 +819,8 @@
 				71AC30FB1385C9900029F185 /* PlayScene.h */,
 				71AC30FC1385C9900029F185 /* StageSelectScene.h */,
 				71AC30FD1385C9900029F185 /* TitleScene.h */,
+				71A14F27138AFF9A009B6F40 /* TouchLayer.h */,
+				71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */,
 				71AC30FE1385C9900029F185 /* AppDelegate.cpp */,
 				71AC30FF1385C9900029F185 /* BaseScene.cpp */,
 				71AC31001385C9900029F185 /* HelloWorldScene.cpp */,
@@ -1786,6 +1791,7 @@
 				71AC31151385C9900029F185 /* TitleScene.cpp in Sources */,
 				71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */,
 				71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */,
+				71A14F29138AFF9A009B6F40 /* TouchLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1992,7 +1998,6 @@
 				COMPRESS_PNG_FILES = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					_DEBUG,
 					DEBUG,
 					"COCOS2D_DEBUG=1",
 					"CD_DEBUG=1",
