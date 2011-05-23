@@ -203,11 +203,11 @@ function _TitleScene_AddHiScoreItems(toplayer, toptag)
 end
 
 function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
-	
+
 	local layertag = toptag + CCTag_Layer_03;
 	local menus = {};
 	local count = game.GetHiScoreData();
-	local x = 25;
+	local x = 35;
 	local ybegin = 380;
 	local yoffset = 24;
 	local text, inputmax = game.GetUsername();

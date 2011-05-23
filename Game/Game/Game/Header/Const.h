@@ -50,8 +50,8 @@ enum
 #define M_CCEVENTTAG_ENTER		0x0001
 #define M_CCEVENTTAG_LEAVE		0x0002
 
-#define M_USERNAMEMAX	0x10
-#define M_HISCOREMAX	0x10
+#define M_USERNAMEMAX	13
+#define M_HISCOREMAX	15
 
 
 #define LOG_FILENAME		"log.log"
