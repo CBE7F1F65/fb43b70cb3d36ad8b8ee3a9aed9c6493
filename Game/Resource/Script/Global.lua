@@ -3,7 +3,6 @@ LGlobal_MessageBoxCount	=	{};
 LGlobal_LogLineCount = 0;
 LGlobal_LogLineCountMax = 30;
 LGlobal_LogLineHeight = 18;
-LGlobal_LogLineInfo = {};
 
 function LGlobal_CallMessageBoxOnce(content, title, indi)
 	if indi == nil then
@@ -37,16 +36,17 @@ function LGlobal_CallMessageBox(content, title)
 end
 
 
-function Debug_LogMoveup()
+function Debug_LogMoveup(toplayer, layertag)
 	for i=1, LGlobal_LogLineCountMax do
-		if LGlobal_LogLineInfo[i] ~= nil then
+		local item = game.GetNode({toplayer, layertag, i});
+		if item ~= NULL then
 			local posindex = LGlobal_LogLineCount+1-i;
 			if posindex > LGlobal_LogLineCountMax then
 				posindex = posindex - LGlobal_LogLineCountMax;
 			elseif posindex < 1 then
 				posindex = posindex + LGlobal_LogLineCountMax;
 			end
-			game.SetPosition(LGlobal_LogLineInfo[i], 0, (posindex+1)*LGlobal_LogLineHeight);
+			game.SetPosition(item, 0, (posindex)*LGlobal_LogLineHeight);
 		end
 	end
 			
@@ -56,9 +56,9 @@ function Debug_LogMoveup()
 		LGlobal_LogLineCount = 1;
 	end
 	
-	if LGlobal_LogLineInfo[LGlobal_LogLineCount] ~= nil then
-		game.RemoveChild(LGlobal_LogLineInfo[LGlobal_LogLineCount]);
-		LGlobal_LogLineInfo[LGlobal_LogLineCount] = nil;
+	local item = game.GetNode({toplayer, layertag, LGlobal_LogLineCount})
+	if item ~= NULL then
+		game.RemoveChild(item);
 	end
 end
 
@@ -67,9 +67,9 @@ function Debug_Log(str, toplayer, toptag)
 	if toplayer ~= nil and toptag ~= nil then
 		local layertag = toptag + CCTag_Layer_14;
 		
-		Debug_LogMoveup();
-		LGlobal_LogLineInfo[LGlobal_LogLineCount] = game.AddTextChild({toplayer, layertag}, {0, LGlobal_LogLineHeight}, str, LConst_FontSize*0.5);
-		game.SetAnchor(LGlobal_LogLineInfo[LGlobal_LogLineCount], 0, 0)
+		Debug_LogMoveup(toplayer, layertag);
+		local item = game.AddTextChild({toplayer, layertag}, {0, LGlobal_LogLineHeight, 0, LGlobal_LogLineCount}, str, LConst_FontSize*0.5);
+		game.SetAnchor(item, 0, 0)
 	end
 end
 
