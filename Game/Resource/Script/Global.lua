@@ -1,9 +1,9 @@
-LGlobal_MessageBoxCount	=	{}
+LGlobal_MessageBoxCount	=	{};
 
-_DEBUG_LGlobal_Jump	=	-1;
-_DEBUG_MatchAndLog	=	0;
-
-_DEBUG_ReplayCount = 0;
+LGlobal_LogLineCount = 0;
+LGlobal_LogLineCountMax = 30;
+LGlobal_LogLineHeight = 18;
+LGlobal_LogLineInfo = {};
 
 function LGlobal_CallMessageBoxOnce(content, title, indi)
 	if indi == nil then
@@ -36,9 +36,46 @@ function LGlobal_CallMessageBox(content, title)
 	return global.MessageBox(content, title);
 end
 
+
+function Debug_LogMoveup()
+	for i=1, LGlobal_LogLineCountMax do
+		if LGlobal_LogLineInfo[i] ~= nil then
+			local posindex = LGlobal_LogLineCount+1-i;
+			if posindex > LGlobal_LogLineCountMax then
+				posindex = posindex - LGlobal_LogLineCountMax;
+			elseif posindex < 1 then
+				posindex = posindex + LGlobal_LogLineCountMax;
+			end
+			game.SetPosition(LGlobal_LogLineInfo[i], 0, (posindex+1)*LGlobal_LogLineHeight);
+		end
+	end
+			
+	if LGlobal_LogLineCount < LGlobal_LogLineCountMax then
+		LGlobal_LogLineCount = LGlobal_LogLineCount+1;
+	else
+		LGlobal_LogLineCount = 1;
+	end
+	
+	if LGlobal_LogLineInfo[LGlobal_LogLineCount] ~= nil then
+		game.RemoveChild(LGlobal_LogLineInfo[LGlobal_LogLineCount]);
+		LGlobal_LogLineInfo[LGlobal_LogLineCount] = nil;
+	end
+end
+
+function Debug_Log(str, toplayer, toptag)
+	global.SystemLog(str);
+	if toplayer ~= nil and toptag ~= nil then
+		local layertag = toptag + CCTag_Layer_14;
+		
+		Debug_LogMoveup();
+		LGlobal_LogLineInfo[LGlobal_LogLineCount] = game.AddTextChild({toplayer, layertag}, {0, LGlobal_LogLineHeight}, str, LConst_FontSize*0.5);
+		game.SetAnchor(LGlobal_LogLineInfo[LGlobal_LogLineCount], 0, 0)
+	end
+end
+
 MB	=	LGlobal_CallMessageBoxOnce;
 MBA	=	LGlobal_CallMessageBox;
-LOG	=	global.SystemLog;
+LOG	=	Debug_Log;
 
 RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;

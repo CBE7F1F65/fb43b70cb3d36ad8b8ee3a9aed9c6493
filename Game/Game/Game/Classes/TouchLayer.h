@@ -18,6 +18,8 @@ struct TouchData
 	LONGLONG	endPressTime;
 
 	bool bPressing;
+
+	CCTouch * touch;
 };
 
 class TouchLayer : public CCLayer, public CCStandardTouchDelegate

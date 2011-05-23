@@ -49,11 +49,16 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("GetNode", LuaFn_Game_GetNode);
 
 	_gameobj.Register("AddNullChild", LuaFn_Game_AddNullChild);
+	_gameobj.Register("RemoveChild", LuaFn_Game_RemoveChild);
 	_gameobj.Register("RemoveAllChildren", LuaFn_Game_RemoveAllChildren);
 
 	// Sprite
 	_gameobj.Register("CreateSprite", LuaFn_Game_CreateSprite);
 	_gameobj.Register("AddSpriteChild", LuaFn_Game_AddSpriteChild);
+
+	// Text
+	_gameobj.Register("AddTextChild", LuaFn_Game_AddTextChild);
+
 	// Menu
 	_gameobj.Register("CreateMenuItem", LuaFn_Game_CreateMenuItem);
 	_gameobj.Register("AddMenuChild", LuaFn_Game_AddMenuChild);
@@ -79,7 +84,9 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("SetTouchEnabled", LuaFn_Game_SetTouchEnabled);
 	_gameobj.Register("SetIsVisible", LuaFn_Game_SetIsVisible);
 
-	// Color
+	
+	_gameobj.Register("SetPosition", LuaFn_Game_SetPosition);
+	_gameobj.Register("GetPosition", LuaFn_Game_GetPosition);
 	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
 	_gameobj.Register("GetColor", LuaFn_Game_GetColor);
 	_gameobj.Register("SetAnchor", LuaFn_Game_SetAnchor);
@@ -490,29 +497,71 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
-int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
+int Export_Lua_Game::LuaFn_Game_RemoveChild(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// {nodelist}
+	// {nodelist}, bcleanup
+	// item, bcleanup
+
+	CCNode * nownode = NULL;
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
 		_LObjNode cnode(ls, &(node._obj), &node);
-		CCNode * nownode = _GetNowNode(&cnode);
-		if (!nownode)
-		{
-			break;
-		}
-
-		bool _bcleanup = true;
-		node.jNextGet();
-		if (node.bhavenext)
-		{
-			_bcleanup = node.bGet();
-		}
-		nownode->removeAllChildrenWithCleanup(_bcleanup);
+		nownode = _GetNowNode(&cnode);
 	}
+	else
+	{
+		nownode = (CCNode *)node.dGet();
+	}
+
+	if (!nownode)
+	{
+		break;
+	}
+
+	bool _bcleanup = true;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bcleanup = node.bGet();
+	}
+	nownode->removeFromParentAndCleanup(_bcleanup);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// {nodelist}, bcleanup
+	// item, bcleanup
+	CCNode * nownode = NULL;
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		nownode = _GetNowNode(&cnode);
+	}
+	else
+	{
+		nownode = (CCNode *)node.dGet();
+	}
+
+	if (!nownode)
+	{
+		break;
+	}
+
+	bool _bcleanup = true;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bcleanup = node.bGet();
+	}
+	nownode->removeAllChildrenWithCleanup(_bcleanup);
 
 	_LEAVEFUNC_LUA;
 }
@@ -621,6 +670,58 @@ int Export_Lua_Game::LuaFn_Game_AddSpriteChild(LuaState * ls)
 		}
 	}
 	node.PDword((DWORD)sprite);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(4);
+
+	// {nodelist}, {XYZT}, str, fontsize, font
+
+	CCLabelTTF * item = NULL;
+
+	float _x = 0.0f;
+	float _y = 0.0f;
+	int _zOrder = 0;
+	int _tag = kCCNodeTagInvalid;
+
+	char * _labelstr = NULL;
+	char * _fontname = NULL;
+	float _fontsize = 0;
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode tcnode(ls, &(node._obj), &node);
+		CCNode * nownode = _GetNowNode(&tcnode);
+		if (!nownode)
+		{
+			break;
+		}
+
+		node.jNextGet();
+		if (node.ObjIsTable())
+		{
+			_LObjNode cnode(ls, &(node._obj), &node);
+			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
+		}
+
+		_labelstr = (char *)node.sNextGet();
+		_fontsize = node.fNextGet();
+		_fontsize = BGlobal::Scaler(_fontsize);
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_fontname = (char *)node.sGet();
+		}
+		item = CCLabelTTF::labelWithString(_labelstr, _fontname?(strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME):M_DEFAULT_FONTNAME, _fontsize);
+		if (item)
+		{
+			nownode->addChild(item, _zOrder, _tag);
+			node.PDword((DWORD)item);
+		}
+	}
 
 	_LEAVEFUNC_LUA;
 }
@@ -966,54 +1067,34 @@ int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// touches -> touchescount
-	// touches, touchlayer, i, ccti -> x, y, time
-	CCSet * pTouches = (CCSet *)node.dNextGet();
-	if (!pTouches)
+	// touchlayer, index, ccti -> x, y, time
+
+	TouchLayer * _touchlayer = (TouchLayer *)node.dNextGet();
+	if (!_touchlayer)
 	{
 		break;
 	}
 
+	int _index = 0;
+	int _flag = M_CCTOUCHINDICATOR_BEGAN;
 	node.jNextGet();
 	if (node.bhavenext)
 	{
-		TouchLayer * _touchlayer = (TouchLayer *)node.dGet();
-		if (!_touchlayer)
-		{
-			break;
-		}
-
+		_index = node.iGet();
 		node.jNextGet();
 		if (node.bhavenext)
 		{
-			int _index = node.iGet();
-			int _flag = M_CCTOUCHINDICATOR_BEGAN;
-
-			node.jNextGet();
-			if (node.bhavenext)
-			{
-				_flag = node.iGet();
-			}
-
-			float x;
-			float y;
-			LONGLONG time;
-			_touchlayer->GetTouchData(_index, _flag, &x, &y, &time);
-
-			node.PFloat(x);
-			node.PFloat(y);
-			node.PLongLong(time);
+			_flag = node.iGet();
 		}
 	}
-	else
-	{
-		int touchescount = pTouches->count();
-		if (touchescount > M_TOUCHMAX)
-		{
-			touchescount = M_TOUCHMAX;
-		}
-		node.PInt(touchescount);
-	}
+	float x;
+	float y;
+	LONGLONG time;
+	_touchlayer->GetTouchData(_index, _flag, &x, &y, &time);
+
+	node.PFloat(x);
+	node.PFloat(y);
+	node.PLongLong(time);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1137,6 +1218,40 @@ int Export_Lua_Game::LuaFn_Game_SetIsVisible(LuaState * ls)
 		}
 		_item->setIsVisible(_visible);
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetPosition(LuaState * ls)
+{
+	_ENTERFUNC_LUA(3);
+
+	// item x y
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	_item->setPosition(BGlobal::ScalerPoint(ccp(_x, _y)));
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetPosition(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	CCPoint pos = _item->getPosition();
+	node.PFloat(pos.x);
+	node.PFloat(pos.y);
 
 	_LEAVEFUNC_LUA;
 }

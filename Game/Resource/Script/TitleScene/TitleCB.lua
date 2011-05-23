@@ -171,35 +171,26 @@ function TitleScene_CBDelay_Option(itemtag, toplayer, toptag, sublayertag, selgr
 	_TitleScene_EnterMainLayer(toplayer, toptag);
 end
 
-function _TitleScene_CB_OptionTouch_Began(toplayer, toptag, touches, touchlayer)
-	local touchescount = game.GetTouchInfo(touches);
-	for i=0, touchescount-1 do
-		local beginx, beginy, begintime = game.GetTouchInfo(touches, touchlayer, i, CCTI_Began);
-		LOG("Began: "..i.." ("..beginx..", "..beginy..")");
-	end
+function _TitleScene_CB_OptionTouch_Began(toplayer, toptag, touchlayer, index)
+	local beginx, beginy, begintime = game.GetTouchInfo(touchlayer, index, CCTI_Began);
+	LOG("Began: "..index.." ("..beginx..", "..beginy..")", toplayer, toptag);
 end
 
-function _TitleScene_CB_OptionTouch_Moved(toplayer, toptag, touches, touchlayer)
-	local touchescount = game.GetTouchInfo(touches);
-	for i=0, touchescount-1 do
-		local nowx, nowy, nowime = game.GetTouchInfo(touches, touchlayer, i, CCTI_Moved);
-		LOG("  Moved: "..i.." ("..nowx..", "..nowy..")");
+function _TitleScene_CB_OptionTouch_Moved(toplayer, toptag, touchlayer, index)
+	local nowx, nowy, nowime = game.GetTouchInfo(touchlayer, index, CCTI_Moved);
+	LOG("  Moved: "..index.." ("..nowx..", "..nowy..")", toplayer, toptag);
 		
-		local beginx, beginy, begintime = game.GetTouchInfo(touches, touchlayer, i, CCTI_Began);
-		LOG("  __Began: "..i.." ("..beginx..", "..beginy..")");
-	end
+	local beginx, beginy, begintime = game.GetTouchInfo(touchlayer, index, CCTI_Began);
+	LOG("  __Began: "..index.." ("..beginx..", "..beginy..")", toplayer, toptag);
 end
 
-function _TitleScene_CB_OptionTouch_Ended(toplayer, toptag, touches, touchlayer)
-	local touchescount = game.GetTouchInfo(touches);
-	for i=0, touchescount-1 do
-		local endx, endy, endtime = game.GetTouchInfo(touches, touchlayer, i, CCTI_Ended);
-		LOG("Ended: "..i.." ("..endx..", "..endy..")");
+function _TitleScene_CB_OptionTouch_Ended(toplayer, toptag, touchlayer, index)
+	local endx, endy, endtime = game.GetTouchInfo(touchlayer, index, CCTI_Ended);
+	LOG("Ended: "..index.." ("..endx..", "..endy..")", toplayer, toptag);
 		
-		local beginx, beginy, begintime = game.GetTouchInfo(touches, touchlayer, i, CCTI_Began);
-		LOG("__Began: "..i.." ("..beginx..", "..beginy..")");
-	end
+	local beginx, beginy, begintime = game.GetTouchInfo(touchlayer, index, CCTI_Began);
+	LOG("__Began: "..index.." ("..beginx..", "..beginy..")", toplayer, toptag);
 end
 
-function _TitleScene_CB_OptionTouch_Canceled(toplayer, toptag, touchlayer)
+function _TitleScene_CB_OptionTouch_Canceled(toplayer, toptag, touchlayer, index)
 end

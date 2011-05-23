@@ -8,6 +8,7 @@
 
 TouchLayer::TouchLayer()
 {
+	ZeroMemory(&touchdata, sizeof(TouchData));
 	initWithRect(NULL, CCRectZero);
 }
 
@@ -31,70 +32,80 @@ void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		{
 			break;
 		}
+		if (touchdata[i].bPressing)
+		{
+			continue;
+		}
 		CCTouch* touch = (CCTouch*)(*it);
 
 		touchdata[i].beginPos = touch->locationInView( touch->view() );	
 		touchdata[i].beginPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].beginPos);
 		touchdata[i].beginPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 		touchdata[i].bPressing = true;
+		touchdata[i].touch = touch;
+		Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_BEGAN, this, i);
 	}
-	Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_BEGAN, pTouches, this);
 }
 
 void TouchLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
 	CCSetIterator it = pTouches->begin();
-	for (int i=0; it!=pTouches->end(); ++it, ++i)
+	for (; it!=pTouches->end(); ++it)
 	{
-		if (i >= M_TOUCHMAX)
-		{
-			break;
-		}
 		CCTouch* touch = (CCTouch*)(*it);
-
-		touchdata[i].nowPos = touch->locationInView( touch->view() );	
-		touchdata[i].nowPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].nowPos);
-		touchdata[i].nowPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
+		for (int i=0; i<M_TOUCHMAX; i++)
+		{
+			if (touchdata[i].bPressing && touchdata[i].touch == touch)
+			{
+				touchdata[i].nowPos = touch->locationInView( touch->view() );	
+				touchdata[i].nowPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].nowPos);
+				touchdata[i].nowPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_MOVED, this, i);
+			}
+		}
 	}
-	Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_MOVED, pTouches, this);
 }
 
 void TouchLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 {
 	CCSetIterator it = pTouches->begin();
-	for (int i=0; it!=pTouches->end(); ++it, ++i)
+	for (; it!=pTouches->end(); ++it)
 	{
-		if (i >= M_TOUCHMAX)
-		{
-			break;
-		}
 		CCTouch* touch = (CCTouch*)(*it);
-
-		touchdata[i].endPos = touch->locationInView( touch->view() );	
-		touchdata[i].endPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].endPos);
-		touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
-		touchdata[i].bPressing = false;
+		for (int i=0; i<M_TOUCHMAX; i++)
+		{
+			if (touchdata[i].bPressing && touchdata[i].touch == touch)
+			{
+				touchdata[i].endPos = touch->locationInView( touch->view() );	
+				touchdata[i].endPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].endPos);
+				touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
+				touchdata[i].bPressing = false;
+				touchdata[i].touch = NULL;
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+			}
+		}
 	}
-	Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, pTouches, this);
 }
 
 void TouchLayer::ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent)
 {
 	CCSetIterator it = pTouches->begin();
-	for (int i=0; it!=pTouches->end(); ++it, ++i)
+	for (; it!=pTouches->end(); ++it)
 	{
-		if (i >= M_TOUCHMAX)
-		{
-			break;
-		}
 		CCTouch* touch = (CCTouch*)(*it);
-
-		touchdata[i].endPos = touch->locationInView( touch->view() );	
-		touchdata[i].endPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].endPos);
-		touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
-		touchdata[i].bPressing = false;
+		for (int i=0; i<M_TOUCHMAX; i++)
+		{
+			if (touchdata[i].bPressing && touchdata[i].touch == touch)
+			{
+				touchdata[i].endPos = touch->locationInView( touch->view() );	
+				touchdata[i].endPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].endPos);
+				touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
+				touchdata[i].bPressing = false;
+				touchdata[i].touch = NULL;
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+			}
+		}
 	}
-	Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_CANCELED, pTouches, this);
 }
 
 void TouchLayer::onEnter()

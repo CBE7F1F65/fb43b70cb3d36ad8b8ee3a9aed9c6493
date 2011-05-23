@@ -281,10 +281,10 @@ bool Export_Lua_Scene::ExecuteCBInputLayer(int tag, CCLayer * toplayer, int even
 	return bret;
 }
 
-bool Export_Lua_Scene::ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCSet * pTouches, CCLayer * thislayer)
+bool Export_Lua_Scene::ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCLayer * thislayer, int index)
 {
 	LuaState * ls = state;
-	bool bret = (*cbTouchLayer)(tag, CDOUBLEN(toplayer), eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, CDOUBLEN(pTouches), CDOUBLEN(thislayer));
+	bool bret = (*cbTouchLayer)(tag, CDOUBLEN(toplayer), eventtag, tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK,CDOUBLEN(thislayer), index);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

@@ -26,7 +26,7 @@ public:
 
 	static bool ExecuteCBInputLayer(int tag, CCLayer * toplayer, int eventtag, const char * text);
 
-	static bool ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCSet * pTouches, CCLayer * thislayer);
+	static bool ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCLayer * thislayer, int index);
 
 	static void _GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
 	static int _GetTopTag(int scenetag);

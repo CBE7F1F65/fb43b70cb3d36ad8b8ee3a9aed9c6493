@@ -41,10 +41,13 @@ public:
 	static int LuaFn_Game_GetNode(LuaState * ls);
 
 	static int LuaFn_Game_AddNullChild(LuaState * ls);
+	static int LuaFn_Game_RemoveChild(LuaState * ls);
 	static int LuaFn_Game_RemoveAllChildren(LuaState * ls);
 
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
+
+	static int LuaFn_Game_AddTextChild(LuaState * ls);
 
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
@@ -65,6 +68,8 @@ public:
 	static int LuaFn_Game_SetTouchEnabled(LuaState * ls);
 	static int LuaFn_Game_SetIsVisible(LuaState * ls);
 
+	static int LuaFn_Game_SetPosition(LuaState * ls);
+	static int LuaFn_Game_GetPosition(LuaState * ls);
 	static int LuaFn_Game_SetColor(LuaState * ls);
 	static int LuaFn_Game_GetColor(LuaState * ls);
 	static int LuaFn_Game_SetAnchor(LuaState * ls);

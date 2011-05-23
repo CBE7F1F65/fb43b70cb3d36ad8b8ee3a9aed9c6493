@@ -14,7 +14,7 @@ public:
 	static float ScalerX(float val);
 	static float ScalerY(float val);
 	static float Scaler(float val);
-	static CCPoint ScalerPoint(CCPoint rect);
+	static CCPoint ScalerPoint(CCPoint point);
 	static CCSize ScalerSize(CCSize size);
 	static CCRect ScalerRect(CCRect rect);
 
