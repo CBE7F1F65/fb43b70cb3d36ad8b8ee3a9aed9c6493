@@ -222,7 +222,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		if i+1 < 10 then
 			text = '0';
 		end
-		text = text..(i+1)..'. '..username..' ';
+		text = text..(i+1)..'.'..username;
 
 		for j=0, namelengthmax - namelength do
 			text = text..'-'
@@ -233,7 +233,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		for j=0, LConst_ScoreDigitMax-hiscoretextlength do
 			hiscoretext = '0'..hiscoretext;
 		end
-		text = text..' '..hiscoretext;
+		text = text..hiscoretext;
 		
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, y, CCTag_Menu_03, layertag+CCTag_Menu_03+i+1}, text, LConst_FontSize*0.8);
 		game.SetAnchor(menus[i+1], 0, 0);
