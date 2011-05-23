@@ -39,7 +39,7 @@ end
 function Debug_LogMoveup(toplayer, layertag)
 	for i=1, LGlobal_LogLineCountMax do
 		local item = game.GetNode({toplayer, layertag, i});
-		if item ~= NULL then
+		if item ~= global.ARGB(0, 0) then
 			local posindex = LGlobal_LogLineCount+1-i;
 			if posindex > LGlobal_LogLineCountMax then
 				posindex = posindex - LGlobal_LogLineCountMax;
@@ -57,7 +57,7 @@ function Debug_LogMoveup(toplayer, layertag)
 	end
 	
 	local item = game.GetNode({toplayer, layertag, LGlobal_LogLineCount})
-	if item ~= NULL then
+	if item ~= global.ARGB(0, 0) then
 		game.RemoveChild(item);
 	end
 end
