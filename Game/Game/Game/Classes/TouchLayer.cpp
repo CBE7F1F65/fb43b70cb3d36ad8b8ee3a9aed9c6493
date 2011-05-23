@@ -26,15 +26,15 @@ TouchLayer::~TouchLayer()
 void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 {
 	CCSetIterator it = pTouches->begin();
-	for (int i=0; it!=pTouches->end(); ++it, ++i)
+	for (; it!=pTouches->end(); ++it)
 	{
-		if (i >= M_TOUCHMAX)
+		int i=0;
+		for (; i<M_TOUCHMAX; i++)
 		{
-			break;
-		}
-		if (touchdata[i].bPressing)
-		{
-			continue;
+			if (touchdata[i].bPressing)
+			{
+				continue;
+			}
 		}
 		CCTouch* touch = (CCTouch*)(*it);
 
