@@ -64,6 +64,7 @@ public:
 
 	static int LuaFn_Game_SetColor(LuaState * ls);
 	static int LuaFn_Game_GetColor(LuaState * ls);
+	static int LuaFn_Game_SetAnchor(LuaState * ls);
 
 	static int LuaFn_Game_ActionMove(LuaState * ls);
 	static int LuaFn_Game_ActionRotate(LuaState * ls);

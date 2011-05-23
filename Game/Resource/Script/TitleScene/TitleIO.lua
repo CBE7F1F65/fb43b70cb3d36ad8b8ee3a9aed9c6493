@@ -106,7 +106,7 @@ function _TitleScene_AddInputLayer(toplayer, toptag)
 	local xcen = 200;
 	local ycen = 450;
 	local width = 336;
-	local height = 30;
+	local height = 50;
 	local x = xcen - width / 2;
 	local y = ycen - height / 2;
 	local layertag = toptag + CCTag_Layer_13;
@@ -207,8 +207,8 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_03;
 	local menus = {};
 	local count = game.GetHiScoreData();
-	local x = 340;
-	local ybegin = 400;
+	local x = 50;
+	local ybegin = 380;
 	local yoffset = 24;
 	local text, inputmax = game.GetUsername();
 	local namelengthmax = inputmax + 1;
@@ -235,7 +235,8 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..' '..hiscoretext;
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, y, CCTag_Menu_03, layertag+CCTag_Menu_03+i+1}, text, LConst_FontSize*0.8);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, y, CCTag_Menu_03, layertag+CCTag_Menu_03+i+1}, text, LConst_FontSize*0.8, "");
+		game.SetAnchor(menus[i+1], 0, 0);
 	end
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_03, layertag+CCTag_Menu_03});
 	game.SetTouchEnabled(menu, false);

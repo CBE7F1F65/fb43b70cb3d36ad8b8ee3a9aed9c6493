@@ -77,7 +77,7 @@ void InputLayer::ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent)
 
 bool InputLayer::onTextFieldInsertText(CCTextFieldTTF * pSender, const char * text, int nLen)
 {
-	if (pSender->getCharCount() >= inputmax)
+	if (pSender->getCharCount() > inputmax)
 	{
 		return true;
 	}

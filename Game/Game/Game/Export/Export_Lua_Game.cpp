@@ -70,6 +70,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	// Color
 	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
 	_gameobj.Register("GetColor", LuaFn_Game_GetColor);
+	_gameobj.Register("SetAnchor", LuaFn_Game_SetAnchor);
 
 	_gameobj.Register("ActionMove", LuaFn_Game_ActionMove);
 	_gameobj.Register("ActionRotate", LuaFn_Game_ActionRotate);
@@ -1057,6 +1058,34 @@ int Export_Lua_Game::LuaFn_Game_GetColor(LuaState * ls)
 
 	_LEAVEFUNC_LUA;
 }
+
+int Export_Lua_Game::LuaFn_Game_SetAnchor(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// item anchorx anchory
+	CCNode * _item = (CCNode *)node.dNextGet();
+	float _anchorx = _item->getAnchorPoint().x;
+	float _anchory = _item->getAnchorPoint().y;
+
+	if (_item)
+	{
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_anchorx = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_anchory = node.fGet();
+			}
+		}
+		_item->setAnchorPoint(ccp(_anchorx, _anchory));
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 
 int Export_Lua_Game::LuaFn_Game_ActionMove(LuaState * ls)
 {
