@@ -207,7 +207,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_03;
 	local menus = {};
 	local count = game.GetHiScoreData();
-	local x = 50;
+	local x = 20;
 	local ybegin = 380;
 	local yoffset = 24;
 	local text, inputmax = game.GetUsername();
@@ -231,7 +231,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		local hiscoretext = hiscore;
 		local hiscoretextlength = string.len(hiscoretext);
 		for j=0, LConst_ScoreDigitMax-hiscoretextlength do
-			hiscoretext = '_'..hiscoretext;
+			hiscoretext = '0'..hiscoretext;
 		end
 		text = text..' '..hiscoretext;
 		

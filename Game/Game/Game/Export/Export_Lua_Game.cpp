@@ -12,6 +12,13 @@
 
 #include "../Header/GameMain.h"
 
+
+#if defined __IPHONE
+#define M_DEFAULT_FONTNAME	"CourierNewPS-BoldMT"
+#else
+#define M_DEFAULT_FONTNAME	"Courier New Bold"
+#endif
+
 using namespace cocos2d;
 
 _LObjNode Export_Lua_Game::node;
@@ -709,7 +716,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 		}
 		if (_labelstr)
 		{
-			CCLabelTTF* label = CCLabelTTF::labelWithString(_labelstr, _fontname?_fontname:M_DEFAULT_FONTNAME, _fontsize);
+			CCLabelTTF* label = CCLabelTTF::labelWithString(_labelstr, _fontname?(strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME):M_DEFAULT_FONTNAME, _fontsize);
 			item = CCMenuItemLabel::itemWithLabel(label, proto, cbfunc);
 		}
 		else

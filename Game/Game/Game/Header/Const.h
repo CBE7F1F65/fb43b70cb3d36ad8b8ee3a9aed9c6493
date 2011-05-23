@@ -39,12 +39,6 @@ enum
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f
 
-#if defined __IPHONE
-#define M_DEFAULT_FONTNAME	"CourierNewPS-BoldMT"
-#else
-#define M_DEFAULT_FONTNAME	""
-#endif
-
 #define M_CCACTIONFLAG_NULL		0x0000
 #define M_CCACTIONFLAG_IN		0x0001
 #define M_CCACTIONFLAG_OUT		0x0002

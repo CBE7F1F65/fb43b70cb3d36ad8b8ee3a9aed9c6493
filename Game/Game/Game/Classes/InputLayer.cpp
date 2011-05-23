@@ -16,14 +16,7 @@ void InputLayer::initWithInputData(CCLayer * _toplayer, CCRect rect, const char 
 {
 	toplayer = _toplayer;
 	touchrect = rect;//BGlobal::ScalerRect(rect);
-	if (strlen(_fontname))
-	{
-		strcpy(fontname, _fontname);
-	}
-	else
-	{
-		strcpy(fontname, M_DEFAULT_FONTNAME);
-	}
+	strcpy(fontname, _fontname);
 
 	fontsize = _fontsize;//BGlobal::Scaler(_fontsize);
 	inputmax = _inputmax;
