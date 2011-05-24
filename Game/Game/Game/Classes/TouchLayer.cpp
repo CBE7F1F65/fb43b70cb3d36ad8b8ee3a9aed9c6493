@@ -31,11 +31,16 @@ void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		int i=0;
 		for (; i<M_TOUCHMAX; i++)
 		{
-			if (touchdata[i].bPressing)
+			if (!touchdata[i].bPressing)
 			{
-				continue;
+				break;
 			}
 		}
+		if (i >= M_TOUCHMAX)
+		{
+			break;
+		}
+
 		CCTouch* touch = (CCTouch*)(*it);
 
 		CCPoint beginpos = touch->locationInView( touch->view() );

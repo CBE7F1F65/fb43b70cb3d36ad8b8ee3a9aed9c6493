@@ -306,6 +306,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	--SE
 	layertag = toptag + CCTag_Layer_07;
 	ycen = ycen - 108;
+	local y = ycen - height / 2;
 	local spritebgSE = game.CreateSprite(SI_White, {xcen, ycen, 0, width, height});
 	game.AddSpriteChild(spritebgSE, {toplayer, layertag});
 	game.SetColor(spritebgSE, global.ARGB(0x1f, 0xffffff));
