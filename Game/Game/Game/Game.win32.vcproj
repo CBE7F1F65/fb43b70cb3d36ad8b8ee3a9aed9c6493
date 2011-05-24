@@ -275,10 +275,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Classes\HiScoreScene.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Classes\InputLayer.cpp"
 				>
 			</File>
@@ -296,14 +292,6 @@
 			</File>
 			<File
 				RelativePath=".\mmgr\mmgr.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Classes\OnlineScene.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Classes\OptionScene.cpp"
 				>
 			</File>
 			<File
@@ -400,10 +388,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Classes\HiScoreScene.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Header\HTexture.h"
 				>
 			</File>
@@ -433,14 +417,6 @@
 			</File>
 			<File
 				RelativePath=".\mmgr\nommgr.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Classes\OnlineScene.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Classes\OptionScene.h"
 				>
 			</File>
 			<File

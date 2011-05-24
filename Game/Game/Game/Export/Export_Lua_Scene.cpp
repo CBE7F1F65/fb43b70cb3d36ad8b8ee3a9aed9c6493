@@ -5,9 +5,6 @@
 
 #include "../Classes/LoadingScene.h"
 #include "../Classes/TitleScene.h"
-#include "../Classes/HiScoreScene.h"
-#include "../Classes/OptionScene.h"
-#include "../Classes/OnlineScene.h"
 #include "../Classes/HelpScene.h"
 #include "../Classes/StageSelectScene.h"
 #include "../Classes/MissionSelectScene.h"
@@ -37,9 +34,6 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 
 	obj->SetInteger("ktag_TitleSceneLayer", KTAG_TITLESCENELAYER);
 
-	obj->SetInteger("ktag_HiScoreSceneLayer", KTAG_HISCORESCENELAYER);
-	obj->SetInteger("ktag_OptionSceneLayer", KTAG_OPTIONSCENELAYER);
-	obj->SetInteger("ktag_OnlineSceneLayer", KTAG_ONLINESCENELAYER);
 	obj->SetInteger("ktag_HelpSceneLayer", KTAG_HELPSCENELAYER);
 
 	obj->SetInteger("ktag_StageSelectSceneLayer", KTAG_STAGESELECTSCENELAYER);
@@ -130,36 +124,6 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbf
 			*cbndfunc = callfuncND_selector(TitleScene::NodeCallbackFunc);
 		}
 		break;
-	case KTAG_HISCORESCENELAYER:
-		if (cbfunc)
-		{
-			*cbfunc = menu_selector(HiScoreScene::MenuCallbackFunc);
-		}
-		if (cbndfunc)
-		{
-			*cbndfunc = callfuncND_selector(HiScoreScene::NodeCallbackFunc);
-		}
-		break;
-	case KTAG_OPTIONSCENELAYER:
-		if (cbfunc)
-		{
-			*cbfunc = menu_selector(OptionScene::MenuCallbackFunc);
-		}
-		if (cbndfunc)
-		{
-			*cbndfunc = callfuncND_selector(OptionScene::NodeCallbackFunc);
-		}
-		break;
-	case KTAG_ONLINESCENELAYER:
-		if (cbfunc)
-		{
-			*cbfunc = menu_selector(OnlineScene::MenuCallbackFunc);
-		}
-		if (cbndfunc)
-		{
-			*cbndfunc = callfuncND_selector(OnlineScene::NodeCallbackFunc);
-		}
-		break;
 	case KTAG_HELPSCENELAYER:
 		if (cbfunc)
 		{
@@ -218,15 +182,6 @@ CCScene * Export_Lua_Scene::_GetNewScene(int scenetag)
 		break;
 	case KTAG_TITLESCENELAYER:
 		return TitleScene::scene();
-		break;
-	case KTAG_HISCORESCENELAYER:
-		return HiScoreScene::scene();
-		break;
-	case KTAG_OPTIONSCENELAYER:
-		return OptionScene::scene();
-		break;
-	case KTAG_ONLINESCENELAYER:
-		return OnlineScene::scene();
 		break;
 	case KTAG_HELPSCENELAYER:
 		return HelpScene::scene();
