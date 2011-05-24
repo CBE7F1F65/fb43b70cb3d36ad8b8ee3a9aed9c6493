@@ -53,6 +53,8 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("RemoveAllChildren", LuaFn_Game_RemoveAllChildren);
 
 	// Sprite
+	_gameobj.Register("GetSIData", LuaFn_Game_GetSIData);
+
 	_gameobj.Register("CreateSprite", LuaFn_Game_CreateSprite);
 	_gameobj.Register("AddSpriteChild", LuaFn_Game_AddSpriteChild);
 
@@ -72,6 +74,10 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("GetHiScoreData", LuaFn_Game_GetHiScoreData);
 	_gameobj.Register("InsertHiScore", LuaFn_Game_InsertHiScore);
 
+	_gameobj.Register("GetBGMSEVol", LuaFn_Game_GetBGMSEVol);
+	_gameobj.Register("SetBGMSEVol", LuaFn_Game_SetBGMSEVol);
+	_gameobj.Register("SaveIni", LuaFn_Game_SaveIni);
+
 	// Touch
 	_gameobj.Register("AddTouchLayerChild", LuaFn_Game_AddTouchLayerChild);
 	_gameobj.Register("GetTouchInfo", LuaFn_Game_GetTouchInfo);
@@ -84,9 +90,11 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("SetTouchEnabled", LuaFn_Game_SetTouchEnabled);
 	_gameobj.Register("SetIsVisible", LuaFn_Game_SetIsVisible);
 
-	
+
 	_gameobj.Register("SetPosition", LuaFn_Game_SetPosition);
 	_gameobj.Register("GetPosition", LuaFn_Game_GetPosition);
+	_gameobj.Register("SetScale", LuaFn_Game_SetScale);
+	_gameobj.Register("GetScale", LuaFn_Game_GetScale);
 	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
 	_gameobj.Register("GetColor", LuaFn_Game_GetColor);
 	_gameobj.Register("SetAnchor", LuaFn_Game_SetAnchor);
@@ -570,6 +578,26 @@ int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
 /* Sprite                                                               */
 /************************************************************************/
 
+int Export_Lua_Game::LuaFn_Game_GetSIData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// siid -> width, height
+	int _siid = node.iNextGet();
+	float _width = 0;
+	float _height = 0;
+	spriteData * spdata = SpriteItemManager::CastSprite(_siid);
+	if (spdata)
+	{
+		_width = spdata->tex_w;
+		_height = spdata->tex_h;
+	}
+	node.PFloat(_width);
+	node.PFloat(_height);
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_CreateSprite(LuaState * ls)
 {
 	// (siid, {x, y, angle, hscale, vscale}, tag)
@@ -1009,6 +1037,62 @@ int Export_Lua_Game::LuaFn_Game_GetHiScoreData(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_InsertHiScore(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// hiscore
+	int _hiscore = node.iNextGet();
+	bool retval = GameMain::getInstance()->InsertScore(_hiscore);
+
+	node.PBoolean(retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetBGMSEVol(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	node.PInt(GameMain::getInstance()->bgmvol);
+	node.PInt(GameMain::getInstance()->sevol);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetBGMSEVol(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	int _bgmvol = -1;
+	int _sevol = -1;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bgmvol = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_sevol = node.iGet();
+		}
+	}
+
+	GameMain::getInstance()->SetBGMVol(_bgmvol);
+	GameMain::getInstance()->SetSEVol(_sevol);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SaveIni(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	GameMain::getInstance()->SaveIni();
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 {
 	_ENTERFUNC_LUA(2);
@@ -1067,7 +1151,7 @@ int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// touchlayer, index, ccti -> x, y, time
+	// touchlayer, index, ccti -> x, y, time, rectx, recty, rectw, recth
 
 	TouchLayer * _touchlayer = (TouchLayer *)node.dNextGet();
 	if (!_touchlayer)
@@ -1090,24 +1174,20 @@ int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 	float x;
 	float y;
 	LONGLONG time;
-	_touchlayer->GetTouchData(_index, _flag, &x, &y, &time);
+	CCRect rect;
 
+	_touchlayer->GetTouchData(_index, _flag, &x, &y, &time, &rect);
+
+	x = BGlobal::RScalerX(x);
+	y = BGlobal::RScalerX(y);
+	rect = BGlobal::RScalerRect(rect);
 	node.PFloat(x);
 	node.PFloat(y);
 	node.PLongLong(time);
-
-	_LEAVEFUNC_LUA;
-}
-
-int Export_Lua_Game::LuaFn_Game_InsertHiScore(LuaState * ls)
-{
-	_ENTERFUNC_LUA(1);
-
-	// hiscore
-	int _hiscore = node.iNextGet();
-	bool retval = GameMain::getInstance()->InsertScore(_hiscore);
-
-	node.PBoolean(retval);
+	node.PFloat(rect.origin.x);
+	node.PFloat(rect.origin.y);
+	node.PFloat(rect.size.width);
+	node.PFloat(rect.size.height);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1250,8 +1330,52 @@ int Export_Lua_Game::LuaFn_Game_GetPosition(LuaState * ls)
 		break;
 	}
 	CCPoint pos = _item->getPosition();
+	pos = BGlobal::RScalerPoint(pos);
 	node.PFloat(pos.x);
 	node.PFloat(pos.y);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetScale(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// item sx sy
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	float _scalex = node.fNextGet();
+	float _scaley = _scalex;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_scaley = node.fGet();
+	}
+	_item->setScaleX(BGlobal::ScalerX(_scalex));
+	_item->setScaleY(BGlobal::ScalerY(_scaley));
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetScale(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item -> sx, sy
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	float scalex = BGlobal::RScalerX(_item->getScaleX());
+	float scaley = BGlobal::RScalerY(_item->getScaleY());
+
+	node.PFloat(scalex);
+	node.PFloat(scaley);
 
 	_LEAVEFUNC_LUA;
 }

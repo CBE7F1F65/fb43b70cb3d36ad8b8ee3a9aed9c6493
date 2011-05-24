@@ -40,7 +40,7 @@ public:
 
 	virtual void onEnter();
 
-	bool GetTouchData(int index, int flag, float *x=NULL, float *y = NULL, LONGLONG *time=NULL);
+	bool GetTouchData(int index, int flag, float *x=NULL, float *y = NULL, LONGLONG *time=NULL, CCRect *rect=NULL);
 
 public:
 	CCLayer * toplayer;

@@ -129,7 +129,7 @@ void TouchLayer::onEnter()
 	setIsTouchEnabled(true);
 }
 
-bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *_y /* = NULL */, LONGLONG *_time/* =NULL */)
+bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *_y /* = NULL */, LONGLONG *_time/* =NULL */, CCRect * _rect/* =NULL */)
 {
 	if (index < 0 || index >= M_TOUCHMAX)
 	{
@@ -170,6 +170,10 @@ bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *
 	if (_time)
 	{
 		*_time = time;
+	}
+	if (_rect)
+	{
+		*_rect = touchrect;
 	}
 	return true;
 }

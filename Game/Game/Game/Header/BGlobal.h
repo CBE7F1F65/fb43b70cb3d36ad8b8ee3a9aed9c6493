@@ -18,6 +18,15 @@ public:
 	static CCSize ScalerSize(CCSize size);
 	static CCRect ScalerRect(CCRect rect);
 
+	static CCPoint RTranslatePosition(float x, float y);
+
+	static float RScalerX(float val);
+	static float RScalerY(float val);
+	static float RScaler(float val);
+	static CCPoint RScalerPoint(CCPoint point);
+	static CCSize RScalerSize(CCSize size);
+	static CCRect RScalerRect(CCRect rect);
+
 	static bool IsTap(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 	static bool IsHold(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 	static bool IsMove(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);

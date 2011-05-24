@@ -46,6 +46,48 @@ CCRect BGlobal::ScalerRect(CCRect rect)
 	return CCRectMake(point.x, point.y, size.width, size.height);
 }
 
+CCPoint BGlobal::RTranslatePosition(float x, float y)
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	x = x * M_SCREEN_WIDTH / size.width;
+	y = y * M_SCREEN_HEIGHT / size.height;
+	return ccp(x, y);
+}
+
+float BGlobal::RScalerX(float val)
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	return val * M_SCREEN_WIDTH / size.width;
+}
+
+float BGlobal::RScalerY(float val)
+{
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	return val * M_SCREEN_HEIGHT / size.height;
+}
+
+float BGlobal::RScaler(float val)
+{
+	return (RScalerX(val)+RScalerY(val))/2.0f;
+}
+
+CCPoint BGlobal::RScalerPoint(CCPoint point)
+{
+	return CCPointMake(RScalerX(point.x), RScalerY(point.y));
+}
+
+CCSize BGlobal::RScalerSize(CCSize size)
+{
+	return CCSizeMake(RScalerX(size.width), RScalerY(size.height));
+}
+
+CCRect BGlobal::RScalerRect(CCRect rect)
+{
+	CCPoint point = RScalerPoint(rect.origin);
+	CCSize size = RScalerSize(rect.size);
+	return CCRectMake(point.x, point.y, size.width, size.height);
+}
+
 bool BGlobal::IsTap(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime)
 {
 	if (DIST2(beginpos.x, beginpos.y, endpos.x, endpos.y) < M_TOUCH_ALLOWABLEMOVEMENT*M_TOUCH_ALLOWABLEMOVEMENT)

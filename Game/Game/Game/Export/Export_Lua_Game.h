@@ -44,6 +44,8 @@ public:
 	static int LuaFn_Game_RemoveChild(LuaState * ls);
 	static int LuaFn_Game_RemoveAllChildren(LuaState * ls);
 
+	static int LuaFn_Game_GetSIData(LuaState * ls);
+
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
 
@@ -59,6 +61,10 @@ public:
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
 	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 
+	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SaveIni(LuaState * ls);
+
 	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
 	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
 
@@ -70,6 +76,8 @@ public:
 
 	static int LuaFn_Game_SetPosition(LuaState * ls);
 	static int LuaFn_Game_GetPosition(LuaState * ls);
+	static int LuaFn_Game_SetScale(LuaState * ls);
+	static int LuaFn_Game_GetScale(LuaState * ls);
 	static int LuaFn_Game_SetColor(LuaState * ls);
 	static int LuaFn_Game_GetColor(LuaState * ls);
 	static int LuaFn_Game_SetAnchor(LuaState * ls);

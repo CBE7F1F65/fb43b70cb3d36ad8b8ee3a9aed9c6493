@@ -126,11 +126,19 @@ void GameMain::SaveHiScore()
 
 void GameMain::SetBGMVol(int _bgmvol)
 {
+	if (_bgmvol < 0 || _bgmvol > INIDEFAULT_BGMVOL)
+	{
+		return;
+	}
 	bgmvol = _bgmvol;
 }
 
 void GameMain::SetSEVol(int _sevol)
 {
+	if (_sevol < 0 || _sevol > INIDEFAULT_SEVOL)
+	{
+		return;
+	}
 	sevol = _sevol;
 }
 
