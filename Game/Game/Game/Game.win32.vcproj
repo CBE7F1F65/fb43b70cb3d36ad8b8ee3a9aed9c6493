@@ -239,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\CCActionExpand.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\DataTable.cpp"
 				>
 			</File>
@@ -345,6 +349,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\BResource.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\CCActionExpand.h"
 				>
 			</File>
 			<File

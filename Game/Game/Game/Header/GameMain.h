@@ -25,12 +25,14 @@ public:
 	void ReadHiScores();
 	void ReadIni();
 
-	void SaveHiScore();
+	void SaveData();
+	void ResetHiScore();
 	void ReportHiScore();
 
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
 
+	bool ResetIni(bool bresetname=false);
 	bool SaveIni();
 
 	void SetBGMVol(int bgmvol);

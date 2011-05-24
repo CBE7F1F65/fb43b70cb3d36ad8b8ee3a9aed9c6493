@@ -61,6 +61,16 @@ void GameMain::ReadIni()
 	strcpy(username, bio->Ini_GetString(INISECTION_CUSTOM, ININAME_USERNAME, INIDEFAULT_USERNAME));
 }
 
+bool GameMain::ResetIni(bool bresetname/* =false */)
+{
+	if (bresetname)
+	{
+		SetUsername(INIDEFAULT_USERNAME);
+	}
+	SetBGMVol(INIDEFAULT_BGMVOL);
+	SetSEVol(INIDEFAULT_SEVOL);
+}
+
 bool GameMain::SaveIni()
 {
 	BIOInterface * bio = BIOInterface::getInstance();
@@ -109,7 +119,7 @@ bool GameMain::InsertScore(int score)
 	{
 		ReportHiScore();
 	}
-	SaveHiScore();
+	SaveData();
 	return btopscore;
 }
 
@@ -118,10 +128,15 @@ void GameMain::ReportHiScore()
 	// TODO
 }
 
-void GameMain::SaveHiScore()
+void GameMain::SaveData()
 {
 	BIOInterface * bio = BIOInterface::getInstance();
 	bio->Data_Save((BYTE *)&gamedata, sizeof(GameData));
+}
+
+void GameMain::ResetHiScore()
+{
+	ZeroMemory(&(gamedata.hiscores), sizeof(HiScoreData)*M_HISCOREMAX);
 }
 
 void GameMain::SetBGMVol(int _bgmvol)

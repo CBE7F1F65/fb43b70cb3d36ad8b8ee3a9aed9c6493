@@ -60,10 +60,12 @@ public:
 
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
 	static int LuaFn_Game_InsertHiScore(LuaState * ls);
+	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
 
 	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SaveIni(LuaState * ls);
+	static int LuaFn_Game_ResetIni(LuaState * ls);
 
 	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
 	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
@@ -92,6 +94,7 @@ public:
 	static int LuaFn_Game_ActionSpawn(LuaState * ls);
 	static int LuaFn_Game_ActionRepeat(LuaState * ls);
 	static int LuaFn_Game_ActionDelay(LuaState * ls);
+	static int LuaFn_Game_ActionDelete(LuaState * ls);
 	static int LuaFn_Game_ActionCallFunc(LuaState * ls);
 
 	static CCNode * _GetNowNode(_LObjNode * cnode, bool topnode=false, int * scenetag=NULL);

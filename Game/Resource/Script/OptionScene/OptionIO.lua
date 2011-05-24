@@ -103,6 +103,64 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 		
 end
 
+function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
+	
+	local layertag = toptag + CCTag_Layer_05;
+		
+	local xorig = 780;
+	local xcen = 530;
+	local ybegin = 338;
+	local yoffset = 108;
+	
+	local spTitleMenus = {};
+	local spTitleSelectedMenus = {};
+	local menus = {};
+	local grouptag = layertag + CCTag_Menu_04;
+	
+	for i=0, 1 do
+		local y = ybegin - i*yoffset;
+		
+		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_OK+i*2);
+		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_OK_Down+i*2);
+
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_04, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
+
+		local fadetime = 0.3+i*0.05;
+		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
+		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
+		
+		local blinktimepre = 0.5;
+		local blinktimepost = 0.9;
+		
+		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
+		local menurepeataction = game.ActionRepeat(menurepeataction);
+		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
+		
+		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+
+		game.RunAction(menus[i+1], menuaction);
+		
+	end
+	
+	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+3);
+	
+	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+end
+
+function _TitleScene_EnterOKCancelOptionLayer(toplayer, toptag)
+	_TitleScene_AddOptionOKCancelItems(toplayer, toptag);
+end
+
+function _TitleScene_LeaveOKCancelOptionLayer(toplayer, toptag)
+	local layertag = toptag + CCTag_Layer_05;
+	local grouptag = layertag + CCTag_Menu_04;
+	game.RemoveChild({toplayer, layertag, grouptag});
+end
+
+
 
 function _TitleScene_EnterOptionLayer(toplayer, toptag)
 	_TitleScene_AddOptionItems(toplayer, toptag);

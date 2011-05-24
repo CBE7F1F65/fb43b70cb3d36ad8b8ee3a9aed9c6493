@@ -13,3 +13,15 @@ g_SceneFunctions =
 	
 	{ktag_BaseSceneLayer, BaseScene_IO, BaseScene_CB},
 }
+
+function GlobalScene_CreateCancelMenu(nownode, zOrder, itemtag)
+	
+		local spNormal = game.CreateSprite(SI_White, {0, 0, 0, 960, 640});
+		local spSelected = game.CreateSprite(SI_White, {0, 0, 0, 960, 640});
+
+		local menu = game.CreateMenuItem(nownode, {480, 320, zOrder, itemtag}, spNormal, spSelected);
+		game.SetColor(menu, global.ARGB(0, 0));
+		
+		return menu;
+		
+end

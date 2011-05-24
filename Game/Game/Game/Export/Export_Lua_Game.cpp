@@ -13,6 +13,8 @@
 
 #include "../Header/GameMain.h"
 
+#include "../Header/CCActionExpand.h"
+
 
 #if defined __IPHONE
 #define M_DEFAULT_FONTNAME	"CourierNewPS-BoldMT"
@@ -73,10 +75,12 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	// Data
 	_gameobj.Register("GetHiScoreData", LuaFn_Game_GetHiScoreData);
 	_gameobj.Register("InsertHiScore", LuaFn_Game_InsertHiScore);
+	_gameobj.Register("ResetHiScoreData", LuaFn_Game_ResetHiScoreData);
 
 	_gameobj.Register("GetBGMSEVol", LuaFn_Game_GetBGMSEVol);
 	_gameobj.Register("SetBGMSEVol", LuaFn_Game_SetBGMSEVol);
 	_gameobj.Register("SaveIni", LuaFn_Game_SaveIni);
+	_gameobj.Register("ResetIni", LuaFn_Game_ResetIni);
 
 	// Touch
 	_gameobj.Register("AddTouchLayerChild", LuaFn_Game_AddTouchLayerChild);
@@ -109,6 +113,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("ActionSpawn", LuaFn_Game_ActionSpawn);
 	_gameobj.Register("ActionRepeat", LuaFn_Game_ActionRepeat);
 	_gameobj.Register("ActionDelay", LuaFn_Game_ActionDelay);
+	_gameobj.Register("ActionDelete", LuaFn_Game_ActionDelete);
 	_gameobj.Register("ActionCallFunc", LuaFn_Game_ActionCallFunc);
 
 	return true;
@@ -494,7 +499,7 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 			_LObjNode tcnode(ls, &(node._obj), &node);
 			_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
 
-			CCNode * addednode = CCNode::node();
+			CCLayer * addednode = CCLayer::node();
 			addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
 			nownode->addChild(addednode, _zOrder, _tag);
 
@@ -747,6 +752,7 @@ int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
 		if (item)
 		{
 			nownode->addChild(item, _zOrder, _tag);
+			item->setPosition(BGlobal::TranslatePosition(_x, _y));
 			node.PDword((DWORD)item);
 		}
 	}
@@ -1050,6 +1056,25 @@ int Export_Lua_Game::LuaFn_Game_InsertHiScore(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_ResetHiScoreData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	GameMain::getInstance()->ResetHiScore();
+	bool _bsave = true;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bsave = node.bGet();
+	}
+	if (_bsave)
+	{
+		GameMain::getInstance()->SaveData();
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_GetBGMSEVol(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
@@ -1089,6 +1114,31 @@ int Export_Lua_Game::LuaFn_Game_SaveIni(LuaState * ls)
 	_ENTERFUNC_LUA(0);
 
 	GameMain::getInstance()->SaveIni();
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ResetIni(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	bool _bresetname = false;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bresetname = node.bGet();
+	}
+	GameMain::getInstance()->ResetIni(_bresetname);
+	bool _bsave = true;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bsave = node.bGet();
+	}
+	if (_bsave)
+	{
+		GameMain::getInstance()->SaveIni();
+	}
 
 	_LEAVEFUNC_LUA;
 }
@@ -1780,6 +1830,16 @@ int Export_Lua_Game::LuaFn_Game_ActionDelay(LuaState * ls)
 
 	float _time = node.fNextGet();
 	CCAction * retval = CCDelayTime::actionWithDuration(_time);
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionDelete(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	CCAction * retval = CCActionDelete::action();
 	node.PDword((DWORD)retval);
 
 	_LEAVEFUNC_LUA;

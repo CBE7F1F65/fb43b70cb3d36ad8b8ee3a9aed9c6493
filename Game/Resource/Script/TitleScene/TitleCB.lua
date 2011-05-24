@@ -13,6 +13,10 @@ function TitleScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 	elseif sublayertag == CCTag_Layer_03 then
 		if selgrouptag == CCTag_Menu_01 then
 			return TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_04 then
+			return TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_11 then
+			return TitleScene_CBDelay_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_14 then
 			return TitleScene_CBDelay_HiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
@@ -20,6 +24,10 @@ function TitleScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 	elseif sublayertag == CCTag_Layer_05 then
 		if selgrouptag == CCTag_Menu_01 then
 			return TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_04 then
+			return TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_11 then
+			return TitleScene_CBDelay_OKCancelOption(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_14 then
 			return TitleScene_CBDelay_Option(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
