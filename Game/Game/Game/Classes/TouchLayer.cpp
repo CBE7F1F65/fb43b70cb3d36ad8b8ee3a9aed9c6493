@@ -38,8 +38,14 @@ void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 		CCTouch* touch = (CCTouch*)(*it);
 
-		touchdata[i].beginPos = touch->locationInView( touch->view() );	
-		touchdata[i].beginPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].beginPos);
+		CCPoint beginpos = touch->locationInView( touch->view() );
+		beginpos = CCDirector::sharedDirector()->convertToGL(beginpos);
+		if (!BGlobal::PointInRect(beginpos, touchrect))
+		{
+			continue;
+		}
+
+		touchdata[i].beginPos = beginpos;		
 		touchdata[i].beginPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 		touchdata[i].bPressing = true;
 		touchdata[i].touch = touch;
@@ -61,6 +67,7 @@ void TouchLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].nowPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].nowPos);
 				touchdata[i].nowPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_MOVED, this, i);
+				break;
 			}
 		}
 	}
@@ -82,6 +89,7 @@ void TouchLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].bPressing = false;
 				touchdata[i].touch = NULL;
 				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+				break;
 			}
 		}
 	}
@@ -103,6 +111,7 @@ void TouchLayer::ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].bPressing = false;
 				touchdata[i].touch = NULL;
 				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+				break;
 			}
 		}
 	}
