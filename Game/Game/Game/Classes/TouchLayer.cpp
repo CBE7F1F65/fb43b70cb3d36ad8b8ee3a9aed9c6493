@@ -8,7 +8,7 @@
 
 TouchLayer::TouchLayer()
 {
-	ZeroMemory(&touchdata, sizeof(TouchData));
+	ZeroMemory(&touchdata, sizeof(TouchData)*M_TOUCHMAX);
 	initWithRect(NULL, CCRectZero);
 }
 
