@@ -311,11 +311,11 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	game.AddSpriteChild(spritebgSE, {toplayer, layertag});
 	game.SetColor(spritebgSE, global.ARGB(0x1f, 0xffffff));
 		
-	local touchlayerSE = game.AddTouchLayerChild(
-			{toplayer, {x, y, width, height}},
-			{toplayer, layertag},
-			{0, 0, CCTag_Layer_07, layertag+CCTag_Menu_01}
-		);
+--	local touchlayerSE = game.AddTouchLayerChild(
+--			{toplayer, {x, y, width, height}},
+--			{toplayer, layertag},
+--			{0, 0, CCTag_Layer_07, layertag+CCTag_Menu_01}
+--		);
 	
 end
 
