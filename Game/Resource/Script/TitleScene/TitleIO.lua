@@ -270,7 +270,7 @@ end
 function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	
 	local xcen = 780;
-	local ycen = 450;
+	local ycen = 500;
 	
 	local width, height = game.GetSIData(SI_TUI_BGMSE_Bar);
 	local bgmvol, sevol = game.GetBGMSEVol();
@@ -300,7 +300,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	
 	--SE
 	layertag = toptag + CCTag_Layer_07;
-	ycen = ycen - 60;
+	ycen = ycen - 80;
 	y = ycen - height / 2;
 	local spritebgSE = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTag_Menu_01);
 	game.AddSpriteChild(spritebgSE, {toplayer, layertag});
