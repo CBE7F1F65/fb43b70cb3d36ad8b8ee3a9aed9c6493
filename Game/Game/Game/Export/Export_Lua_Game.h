@@ -52,6 +52,7 @@ public:
 	static int LuaFn_Game_AddTextChild(LuaState * ls);
 
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
+	static int LuaFn_Game_SetMenuItemEnabled(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
 
 	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
@@ -61,6 +62,13 @@ public:
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
 	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
+
+	static int LuaFn_Game_StageIsEnabled(LuaState * ls);
+	static int LuaFn_Game_MissionIsEnabled(LuaState * ls);
+	static int LuaFn_Game_EnableMission(LuaState * ls);
+	static int LuaFn_Game_TryStage(LuaState * ls);
+	static int LuaFn_Game_TryMission(LuaState * ls);
+	static int LuaFn_Game_ClearMission(LuaState * ls);
 
 	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);

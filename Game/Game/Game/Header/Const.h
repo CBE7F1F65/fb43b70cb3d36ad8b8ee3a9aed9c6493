@@ -58,6 +58,9 @@ enum
 #define M_USERNAMEMAX	13
 #define M_HISCOREMAX	15
 
+#define M_MISSIONMAX	16
+#define M_STAGEMAX		8
+
 
 #define LOG_FILENAME		"log.log"
 #define INI_FILENAME		"config.ini"

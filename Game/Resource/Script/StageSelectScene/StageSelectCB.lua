@@ -64,7 +64,8 @@ function StageSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayerta
 	if selitemtag == 9 then
 		game.ReplaceScene(ktag_TitleSceneLayer, LConst_SceneTransTime);
 	else
-		game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+		game.TryStage(selitemtag-1);
+		game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 	end
 	
 end

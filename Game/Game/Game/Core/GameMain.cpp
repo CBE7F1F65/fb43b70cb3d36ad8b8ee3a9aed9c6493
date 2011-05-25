@@ -18,6 +18,9 @@ GameMain::GameMain()
 	sevol = INIDEFAULT_SEVOL;
 	strcpy(username, "");
 	ZeroMemory(&gamedata, sizeof(GameData));
+
+	nowstage = 0;
+	nowmission = 0;
 }
 
 GameMain::~GameMain()
@@ -41,7 +44,15 @@ GameMain * GameMain::getInstance()
 void GameMain::Init()
 {
 	ReadIni();
-	ReadHiScores();
+	if (!ReadData())
+	{
+		SaveData();
+	}
+
+	if (!StageIsEnabled(0))
+	{
+		EnableMission(0, 0);
+	}
 }
 
 void GameMain::ReadIni()
@@ -82,17 +93,20 @@ bool GameMain::SaveIni()
 	return true;
 }
 
-void GameMain::ReadHiScores()
+bool GameMain::ReadData()
 {
 	BIOInterface * bio = BIOInterface::getInstance();
 	DWORD _size = 0;
 	BYTE * _content = NULL;
+	bool bret = false;
 	_content = bio->Data_Read(&_size);
 	if (_size == sizeof(GameData))
 	{
 		memcpy(&gamedata, _content, sizeof(GameData));
+		bret = true;
 	}
 	bio->Data_Free(_content);
+	return bret;
 }
 
 bool GameMain::InsertScore(int score)
@@ -126,6 +140,111 @@ bool GameMain::InsertScore(int score)
 void GameMain::ReportHiScore()
 {
 	// TODO
+}
+
+bool GameMain::StageIsEnabled(int index)
+{
+	if (index < 0 || index >= M_STAGEMAX)
+	{
+		return false;
+	}
+	return gamedata.stages[index].opencount;
+}
+
+bool GameMain::MissionIsEnabled(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	{
+		return false;
+	}
+	return gamedata.stages[stageindex].missions[missionindex].enabled;
+}
+
+bool GameMain::EnableMission(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	{
+		return false;
+	}
+
+	if (!MissionIsEnabled(missionindex, stageindex))
+	{
+		gamedata.stages[stageindex].missions[missionindex].enabled = 1;
+		gamedata.stages[stageindex].opencount++;
+		SaveData();
+	}
+	
+	return true;
+}
+
+bool GameMain::TryStage(int index)
+{
+	if (index < 0 || index >= M_STAGEMAX)
+	{
+		return false;
+	}
+	nowstage = index;
+	return true;
+}
+
+bool GameMain::TryMission(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	{
+		return false;
+	}
+
+	EnableMission(missionindex, stageindex);
+	gamedata.stages[stageindex].missions[missionindex].trycount++;
+
+	if (nowstage != stageindex)
+	{
+		TryStage(stageindex);
+	}
+	nowmission = missionindex;
+
+	SaveData();
+}
+
+bool GameMain::ClearMission(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	{
+		return false;
+	}
+
+	EnableMission(missionindex, stageindex);
+
+	MissionScoreData * item = &gamedata.stages[stageindex].missions[missionindex];
+	item->clearcount++;
+
+	if (nowturn < item->bestturn)
+	{
+		item->bestturn = nowturn;
+	}
+
+	if (missionscore > item->hiscore)
+	{
+		item->hiscore = missionscore;
+	}
+
+	InsertScore(totalscore);
 }
 
 void GameMain::SaveData()

@@ -60,17 +60,33 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 	local menus = {};
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
+	
 	for i=0, 8 do
 		
+		local enabled = true;
 		if i < 8 then
-			spMenus[i+1] = game.CreateSprite(SI_SSUI_World_1+i);
-			spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_World_1_Down+i);
+			
+			if not game.StageIsEnabled(i) then
+				enabled = false;
+			end
+			
+			if enabled then
+				spMenus[i+1] = game.CreateSprite(SI_SSUI_World_1+i);
+				spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_World_1_Down+i);
+			else
+				spMenus[i+1] = game.CreateSprite(SI_SSUI_Locked);
+				spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_Locked_Down);
+			end
 		else
 			spMenus[i+1] = game.CreateSprite(SI_TUI_Menu);
 			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Menu_Down);
 		end
 		
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen[i+1]+40, ycen[i+1]+40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		
+		if not enabled then
+			game.SetMenuItemEnabled(menus[i+1], false);
+		end
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen[i+1], ycen[i+1], fadetime);
