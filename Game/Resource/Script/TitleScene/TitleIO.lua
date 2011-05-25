@@ -65,18 +65,18 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 	local ybegin = 500;
 	local yoffset = 108;
 	
-	local spTitleMenus = {};
-	local spTitleSelectedMenus = {};
+	local spMenus = {};
+	local spSelectedMenus = {};
 	local menus = {};
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 4 do
 		local y = ybegin - i*yoffset;
 		
-		spTitleMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);
-		spTitleSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spTitleMenus[i+1], spTitleSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -97,7 +97,8 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
 

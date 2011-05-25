@@ -5,12 +5,14 @@ Comment	Index	Texture	TexW	TexH
 #		UI(4~11)		
 -	4	Graphic/UI/GameUI.png	1024	1024
 -	8	Graphic/UI/TitleUI.png	1024	1024
+-	10	Graphic/UI/StageSelectUI.png	1024	1024
 #		Sprite(12~23)		
 -	12	Graphic/Sprite/MapSprite.png	256	256
 -	16	Graphic/Sprite/Enemy.png	1024	1024
 -	20	Graphic/Sprite/AttackItem.png	512	512
 #		SpecialScene(24~31)		
 -	24	Graphic/Scene/Special/Title.png	960	640
+-	26	Graphic/Scene/Special/StageSelect.png	960	640
 #		WorldScene(32~47)		
 -	32	Graphic/Scene/World/World_01.png	1024	1024
 #		Scene(48~63)		

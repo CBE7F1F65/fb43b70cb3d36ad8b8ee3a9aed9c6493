@@ -11,6 +11,7 @@ public:
 	static cocos2d::CCScene* scene();
 
 	virtual void onEnter();
+	virtual void onEnterTransitionDidFinish();
 
 	LAYER_NODE_FUNC(StageSelectScene);
 

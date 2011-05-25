@@ -159,7 +159,7 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbf
 		{
 			*cbfunc = menu_selector(PlayScene::MenuCallbackFunc);
 		}
-		if (cbfunc)
+		if (cbndfunc)
 		{
 			*cbndfunc = callfuncND_selector(PlayScene::NodeCallbackFunc);
 		}
