@@ -52,6 +52,7 @@ public:
 
 	bool StageIsEnabled(int index);
 	bool MissionIsEnabled(int missionindex, int stageindex=-1);
+	int GetMissionTryCount(int missionindex, int stageindex=-1);
 	bool EnableMission(int missionindex, int stageindex=-1);
 
 	bool TryStage(int index);

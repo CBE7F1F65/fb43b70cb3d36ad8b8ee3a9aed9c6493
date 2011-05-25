@@ -84,6 +84,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("TryStage", LuaFn_Game_TryStage);
 	_gameobj.Register("TryMission", LuaFn_Game_TryMission);
 	_gameobj.Register("ClearMission", LuaFn_Game_ClearMission);
+	_gameobj.Register("GetNowStageMission", LuaFn_Game_GetNowStageMission);
 
 	_gameobj.Register("GetBGMSEVol", LuaFn_Game_GetBGMSEVol);
 	_gameobj.Register("SetBGMSEVol", LuaFn_Game_SetBGMSEVol);
@@ -1128,9 +1129,11 @@ int Export_Lua_Game::LuaFn_Game_MissionIsEnabled(LuaState * ls)
 	{
 		_stageindex = node.iGet();
 	}
-	bool bret = GameMain::getInstance()->MissionIsEnabled(_missionindex, _stageindex);
+	bool benabled = GameMain::getInstance()->MissionIsEnabled(_missionindex, _stageindex);
+	bool btried = GameMain::getInstance()->GetMissionTryCount(_missionindex, _stageindex);
 
-	node.PBoolean(bret);
+	node.PBoolean(benabled);
+	node.PBoolean(btried);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1200,6 +1203,19 @@ int Export_Lua_Game::LuaFn_Game_ClearMission(LuaState * ls)
 	bool bret = GameMain::getInstance()->ClearMission(_missionindex, _stageindex);
 
 	node.PBoolean(bret);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetNowStageMission(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	int stageindex = GameMain::getInstance()->nowstage;
+	int missionindex = GameMain::getInstance()->nowmission;
+
+	node.PInt(stageindex);
+	node.PInt(missionindex);
 
 	_LEAVEFUNC_LUA;
 }

@@ -69,6 +69,7 @@ public:
 	static int LuaFn_Game_TryStage(LuaState * ls);
 	static int LuaFn_Game_TryMission(LuaState * ls);
 	static int LuaFn_Game_ClearMission(LuaState * ls);
+	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
 
 	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);

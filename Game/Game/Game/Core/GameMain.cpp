@@ -164,6 +164,19 @@ bool GameMain::MissionIsEnabled(int missionindex, int stageindex/* =-1 */)
 	return gamedata.stages[stageindex].missions[missionindex].enabled;
 }
 
+int GameMain::GetMissionTryCount(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	{
+		return false;
+	}
+	return gamedata.stages[stageindex].missions[missionindex].trycount;
+}
+
 bool GameMain::EnableMission(int missionindex, int stageindex/* =-1 */)
 {
 	if (stageindex < 0 || stageindex >= M_STAGEMAX)
