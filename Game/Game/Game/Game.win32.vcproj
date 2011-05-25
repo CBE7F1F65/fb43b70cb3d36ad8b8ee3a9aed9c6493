@@ -311,6 +311,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Classes\StoryScene.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Classes\TitleScene.cpp"
 				>
 			</File>
@@ -445,6 +449,10 @@
 			</File>
 			<File
 				RelativePath=".\Classes\StageSelectScene.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Classes\StoryScene.h"
 				>
 			</File>
 			<File

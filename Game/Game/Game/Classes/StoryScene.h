@@ -1,9 +1,9 @@
-#ifndef __HELPSCENE_H__
-#define __HELPSCENE_H__
+#ifndef __STORYSCENE_H__
+#define __STORYSCENE_H__
 
 #include "BaseScene.h"
 
-class HelpScene :public BaseScene
+class StoryScene :public BaseScene
 {
 public:
 	virtual bool init();
@@ -13,7 +13,7 @@ public:
 	virtual void onEnter();
 	virtual void onEnterTransitionDidFinish();
 
-	LAYER_NODE_FUNC(HelpScene);
+	LAYER_NODE_FUNC(StoryScene);
 
 	virtual void MenuCallbackFunc(CCObject *sender);
 	virtual void NodeCallbackFunc(CCNode *sender, void * data);

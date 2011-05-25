@@ -11,6 +11,10 @@ function TitleScene_CB_Online(itemtag, toplayer, toptag, sublayertag, selgroupta
 	
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	local menu = game.GetNode({toplayer, layertag, grouptag});
+	game.SetTouchEnabled(menu, false);
+	
 	local menus = {};
 	local xmove = 400;
 	for i=0, 2 do

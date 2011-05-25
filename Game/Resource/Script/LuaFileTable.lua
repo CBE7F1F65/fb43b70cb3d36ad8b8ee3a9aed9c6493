@@ -9,6 +9,7 @@ luaFileTable	=	{
 									"Script/HelpScene/*.lua",
 									"Script/StageSelectScene/*.lua",
 									"Script/MissionSelectScene/*.lua",
+									"Script/StoryScene/*.lua",
 									"Script/PlayScene/*.lua",
 									"Script/Scene/*.lua",
 								}

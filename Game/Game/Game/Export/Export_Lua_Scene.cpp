@@ -8,6 +8,7 @@
 #include "../Classes/HelpScene.h"
 #include "../Classes/StageSelectScene.h"
 #include "../Classes/MissionSelectScene.h"
+#include "../Classes/StoryScene.h"
 #include "../Classes/PlayScene.h"
 
 #define LUASCENE_SCENE_IO	"Scene_IO"
@@ -38,6 +39,7 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 
 	obj->SetInteger("ktag_StageSelectSceneLayer", KTAG_STAGESELECTSCENELAYER);
 	obj->SetInteger("ktag_MissionSelectSceneLayer", KTAG_MISSIONSELECTSCENELAYER);
+	obj->SetInteger("ktag_StorySceneLayer", KTAG_STORYSCENELAYER);
 
 	obj->SetInteger("ktag_PlaySceneLayer", KTAG_PLAYSCENELAYER);
 
@@ -154,6 +156,16 @@ void Export_Lua_Scene::_GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbf
 			*cbndfunc = callfuncND_selector(MissionSelectScene::NodeCallbackFunc);
 		}
 		break;
+	case KTAG_STORYSCENELAYER:
+		if (cbfunc)
+		{
+			*cbfunc = menu_selector(StoryScene::MenuCallbackFunc);
+		}
+		if (cbndfunc)
+		{
+			*cbndfunc = callfuncND_selector(StoryScene::NodeCallbackFunc);
+		}
+		break;
 	case KTAG_PLAYSCENELAYER:
 		if (cbfunc)
 		{
@@ -191,6 +203,9 @@ CCScene * Export_Lua_Scene::_GetNewScene(int scenetag)
 		break;
 	case KTAG_MISSIONSELECTSCENELAYER:
 		return MissionSelectScene::scene();
+		break;
+	case KTAG_STORYSCENELAYER:
+		return StoryScene::scene();
 		break;
 	case KTAG_PLAYSCENELAYER:
 		return PlayScene::scene();

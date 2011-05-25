@@ -10,6 +10,7 @@ g_SceneFunctions =
 	
 	{ktag_StageSelectSceneLayer, StageSelectScene_IO, StageSelectScene_CB},
 	{ktag_MissionSelectSceneLayer, MissionSelectScene_IO, MissionSelectScene_CB},
+	{ktag_StorySceneLayer, StoryScene_IO, StoryScene_CB},
 	
 	{ktag_BaseSceneLayer, BaseScene_IO, BaseScene_CB},
 }

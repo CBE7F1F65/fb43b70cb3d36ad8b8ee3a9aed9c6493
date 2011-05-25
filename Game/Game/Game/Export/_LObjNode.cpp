@@ -79,7 +79,11 @@ LuaObject _LObjNode::jNextGet()
 
 int _LObjNode::iGet()
 {
-	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
+	if (NilCheck())
+	{
+		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		return 0;
+	}
 	return _obj.GetInteger();
 }
 
@@ -91,7 +95,11 @@ int _LObjNode::iNextGet()
 
 float _LObjNode::fGet()
 {
-	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
+	if (NilCheck())
+	{
+		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		return 0.0f;
+	}
 	return _obj.GetFloat();
 }
 
@@ -103,7 +111,11 @@ float _LObjNode::fNextGet()
 
 bool _LObjNode::bGet()
 {
-	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
+	if (NilCheck())
+	{
+		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		return false;
+	}
 	return _obj.GetBoolean();
 }
 
@@ -115,7 +127,11 @@ bool _LObjNode::bNextGet()
 
 const char * _LObjNode::sGet()
 {
-	BIOInterface::getInstance()->System_Assert(!NilCheck(), ASSERTSTR_NILCHECK);
+	if (NilCheck())
+	{
+		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		return NULL;
+	}
 	return _obj.GetString();
 }
 

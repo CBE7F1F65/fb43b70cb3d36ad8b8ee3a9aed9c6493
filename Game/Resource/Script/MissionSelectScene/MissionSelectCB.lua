@@ -14,12 +14,25 @@ end
 
 function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 		
+	if selitemtag == 1 then
+		game.PushScene(ktag_StorySceneLayer, LConst_SceneTransTime);
+		return;
+	end
+	
+	local toquit = true;
+	
 	local nowstage = game.GetNowStageMission();
 	local postable = LGlobal_MissionSelect_NodePos[nowstage+1];
 	local nodecount = table.getn(postable);
 	
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	if toquit then
+		local menu = game.GetNode({toplayer, layertag, grouptag});
+		game.SetTouchEnabled(menu, false);
+	end
+	
 	local menus = {};
 	local xmove = 40;
 	local ymove = -40;
@@ -32,12 +45,14 @@ function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, 
 		
 		if i+1 ~= selitemtag then
 			
-			local menumoveaction = game.ActionMove(CCAF_By, xmove, ymove, fadetime);
-			menumoveaction = game.ActionEase(CCAF_Out, menumoveaction, 0.25);
-			local menualphaaction = game.ActionFade(CCAF_To, 0, fadetime);			
-			local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+			if toquit then
+				local menumoveaction = game.ActionMove(CCAF_By, xmove, ymove, fadetime);
+				menumoveaction = game.ActionEase(CCAF_Out, menumoveaction, 0.25);
+				local menualphaaction = game.ActionFade(CCAF_To, 0, fadetime);			
+				local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
 			
-			game.RunAction(menus[i+1], menuaction);
+				game.RunAction(menus[i+1], menuaction);
+			end
 			
 		else
 			
@@ -52,11 +67,13 @@ function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, 
 
 			game.RunAction(menus[i+1], selectedaction);
 			
-			local delayaction = game.ActionDelay(0.3);
-			local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
-			local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
-			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
-			game.RunAction(callnode, delayreplacesceneaction);
+			if toquit then
+				local delayaction = game.ActionDelay(0.3);
+				local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
+				local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+				game.RunAction(callnode, delayreplacesceneaction);
+			end
 			
 		end
 	end

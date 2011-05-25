@@ -9,6 +9,12 @@ function TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgroupta
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	if toquit then
+		local menu = game.GetNode({toplayer, layertag, grouptag});
+		game.SetTouchEnabled(menu, false);
+	end
+	
 	local menus = {};
 	local xmove = 350;
 	for i=0, 1 do
@@ -66,6 +72,12 @@ function TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, se
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	if toquit then
+		local menu = game.GetNode({toplayer, layertag, grouptag});
+		game.SetTouchEnabled(menu, false);
+	end
+	
 	local menus = {};
 	local xmove = 400;
 	for i=0, 1 do

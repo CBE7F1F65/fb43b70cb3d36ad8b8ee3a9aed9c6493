@@ -8,6 +8,12 @@ function TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgroupt
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	if toquit then
+		local menu = game.GetNode({toplayer, layertag, grouptag});
+		game.SetTouchEnabled(menu, false);
+	end
+	
 	local menus = {};
 	local xmove = 400;
 	
@@ -65,6 +71,12 @@ function TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, s
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	
+	if toquit then
+		local menu = game.GetNode({toplayer, layertag, grouptag});
+		game.SetTouchEnabled(menu, false);
+	end
+	
 	local menus = {};
 	local xmove = 350;
 	for i=0, 1 do

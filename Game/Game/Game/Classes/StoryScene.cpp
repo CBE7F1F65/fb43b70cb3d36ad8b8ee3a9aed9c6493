@@ -1,9 +1,9 @@
-#include "HelpScene.h"
+#include "StoryScene.h"
 
 #include "../Export/Export_Lua_Scene.h"
 #include "../Header/SceneConst.h"
 
-CCScene* HelpScene::scene()
+CCScene* StoryScene::scene()
 {
 	CCScene * pScene = NULL;
 	do 
@@ -11,10 +11,10 @@ CCScene* HelpScene::scene()
 		pScene = CCScene::node();
 		CC_BREAK_IF(! pScene);
 
-		HelpScene *pLayer = HelpScene::node();
+		StoryScene *pLayer = StoryScene::node();
 		CC_BREAK_IF(! pLayer);
 
-		pScene->addChild(pLayer, ZORDER_BG, KTAG_HELPSCENELAYER);
+		pScene->addChild(pLayer, ZORDER_BG, KTAG_STORYSCENELAYER);
 
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONINIT, pLayer, pLayer->getTag());
 
@@ -26,18 +26,18 @@ CCScene* HelpScene::scene()
 	return pScene;
 }
 
-void HelpScene::MenuCallbackFunc(CCObject * sender)
+void StoryScene::MenuCallbackFunc(CCObject * sender)
 {
 	CCNode * nSender = (CCNode *)sender;
 	Export_Lua_Scene::ExecuteCBScene(nSender->getTag(), this);
 }
 
-void HelpScene::NodeCallbackFunc(CCNode *sender, void *data)
+void StoryScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
 	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
 }
 
-bool HelpScene::init()
+bool StoryScene::init()
 {
 	bool bRet = false;
 	do 
@@ -50,7 +50,7 @@ bool HelpScene::init()
 	return bRet;
 }
 
-void HelpScene::onEnter()
+void StoryScene::onEnter()
 {
 	CCLayer::onEnter();
 
@@ -61,7 +61,7 @@ void HelpScene::onEnter()
 	}
 }
 
-void HelpScene::onEnterTransitionDidFinish()
+void StoryScene::onEnterTransitionDidFinish()
 {
 	CCLayer::onEnterTransitionDidFinish();
 

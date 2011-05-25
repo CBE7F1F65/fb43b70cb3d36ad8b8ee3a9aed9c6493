@@ -1,39 +1,38 @@
-function StageSelectScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function StoryScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	if sublayertag == CCTag_Layer_14 then
-		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
-	
-	-- Main menu
+		if selgrouptag == CCTag_Debug_ReloadMenu then
+			return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
+		end
+		
 	elseif sublayertag == CCTag_Layer_01 then
 		if selgrouptag == CCTag_Menu_01 then
-			return StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return StoryScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_14 then
-			return StageSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return StoryScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
-	
 end
 
-function StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function StoryScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
+	local menus = {};
+	local xmove = 400;
 	
 	local menu = game.GetNode({toplayer, layertag, grouptag});
 	game.SetTouchEnabled(menu, false);
 	
-	local menus = {};
-	local xmove = 40;
-	local ymove = 40;
-	
-	for i=0, 8 do
+--	for i=0, 2 do
+	local i = 0;
 	
 		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
 		
-		local fadetime = 0.3+(8-i)*0.05;
+		local fadetime = 0.3+(4-i)*0.05;
 		
 		if i+1 ~= selitemtag then
 			
-			local menumoveaction = game.ActionMove(CCAF_By, xmove, ymove, fadetime);
+			local menumoveaction = game.ActionMove(CCAF_By, xmove, 0, fadetime);
 			menumoveaction = game.ActionEase(CCAF_Out, menumoveaction, 0.25);
 			local menualphaaction = game.ActionFade(CCAF_To, 0, fadetime);			
 			local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
@@ -60,16 +59,10 @@ function StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, se
 			game.RunAction(callnode, delayreplacesceneaction);
 			
 		end
-	end
+--	end
+	
 end
 
-function StageSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
-	
-	if selitemtag == 9 then
-		game.ReplaceScene(ktag_TitleSceneLayer, LConst_SceneTransTime);
-	else
-		game.TryStage(selitemtag-1);
-		game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
-	end
-	
+function StoryScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	game.PopScene();
 end

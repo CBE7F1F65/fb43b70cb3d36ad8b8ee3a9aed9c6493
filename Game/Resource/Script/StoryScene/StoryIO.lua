@@ -1,21 +1,22 @@
-function HelpScene_IO(eventtype, toplayer, toptag)
+function StoryScene_IO(eventtype, toplayer, toptag)
 	
 	if eventtype == SceneIOFlag_OnInit then
-		return HelpScene_OnInit(toplayer, toptag);
+		return StoryScene_OnInit(toplayer, toptag);
 	elseif eventtype == SceneIOFlag_OnEnter then
-		return HelpScene_OnEnter(toplayer, toptag);
+		return StoryScene_OnEnter(toplayer, toptag);
 	elseif eventtype == SceneIOFlag_OnEnterTDF then
-		return HelpScene_OnEnterTDF(toplayer, toptag);
+		return StoryScene_OnEnterTDF(toplayer, toptag);
 	elseif eventtype == SceneIOFlag_OnExit then
-		return HelpScene_OnExit(toplayer, toptag);
+		return StoryScene_OnExit(toplayer, toptag);
 	elseif eventtype == SceneIOFlag_OnTouchBegin then
-		return HelpScene_OnTouchBegin(toplayer, toptag);
+		return StoryScene_OnTouchBegin(toplayer, toptag);
 	elseif eventtype == SceneIOFlag_OnTouchEnd then
-		return HelpScene_OnTouchEnd(toplayer, toptag);
+		return StoryScene_OnTouchEnd(toplayer, toptag);
 	end
 end
 
-function HelpScene_OnInit(toplayer, toptag)
+function StoryScene_OnInit(toplayer, toptag)
+	
 	local layertag = toptag;
 	
 	-- bg layer
@@ -25,31 +26,27 @@ function HelpScene_OnInit(toplayer, toptag)
 	-- menu layer
 	layertag = toptag + CCTag_Layer_01;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+			
 end
 
-function HelpScene_OnEnter(toplayer, toptag)
+function StoryScene_OnEnter(toplayer, toptag)
 end
 
-function _HelpScene_AddHelpItems(toplayer, toptag)
+function _StoryScene_AddStoryItems(toplayer, toptag)
+	local xorig = 1200;
+	local xcen = 800;
+	local y = 120
 	
-	local xorig = 1180;
-	local xcen = 780;
-	local ybegin = 500;
-	local yoffset = 108;
-	
+	local layertag = toptag + CCTag_Layer_01;
+	local grouptag = layertag + CCTag_Menu_01;
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
-	for i=0, 2 do
-		local y = ybegin - i*yoffset;
-		if i == 2 then
-			y = y-yoffset
-		end
+--	for i=0, 2 do
+	local i = 0;
 		
-		spMenus[i+1] = game.CreateSprite(SI_TUI_Back+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Back_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_TUI_Back);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Back_Down);
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.01;
@@ -70,16 +67,17 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 
 		game.RunAction(menus[i+1], menuaction);
 		
-	end
+--	end
 	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
-	
 end
-function HelpScene_OnEnterTDF(toplayer, toptag)
-	_HelpScene_AddHelpItems(toplayer, toptag);
+
+function StoryScene_OnEnterTDF(toplayer, toptag)
+	_StoryScene_AddStoryItems(toplayer, toptag);
 end
-function HelpScene_OnExit(toplayer, toptag)
+
+function StoryScene_OnExit(toplayer, toptag)
 end
-function HelpScene_OnTouchBegin(toplayer, toptag)
+function StoryScene_OnTouchBegin(toplayer, toptag)
 end
-function HelpScene_OnTouchEnd(toplayer, toptag)
+function StoryScene_OnTouchEnd(toplayer, toptag)
 end

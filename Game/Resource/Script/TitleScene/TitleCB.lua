@@ -52,6 +52,10 @@ function TitleScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroup
 	local grouptag = layertag+selgrouptag;
 	local menus = {};
 	local xmove = 400;
+	
+	local menu = game.GetNode({toplayer, layertag, grouptag});
+	game.SetTouchEnabled(menu, false);
+	
 	for i=0, 4 do
 	
 		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
