@@ -279,7 +279,8 @@ bool BResource::GainData()
 		RSIZE_EFFECT + 
 		RSIZE_WEAPON + 
 		RSIZE_ITEM + 
-		RSIZE_ENEMY)
+		RSIZE_ENEMY + 
+		RSIZE_MISSION)
 	{
 		return false;
 	}
@@ -302,6 +303,8 @@ bool BResource::GainData()
 	offset += RSIZE_ITEM;
 	memcpy(enemydata, content+offset, RSIZE_ENEMY);
 	offset += RSIZE_ENEMY;
+	memcpy(missiondata, content+offset, RSIZE_MISSION);
+	offset += RSIZE_MISSION;
 
 	pbres->Resource_Free(content);
 
