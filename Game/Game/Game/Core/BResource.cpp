@@ -135,6 +135,10 @@ void BResource::ClearEnemyData()
 {
 	ZeroMemory(enemydata, RSIZE_ENEMY);
 }
+void BResource::ClearMissionData()
+{
+	ZeroMemory(missiondata, RSIZE_MISSION);
+}
 
 BResource * BResource::getInstance()
 {
@@ -204,7 +208,8 @@ bool BResource::PackData()
 		RSIZE_EFFECT + 
 		RSIZE_WEAPON + 
 		RSIZE_ITEM + 
-		RSIZE_ENEMY;
+		RSIZE_ENEMY + 
+		RSIZE_MISSION;
 	BYTE * content = (BYTE *)malloc(size);
 
 	DWORD offset = 0;
@@ -227,6 +232,8 @@ bool BResource::PackData()
 	offset += RSIZE_ITEM;
 	memcpy(content+offset, enemydata, RSIZE_ENEMY);
 	offset += RSIZE_ENEMY;
+	memcpy(content+offset, missiondata, RSIZE_MISSION);
+	offset += RSIZE_MISSION;
 
 	BIOMemoryFile memfile;
 	memfile.data = content;

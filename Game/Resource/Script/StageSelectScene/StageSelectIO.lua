@@ -32,6 +32,7 @@ function StageSelectScene_OnInit(toplayer, toptag)
 end
 
 function StageSelectScene_OnEnter(toplayer, toptag)
+
 end
 
 
@@ -99,7 +100,7 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
-		local menurepeataction = game.ActionRepeat(menurepeataction);
+		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
 		
 		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
@@ -122,7 +123,7 @@ function _StageSelectScene_LeaveMainLayer(toplayer, toptag)
 end
 
 
-function StageSelectScene_OnEnterTDF(toplayer, toptag)
+function StageSelectScene_OnEnterTDF(toplayer, toptag)	
 	_StageSelectScene_EnterMainLayer(toplayer, toptag);	
 end
 function StageSelectScene_OnExit(toplayer, toptag)

@@ -60,8 +60,9 @@ enum
 #define M_USERNAMEMAX	13
 #define M_HISCOREMAX	15
 
-#define M_MISSIONMAX	16
-#define M_STAGEMAX		8
+#define M_STAGEMISSIONMAX	17
+#define M_STAGEMAX			8
+#define M_HELPTYPEMAX		5
 
 
 #define LOG_FILENAME		"log.log"

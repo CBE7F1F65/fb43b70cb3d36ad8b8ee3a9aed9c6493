@@ -43,6 +43,9 @@ bool PlayScene::init()
 	do 
 	{
 		CC_BREAK_IF(! CCLayer::init());
+
+		scheduleUpdate();
+
 		bRet = true;
 
 	}while (0);
@@ -59,6 +62,7 @@ void PlayScene::onEnter()
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTER, this, this->getTag());
 		toenter = false;
 	}
+	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERA, this, this->getTag());
 }
 
 void PlayScene::onEnterTransitionDidFinish()
@@ -70,4 +74,12 @@ void PlayScene::onEnterTransitionDidFinish()
 		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERTDF, this, this->getTag());
 		toentertdf = false;
 	}
+	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERTDFA, this, this->getTag());
+}
+
+void PlayScene::update(ccTime dt)
+{
+	CCLayer::update(dt);
+
+	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONUPDATE, this, this->getTag());
 }

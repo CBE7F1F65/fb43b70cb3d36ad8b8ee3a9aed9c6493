@@ -13,12 +13,7 @@ function MissionSelectScene_CB(itemtag, toplayer, toptag, sublayertag, selgroupt
 end
 
 function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
-		
-	if selitemtag == 1 then
-		game.PushScene(ktag_StorySceneLayer, LConst_SceneTransTime);
-		return;
-	end
-	
+			
 	local toquit = true;
 	
 	local nowstage = game.GetNowStageMission();
@@ -88,12 +83,12 @@ function MissionSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayer
 	if selitemtag == nodecount+1 then
 		game.ReplaceScene(ktag_StageSelectSceneLayer, LConst_SceneTransTime);
 	else
+		game.TryMission(selitemtag-1);
 		if selitemtag == 1 then
-			-- TODO
-		else
-			game.TryMission(selitemtag-2);
-			game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+			game.ReplaceScene(ktag_StorySceneLayer, LConst_SceneTransTime);
+			return;
 		end
+		game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
 	end
 	
 end

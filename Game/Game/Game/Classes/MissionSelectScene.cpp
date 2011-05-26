@@ -60,3 +60,14 @@ void MissionSelectScene::onEnter()
 		toenter = false;
 	}
 }
+
+void MissionSelectScene::onEnterTransitionDidFinish()
+{
+	CCLayer::onEnterTransitionDidFinish();
+
+	if (toentertdf)
+	{
+		Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONENTERTDF, this, this->getTag());
+		toentertdf = false;
+	}
+}

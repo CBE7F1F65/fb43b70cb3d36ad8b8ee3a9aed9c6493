@@ -263,6 +263,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Export\Export_Lua_Game_Mission.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Export\Export_Lua_Scene.cpp"
 				>
 			</File>
@@ -388,6 +392,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Header\GameData.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Header\GameMain.h"
 				>
 			</File>
@@ -445,6 +453,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\SpriteItemManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\StageMissionData.h"
 				>
 			</File>
 			<File

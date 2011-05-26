@@ -38,6 +38,7 @@ public:
 	void ClearWeaponData();
 	void ClearItemData();
 	void ClearEnemyData();
+	void ClearMissionData();
 
 	int Texture_GetWidth(HTEXTURE tex);
 	int Texture_GetHeight(HTEXTURE tex);
@@ -60,6 +61,7 @@ public:
 	weaponData weapondata[DATASTRUCT_WEAPONMAX];
 	itemData itemdata[DATASTRUCT_ITEMMAX];
 	enemyData enemydata[DATASTRUCT_ENEMYMAX];
+	missionData missiondata[DATASTRUCT_MISSIONMAX];
 
 	HTEXTURE tex[DATASTRUCT_TEXMAX];
 	hTextureInfo texinfo[DATASTRUCT_TEXMAX];

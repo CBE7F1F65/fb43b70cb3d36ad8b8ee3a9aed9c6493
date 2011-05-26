@@ -1,39 +1,9 @@
 #ifndef __GAMEMAIN_H__
 #define __GAMEMAIN_H__
 
-#include "Const.h"
-#include "MainDependency.h"
+#include "GameData.h"
+#include "StageMissionData.h"
 
-// TODO Update GameData from order version
-
-struct HiScoreData 
-{
-	int hiscore;
-	char username[M_USERNAMEMAX];
-};
-
-struct MissionScoreData
-{
-	int trycount;
-	int clearcount;
-	int hiscore;
-	BYTE rank;
-	BYTE bestturn;
-	BYTE enabled;
-};
-
-struct StageScoreData
-{
-	MissionScoreData missions[M_MISSIONMAX];
-	BYTE opencount;
-	BYTE clearcount;
-};
-
-struct GameData
-{
-	HiScoreData hiscores[M_HISCOREMAX];
-	StageScoreData stages[M_STAGEMAX];
-};
 
 class GameMain
 {
@@ -59,6 +29,14 @@ public:
 	bool TryMission(int missionindex, int stageindex=-1);
 	bool ClearMission(int missionindex, int stageindex=-1);
 
+	bool HelpIsEnabled(BYTE type, int index=-1);
+	bool EnableHelp(BYTE type, BYTE index);
+	void SetHelpIndex(BYTE type, BYTE index);
+
+	// In Game
+	int GetMissionBGSIID();
+	void GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs);
+
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
 
@@ -78,6 +56,9 @@ public:
 
 	int nowstage;
 	int nowmission;
+
+	BYTE helptype;
+	BYTE helpindex;
 
 	int missionscore;
 	int totalscore;

@@ -25,7 +25,10 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 {
 	obj->SetInteger("SceneIOFlag_OnInit", LUASCENE_IOFLAG_ONINIT);
 	obj->SetInteger("SceneIOFlag_OnEnter", LUASCENE_IOFLAG_ONENTER);
+	obj->SetInteger("SceneIOFlag_OnEnterA", LUASCENE_IOFLAG_ONENTERA);
 	obj->SetInteger("SceneIOFlag_OnEnterTDF", LUASCENE_IOFLAG_ONENTERTDF);
+	obj->SetInteger("SceneIOFlag_OnEnterTDFA", LUASCENE_IOFLAG_ONENTERTDFA);
+	obj->SetInteger("SceneIOFlag_OnUpdate", LUASCENE_IOFLAG_ONUPDATE);
 	obj->SetInteger("SceneIOFlag_OnExit", LUASCENE_IOFLAG_ONEXIT);
 	obj->SetInteger("SceneIOFlag_OnTouchBegin", LUASCENE_IOFLAG_ONTOUCHBEGIN);
 	obj->SetInteger("SceneIOFlag_OnTouchEnd", LUASCENE_IOFLAG_ONTOUCHEND);

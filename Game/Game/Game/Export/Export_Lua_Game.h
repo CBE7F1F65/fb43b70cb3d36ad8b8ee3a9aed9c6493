@@ -27,6 +27,7 @@ class Export_Lua_Game : Export_Lua
 public:
 	static bool _LuaRegistConst(LuaObject * obj);
 	static bool _LuaRegistFunction(LuaObject * obj);
+	static bool _LuaRegistFunction_Mission(LuaObject * obj);
 
 	static int LuaFn_Game_Random_Int(LuaState * ls);
 	static int LuaFn_Game_Random_Float(LuaState * ls);
@@ -56,25 +57,6 @@ public:
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
 
 	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
-	static int LuaFn_Game_GetUsername(LuaState * ls);
-	static int LuaFn_Game_SetUsername(LuaState * ls);
-
-	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
-	static int LuaFn_Game_InsertHiScore(LuaState * ls);
-	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
-
-	static int LuaFn_Game_StageIsEnabled(LuaState * ls);
-	static int LuaFn_Game_MissionIsEnabled(LuaState * ls);
-	static int LuaFn_Game_EnableMission(LuaState * ls);
-	static int LuaFn_Game_TryStage(LuaState * ls);
-	static int LuaFn_Game_TryMission(LuaState * ls);
-	static int LuaFn_Game_ClearMission(LuaState * ls);
-	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
-
-	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
-	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
-	static int LuaFn_Game_SaveIni(LuaState * ls);
-	static int LuaFn_Game_ResetIni(LuaState * ls);
 
 	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
 	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
@@ -105,6 +87,36 @@ public:
 	static int LuaFn_Game_ActionDelay(LuaState * ls);
 	static int LuaFn_Game_ActionDelete(LuaState * ls);
 	static int LuaFn_Game_ActionCallFunc(LuaState * ls);
+
+public:
+
+	static int LuaFn_Game_GetUsername(LuaState * ls);
+	static int LuaFn_Game_SetUsername(LuaState * ls);
+
+	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
+	static int LuaFn_Game_InsertHiScore(LuaState * ls);
+	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
+
+	static int LuaFn_Game_StageIsEnabled(LuaState * ls);
+	static int LuaFn_Game_MissionIsEnabled(LuaState * ls);
+	static int LuaFn_Game_EnableMission(LuaState * ls);
+	static int LuaFn_Game_TryStage(LuaState * ls);
+	static int LuaFn_Game_TryMission(LuaState * ls);
+	static int LuaFn_Game_ClearMission(LuaState * ls);
+	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
+
+	// In Game
+	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
+	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
+
+	static int LuaFn_Game_GetHelpAccessInfo(LuaState * ls);
+	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
+
+	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SaveIni(LuaState * ls);
+	static int LuaFn_Game_ResetIni(LuaState * ls);
+
 
 	static CCNode * _GetNowNode(_LObjNode * cnode, bool topnode=false, int * scenetag=NULL);
 	static bool _GetXYZT(_LObjNode * cnode, float *x=NULL, float *y=NULL, int *zOrder=NULL, int *tag=NULL);

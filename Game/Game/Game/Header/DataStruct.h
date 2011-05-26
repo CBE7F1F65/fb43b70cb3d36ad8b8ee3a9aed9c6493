@@ -8,8 +8,9 @@
 #define DATASTRUCT_EFFECTMAX		0x40
 #define DATASTRUCT_SPRITEMAX		0x100
 #define DATASTRUCT_WEAPONMAX		0x10
-#define DATASTRUCT_ITEMMAX			0x100
-#define DATASTRUCT_ENEMYMAX			0x100
+#define DATASTRUCT_ITEMMAX			0x20
+#define DATASTRUCT_ENEMYMAX			0x40
+#define DATASTRUCT_MISSIONMAX		0xA0
 
 struct customconstData{
 	char name[M_STRMAX];
@@ -69,6 +70,40 @@ struct enemyData
 	int siid;
 };
 
+#define M_MISSIONTARGETMAX	3
+#define M_MISSIONRANKMAX	3
+#define M_MISSIONHELPMAX	3
+
+// mission
+
+struct missionTargetData{
+	BYTE enemytype;
+	BYTE num;
+};
+
+struct missionRankData{
+	int hiscore;
+};
+
+struct missionDefendData{
+	BYTE defendturn;
+};
+
+struct missionHelpData{
+	BYTE helptype;
+	BYTE helpindex;
+};
+
+struct missionData{
+	int bgsiid;
+	BYTE missiontype;
+	BYTE weatherflag;
+	missionDefendData defend;
+	missionTargetData targets[M_MISSIONTARGETMAX];
+	missionRankData ranks[M_MISSIONRANKMAX];
+	missionHelpData helps[M_MISSIONHELPMAX];
+};
+
 #define RSIZE_CUSTOMCONST	(sizeof(customconstData) * DATASTRUCT_CUSTOMCONSTMAX)
 #define RSIZE_TEXTURE		(sizeof(textureData) * DATASTRUCT_TEXMAX)
 #define RSIZE_MUSIC			(sizeof(musicData) * DATASTRUCT_MUSICMAX)
@@ -78,5 +113,6 @@ struct enemyData
 #define RSIZE_WEAPON		(sizeof(weaponData) * DATASTRUCT_WEAPONMAX)
 #define RSIZE_ITEM			(sizeof(itemData) * DATASTRUCT_ITEMMAX)
 #define RSIZE_ENEMY			(sizeof(enemyData) * DATASTRUCT_ENEMYMAX)
+#define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
 
 #endif

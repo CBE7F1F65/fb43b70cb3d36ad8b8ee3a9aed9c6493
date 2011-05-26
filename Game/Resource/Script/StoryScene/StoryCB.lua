@@ -6,14 +6,14 @@ function StoryScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 		
 	elseif sublayertag == CCTag_Layer_01 then
 		if selgrouptag == CCTag_Menu_01 then
-			return StoryScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return StoryScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_14 then
-			return StoryScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return StoryScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
 end
 
-function StoryScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function StoryScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 		
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
@@ -63,6 +63,15 @@ function StoryScene_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag
 	
 end
 
-function StoryScene_PopScene(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
-	game.PopScene();
+function _StoryScene_EnableNextMission(toplayer, toptag)
+	local nowstage, nowmission = game.GetNowStageMission();
+	
+	game.EnableMission(nowmission+1);
+	--Update MissionSelectUI
+	
+end
+
+function StoryScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	_StoryScene_EnableNextMission(toplayer, toptag);
+	game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 end

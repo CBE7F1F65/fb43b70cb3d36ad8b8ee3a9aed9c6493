@@ -30,6 +30,7 @@ public:
 	bool ReadWeaponDefineTable();
 	bool ReadItemDefineTable();
 	bool ReadEnemyDefineTable();
+	bool ReadMissionDefineTable();
 
 public:
 	FILE * file;

@@ -89,7 +89,7 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
-		local menurepeataction = game.ActionRepeat(menurepeataction);
+		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
 		
 		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});

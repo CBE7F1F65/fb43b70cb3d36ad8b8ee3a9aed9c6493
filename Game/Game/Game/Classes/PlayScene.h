@@ -12,6 +12,7 @@ public:
 
 	virtual void onEnter();
 	virtual void onEnterTransitionDidFinish();
+	virtual void update(ccTime dt);
 
 	LAYER_NODE_FUNC(PlayScene);
 

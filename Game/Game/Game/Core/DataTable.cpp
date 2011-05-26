@@ -5,6 +5,8 @@
 
 #include "cocos2d.h"
 
+#include "../Header/SpriteItemManager.h"
+
 using namespace cocos2d;
 
 static DataTable * g_DataTableSingleton = NULL;
@@ -21,6 +23,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATATYPE_WEAPONDEFINE			0x57
 #define DATATYPE_ITEMDEFINE				0x58
 #define DATATYPE_ENEMYDEFINE			0x59
+#define DATATYPE_MISSIONDEFINE			0x5A
 
 #define DATAINDEX_DATADEFINE			(DATATYPE_DATADEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_CUSTOMCONSTDEFINE		(DATATYPE_CUSTOMCONSTDEFINE-DATATYPE_DATATABLEBEGIN)
@@ -32,6 +35,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATAINDEX_WEAPONDEFINE			(DATATYPE_WEAPONDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ITEMDEFINE			(DATATYPE_ITEMDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ENEMYDEFINE			(DATATYPE_ENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
+#define DATAINDEX_MISSIONDEFINE			(DATATYPE_MISSIONDEFINE-DATATYPE_DATATABLEBEGIN)
 
 #define ERRORSTR_DATATABLE	"Error in Reading Data Table File!"
 
@@ -183,6 +187,11 @@ bool DataTable::ReadAllTable()
 	if (!ReadEnemyDefineTable())
 	{
 		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_ENEMYDEFINE));
+		return false;
+	}
+	if (!ReadMissionDefineTable())
+	{
+		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_MISSIONDEFINE));
 		return false;
 	}
 	return true;
@@ -462,5 +471,83 @@ bool DataTable::ReadEnemyDefineTable()
 {
 	BResource * pbres = BResource::getInstance();
 	pbres->ClearEnemyData();
+	return true;
+}
+
+bool DataTable::ReadMissionDefineTable()
+{
+	if (!CheckHeader(DATATYPE_MISSIONDEFINE))
+	{
+		return false;
+	}
+
+	BResource * pbres = BResource::getInstance();
+
+	pbres->ClearMissionData();
+
+	_READSTRINGBUFFERLINE(18);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		missionData * item = &(pbres->missiondata[tindex]);
+
+		fscanf(file, "%x%s%x%d%d%d%d%d%d%d%d%d%d%x%x%x", 
+			_SAVETINT,
+//			&(item->missiontype), 
+			strbuffer[0],
+			&(item->weatherflag), 
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT,
+/*			&(item->targets[0].enemytype), 
+			&(item->targets[0].num), 
+			&(item->targets[1].enemytype), 
+			&(item->targets[1].num), 
+			&(item->targets[2].enemytype), 
+			&(item->targets[2].num), 
+			&(item->defend.defendturn), 
+*/			&(item->ranks[0].hiscore), 
+			&(item->ranks[1].hiscore), 
+			&(item->ranks[2].hiscore), 
+			_SAVETINT,
+			_SAVETINT,
+			_SAVETINT
+//			&(item->helps[0].helpindex), 
+//			&(item->helps[1].helpindex), 
+//			&(item->helps[2].helpindex)
+			);
+
+
+		_DOSWAPTINT;
+		_INITTINT;
+
+		item->missiontype = _LOADTINT;
+		item->bgsiid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+		item->targets[0].enemytype = _LOADTINT;
+		item->targets[0].num = _LOADTINT;
+		item->targets[1].enemytype = _LOADTINT;
+		item->targets[1].num = _LOADTINT;
+		item->targets[2].enemytype = _LOADTINT;
+		item->targets[2].num = _LOADTINT;
+		item->defend.defendturn = _LOADTINT;
+
+		int _tindex = _LOADTINT;
+		item->helps[0].helptype = _tindex>>8;
+		item->helps[0].helpindex = _tindex&0xff;
+		_tindex = _LOADTINT;
+		item->helps[1].helptype = _tindex>>8;
+		item->helps[1].helpindex = _tindex&0xff;
+		_tindex = _LOADTINT;
+		item->helps[2].helptype = _tindex>>8;
+		item->helps[2].helpindex = _tindex&0xff;
+
+	}
 	return true;
 }

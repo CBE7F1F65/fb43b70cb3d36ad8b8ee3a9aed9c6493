@@ -49,29 +49,34 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	for i=0, nodecount do
 		
 		local enabled = true;
+		local missionenabled = false;
+		local missiontriedtime = 0;
 		
-		--event
-		if i == 0 then
-			spMenus[i+1] = game.CreateSprite(SI_MSUI_Event);
-			spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Event_Down);
-		--pace
-		elseif i < nodecount then
+		if i < nodecount then
 			
-			local missionenabled, missiontried = game.MissionIsEnabled(i-1);
-			if not missionenabled then
-				enabled = false;
-			end
-			
-			if enabled then
-				if missiontried then
-					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Tried);
-				else
-					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission);
-				end
+			missionenabled, missiontriedtime = game.MissionIsEnabled(i);
+			--event
+			if i == 0 and nowstage < 7 then
+				spMenus[i+1] = game.CreateSprite(SI_MSUI_Event);
+				spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Event_Down);
+			--pace
 			else
-				spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Disabled);
+			
+				if not missionenabled then
+					enabled = false;
+				end
+			
+				if enabled then
+					if missiontriedtime > 0 then
+						spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Tried);
+					else
+						spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission);
+					end
+				else
+					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Disabled);
+				end
+				spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Down);
 			end
-			spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Down);
 		--back
 		else
 			spMenus[i+1] = game.CreateSprite(SI_TUI_Back);
@@ -103,10 +108,22 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
-		local menurepeataction = game.ActionRepeat(menurepeataction);
+		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
 		
-		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+		local menuaction;
+		if missionenabled and missiontriedtime == 0 then
+			local menuscaleinaction = game.ActionScale(CCAF_To, 1.0, 1.0, fadetime);
+			local menurepeatscaleactionpre = game.ActionScale(CCAF_To, 1.2, 1.2, blinktimepre/3);
+			local menurepeatscaleactionpost = game.ActionScale(CCAF_To, 1.0, 1.0, blinktimepost/3);
+			local menurepeatscaleaction = game.ActionSequence({menurepeatscaleactionpre, menurepeatscaleactionpost});
+			menurepeatscaleaction = game.ActionRepeat(menurepeatscaleaction);
+			local menuscaleaction = game.ActionSequence({menuscaleinaction, menurepeatscaleaction});
+			
+			menuaction = game.ActionSpawn({menumoveaction, menualphaaction, menuscaleaction})
+		else		
+			menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+		end
 
 		game.RunAction(menus[i+1], menuaction);
 		
@@ -126,9 +143,10 @@ function _MissionSelectScene_LeaveMainLayer(toplayer, toptag)
 end
 
 function MissionSelectScene_OnEnter(toplayer, toptag)
-	_MissionSelectScene_EnterMainLayer(toplayer, toptag);	
 end
+
 function MissionSelectScene_OnEnterTDF(toplayer, toptag)
+	_MissionSelectScene_EnterMainLayer(toplayer, toptag);
 end
 function MissionSelectScene_OnExit(toplayer, toptag)
 end

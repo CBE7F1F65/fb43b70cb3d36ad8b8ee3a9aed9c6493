@@ -1,5 +1,6 @@
 #include "../Header/GameMain.h"
 #include "../Header/BIOInterface.h"
+#include "../Header/BResource.h"
 
 static GameMain * g_GameMainSingleton = NULL;
 
@@ -21,6 +22,13 @@ GameMain::GameMain()
 
 	nowstage = 0;
 	nowmission = 0;
+
+	helptype = 0;
+	helpindex = 0;
+
+	missionscore = 0;
+	totalscore = 0;
+	nowturn = 0;
 }
 
 GameMain::~GameMain()
@@ -53,6 +61,12 @@ void GameMain::Init()
 	{
 		EnableMission(0, 0);
 	}
+	/*
+	if (!HelpIsEnabled(1, 0))
+	{
+		EnableHelp(1, 0);
+	}
+	*/
 }
 
 void GameMain::ReadIni()
@@ -157,7 +171,7 @@ bool GameMain::MissionIsEnabled(int missionindex, int stageindex/* =-1 */)
 	{
 		stageindex = nowstage;
 	}
-	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
 	{
 		return false;
 	}
@@ -170,7 +184,7 @@ int GameMain::GetMissionTryCount(int missionindex, int stageindex/* =-1 */)
 	{
 		stageindex = nowstage;
 	}
-	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
 	{
 		return false;
 	}
@@ -183,7 +197,7 @@ bool GameMain::EnableMission(int missionindex, int stageindex/* =-1 */)
 	{
 		stageindex = nowstage;
 	}
-	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
 	{
 		return false;
 	}
@@ -214,7 +228,7 @@ bool GameMain::TryMission(int missionindex, int stageindex/* =-1 */)
 	{
 		stageindex = nowstage;
 	}
-	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
 	{
 		return false;
 	}
@@ -237,7 +251,7 @@ bool GameMain::ClearMission(int missionindex, int stageindex/* =-1 */)
 	{
 		stageindex = nowstage;
 	}
-	if (missionindex < 0 || missionindex >= M_MISSIONMAX)
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
 	{
 		return false;
 	}
@@ -258,6 +272,65 @@ bool GameMain::ClearMission(int missionindex, int stageindex/* =-1 */)
 	}
 
 	InsertScore(totalscore);
+}
+
+bool GameMain::HelpIsEnabled(BYTE _type, int index)
+{
+	BYTE type = _type-1;
+	if (type >= M_HELPTYPEMAX)
+	{
+		return false;
+	}
+	if (index < 0)
+	{
+		return gamedata.helps[type].accessflag;
+	}
+	return gamedata.helps[type].accessflag & (1<<index);
+}
+
+bool GameMain::EnableHelp(BYTE _type, BYTE index)
+{
+	BYTE type = _type-1;
+	if (type >= M_HELPTYPEMAX)
+	{
+		return false;
+	}
+	if (!HelpIsEnabled(_type, index))
+	{
+		gamedata.helps[type].accessflag |= (1<<index);
+		SaveData();
+	}
+	return true;
+}
+
+void GameMain::SetHelpIndex(BYTE type, BYTE index)
+{
+	if (type > M_HELPTYPEMAX)
+	{
+		type = 0;
+	}
+	helptype = type;
+	helpindex = index;
+}
+
+int GameMain::GetMissionBGSIID()
+{
+	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
+	return BResource::getInstance()->missiondata[index].bgsiid;
+}
+
+void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
+{
+	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
+	missionData * item = &(BResource::getInstance()->missiondata[index]);
+	if (helpindexs)
+	{
+		for (int i=0; i<M_MISSIONHELPMAX; i++)
+		{
+			helptypes[i] = item->helps[i].helptype;
+			helpindexs[i] = item->helps[i].helpindex;
+		}
+	}
 }
 
 void GameMain::SaveData()
