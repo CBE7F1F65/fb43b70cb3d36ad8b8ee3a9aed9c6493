@@ -144,6 +144,9 @@ typedef QWORD ULONGLONG;
 #define ARC(X)		((X) * 0.0001745329251994329f)
 #define ANGLE(X)	(int)((X) * 5729.577951308232f)
 
+#define CCARC(X)	((X) * 0.01f)
+#define CCANGLE(X)	((int)((X) * 100))
+
 #define DIST(X1, Y1, X2, Y2)	(sqrtf(((X1)-(X2))*((X1)-(X2)) + ((Y1)-(Y2))*((Y1)-(Y2))))
 #define DIST2(X1, Y1, X2, Y2)	(((X1)-(X2))*((X1)-(X2)) + ((Y1)-(Y2))*((Y1)-(Y2)))
 #define SIGN(X)					((((X)&1)<<1)-1)

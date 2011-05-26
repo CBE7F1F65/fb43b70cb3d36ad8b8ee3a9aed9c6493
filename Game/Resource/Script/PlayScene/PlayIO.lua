@@ -26,8 +26,17 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 	local layertag = toptag+CCTag_Layer_00;
 	
 	local bgsiid = game.GetMissionBGData();
-	local spBG = game.CreateSprite(bgsiid, {480, 320});
+	local spBG = game.CreateSprite(bgsiid, {480, 336});
 	game.AddSpriteChild(spBG, {toplayer, layertag});
+	
+	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608, -9000});
+	game.AddSpriteChild(spTopPanel, {toplayer, layertag});
+	local spBottomPanel = game.CreateSprite(SI_GUI_BottomPanel, {480, 48, -9000});
+	game.AddSpriteChild(spBottomPanel, {toplayer, layertag});
+	local spLeftPanel = game.CreateSprite(SI_GUI_LeftPanel, {32, 368});
+	game.AddSpriteChild(spLeftPanel, {toplayer, layertag});
+	local spRightPanel = game.CreateSprite(SI_GUI_RightPanel, {928, 368});
+	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
 		
 end
 

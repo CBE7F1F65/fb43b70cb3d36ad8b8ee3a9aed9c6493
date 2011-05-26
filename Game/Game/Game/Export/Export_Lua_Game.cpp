@@ -1424,10 +1424,10 @@ int Export_Lua_Game::LuaFn_Game_ActionRotate(LuaState * ls)
 	switch (_flag)
 	{
 	case M_CCACTIONFLAG_TO:
-		retval = CCRotateTo::actionWithDuration(_time, ARC(_angle));
+		retval = CCRotateTo::actionWithDuration(_time, CCARC(_angle));
 		break;
 	case M_CCACTIONFLAG_BY:
-		retval = CCRotateBy::actionWithDuration(_time, ARC(_angle));
+		retval = CCRotateBy::actionWithDuration(_time, CCARC(_angle));
 		break;
 	}
 	node.PDword((DWORD)retval);

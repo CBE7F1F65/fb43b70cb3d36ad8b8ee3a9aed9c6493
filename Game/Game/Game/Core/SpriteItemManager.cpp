@@ -281,7 +281,7 @@ bool SpriteItemManager::SetRenderEx(CCSprite * sprite, float x, float y, int ang
 		return false;
 	}
 	sprite->setPosition(BGlobal::TranslatePosition(x, y));
-	sprite->setRotation(ARC(angle));
+	sprite->setRotation(CCARC(angle));
 	if (vscale == 0.0f)
 	{
 		vscale = hscale;
