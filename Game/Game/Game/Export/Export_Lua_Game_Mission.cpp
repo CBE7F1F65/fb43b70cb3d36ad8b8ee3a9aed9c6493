@@ -17,14 +17,22 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("EnableMission", LuaFn_Game_EnableMission);
 	obj->Register("TryStage", LuaFn_Game_TryStage);
 	obj->Register("TryMission", LuaFn_Game_TryMission);
-	obj->Register("ClearMission", LuaFn_Game_ClearMission);
 	obj->Register("GetNowStageMission", LuaFn_Game_GetNowStageMission);
+
+	obj->Register("GetItemData", LuaFn_Game_GetItemData);
+	obj->Register("UseItem", LuaFn_Game_UseItem);
+	obj->Register("BuyItem", LuaFn_Game_BuyItem);
 
 	obj->Register("GetMissionBGData", LuaFn_Game_GetMissionBGData);
 	obj->Register("GetMissionHelpData", LuaFn_Game_GetMissionHelpData);
 
+	obj->Register("EnterMission", LuaFn_Game_EnterMission);
+	obj->Register("ClearMission", LuaFn_Game_ClearMission);
+
 	obj->Register("GetHelpAccessInfo", LuaFn_Game_GetHelpAccessInfo);
 	obj->Register("SetHelpIndex", LuaFn_Game_SetHelpIndex);
+
+	obj->Register("GetHPAPSP", LuaFn_Game_GetHPAPSP);
 
 	obj->Register("GetBGMSEVol", LuaFn_Game_GetBGMSEVol);
 	obj->Register("SetBGMSEVol", LuaFn_Game_SetBGMSEVol);
@@ -190,19 +198,20 @@ int Export_Lua_Game::LuaFn_Game_TryMission(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_EnterMission(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	GameMain::getInstance()->EnterMission();
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_ClearMission(LuaState * ls)
 {
-	_ENTERFUNC_LUA(1);
+	_ENTERFUNC_LUA(0);
 
-	int _missionindex = node.iNextGet();
-	int _stageindex = -1;
-
-	node.jNextGet();
-	if (node.bhavenext)
-	{
-		_stageindex = node.iGet();
-	}
-	bool bret = GameMain::getInstance()->ClearMission(_missionindex, _stageindex);
+	bool bret = GameMain::getInstance()->ClearMission();
 
 	node.PBoolean(bret);
 
@@ -218,6 +227,56 @@ int Export_Lua_Game::LuaFn_Game_GetNowStageMission(LuaState * ls)
 
 	node.PInt(stageindex);
 	node.PInt(missionindex);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetItemData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// -> itemtypecount
+	// index -> siid, itemcount
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		BYTE _index = node.iGet();
+		int siid = 0;
+		int itemcount = 0;
+		itemcount = GameMain::getInstance()->GetItemData(_index, &siid);
+		node.PInt(siid);
+		node.PInt(itemcount);
+	}
+	else
+	{
+		BYTE itemtypecount = GameMain::getInstance()->itemtypecount;
+		node.PInt(itemtypecount);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_UseItem(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	BYTE _index = node.iNextGet();
+	bool bret = GameMain::getInstance()->UseItem(_index);
+
+	node.PBoolean(bret);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_BuyItem(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	BYTE _index = node.iNextGet();
+	int iret = GameMain::getInstance()->BuyItem(_index);
+
+	node.PInt(iret);
 
 	_LEAVEFUNC_LUA;
 }
@@ -308,6 +367,21 @@ int Export_Lua_Game::LuaFn_Game_SetHelpIndex(LuaState * ls)
 		GameMain::getInstance()->EnableHelp(_helptype, _helpindex);
 	}
 
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetHPAPSP(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	float nowhp = GameMain::getInstance()->nowhp;
+	float nowap = GameMain::getInstance()->nowap;
+	int nowsp = GameMain::getInstance()->nowsp;
+
+	node.PFloat(nowhp);
+	node.PFloat(nowap);
+	node.PInt(nowsp);
 
 	_LEAVEFUNC_LUA;
 }

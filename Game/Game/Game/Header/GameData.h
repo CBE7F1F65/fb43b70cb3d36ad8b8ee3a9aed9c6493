@@ -33,11 +33,16 @@ struct HelpAccessData{
 	BYTE accessflag;
 };
 
+struct ItemOwnedData{
+	int count;
+};
+
 struct GameData
 {
 	HiScoreData hiscores[M_HISCOREMAX];
 	StageScoreData stages[M_STAGEMAX];
 	HelpAccessData helps[M_HELPTYPEMAX];
+	ItemOwnedData items[M_ITEMTYPEMAX];
 };
 
 #endif

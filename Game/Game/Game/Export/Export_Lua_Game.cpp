@@ -1439,13 +1439,13 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 {
 	_ENTERFUNC_LUA(2);
 
-	// flag sx sy time relative
+	// flag sx sy time bglobal
 
 	int _flag = node.iNextGet();
 	float _scalex = node.fNextGet();
 	float _scaley = _scalex;
 	float _time = 0;
-	bool _relative = false;
+	bool _bglobal = false;
 
 	node.jNextGet();
 	if (node.bhavenext)
@@ -1456,7 +1456,17 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 		{
 			_time = node.fGet();
 			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_bglobal = node.bGet();
+			}
 		}
+	}
+
+	if (_bglobal)
+	{
+		_scalex = BGlobal::ScalerX(_scalex);
+		_scaley = BGlobal::ScalerX(_scaley);
 	}
 
 	CCAction * retval = NULL;

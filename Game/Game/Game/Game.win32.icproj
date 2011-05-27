@@ -6,6 +6,13 @@
 	ProjectGUID="{C68074C3-BB4A-4E92-806E-64070C64DAE5}"
 	VCNestedProjectGUID="{50744886-EA03-4DDF-BFD8-8439EA6F8C44}"
 	VCNestedProjectFileName="Game.win32.vcproj">
-	<Configurations/>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32">
+			<Tool
+				Name="CppCmplrTool"
+				DisableSpecificDiagnostics="1786"/>
+		</Configuration>
+	</Configurations>
 	<Files/>
 </VisualStudioProject>

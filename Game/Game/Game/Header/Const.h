@@ -63,7 +63,10 @@ enum
 #define M_STAGEMISSIONMAX	17
 #define M_STAGEMAX			8
 #define M_HELPTYPEMAX		5
+#define M_ITEMTYPEMAX		8
 
+#define M_GAMEHPMAX	100.0f
+#define M_GAMEAPMAX	100.0f
 
 #define LOG_FILENAME		"log.log"
 #define INI_FILENAME		"config.ini"

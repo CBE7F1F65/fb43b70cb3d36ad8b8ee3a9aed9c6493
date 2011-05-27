@@ -70,7 +70,7 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 		local blinktimepost = 0.9;
 		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
@@ -86,7 +86,8 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 		end
 		
 	end
-	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
 
@@ -132,7 +133,7 @@ function _HelpScene_AddHelpCatagoryItems(toplayer, toptag)
 		local blinktimepost = 0.9;
 		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
@@ -143,7 +144,8 @@ function _HelpScene_AddHelpCatagoryItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_02, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_02, grouptag});
+	game.SetColor(menu, global.ARGB(0, 0xffffff));
 end
 
 function _HelpScene_EnterCatagoryMenu(toplayer, toptag)

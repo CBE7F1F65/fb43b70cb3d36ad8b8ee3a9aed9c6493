@@ -88,7 +88,7 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 		local blinktimepost = 0.9;
 		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
@@ -134,7 +134,7 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 		local blinktimepost = 0.9;
 		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, 0x9F, blinktimepre);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
 		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);

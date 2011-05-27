@@ -29,6 +29,12 @@ GameMain::GameMain()
 	missionscore = 0;
 	totalscore = 0;
 	nowturn = 0;
+
+	nowhp = 0;
+	nowap = 0;
+	nowsp = 0;
+
+	itemtypecount = 0;
 }
 
 GameMain::~GameMain()
@@ -94,6 +100,8 @@ bool GameMain::ResetIni(bool bresetname/* =false */)
 	}
 	SetBGMVol(INIDEFAULT_BGMVOL);
 	SetSEVol(INIDEFAULT_SEVOL);
+
+	return true;
 }
 
 bool GameMain::SaveIni()
@@ -243,35 +251,8 @@ bool GameMain::TryMission(int missionindex, int stageindex/* =-1 */)
 	nowmission = missionindex;
 
 	SaveData();
-}
 
-bool GameMain::ClearMission(int missionindex, int stageindex/* =-1 */)
-{
-	if (stageindex < 0 || stageindex >= M_STAGEMAX)
-	{
-		stageindex = nowstage;
-	}
-	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
-	{
-		return false;
-	}
-
-	EnableMission(missionindex, stageindex);
-
-	MissionScoreData * item = &gamedata.stages[stageindex].missions[missionindex];
-	item->clearcount++;
-
-	if (nowturn < item->bestturn)
-	{
-		item->bestturn = nowturn;
-	}
-
-	if (missionscore > item->hiscore)
-	{
-		item->hiscore = missionscore;
-	}
-
-	InsertScore(totalscore);
+	return true;
 }
 
 bool GameMain::HelpIsEnabled(BYTE _type, int index)
@@ -313,6 +294,41 @@ void GameMain::SetHelpIndex(BYTE type, BYTE index)
 	helpindex = index;
 }
 
+int GameMain::GetItemData(BYTE type, int * siid/* =NULL */)
+{
+	if (siid)
+	{
+		*siid = 0;
+	}
+	if (type > itemtypecount)
+	{
+		return 0;
+	}
+
+	if (siid)
+	{
+		*siid = BResource::getInstance()->itemdata[type].siid;
+	}
+
+	return gamedata.items[type].count;
+}
+
+int GameMain::BuyItem(BYTE type)
+{
+	if (type > itemtypecount)
+	{
+		return 0;
+	}
+	// TODO
+	return 0;
+}
+
+bool GameMain::UseItem(BYTE type)
+{
+	// TODO
+	return false;
+}
+
 int GameMain::GetMissionBGSIID()
 {
 	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
@@ -331,6 +347,32 @@ void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 			helpindexs[i] = item->helps[i].helpindex;
 		}
 	}
+}
+
+void GameMain::EnterMission()
+{
+	nowhp = M_GAMEHPMAX;
+	nowap = M_GAMEAPMAX;
+	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
+	nowsp = BResource::getInstance()->missiondata[index].sp;
+}
+
+bool GameMain::ClearMission()
+{
+	MissionScoreData * item = &gamedata.stages[nowstage].missions[nowmission];
+	item->clearcount++;
+
+	if (nowturn < item->bestturn)
+	{
+		item->bestturn = nowturn;
+	}
+
+	if (missionscore > item->hiscore)
+	{
+		item->hiscore = missionscore;
+	}
+
+	return InsertScore(totalscore);
 }
 
 void GameMain::SaveData()

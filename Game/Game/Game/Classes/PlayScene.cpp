@@ -83,3 +83,10 @@ void PlayScene::update(ccTime dt)
 
 	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONUPDATE, this, this->getTag());
 }
+
+void PlayScene::onExit()
+{
+	CCLayer::onExit();
+
+	Export_Lua_Scene::ExecuteIOScene(LUASCENE_IOFLAG_ONEXIT, this, this->getTag());
+}

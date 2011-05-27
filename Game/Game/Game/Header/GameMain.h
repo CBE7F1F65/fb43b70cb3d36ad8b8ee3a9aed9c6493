@@ -27,15 +27,21 @@ public:
 
 	bool TryStage(int index);
 	bool TryMission(int missionindex, int stageindex=-1);
-	bool ClearMission(int missionindex, int stageindex=-1);
 
 	bool HelpIsEnabled(BYTE type, int index=-1);
 	bool EnableHelp(BYTE type, BYTE index);
 	void SetHelpIndex(BYTE type, BYTE index);
 
+	int GetItemData(BYTE type, int * siid=NULL);
+	int BuyItem(BYTE type);
+	bool UseItem(BYTE type);
+
 	// In Game
 	int GetMissionBGSIID();
 	void GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs);
+
+	void EnterMission();
+	bool ClearMission();
 
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
@@ -57,12 +63,18 @@ public:
 	int nowstage;
 	int nowmission;
 
+	float nowhp;
+	float nowap;
+	int nowsp;
+
 	BYTE helptype;
 	BYTE helpindex;
 
 	int missionscore;
 	int totalscore;
 	int nowturn;
+
+	BYTE itemtypecount;
 
 public:
 	static GameMain * getInstance();

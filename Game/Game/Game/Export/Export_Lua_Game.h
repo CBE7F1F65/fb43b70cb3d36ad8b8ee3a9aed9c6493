@@ -97,20 +97,28 @@ public:
 	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
 
+	static int LuaFn_Game_GetItemData(LuaState * ls);
+	static int LuaFn_Game_UseItem(LuaState * ls);
+	static int LuaFn_Game_BuyItem(LuaState * ls);
+
 	static int LuaFn_Game_StageIsEnabled(LuaState * ls);
 	static int LuaFn_Game_MissionIsEnabled(LuaState * ls);
 	static int LuaFn_Game_EnableMission(LuaState * ls);
 	static int LuaFn_Game_TryStage(LuaState * ls);
 	static int LuaFn_Game_TryMission(LuaState * ls);
-	static int LuaFn_Game_ClearMission(LuaState * ls);
 	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
 
 	// In Game
 	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
 	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
 
+	static int LuaFn_Game_EnterMission(LuaState * ls);
+	static int LuaFn_Game_ClearMission(LuaState * ls);
+
 	static int LuaFn_Game_GetHelpAccessInfo(LuaState * ls);
 	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
+
+	static int LuaFn_Game_GetHPAPSP(LuaState * ls);
 
 	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);

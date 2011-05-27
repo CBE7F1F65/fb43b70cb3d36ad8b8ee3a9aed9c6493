@@ -98,6 +98,7 @@ struct missionData{
 	int bgsiid;
 	BYTE missiontype;
 	BYTE weatherflag;
+	BYTE sp;
 	missionDefendData defend;
 	missionTargetData targets[M_MISSIONTARGETMAX];
 	missionRankData ranks[M_MISSIONRANKMAX];

@@ -6,6 +6,7 @@
 #include "cocos2d.h"
 
 #include "../Header/SpriteItemManager.h"
+#include "../Header/GameMain.h"
 
 using namespace cocos2d;
 
@@ -462,8 +463,38 @@ bool DataTable::ReadWeaponDefineTable()
 
 bool DataTable::ReadItemDefineTable()
 {
+	if (!CheckHeader(DATATYPE_EFFECTDEFINE))
+	{
+		return false;
+	}
+
 	BResource * pbres = BResource::getInstance();
+
 	pbres->ClearItemData();
+
+	int itemtypecount = 0;
+
+	_READSTRINGBUFFERLINE(3);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		itemData * item = &(pbres->itemdata[tindex]);
+		_CHECKEOF_DATATABLE;
+
+		fscanf(file, "%s", strbuffer[0]);
+
+		_DOSWAPTINT;
+		_INITTINT;
+
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+
+		itemtypecount++;
+	}
+
+	GameMain::getInstance()->itemtypecount = itemtypecount;
+
 	return true;
 }
 
@@ -494,11 +525,12 @@ bool DataTable::ReadMissionDefineTable()
 		_CHECKEOF_DATATABLE;
 		missionData * item = &(pbres->missiondata[tindex]);
 
-		fscanf(file, "%x%s%x%d%d%d%d%d%d%d%d%d%d%x%x%x", 
+		fscanf(file, "%x%s%x%d%d%d%d%d%d%d%d%d%d%d%x%x%x", 
 			_SAVETINT,
 //			&(item->missiontype), 
 			strbuffer[0],
 			&(item->weatherflag), 
+			_SAVETINT,
 			_SAVETINT,
 			_SAVETINT,
 			_SAVETINT,
@@ -530,6 +562,7 @@ bool DataTable::ReadMissionDefineTable()
 
 		item->missiontype = _LOADTINT;
 		item->bgsiid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+		item->sp = _LOADTINT;
 		item->targets[0].enemytype = _LOADTINT;
 		item->targets[0].num = _LOADTINT;
 		item->targets[1].enemytype = _LOADTINT;

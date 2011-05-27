@@ -86,9 +86,9 @@ function MissionSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayer
 		game.TryMission(selitemtag-1);
 		if selitemtag == 1 then
 			game.ReplaceScene(ktag_StorySceneLayer, LConst_SceneTransTime);
-			return;
+		else
+			game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
 		end
-		game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
 	end
 	
 end

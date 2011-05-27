@@ -86,7 +86,7 @@ function HelpScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 	
 		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
 		
-		local fadetime = 0.3+(4-i)*0.05;
+		local fadetime = 0.3+(3-i)*0.05;
 		
 		if i+1 ~= selitemtag then
 			
