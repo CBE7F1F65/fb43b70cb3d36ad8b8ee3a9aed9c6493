@@ -100,6 +100,7 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 	local grouptag = layertag + CCTag_Menu_01;
 	-- Menu
 	if callitemtag == grouptag+4 then
+		-- TODO: Target
 		--Quit
 		if selitemtag == 1 then
 			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
@@ -546,6 +547,10 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 	
 end
 
+function _PlayScene_CB_Action(toplayer, toptag)
+	_PlayScene_StateFinish(STATE_Planning);
+end
+
 function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	local layertag = toptag + sublayertag;
@@ -556,10 +561,31 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 
 	-- command
 	if selitemtag == 1 then
+	-- action
+	elseif selitemtag == 2 then
+		_PlayScene_CB_Action(toplayer, toptag);
+	-- wait
+	elseif selitemtag == 3 then
 	-- menu
 	elseif selitemtag == 4 then
 		_PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 110});
 --		_PlayScene_CB_AddOKCancel(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 110});
 	end
 	
+end
+
+
+
+
+
+function _PlayScene_CB_Touch_Began(toplayer, toptag, touchlayer, index)	
+end
+
+function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index)
+end
+
+function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index)
+end
+
+function _PlayScene_CB_Touch_Canceled(toplayer, toptag, touchlayer, index)
 end

@@ -109,6 +109,9 @@ public:
 	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
 
 	// In Game
+
+	static int LuaFn_Game_Update(LuaState * ls);
+
 	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
 	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
 
@@ -119,6 +122,9 @@ public:
 	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
 
 	static int LuaFn_Game_GetHPAPSP(LuaState * ls);
+
+	static int LuaFn_Game_GetState(LuaState * ls);
+	static int LuaFn_Game_SetState(LuaState * ls);
 
 	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
 	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);

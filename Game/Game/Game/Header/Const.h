@@ -65,8 +65,8 @@ enum
 #define M_HELPTYPEMAX		5
 #define M_ITEMTYPEMAX		8
 
-#define M_GAMEHPMAX	100.0f
-#define M_GAMEAPMAX	100.0f
+#define M_GAMEHPMAX	10000
+#define M_GAMEAPMAX	10000
 
 #define LOG_FILENAME		"log.log"
 #define INI_FILENAME		"config.ini"

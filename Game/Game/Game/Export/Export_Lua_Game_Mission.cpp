@@ -23,6 +23,9 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("UseItem", LuaFn_Game_UseItem);
 	obj->Register("BuyItem", LuaFn_Game_BuyItem);
 
+
+	obj->Register("Update", LuaFn_Game_Update);
+
 	obj->Register("GetMissionBGData", LuaFn_Game_GetMissionBGData);
 	obj->Register("GetMissionHelpData", LuaFn_Game_GetMissionHelpData);
 
@@ -33,6 +36,9 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("SetHelpIndex", LuaFn_Game_SetHelpIndex);
 
 	obj->Register("GetHPAPSP", LuaFn_Game_GetHPAPSP);
+
+	obj->Register("GetState", LuaFn_Game_GetState);
+	obj->Register("SetState", LuaFn_Game_SetState);
 
 	obj->Register("GetBGMSEVol", LuaFn_Game_GetBGMSEVol);
 	obj->Register("SetBGMSEVol", LuaFn_Game_SetBGMSEVol);
@@ -281,6 +287,15 @@ int Export_Lua_Game::LuaFn_Game_BuyItem(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_Update(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	GameMain::getInstance()->Update();
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_GetMissionBGData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
@@ -375,17 +390,56 @@ int Export_Lua_Game::LuaFn_Game_GetHPAPSP(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
-	float nowhp = GameMain::getInstance()->nowhp;
-	float nowap = GameMain::getInstance()->nowap;
+	int nowhp = GameMain::getInstance()->nowhp;
+	int nowap = GameMain::getInstance()->nowap;
 	int nowsp = GameMain::getInstance()->nowsp;
 
-	node.PFloat(nowhp);
-	node.PFloat(nowap);
+	node.PInt(nowhp);
+	node.PInt(nowap);
 	node.PInt(nowsp);
 
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_GetState(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	int stateST;
+	int stateAction;
+	int stateStep;
+	GameMain::getInstance()->GetState(&stateST, &stateAction, &stateStep);
+
+	node.PInt(stateST);
+	node.PInt(stateAction);
+	node.PInt(stateStep);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetState(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	int stateST = node.iNextGet();
+	int stateAction = -1;
+	int stateStep = -1;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		stateAction = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			stateStep = node.iGet();
+		}
+	}
+
+	GameMain::getInstance()->SetState(stateST, stateAction, stateStep);
+
+	_LEAVEFUNC_LUA;
+}
 
 int Export_Lua_Game::LuaFn_Game_GetBGMSEVol(LuaState * ls)
 {

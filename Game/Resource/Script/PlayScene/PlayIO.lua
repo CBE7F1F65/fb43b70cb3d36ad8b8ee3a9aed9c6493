@@ -40,42 +40,6 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 		
 end
 
-function _PlayScene_RunHelp(toplayer, toptag)
-		
-	local helptype1, helpindex1, helptype2, helpindex2, helptype3, helpindex3 = game.GetMissionHelpData();
-
-	if helptype1 > 0 then
-		local enabled = game.GetHelpAccessInfo(helptype1, helpindex1);
-		
-		if not enabled then
-			game.SetHelpIndex(helptype1, helpindex1);
-			game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
-			return
-		end
-	end
-	
-	if helptype2 > 0 then
-		local enabled = game.GetHelpAccessInfo(helptype2, helpindex2);
-		if not enabled then
-			game.SetHelpIndex(helptype2, helpindex2);
-			game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
-			return
-		end
-	end
-	
-	if helptype3 > 0 then
-		local enabled = game.GetHelpAccessInfo(helptype3, helpindex3);
-		if not enabled then
-			game.SetHelpIndex(helptype3, helpindex3);
-			game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
-			return
-		end
-	end
-	
-	LGlobal_PlayData.PlayScene_EnterHelpFlag = -1;
-		
-end
-
 function PlayScene_OnInit(toplayer, toptag)
 	
 	local layertag = toptag;
@@ -124,8 +88,7 @@ function PlayScene_OnInit(toplayer, toptag)
 end
 
 function PlayScene_OnEnter(toplayer, toptag)
-end
-function PlayScene_OnEnterA(toplayer, toptag)
+	game.EnterMission();
 end
 
 function _PlayScene_AddHPAPSPItems(toplayer, toptag)
@@ -158,9 +121,9 @@ function _PlayScene_AddHPAPSPItems(toplayer, toptag)
 	
 	grouptag = layertag + CCTag_Menu_02;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
-	x = 432;
+	local xorig = 432;
 	for i=0, 3 do
-		x = x + i*32;
+		x = xorig + i*32;
 		
 		local spSP = game.CreateSprite(SI_GUI_SP, {x, y}, grouptag+i+1);
 		local nodesp = game.AddSpriteChild(spSP, {toplayer, layertag, grouptag});
@@ -221,7 +184,7 @@ end
 function _PlayScene_SetHPAPSP(toplayer, toptag)
 	
 	local hp, ap, sp = game.GetHPAPSP();
-		
+	
 	local layertag = toptag + CCTag_Layer_07;
 	local grouptag = layertag + CCTag_Menu_01;
 	
@@ -230,17 +193,18 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 	
 	if LGlobal_PlayData.nowhp ~= hp then
 		LGlobal_PlayData.nowhp = hp;
-		local hpscaleaction = game.ActionScale(CCAF_To, hp/100.0, 1, LConst_HPAPChangeTime, true);
+		local hpscaleaction = game.ActionScale(CCAF_To, hp/10000.0, 1, LConst_HPAPChangeTime, true);
 		game.RunAction(hpbar, hpscaleaction);
 	end
 	
 	if LGlobal_PlayData.nowap ~= ap then
 		LGlobal_PlayData.nowap = ap;
-		local apscaleaction = game.ActionScale(CCAF_To, ap/100.0, 1, LConst_HPAPChangeTime, true);
+		local apscaleaction = game.ActionScale(CCAF_To, ap/10000.0, 1, LConst_HPAPChangeTime, true);
 		game.RunAction(apbar, apscaleaction);
 	end
 	
 	local grouptag = layertag + CCTag_Menu_02;
+	
 	if LGlobal_PlayData.nowsp ~= sp then
 		local nowsp = LGlobal_PlayData.nowsp;
 		LGlobal_PlayData.nowsp = sp;
@@ -263,27 +227,57 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 	
 end
 
+function _PlayScene_AddTouchLayer(toplayer, toptag)
+	
+	local xcen = 480;
+	local ycen = 272;
+	local width = 960;
+	local height = 544;
+	
+	local layertag = toptag + CCTag_Layer_06;
+	
+	local touchlayer = game.AddTouchLayerChild(
+			{toplayer, {x, y, width, height}},
+			{toplayer, layertag},
+			{0, 0, CCTag_Layer_06, layertag+CCTag_Menu_01}
+		);
+	
+end
+
+function PlayScene_OnEnterA(toplayer, toptag)
+	LGlobal_PlayData.btrasitioning = true;
+end
+
 function PlayScene_OnEnterTDF(toplayer, toptag)
 	_PlayScene_AddMainItems(toplayer, toptag);
 	_PlayScene_AddHPAPSPItems(toplayer, toptag);
 	_PlayScene_SetHPAPSP(toplayer, toptag);
+	
+	_PlayScene_AddTouchLayer(toplayer, toptag);
 end
 
 function PlayScene_OnEnterTDFA(toplayer, toptag)
-	if LGlobal_PlayData.PlayScene_EnterHelpFlag < 3 then
-		LGlobal_PlayData.PlayScene_EnterHelpFlag = LGlobal_PlayData.PlayScene_EnterHelpFlag+4;
-	else
-		LGlobal_PlayData.PlayScene_EnterHelpFlag = -1;
-	end
-end
-function PlayScene_OnUpdate(toplayer, toptag)
-	if LGlobal_PlayData.PlayScene_EnterHelpFlag > 3 then
-		LGlobal_PlayData.PlayScene_EnterHelpFlag = LGlobal_PlayData.PlayScene_EnterHelpFlag-3;
-		_PlayScene_RunHelp(toplayer, toptag);
-	else
+	if LGlobal_PlayData.btrasitioning then
+		LGlobal_PlayData.btrasitioning = false;
 	end
 	
---	_PlayScene_SetHPAPSP(toplayer, toptag);
+	_PlayScene_StepForward(STATE_ShowHelp);
+
+end
+
+
+function PlayScene_OnUpdate(toplayer, toptag)
+	
+	if LGlobal_PlayData.btrasitioning then
+		return
+	end
+	
+	game.Update();
+	
+	_PlayScene_UpdateState(toplayer, toptag);
+		
+	_PlayScene_SetHPAPSP(toplayer, toptag);
+	
 end
 
 function PlayScene_OnExit(toplayer, toptag)

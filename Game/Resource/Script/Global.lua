@@ -75,9 +75,56 @@ function Debug_Log(str, toplayer, toptag)
 	end
 end
 
+function Debug_LogState(str, stateST, stateAction, stateStep, toplayer, toptag)
+	str = str.."	State:";
+	str = str.."	ST:	";
+	if stateST == STATE_ST_Null then
+		str = str.."Null";
+	elseif stateST == STATE_ST_Standby then
+		str = str.."Standby";
+	elseif stateST == STATE_ST_Progressing then
+		str = str.."Progressing";
+	elseif stateST == STATE_ST_StepForward then
+		str = str.."StepForward";
+	elseif stateST == STATE_ST_Error then
+		str = str.."Error";
+	elseif stateST == STATE_ST_Finished then
+		str = str.."Finished";
+	else
+		str = str.."??";
+	end
+	str = str.."	Action:	";
+	if stateAction == STATE_Waiting then
+		str = str.."Waiting";
+	elseif stateAction == STATE_ShowHelp then
+		str = str.."ShowHelp";
+	elseif stateAction == STATE_ShowTarget then
+		str = str.."ShowTarget";
+	elseif stateAction == STATE_EnemyEnter then
+		str = str.."EnemyEnter";
+	elseif stateAction == STATE_HPAPRegain then
+		str = str.."HPAPRegain";
+	elseif stateAction == STATE_ShowTurnStart then
+		str = str.."ShowTurnStart";
+	elseif stateAction == STATE_Planning then
+		str = str.."Planning";
+	elseif stateAction == STATE_SelfAction then
+		str = str.."SelfAction";
+	elseif stateAction == STATE_EnemyAction then
+		str = str.."EnemyAction";
+	elseif stateAction == STATE_Over then
+		str = str.."Over";
+	else
+		str = str.."??";
+	end
+	str = str.."	Step:	"..stateStep;
+	Debug_Log(str, toplayer, toptag);
+end
+
 MB	=	LGlobal_CallMessageBoxOnce;
 MBA	=	LGlobal_CallMessageBox;
 LOG	=	Debug_Log;
+LOGSTATE = Debug_LogState;
 
 RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;

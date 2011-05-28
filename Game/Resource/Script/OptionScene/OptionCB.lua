@@ -195,7 +195,7 @@ function _TitleScene_CB_BGMTouch_Ended(toplayer, toptag, touchlayer, index)
 	_TitleScene_CB_BGMTouch_SetValue(toplayer, toptag, touchlayer, index, CCTI_Moved);--CCTI_Ended
 end
 
-function _TitleScene_CB_SETouch_Canceled(toplayer, toptag, touchlayer, index)
+function _TitleScene_CB_BGMTouch_Canceled(toplayer, toptag, touchlayer, index)
 	_TitleScene_CB_BGMTouch_SetValue(toplayer, toptag, touchlayer, index, CCTI_Moved);--CCTI_Ended
 end
 

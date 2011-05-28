@@ -35,6 +35,7 @@ GameMain::GameMain()
 	nowsp = 0;
 
 	itemtypecount = 0;
+	stateflag = GAMESTATE_ST_NULL;
 }
 
 GameMain::~GameMain()
@@ -355,6 +356,7 @@ void GameMain::EnterMission()
 	nowap = M_GAMEAPMAX;
 	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
 	nowsp = BResource::getInstance()->missiondata[index].sp;
+	stateflag = GAMESTATE_ST_NULL;
 }
 
 bool GameMain::ClearMission()
@@ -373,6 +375,41 @@ bool GameMain::ClearMission()
 	}
 
 	return InsertScore(totalscore);
+}
+
+int GameMain::GetState(int *stateST/* =NULL */, int *stateAction/* =NULL */, int *stateStep/* =NULL */)
+{
+	if (stateST)
+	{
+		*stateST = stateflag&GAMESTATE_STMASK;
+	}
+	if (stateAction)
+	{
+		*stateAction = stateflag&GAMESTATE_ACTIONMASK;
+	}
+	if (stateStep)
+	{
+		*stateStep = stateflag&GAMESTATE_STEPMASK;
+	}
+	return stateflag;
+}
+
+int GameMain::SetState(int stateST, int stateAction/* =-1 */, int stateStep/* =-1 */)
+{
+	stateflag &= ~GAMESTATE_STMASK;
+	stateflag |= (stateST&GAMESTATE_STMASK);
+
+	if (stateAction >= 0)
+	{
+		stateflag &= ~GAMESTATE_ACTIONMASK;
+		stateflag |= (stateAction&GAMESTATE_ACTIONMASK);
+	}
+	if (stateStep >= 0)
+	{
+		stateflag &= ~GAMESTATE_STEPMASK;
+		stateflag |= (stateStep&GAMESTATE_STEPMASK);
+	}
+	return stateflag;
 }
 
 void GameMain::SaveData()
@@ -426,4 +463,85 @@ const char * GameMain::GetHiScoreUsername(int index)
 		return NULL;
 	}
 	return gamedata.hiscores[index].username;
+}
+
+
+bool GameMain::CheckMissionOver()
+{
+	// TODO
+	return false;
+}
+
+void GameMain::Update()
+{
+	int stateST;
+	int stateAction;
+	int stateStep;
+	GetState(&stateST, &stateAction, &stateStep);
+/*
+	if (stateST == GAMESTATE_ST_STANDBY)
+	{
+		stateST = GAMESTATE_ST_PROGRESSING;
+	}
+	else 
+*/
+	if (stateST == GAMESTATE_ST_STEPFORWARD)
+	{
+		stateStep++;
+//		stateST = GAMESTATE_ST_PROGRESSING;
+	}
+	else if (stateST == GAMESTATE_ST_FINISHED)
+	{
+		switch (stateAction)
+		{
+		case GAMESTATE_WAITING:
+			stateAction = GAMESTATE_SHOWHELP;
+			break;
+		case GAMESTATE_SHOWHELP:
+			stateAction = GAMESTATE_SHOWTARGET;
+			break;
+		case GAMESTATE_SHOWTARGET:
+			stateAction = GAMESTATE_ENEMYENTER;
+			break;
+
+		case GAMESTATE_ENEMYENTER:
+			stateAction = GAMESTATE_HPAPREGAIN;
+			break;
+		case GAMESTATE_HPAPREGAIN:
+			stateAction = GAMESTATE_SHOWTURNSTART;
+			break;
+		case GAMESTATE_SHOWTURNSTART:
+			stateAction = GAMESTATE_PLANNING;
+			break;
+		case GAMESTATE_PLANNING:
+			stateAction = GAMESTATE_SELFACTION;
+			break;
+
+		case GAMESTATE_SELFACTION:
+			if (CheckMissionOver())
+			{
+				stateAction = GAMESTATE_OVER;
+			}
+			else
+			{
+				stateAction = GAMESTATE_ENEMYACTION;
+			}
+			break;
+		case GAMESTATE_ENEMYACTION:
+			if (CheckMissionOver())
+			{
+				stateAction = GAMESTATE_OVER;
+			}
+			else
+			{
+				stateAction = GAMESTATE_ENEMYENTER;
+			}
+			break;
+		}
+		stateStep = 0;
+		stateST = GAMESTATE_ST_NULL;
+	}
+
+	stateflag = SetState(stateST, stateAction, stateStep);
+
 }

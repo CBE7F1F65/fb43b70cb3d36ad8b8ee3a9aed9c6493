@@ -143,7 +143,6 @@ function _MissionSelectScene_LeaveMainLayer(toplayer, toptag)
 end
 
 function MissionSelectScene_OnEnter(toplayer, toptag)
-	game.EnterMission();
 end
 
 function MissionSelectScene_OnEnterTDF(toplayer, toptag)

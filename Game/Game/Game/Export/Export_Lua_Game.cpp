@@ -28,6 +28,24 @@ _LObjNode Export_Lua_Game::node;
 
 bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 {
+	obj->SetInteger("STATE_ST_Null", GAMESTATE_ST_NULL);
+	obj->SetInteger("STATE_ST_Standby", GAMESTATE_ST_STANDBY);
+	obj->SetInteger("STATE_ST_Progressing", GAMESTATE_ST_PROGRESSING);
+	obj->SetInteger("STATE_ST_StepForward", GAMESTATE_ST_STEPFORWARD);
+	obj->SetInteger("STATE_ST_Error", GAMESTATE_ST_ERROR);
+	obj->SetInteger("STATE_ST_Finished", GAMESTATE_ST_FINISHED);
+
+	obj->SetInteger("STATE_Waiting", GAMESTATE_WAITING);
+	obj->SetInteger("STATE_ShowHelp", GAMESTATE_SHOWHELP);
+	obj->SetInteger("STATE_ShowTarget", GAMESTATE_SHOWTARGET);
+	obj->SetInteger("STATE_EnemyEnter", GAMESTATE_ENEMYENTER);
+	obj->SetInteger("STATE_HPAPRegain", GAMESTATE_HPAPREGAIN);
+	obj->SetInteger("STATE_ShowTurnStart", GAMESTATE_SHOWTURNSTART);
+	obj->SetInteger("STATE_Planning", GAMESTATE_PLANNING);
+	obj->SetInteger("STATE_SelfAction", GAMESTATE_SELFACTION);
+	obj->SetInteger("STATE_EnemyAction", GAMESTATE_ENEMYACTION);
+	obj->SetInteger("STATE_Over", GAMESTATE_OVER);
+
 	return true;
 }
 

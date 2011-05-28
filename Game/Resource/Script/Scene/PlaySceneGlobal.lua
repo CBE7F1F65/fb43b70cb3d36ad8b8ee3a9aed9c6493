@@ -2,6 +2,8 @@ LGlobal_PlayData =
 {
 	PlayScene_EnterHelpFlag = 0;
 	
+	btrasitioning = true;
+	
 	nowhp = 0;
 	nowap = 0;
 	nowsp = 0;
@@ -19,6 +21,7 @@ function LGlobal_PlayScene_InitGlobal(toplayer, toptag)
 	LGlobal_PlayData.nowsp = 0;
 	LGlobal_PlayData.pushedMenuData = {};
 	LGlobal_PlayData.itemCount = game.GetItemData();
+	LGlobal_PlayData.btrasitioning = true;
 end
 
 function LGobal_PushPlaySceneMenuData(itemtag, posdata)
