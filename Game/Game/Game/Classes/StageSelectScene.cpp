@@ -34,7 +34,7 @@ void StageSelectScene::MenuCallbackFunc(CCObject * sender)
 
 void StageSelectScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 bool StageSelectScene::init()

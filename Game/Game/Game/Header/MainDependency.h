@@ -8,6 +8,8 @@
 #include <list>
 #include <vector>
 
+using namespace std;
+
 #include "BMath.h"
 
 #define M_MIN(x,y) ((x) < (y)) ? (x) : (y)

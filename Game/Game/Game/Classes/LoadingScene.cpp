@@ -39,7 +39,7 @@ void LoadingScene::MenuCallbackFunc(CCObject * sender)
 
 void LoadingScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 bool LoadingScene::init()

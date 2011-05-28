@@ -68,6 +68,7 @@ struct itemData
 struct enemyData
 {
 	int siid;
+	int life;
 };
 
 #define M_MISSIONTARGETMAX	3

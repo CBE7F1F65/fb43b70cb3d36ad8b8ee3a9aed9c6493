@@ -1,7 +1,5 @@
 LGlobal_PlayData = 
-{
-	PlayScene_EnterHelpFlag = 0;
-	
+{	
 	btrasitioning = true;
 	
 	nowhp = 0;
@@ -15,7 +13,6 @@ LGlobal_PlayData =
 
 
 function LGlobal_PlayScene_InitGlobal(toplayer, toptag)
-	LGlobal_PlayData.PlayScene_EnterHelpFlag = 0;
 	LGlobal_PlayData.nowhp = 0;
 	LGlobal_PlayData.nowap = 0;
 	LGlobal_PlayData.nowsp = 0;

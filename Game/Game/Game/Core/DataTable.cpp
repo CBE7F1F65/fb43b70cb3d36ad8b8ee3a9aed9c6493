@@ -463,7 +463,7 @@ bool DataTable::ReadWeaponDefineTable()
 
 bool DataTable::ReadItemDefineTable()
 {
-	if (!CheckHeader(DATATYPE_EFFECTDEFINE))
+	if (!CheckHeader(DATATYPE_ITEMDEFINE))
 	{
 		return false;
 	}
@@ -500,8 +500,35 @@ bool DataTable::ReadItemDefineTable()
 
 bool DataTable::ReadEnemyDefineTable()
 {
+	if (!CheckHeader(DATATYPE_ENEMYDEFINE))
+	{
+		return false;
+	}
+
 	BResource * pbres = BResource::getInstance();
+
 	pbres->ClearEnemyData();
+
+
+	_READSTRINGBUFFERLINE(4);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		enemyData * item = &(pbres->enemydata[tindex]);
+		_CHECKEOF_DATATABLE;
+
+		fscanf(file, "%s%d", 
+			strbuffer[0], 
+			&(item->life));
+
+		_DOSWAPTINT;
+		_INITTINT;
+
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+	}
+
 	return true;
 }
 

@@ -34,7 +34,7 @@ void HelpScene::MenuCallbackFunc(CCObject * sender)
 
 void HelpScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 bool HelpScene::init()

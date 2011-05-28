@@ -19,13 +19,19 @@
 #define GAMESTATE_SHOWHELP		0x000100
 #define GAMESTATE_SHOWTARGET	0x000200
 #define GAMESTATE_ENEMYENTER	0x000300
-#define GAMESTATE_HPAPREGAIN	0x000400
-#define GAMESTATE_SHOWTURNSTART	0x000500
-#define GAMESTATE_PLANNING		0x000600
-#define GAMESTATE_SELFACTION	0x000700
-#define GAMESTATE_ENEMYACTION	0x000800
-#define GAMESTATE_OVER			0x000800
+#define GAMESTATE_ADDENEMY		0x000400
+#define GAMESTATE_HPAPREGAIN	0x000500
+#define GAMESTATE_SHOWTURNSTART	0x000600
+#define GAMESTATE_PLANNING		0x000700
+#define GAMESTATE_SELFACTION	0x000800
+#define GAMESTATE_ENEMYACTION	0x000900
+#define GAMESTATE_OVER			0x000A00
 
+
+struct EnemyInGameData 
+{
+	int itemtag;
+};
 
 class GameMain
 {
@@ -71,6 +77,8 @@ public:
 	void Update();
 	bool CheckMissionOver();
 
+	int AddEnemy(int itemtag, bool toscene=false);
+
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
 
@@ -99,12 +107,15 @@ public:
 	BYTE helpindex;
 
 	int missionscore;
-	int totalscore;
+	int totalscore;	// TODO(calculate on re enter mission)
 	int nowturn;
 
 	BYTE itemtypecount;
 
 	int stateflag;
+
+	vector<EnemyInGameData> enemyonside;
+	vector<EnemyInGameData> enemyinscene;
 
 public:
 	static GameMain * getInstance();

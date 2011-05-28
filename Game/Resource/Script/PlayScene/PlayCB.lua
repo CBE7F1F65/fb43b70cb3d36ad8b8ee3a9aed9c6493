@@ -1,6 +1,13 @@
-function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
 	if sublayertag == CCTag_Layer_14 then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
+		
+	-- Sprites
+	elseif sublayertag == CCTag_Layer_02 then
+		-- EnemyStateEvent
+		if selgrouptag == CCTag_Menu_11 then
+			return PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
+		end
 	
 	-- Main menu
 	elseif sublayertag == CCTag_Layer_08 then
@@ -33,6 +40,15 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 			return PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
+end
+
+function PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
+	local layertag = toptag + sublayertag;
+	local grouptag = layertag + selgrouptag;
+	
+	game.RemoveChild({toplayer, layertag, grouptag, grouptag+selitemtag});
+	local stateAction = LGlobal_GetData(dataindex);
+	_PlayScene_StepForward(stateAction);
 end
 
 function PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
@@ -214,11 +230,9 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 	
 	
 	if toquit then
-		local delayaction = game.ActionDelay(0.3);
-		local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+selitemtag+1});
-		local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+selitemtag+1});
-		game.RunAction(callnode, delayreplacesceneaction);
+		game.RunAction(callnode, callfuncaction);
 		
 		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
@@ -286,11 +300,9 @@ function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, se
 	
 	
 	if toquit then
-		local delayaction = game.ActionDelay(0.3);
-		local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+selitemtag+1});
-		local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_12+selitemtag+1});
-		game.RunAction(callnode, delayreplacesceneaction);
+		game.RunAction(callnode, callfuncaction);
 		
 		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
@@ -358,11 +370,9 @@ function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, se
 	
 	
 	if toquit then
-		local delayaction = game.ActionDelay(0.3);
-		local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+selitemtag+1});
-		local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_10+selitemtag+1});
-		game.RunAction(callnode, delayreplacesceneaction);
+		game.RunAction(callnode, callfuncaction);
 		
 		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
@@ -431,11 +441,9 @@ function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, se
 	
 	
 	if toquit then
-		local delayaction = game.ActionDelay(0.3);
-		local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+selitemtag+1});
-		local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_09+selitemtag+1});
-		game.RunAction(callnode, delayreplacesceneaction);
+		game.RunAction(callnode, callfuncaction);
 		
 		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);

@@ -37,7 +37,17 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
 			if _PlayScene_EnemyEnter(toplayer, toptag, stateStep) then
+				stateST = STATE_ST_Finished;
+			end
+		end
+	elseif stateAction == STATE_AddEnemy then
+		if stateST == STATE_ST_Null then
+			stateST  = STATE_ST_Standby;
+		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
+			if _PlayScene_AddEnemy(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
 		end
@@ -54,6 +64,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 	elseif stateAction == STATE_ShowTurnStart then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
+			game.AddTurn();
 		elseif stateST == STATE_ST_Standby then
 			if _PlayScene_ShowTurnStart(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
@@ -69,6 +80,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
 			if _PlayScene_SelfAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
@@ -77,6 +89,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
 			if _PlayScene_EnemyAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
@@ -132,7 +145,6 @@ function _PlayScene_ShowHelp(toplayer, toptag)
 		end
 	end
 	
---	LGlobal_PlayData.PlayScene_EnterHelpFlag = -1;
 	return true;
 		
 end
@@ -146,9 +158,72 @@ function _PlayScene_ShowTarget(toplayer, toptag)
 	return false;
 end
 
-function _PlayScene_EnemyEnter(toplayer, toptag, index)
+function _PlayScene_CalculatePos(x, y, elayer)
+	-- TODO
+	return x, y, 1, 1;
+end
+
+function _PlayScene_CreateEnemySprite(toplayer, toptag, siid, x, y, elayer)
+
+	local layertag = toptag + CCTag_Layer_02;
+	local grouptag = layertag + CCTag_Menu_04;
 	
+	local enemyinscenecount = game.GetActiveEnemyData();
+	local selitemtag = enemyinscenecount+1;
+	
+	x, y, xscale, yscale = _PlayScene_CalculatePos(x, y, elayer);
+	local spEnemy = game.CreateSprite(siid, {x, y, 0, xscale, yscale}, grouptag+selitemtag);
+	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, layertag, grouptag}, elayer);
+	
+	game.AddEnemy(grouptag+selitemtag, true);
+	
+	return enemynode, layertag, grouptag, selitemtag;
+end
+
+function _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
+	
+	--skip event mission
+	local eposturnitem = LGlobal_EnemyPosTable[nowstage+1][nowmission][1];
+	if index >= table.getn(eposturnitem) then
+		return true;
+	end
+		
+	local epositem = eposturnitem[index+1];
+	local x, y, etype, elayer = epositem[1], epositem[2], epositem[3], epositem[4];
+	local siid, life = game.GetEnemyTypeData(etype);
+	
+	local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySprite(toplayer, toptag, siid, x, y, elayer);
+	
+	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
+	
+	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
+	game.RunAction(enemynode, enemyaction);
+	
+	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
+	
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
+	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnode = game.AddNullChild({toplayer, layertag, grouptag, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	game.RunAction(callnode, callfuncaction);
+	
+end
+
+function _PlayScene_EnemyEnter(toplayer, toptag, index)
+
 	-- Check all enemy in
+	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
+	if nowturn == 0 then
+		if _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission) then
+			return true;
+		end
+	end
+	
+	return false;
+end
+
+function _PlayScene_AddEnemy(toplayer, toptag, index)
+	
+	-- Check all enemy added
 	if true then
 		return true;
 	end

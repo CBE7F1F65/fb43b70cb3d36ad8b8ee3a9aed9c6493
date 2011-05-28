@@ -1,6 +1,7 @@
 #include "Export_Lua_Game.h"
 #include "../Header/GameMain.h"
 #include "../Header/DataStruct.h"
+#include "../Header/BResource.h"
 
 bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 {
@@ -17,7 +18,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("EnableMission", LuaFn_Game_EnableMission);
 	obj->Register("TryStage", LuaFn_Game_TryStage);
 	obj->Register("TryMission", LuaFn_Game_TryMission);
-	obj->Register("GetNowStageMission", LuaFn_Game_GetNowStageMission);
+	obj->Register("GetNowStageMissionTurn", LuaFn_Game_GetNowStageMissionTurn);
 
 	obj->Register("GetItemData", LuaFn_Game_GetItemData);
 	obj->Register("UseItem", LuaFn_Game_UseItem);
@@ -25,6 +26,8 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 
 
 	obj->Register("Update", LuaFn_Game_Update);
+
+	obj->Register("AddTurn", LuaFn_Game_AddTurn);
 
 	obj->Register("GetMissionBGData", LuaFn_Game_GetMissionBGData);
 	obj->Register("GetMissionHelpData", LuaFn_Game_GetMissionHelpData);
@@ -36,6 +39,10 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("SetHelpIndex", LuaFn_Game_SetHelpIndex);
 
 	obj->Register("GetHPAPSP", LuaFn_Game_GetHPAPSP);
+
+	obj->Register("GetEnemyTypeData", LuaFn_Game_GetEnemyTypeData);
+	obj->Register("AddEnemy", LuaFn_Game_AddEnemy);
+	obj->Register("GetActiveEnemyData", LuaFn_Game_GetActiveEnemyData);
 
 	obj->Register("GetState", LuaFn_Game_GetState);
 	obj->Register("SetState", LuaFn_Game_SetState);
@@ -224,15 +231,17 @@ int Export_Lua_Game::LuaFn_Game_ClearMission(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
-int Export_Lua_Game::LuaFn_Game_GetNowStageMission(LuaState * ls)
+int Export_Lua_Game::LuaFn_Game_GetNowStageMissionTurn(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
 	int stageindex = GameMain::getInstance()->nowstage;
 	int missionindex = GameMain::getInstance()->nowmission;
+	int nowturn = GameMain::getInstance()->nowturn;
 
 	node.PInt(stageindex);
 	node.PInt(missionindex);
+	node.PInt(nowturn);
 
 	_LEAVEFUNC_LUA;
 }
@@ -292,6 +301,15 @@ int Export_Lua_Game::LuaFn_Game_Update(LuaState * ls)
 	_ENTERFUNC_LUA(0);
 
 	GameMain::getInstance()->Update();
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddTurn(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	(GameMain::getInstance()->nowturn)++;
 
 	_LEAVEFUNC_LUA;
 }
@@ -397,6 +415,82 @@ int Export_Lua_Game::LuaFn_Game_GetHPAPSP(LuaState * ls)
 	node.PInt(nowhp);
 	node.PInt(nowap);
 	node.PInt(nowsp);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetEnemyTypeData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// type
+
+	int _etype = node.iNextGet();
+
+	enemyData * item = &(BResource::getInstance()->enemydata[_etype]);
+	
+	node.PInt(item->siid);
+	node.PInt(item->life);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// itemtag, binscene -> count
+
+	int _itemtag = node.iNextGet();
+	bool _toscene = false;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_toscene = node.bGet();
+	}
+
+	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _toscene);
+	node.PInt(enemycount);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// -> inscenecount, onsidecount
+	// index, binscene -> itemtag
+
+	if (!node.argscount)
+	{
+		int inscenecount = GameMain::getInstance()->enemyinscene.size();
+		int onsidecount = GameMain::getInstance()->enemyonside.size();
+
+		node.PInt(inscenecount);
+		node.PInt(onsidecount);
+	}
+	else
+	{
+		int _index = node.iNextGet();
+		bool _binscene = true;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_binscene = node.bGet();
+		}
+
+		int itemtag = -1;
+		if (_binscene)
+		{
+			itemtag = GameMain::getInstance()->enemyinscene[_index].itemtag;
+		}
+		else
+		{
+			itemtag = GameMain::getInstance()->enemyonside[_index].itemtag;
+		}
+		node.PInt(itemtag);
+	}
 
 	_LEAVEFUNC_LUA;
 }

@@ -34,7 +34,7 @@ void HelloWorldScene::MenuCallbackFunc(CCObject * sender)
 
 void HelloWorldScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 

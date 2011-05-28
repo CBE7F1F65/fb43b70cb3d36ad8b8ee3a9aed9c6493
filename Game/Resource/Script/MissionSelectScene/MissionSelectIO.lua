@@ -21,7 +21,7 @@ function MissionSelectScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
-	local nowstage = game.GetNowStageMission();
+	local nowstage = game.GetNowStageMissionTurn();
 	local spMissionSelect = game.CreateSprite(SI_World01_Scene+nowstage, {480, 320});
 	game.AddSpriteChild(spMissionSelect, {toplayer, layertag});
 	
@@ -33,7 +33,7 @@ end
 
 function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	
-	local nowstage = game.GetNowStageMission();
+	local nowstage = game.GetNowStageMissionTurn();
 	local postable = LGlobal_MissionSelect_NodePos[nowstage+1];
 	local nodecount = table.getn(postable);
 		

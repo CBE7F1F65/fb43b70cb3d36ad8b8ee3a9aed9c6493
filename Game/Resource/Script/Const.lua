@@ -10,3 +10,8 @@ LConst_HPAPChangeTime = 0.5;
 LConst_SPChangeTime = 0.5;
 
 LConst_CommandCount = 4;
+
+LConst_DelayActionTime = 0.3;
+
+LConst_EnemySpriteFadeTime = 0.3;
+LConst_EnemyEnterDelayTime = 0.1;

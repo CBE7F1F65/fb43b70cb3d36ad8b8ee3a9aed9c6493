@@ -232,10 +232,10 @@ bool Export_Lua_Scene::ExecuteIOScene(BYTE flag, CCLayer *toplayer, int toptag)
 	return bret;
 }
 
-bool Export_Lua_Scene::ExecuteCBScene(int tag, CCLayer * toplayer)
+bool Export_Lua_Scene::ExecuteCBScene(int tag, CCLayer * toplayer, int dataindex /* = -1 */)
 {
 	LuaState * ls = state;
-	bool bret = (*cbScene)(tag, CDOUBLEN(toplayer), tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK);
+	bool bret = (*cbScene)(tag, CDOUBLEN(toplayer), tag&KTAG_SCENELAYERMASK, tag&KTAG_SUBLAYERMASK, tag&KTAG_MENUGROUPMASK, tag&KTAG_MENUITEMMASK, dataindex);
 	if (state->CheckError())
 	{
 		Export_Lua::ShowError(LUAERROR_LUAERROR, state->GetError());

@@ -106,11 +106,13 @@ public:
 	static int LuaFn_Game_EnableMission(LuaState * ls);
 	static int LuaFn_Game_TryStage(LuaState * ls);
 	static int LuaFn_Game_TryMission(LuaState * ls);
-	static int LuaFn_Game_GetNowStageMission(LuaState * ls);
+	static int LuaFn_Game_GetNowStageMissionTurn(LuaState * ls);
 
 	// In Game
 
 	static int LuaFn_Game_Update(LuaState * ls);
+
+	static int LuaFn_Game_AddTurn(LuaState * ls);
 
 	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
 	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
@@ -122,6 +124,10 @@ public:
 	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
 
 	static int LuaFn_Game_GetHPAPSP(LuaState * ls);
+
+	static int LuaFn_Game_GetEnemyTypeData(LuaState * ls);
+	static int LuaFn_Game_AddEnemy(LuaState * ls);
+	static int LuaFn_Game_GetActiveEnemyData(LuaState * ls);
 
 	static int LuaFn_Game_GetState(LuaState * ls);
 	static int LuaFn_Game_SetState(LuaState * ls);

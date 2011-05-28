@@ -25,7 +25,7 @@ public:
 	static bool InitCallbacks();
 
 	static bool ExecuteIOScene(BYTE flag, CCLayer *toplayer, int toptag);
-	static bool ExecuteCBScene(int tag, CCLayer * toplayer);
+	static bool ExecuteCBScene(int tag, CCLayer * toplayer, int dataindex=-1);
 
 	static bool ExecuteCBInputLayer(int tag, CCLayer * toplayer, int eventtag, const char * text);
 

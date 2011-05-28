@@ -43,44 +43,48 @@ end
 function PlayScene_OnInit(toplayer, toptag)
 	
 	local layertag = toptag;
+	local grouptag = layertag;
 	
 	-- BG Frame
-	local layertag = toptag + CCTag_Layer_00;
+	layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
 	_PlayScene_AddBGItems(toplayer, toptag);
 	
 	-- ObjBG
-	local layertag = toptag + CCTag_Layer_01;
+	layertag = toptag + CCTag_Layer_01;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
 	
 	-- Sprites
-	local layertag = toptag + CCTag_Layer_02;
+	layertag = toptag + CCTag_Layer_02;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_02, layertag});
+	-- Enemies
+	grouptag = layertag+CCTag_Menu_04;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Layer_02+CCTag_Menu_04, grouptag});
 	
 	-- ObjFG
-	local layertag = toptag + CCTag_Layer_03;
+	layertag = toptag + CCTag_Layer_03;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_03, layertag});
 	
 	-- Message
-	local layertag = toptag + CCTag_Layer_05;
+	layertag = toptag + CCTag_Layer_05;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_05, layertag});
 	
 	-- Touch
-	local layertag = toptag + CCTag_Layer_06;
+	layertag = toptag + CCTag_Layer_06;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_06, layertag});
 	
 	-- HPAPSP
-	local layertag = toptag + CCTag_Layer_07;
+	layertag = toptag + CCTag_Layer_07;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_07, layertag});
 	
 	-- Menu
-	local layertag = toptag + CCTag_Layer_08;
+	layertag = toptag + CCTag_Layer_08;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_08, layertag});
 	
 	
 	-- Clear GameOver
-	local layertag = toptag + CCTag_Layer_10;
+	layertag = toptag + CCTag_Layer_10;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_10, layertag});
 	
 	LGlobal_PlayScene_InitGlobal(toplayer, toptag);

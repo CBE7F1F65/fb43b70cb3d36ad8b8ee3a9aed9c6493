@@ -102,6 +102,8 @@ function Debug_LogState(str, stateST, stateAction, stateStep, toplayer, toptag)
 		str = str.."ShowTarget";
 	elseif stateAction == STATE_EnemyEnter then
 		str = str.."EnemyEnter";
+	elseif stateAction == STATE_AddEnemy then
+		str = str.."AddEnemy";
 	elseif stateAction == STATE_HPAPRegain then
 		str = str.."HPAPRegain";
 	elseif stateAction == STATE_ShowTurnStart then
@@ -141,4 +143,41 @@ function Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag)
 	if selitemtag == 1 then
 		game.ReplaceScene(ktag_LoadingSceneLayer);
 	end
+end
+
+LGlobal_Data = {};
+LGlobal_Data_EmptyIndex = {};
+
+function LGlobal_SaveData(data)
+	
+	local dataindex = -1;
+	local emptycount = table.getn(LGlobal_Data_EmptyIndex);
+	if emptycount > 0 then
+		dataindex = LGlobal_Data_EmptyIndex[emptycount];
+		LGlobal_Data_EmptyIndex[emptycount] = nil;
+	end
+	
+	if dataindex < 0 then
+		local datacount = table.getn(LGlobal_Data);
+		dataindex = datacount+1;
+	end
+	
+	LGlobal_Data[dataindex] = data;
+	return dataindex;
+	
+end
+
+function LGlobal_GetData(dataindex, bremove)
+	if bremove == nil then
+		bremove = true;
+	end	
+	local item = LGlobal_Data[dataindex];
+	if bremove then
+		if dataindex ~= table.getn(LGlobal_Data) then
+			local emptycount = table.getn(LGlobal_Data_EmptyIndex);
+			LGlobal_Data_EmptyIndex[emptycount] = dataindex;
+		end
+		LGlobal_Data[dataindex] = nil;
+	end
+	return item;
 end

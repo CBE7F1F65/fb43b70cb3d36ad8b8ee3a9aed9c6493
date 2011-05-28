@@ -39,6 +39,8 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("STATE_ShowHelp", GAMESTATE_SHOWHELP);
 	obj->SetInteger("STATE_ShowTarget", GAMESTATE_SHOWTARGET);
 	obj->SetInteger("STATE_EnemyEnter", GAMESTATE_ENEMYENTER);
+
+	obj->SetInteger("STATE_AddEnemy", GAMESTATE_ADDENEMY);
 	obj->SetInteger("STATE_HPAPRegain", GAMESTATE_HPAPREGAIN);
 	obj->SetInteger("STATE_ShowTurnStart", GAMESTATE_SHOWTURNSTART);
 	obj->SetInteger("STATE_Planning", GAMESTATE_PLANNING);
@@ -700,7 +702,6 @@ int Export_Lua_Game::LuaFn_Game_AddSpriteChild(LuaState * ls)
 		if (nownode)
 		{
 			int _zOrder = 0;
-			int _tag = kCCNodeTagInvalid;
 
 			node.jNextGet();
 			if (node.bhavenext)
@@ -1748,10 +1749,11 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// {nodelist}
+	// {nodelist}, delaytime, dataindex
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
+
 		int scenetag = kCCNodeTagInvalid;
 		_LObjNode tcnode(ls, &(node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
@@ -1768,8 +1770,32 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 		{
 			break;
 		}
-		CCAction * retval = CCCallFuncND::actionWithTarget(proto, (SEL_CallFuncND)cbndfunc, NULL);
-		node.PDword((DWORD)retval);
+
+		float _delaytime = 0;
+		int _dataindex = -1;
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_delaytime = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_dataindex = node.iGet();
+			}
+		}
+
+		CCAction * callfuncaction = CCCallFuncND::actionWithTarget(proto, (SEL_CallFuncND)cbndfunc, (void*)_dataindex);
+
+		if (_delaytime > 0)
+		{
+			CCFiniteTimeAction * delayaction = CCDelayTime::actionWithDuration(_delaytime);
+			CCFiniteTimeAction * delayedcallfuncaction = CCSequence::actionOneTwo(delayaction, (CCFiniteTimeAction*)callfuncaction);
+			node.PDword((DWORD)delayedcallfuncaction);
+		}
+		else
+		{
+			node.PDword((DWORD)callfuncaction);
+		}
 	}
 
 	_LEAVEFUNC_LUA;

@@ -1,4 +1,4 @@
-function StageSelectScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function StageSelectScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
 	if sublayertag == CCTag_Layer_14 then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 	
@@ -53,11 +53,9 @@ function StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, se
 
 			game.RunAction(menus[i+1], selectedaction);
 			
-			local delayaction = game.ActionDelay(0.3);
-			local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
-			local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+			local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
-			game.RunAction(callnode, delayreplacesceneaction);
+			game.RunAction(callnode, callfuncaction);
 			
 		end
 	end

@@ -357,6 +357,12 @@ void GameMain::EnterMission()
 	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
 	nowsp = BResource::getInstance()->missiondata[index].sp;
 	stateflag = GAMESTATE_ST_NULL;
+
+	missionscore = 0;
+	nowturn = 0;
+
+	enemyonside.clear();
+	enemyinscene.clear();
 }
 
 bool GameMain::ClearMission()
@@ -472,6 +478,24 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
+int GameMain::AddEnemy(int _itemtag, bool toscene/* =false */)
+{
+	EnemyInGameData _edata;
+	_edata.itemtag = _itemtag;
+	int retval = 0;
+	if (toscene)
+	{
+		enemyinscene.push_back(_edata);
+		retval = enemyinscene.size();
+	}
+	else
+	{
+		enemyonside.push_back(_edata);
+		retval = enemyonside.size();
+	}
+	return retval;
+}
+
 void GameMain::Update()
 {
 	int stateST;
@@ -503,8 +527,11 @@ void GameMain::Update()
 		case GAMESTATE_SHOWTARGET:
 			stateAction = GAMESTATE_ENEMYENTER;
 			break;
-
 		case GAMESTATE_ENEMYENTER:
+			stateAction = GAMESTATE_ADDENEMY;
+			break;
+
+		case GAMESTATE_ADDENEMY:
 			stateAction = GAMESTATE_HPAPREGAIN;
 			break;
 		case GAMESTATE_HPAPREGAIN:
@@ -534,9 +561,10 @@ void GameMain::Update()
 			}
 			else
 			{
-				stateAction = GAMESTATE_ENEMYENTER;
+				stateAction = GAMESTATE_ADDENEMY;
 			}
 			break;
+
 		}
 		stateStep = 0;
 		stateST = GAMESTATE_ST_NULL;

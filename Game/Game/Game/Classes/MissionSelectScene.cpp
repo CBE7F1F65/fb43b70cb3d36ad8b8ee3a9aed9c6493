@@ -34,7 +34,7 @@ void MissionSelectScene::MenuCallbackFunc(CCObject * sender)
 
 void MissionSelectScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 bool MissionSelectScene::init()

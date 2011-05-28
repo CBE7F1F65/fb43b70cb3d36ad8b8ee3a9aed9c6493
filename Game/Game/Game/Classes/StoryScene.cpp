@@ -34,7 +34,7 @@ void StoryScene::MenuCallbackFunc(CCObject * sender)
 
 void StoryScene::NodeCallbackFunc(CCNode *sender, void *data)
 {
-	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this);
+	Export_Lua_Scene::ExecuteCBScene(sender->getTag(), this, (int)data);
 }
 
 bool StoryScene::init()

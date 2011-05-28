@@ -48,11 +48,9 @@ function TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgroupt
 			game.RunAction(menus[i+1], selectedaction);
 			
 			if toquit then
-				local delayaction = game.ActionDelay(0.3);
-				local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
-				local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
-				game.RunAction(callnode, delayreplacesceneaction);
+				game.RunAction(callnode, callfuncaction);
 			end
 			
 		end
@@ -110,11 +108,9 @@ function TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, s
 			game.RunAction(menus[i+1], selectedaction);
 			
 			if toquit then
-				local delayaction = game.ActionDelay(0.3);
-				local callfuncaction = game.ActionCallFunc({toplayer, layertag, grouptag, grouptag+i+1});
-				local delayreplacesceneaction = game.ActionSequence({delayaction, callfuncaction});
+				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
 				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+i+1});
-				game.RunAction(callnode, delayreplacesceneaction);
+				game.RunAction(callnode, callfuncaction);
 			end
 			
 		end
