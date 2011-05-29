@@ -32,7 +32,12 @@ public:
 	static bool ExecuteCBTouchLayer(int tag, CCLayer * toplayer, int eventtag, CCLayer * thislayer, int index);
 
 	static void _GetSceneMenuCallback(int scenetag, SEL_MenuHandler * cbfunc=NULL, SEL_CallFuncND * cbndfunc=NULL);
-	static int _GetTopTag(int scenetag);
+
+	static int inline _GetTopTag(int itemtag);
+	static int inline _GetSubLayerTag(int itemtag);
+	static int inline _GetMenuGroupTag(int itemtag);
+	static int inline _GetMenuItemTag(int itemtag);
+
 	static CCScene * _GetNewScene(int scenetag);
 
 public:

@@ -1,3 +1,12 @@
-130	h5nc	59	
-Comment	Index	SIID	Life
--	0	SI_Enemy_Soldier	1200
+130	h5nc	59								
+Comment	Index	SIID	SideSIID	Life	eLayer	eLayerAdvance	ATK_00	ATK_01	ATK_02	ATK_03
+-	0	SI_Enemy_Soldier	SI_Enemy_Soldier	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	1	SI_Enemy_Warrior	SI_Enemy_Warrior	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	2	SI_Enemy_Magician	SI_Enemy_Magician	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	3	SI_Enemy_Rifle	SI_Enemy_Rifle	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	4	SI_Enemy_Angel	SI_Enemy_Angel	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	5	SI_Enemy_Shield	SI_Enemy_Shield	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	6	SI_Enemy_Ghost	SI_Enemy_Ghost	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	7	SI_Enemy_Ninja	SI_Enemy_Ninja	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	8	SI_Enemy_Archer	SI_Enemy_Archer	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120
+-	9	SI_Enemy_Boss	SI_Enemy_Boss	1200	CCZ_eLayer_01	CCZ_eLayer_01	120	120	120	120

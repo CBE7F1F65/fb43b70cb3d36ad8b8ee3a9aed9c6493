@@ -68,7 +68,11 @@ struct itemData
 struct enemyData
 {
 	int siid;
+	int sidesiid;
 	int life;
+	int elayer;
+	int elayeradvance;
+	int atk[M_ENEMY_ELAYERMAX];
 };
 
 #define M_MISSIONTARGETMAX	3

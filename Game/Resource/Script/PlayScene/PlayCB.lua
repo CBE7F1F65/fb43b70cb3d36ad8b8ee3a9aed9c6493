@@ -1,16 +1,16 @@
 function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
 	if sublayertag == CCTag_Layer_14 then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
-		
-	-- Sprites
-	elseif sublayertag == CCTag_Layer_02 then
+	
+	-- Enemy
+	elseif sublayertag == CCTag_Layer_02 or sublayertag == CCTag_Layer_08 then
 		-- EnemyStateEvent
 		if selgrouptag == CCTag_Menu_11 then
 			return PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
 		end
 	
 	-- Main menu
-	elseif sublayertag == CCTag_Layer_08 then
+	elseif sublayertag == CCTag_Layer_10 then
 		-- Main menu
 		if selgrouptag == CCTag_Menu_01 then
 			return PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
@@ -46,8 +46,8 @@ function PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, se
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + selgrouptag;
 	
-	game.RemoveChild({toplayer, layertag, grouptag, grouptag+selitemtag});
-	local stateAction = LGlobal_GetData(dataindex);
+	game.RemoveChild({toplayer, grouptag+selitemtag});
+	local stateAction = LGlobal_GetData(dataindex);	
 	_PlayScene_StepForward(stateAction);
 end
 

@@ -14,6 +14,10 @@ bool Export_Lua::_LuaRegistFunction(LuaObject * obj)
 {
 	LuaObject _globalobj = obj->CreateTable("global");
 	_globalobj.Register("Calculate", LuaFn_Global_Calculate);
+	_globalobj.Register("AMA", LuaFn_Global_AMA);
+	_globalobj.Register("RMA", LuaFn_Global_RMA);
+	_globalobj.Register("SINT", LuaFn_Global_SINT);
+	_globalobj.Register("COST", LuaFn_Global_COST);
 	_globalobj.Register("DIST", LuaFn_Global_DIST);
 	_globalobj.Register("DIST2", LuaFn_Global_DIST2);
 	_globalobj.Register("SIGN", LuaFn_Global_SIGN);
@@ -375,6 +379,62 @@ int Export_Lua::LuaFn_Global_Calculate(LuaState * ls)
 	{
 		_LuaHelper_PushLONGLONG(ls, lret);
 	}
+	return 1;
+}
+
+int Export_Lua::LuaFn_Global_AMA(LuaState * ls)
+{
+	LuaStack args(ls);
+	int iret;
+
+	int _a = 0;
+
+	if (args.Count() > 4)
+	{
+		_a = args[5].GetInteger();
+	}
+	iret = aMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _a);
+
+	ls->PushInteger(iret);
+	return 1;
+}
+
+int Export_Lua::LuaFn_Global_RMA(LuaState * ls)
+{
+	LuaStack args(ls);
+	int iret;
+
+	float _r = 0.0f;
+
+	if (args.Count() > 4)
+	{
+		_r = args[5].GetNumber();
+	}
+	iret = rMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _r);
+
+	ls->PushInteger(iret);
+	return 1;
+}
+
+int Export_Lua::LuaFn_Global_SINT(LuaState * ls)
+{
+	LuaStack args(ls);
+	lua_Number lnret;
+
+	lnret = sint(args[1].GetInteger());
+
+	ls->PushNumber(lnret);
+	return 1;
+}
+
+int Export_Lua::LuaFn_Global_COST(LuaState * ls)
+{
+	LuaStack args(ls);
+	lua_Number lnret;
+
+	lnret = cost(args[1].GetInteger());
+
+	ls->PushNumber(lnret);
 	return 1;
 }
 

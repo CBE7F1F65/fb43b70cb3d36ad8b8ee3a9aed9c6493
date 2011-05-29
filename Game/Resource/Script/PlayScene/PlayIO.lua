@@ -28,6 +28,11 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 	local bgsiid = game.GetMissionBGData();
 	local spBG = game.CreateSprite(bgsiid, {480, 336});
 	game.AddSpriteChild(spBG, {toplayer, layertag});
+		
+end
+
+function _PlayScene_AddFrameItems(toplayer, toptag)
+	local layertag = toptag+CCTag_Layer_05;
 	
 	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608});
 	game.AddSpriteChild(spTopPanel, {toplayer, layertag});
@@ -37,7 +42,6 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 	game.AddSpriteChild(spLeftPanel, {toplayer, layertag});
 	local spRightPanel = game.CreateSprite(SI_GUI_RightPanel, {928, 368});
 	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
-		
 end
 
 function PlayScene_OnInit(toplayer, toptag)
@@ -45,7 +49,7 @@ function PlayScene_OnInit(toplayer, toptag)
 	local layertag = toptag;
 	local grouptag = layertag;
 	
-	-- BG Frame
+	-- BG
 	layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
@@ -55,20 +59,23 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_01;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
 	
-	-- Sprites
+	-- Enemies
 	layertag = toptag + CCTag_Layer_02;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_02, layertag});
-	-- Enemies
-	grouptag = layertag+CCTag_Menu_04;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Layer_02+CCTag_Menu_04, grouptag});
 	
 	-- ObjFG
 	layertag = toptag + CCTag_Layer_03;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_03, layertag});
 	
 	-- Message
+	layertag = toptag + CCTag_Layer_04;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_04, layertag});
+	
+	-- Frame
 	layertag = toptag + CCTag_Layer_05;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_05, layertag});
+	
+	_PlayScene_AddFrameItems(toplayer, toptag);
 	
 	-- Touch
 	layertag = toptag + CCTag_Layer_06;
@@ -78,14 +85,18 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_07;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_07, layertag});
 	
-	-- Menu
+	-- Enemies On Side
 	layertag = toptag + CCTag_Layer_08;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_08, layertag});
 	
-	
-	-- Clear GameOver
+	-- Menu
 	layertag = toptag + CCTag_Layer_10;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_10, layertag});
+	
+	
+	-- Clear GameOver
+	layertag = toptag + CCTag_Layer_12;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_12, layertag});
 	
 	LGlobal_PlayScene_InitGlobal(toplayer, toptag);
 			
@@ -148,7 +159,7 @@ function _PlayScene_AddMainItems(toplayer, toptag)
 	local spSelectedMenus = {};
 	local spDisabledMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_08;
+	local layertag = toptag + CCTag_Layer_10;
 	local grouptag = layertag + CCTag_Menu_01;
 	
 	for i=0, 3 do

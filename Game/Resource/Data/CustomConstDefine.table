@@ -48,3 +48,19 @@ Comment	CustomConst	Name	Value
 -	84	CCTag_MenuSub_12	0x00000d00
 -	85	CCTag_MenuSub_13	0x00000e00
 -	86	CCTag_MenuSub_14	0x00000f00
+#		eLayer	
+-	90	CCZ_eLayer_01	0x01000000
+-	91	CCZ_eLayer_02	0x02000000
+-	92	CCZ_eLayer_03	0x03000000
+-	99	CCZ_Max	0x00ffffff
+#		eType	
+-	100	CC_eType_Soldier	0
+-	101	CC_eType_Warrior	1
+-	102	CC_eType_Magician	2
+-	103	CC_eType_Rifle	3
+-	104	CC_eType_Angel	4
+-	105	CC_eType_Shield	5
+-	106	CC_eType_Ghost	6
+-	107	CC_eType_Ninja	7
+-	108	CC_eType_Archer	8
+-	109	CC_eType_Boss	9

@@ -128,6 +128,8 @@ MBA	=	LGlobal_CallMessageBox;
 LOG	=	Debug_Log;
 LOGSTATE = Debug_LogState;
 
+DtoI = luastate.DWORDToInt;
+
 RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;
 

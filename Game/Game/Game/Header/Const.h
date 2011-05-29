@@ -76,3 +76,6 @@ enum
 #define M_TOUCH_MINIMUMPRESSDURATION	0.5f
 
 #define M_TOUCHMAX	2
+
+#define M_ENEMYMAX	64
+#define M_ENEMY_ELAYERMAX	4

@@ -22,6 +22,9 @@ int randts(int *seed);
 int randt(int imin, int imax=RAND_MAX, int *seed=NULL);
 float randtf(float fmin=0.0f, float fmax=1.0f, int *seed=NULL);
 
+int aMainAngle(float orix, float oriy, float aimx, float aimy, int a=0);
+int rMainAngle(float orix, float oriy, float aimx, float aimy, float r=0);
+
 #ifdef BUSE_MATHTABLE
 
 struct mathTable

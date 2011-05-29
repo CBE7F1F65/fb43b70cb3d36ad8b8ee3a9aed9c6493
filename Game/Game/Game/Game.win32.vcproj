@@ -476,6 +476,10 @@
 				RelativePath=".\Classes\TouchLayer.h"
 				>
 			</File>
+			<File
+				RelativePath=".\Header\VectorList.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="resource"

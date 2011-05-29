@@ -28,6 +28,7 @@ public:
 
 	void ReleaseCustomConst();
 	void MallocCustomConst();
+	bool GetCustomConstDataByName(const char * name, int * value);
 
 	void ClearCustomConstData();
 	void ClearMusicData();

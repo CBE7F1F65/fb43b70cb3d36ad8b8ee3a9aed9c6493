@@ -1,5 +1,7 @@
 #include "../Header/BMath.h"
 
+#include "../Header/MainDependency.h"
+
 #ifdef BUSE_MATHTABLE
 
 mathTable mathtable[] =
@@ -9107,4 +9109,51 @@ float randtf(float fmin, float fmax, int *seed)
 		fret = fmin;
 	}
 	return fret;
+}
+
+int aMainAngle(float orix, float oriy, float aimx, float aimy, int a/* =0 */)
+{
+	//a>0 clockwise
+	//a<0 counterclockwise
+	float dx = aimx - orix;
+	float dy = aimx - oriy;
+	float atanA;
+	if(dx == 0)
+	{
+		if(dy >= 0)
+			atanA = M_PI_2;
+		else
+			atanA = -M_PI_2;
+	}
+	else
+		atanA = atan2f(dy, dx);
+	//	if(dx < 0)
+	//		atanA += M_PI;
+	return ANGLE(atanA)+a;
+}
+
+int rMainAngle(float orix, float oriy, float aimx, float aimy, float r/* =0 */)
+{
+	//r>0 clockwise
+	//r<0 counterclockwise
+	float dx = aimx - orix;
+	float dy = aimx - oriy;
+	float atanA, atanB;
+
+	if(dx == 0)
+	{
+		if(dy >= 0)
+			atanA = M_PI_2;
+		else
+			atanA = -M_PI_2;
+	}
+	else
+		atanA = atan2f(dy, dx);
+	//	if(dx < 0)
+	//		atanA += M_PI;
+	if(r == 0)
+		atanB = 0;
+	else
+		atanB = atan2f(r, sqrt(dx*dx + dy*dy));
+	return ANGLE(atanA + atanB);
 }

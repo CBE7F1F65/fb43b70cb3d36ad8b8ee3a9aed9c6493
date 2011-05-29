@@ -3,6 +3,10 @@
 
 #include "GameData.h"
 #include "StageMissionData.h"
+#include "VectorList.h"
+
+#include "cocos2d.h"
+using namespace cocos2d;
 
 #define GAMESTATE_STMASK		0xff0000
 #define GAMESTATE_ACTIONMASK	0x00ff00
@@ -27,10 +31,16 @@
 #define GAMESTATE_ENEMYACTION	0x000900
 #define GAMESTATE_OVER			0x000A00
 
+#define ENEMY_INSCENE	0
+#define ENEMY_ONSIDE	1
+#define ENEMY_VECTORTYPEMAX	2
 
 struct EnemyInGameData 
 {
 	int itemtag;
+	int life;
+	int elayer;
+	BYTE etype;
 };
 
 class GameMain
@@ -77,7 +87,10 @@ public:
 	void Update();
 	bool CheckMissionOver();
 
-	int AddEnemy(int itemtag, bool toscene=false);
+	int AddEnemy(int itemtag, BYTE etype, int life, int elayer, BYTE enemiesindex=ENEMY_ONSIDE);
+	int DoRemoveEnemy(BYTE enemiesindex=ENEMY_ONSIDE);
+	void RemoveEnemy(int index, BYTE enemiesindex=ENEMY_ONSIDE);
+	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex=ENEMY_ONSIDE);
 
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
@@ -114,8 +127,7 @@ public:
 
 	int stateflag;
 
-	vector<EnemyInGameData> enemyonside;
-	vector<EnemyInGameData> enemyinscene;
+	vector<list<EnemyInGameData>> enemies;
 
 public:
 	static GameMain * getInstance();

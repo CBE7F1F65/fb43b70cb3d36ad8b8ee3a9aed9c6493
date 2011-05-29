@@ -36,10 +36,20 @@ GameMain::GameMain()
 
 	itemtypecount = 0;
 	stateflag = GAMESTATE_ST_NULL;
+
+	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
+	{
+		list<EnemyInGameData> _enemiesgroup;
+		enemies.push_back(_enemiesgroup);
+	}
 }
 
 GameMain::~GameMain()
 {
+	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
+	{
+		enemies[i].clear();
+	}
 	if (g_GameMainSingleton)
 	{
 		delete g_GameMainSingleton;
@@ -361,8 +371,10 @@ void GameMain::EnterMission()
 	missionscore = 0;
 	nowturn = 0;
 
-	enemyonside.clear();
-	enemyinscene.clear();
+	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
+	{
+		enemies[i].clear();
+	}
 }
 
 bool GameMain::ClearMission()
@@ -478,22 +490,53 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
-int GameMain::AddEnemy(int _itemtag, bool toscene/* =false */)
+int GameMain::AddEnemy(int itemtag, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/)
 {
 	EnemyInGameData _edata;
-	_edata.itemtag = _itemtag;
+
+	_edata.itemtag = itemtag;
+	_edata.etype = etype;
+	_edata.life = life;
+	_edata.elayer = elayer;
+
 	int retval = 0;
-	if (toscene)
+	enemies[enemiesindex].push_back(_edata);
+	return enemies[enemiesindex].size();
+}
+
+int GameMain::DoRemoveEnemy(BYTE enemiesindex/* =ENEMY_ONSIDE */)
+{
+	for (list<EnemyInGameData>::iterator it=enemies[enemiesindex].begin(); it!=enemies[enemiesindex].end();)
 	{
-		enemyinscene.push_back(_edata);
-		retval = enemyinscene.size();
+		if (it->life < 0)
+		{
+			it = enemies[enemiesindex].erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
-	else
+	return enemies[enemiesindex].size();
+}
+
+void GameMain::RemoveEnemy(int index, BYTE enemiesindex/*=ENEMY_ONSIDE*/)
+{
+	GetEnemyByIndex(index, enemiesindex)->life = -1;
+}
+
+EnemyInGameData * GameMain::GetEnemyByIndex(int index, BYTE enemiesindex/* =ENEMY_ONSIDE */)
+{
+	int i=0;
+	for (list<EnemyInGameData>::iterator it=enemies[enemiesindex].begin(); it!=enemies[enemiesindex].end(); it++)
 	{
-		enemyonside.push_back(_edata);
-		retval = enemyonside.size();
+		if (i == index)
+		{
+			return &(*it);
+		}
+		i++;
 	}
-	return retval;
+	return NULL;
 }
 
 void GameMain::Update()
@@ -527,10 +570,10 @@ void GameMain::Update()
 		case GAMESTATE_SHOWTARGET:
 			stateAction = GAMESTATE_ENEMYENTER;
 			break;
+
 		case GAMESTATE_ENEMYENTER:
 			stateAction = GAMESTATE_ADDENEMY;
 			break;
-
 		case GAMESTATE_ADDENEMY:
 			stateAction = GAMESTATE_HPAPREGAIN;
 			break;
@@ -561,7 +604,7 @@ void GameMain::Update()
 			}
 			else
 			{
-				stateAction = GAMESTATE_ADDENEMY;
+				stateAction = GAMESTATE_ENEMYENTER;
 			}
 			break;
 

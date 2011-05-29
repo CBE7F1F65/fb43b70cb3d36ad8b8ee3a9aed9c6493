@@ -48,6 +48,9 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("STATE_EnemyAction", GAMESTATE_ENEMYACTION);
 	obj->SetInteger("STATE_Over", GAMESTATE_OVER);
 
+	obj->SetInteger("ENEMY_InScene", ENEMY_INSCENE);
+	obj->SetInteger("ENEMY_OnSide", ENEMY_ONSIDE);
+
 	return true;
 }
 
@@ -108,6 +111,8 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	_gameobj.Register("SetPosition", LuaFn_Game_SetPosition);
 	_gameobj.Register("GetPosition", LuaFn_Game_GetPosition);
+	_gameobj.Register("SetAngle", LuaFn_Game_SetAngle);
+	_gameobj.Register("GetAngle", LuaFn_Game_GetAngle);
 	_gameobj.Register("SetScale", LuaFn_Game_SetScale);
 	_gameobj.Register("GetScale", LuaFn_Game_GetScale);
 	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
@@ -248,6 +253,7 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 	{
 		return NULL;
 	}
+
 	CCNode * nownode = NULL;
 	if (scenetag)
 	{
@@ -274,7 +280,11 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 	}
 
 	int _ktag = cnode->iGet();
+
 	int _ktagtop = Export_Lua_Scene::_GetTopTag(_ktag);
+	int _ktagsublayer = Export_Lua_Scene::_GetSubLayerTag(_ktag);
+	int _ktagmenugroup = Export_Lua_Scene::_GetMenuGroupTag(_ktag);
+	int _ktagmenuitem = Export_Lua_Scene::_GetMenuItemTag(_ktag);
 //	nownode = toplayer->getChildByTag(_ktagtop);
 
 	if (scenetag)
@@ -292,9 +302,26 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 		return NULL;
 	}
 
-	if (_ktagtop != _ktag)
+	//
+	int _nowktag = _ktagtop;
+	if (_nowktag != _ktag && nownode)
 	{
-		nownode = nownode->getChildByTag(_ktag);
+		_nowktag += _ktagsublayer;
+		nownode = nownode->getChildByTag(_nowktag);
+		if (_nowktag != _ktag && nownode)
+		{
+			_nowktag += _ktagmenugroup;
+			nownode = nownode->getChildByTag(_nowktag);
+			if (_nowktag != _ktag && nownode)
+			{
+				_nowktag += _ktagmenuitem;
+				nownode = nownode->getChildByTag(_nowktag);
+				if (_nowktag != _ktag && nownode)
+				{
+					nownode = nownode->getChildByTag(_ktag);
+				}
+			}
+		}
 	}
 
 	do
@@ -473,13 +500,14 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
+	CCNode * retval = NULL;
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
 		_LObjNode cnode(ls, &(node._obj), &node);
-		CCNode * retval = _GetNowNode(&cnode);
-		node.PDword((DWORD)retval);
+		retval = _GetNowNode(&cnode);
 	}
+	node.PDword((DWORD)retval);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1274,6 +1302,36 @@ int Export_Lua_Game::LuaFn_Game_GetPosition(LuaState * ls)
 	node.PFloat(pos.x);
 	node.PFloat(pos.y);
 
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetAngle(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// item angle
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	int _angle = node.iNextGet();
+	_item->setRotation(CCARC(_angle));
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetAngle(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+	// item
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	float rot = _item->getRotation();
+	node.PInt(CCANGLE(rot)); 
 	_LEAVEFUNC_LUA;
 }
 

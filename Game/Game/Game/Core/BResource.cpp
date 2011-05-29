@@ -85,6 +85,26 @@ void BResource::MallocCustomConst()
 	ClearCustomConstData();
 }
 
+bool BResource::GetCustomConstDataByName(const char * name, int * value)
+{
+	if (customconstdata)
+	{
+		for (int i=0; i<DATASTRUCT_CUSTOMCONSTMAX; i++)
+		{
+			if (!strcmp(name, customconstdata[i].name))
+			{
+				if (value)
+				{
+					*value = customconstdata[i].value;
+					return true;
+				}
+				break;
+			}
+		}
+	}
+	return false;
+}
+
 void BResource::ReleaseCustomConst()
 {
 	if (customconstdata)
