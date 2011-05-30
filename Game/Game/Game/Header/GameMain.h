@@ -4,6 +4,7 @@
 #include "GameData.h"
 #include "StageMissionData.h"
 #include "VectorList.h"
+#include "BIOInterface.h"
 
 #include "cocos2d.h"
 using namespace cocos2d;
@@ -35,9 +36,15 @@ using namespace cocos2d;
 #define ENEMY_ONSIDE	1
 #define ENEMY_VECTORTYPEMAX	2
 
+#define ENEMYATK_HP			0x00
+#define ENEMYATK_AP			0x01
+#define ENEMYATK_HPREGAIN	0x02
+
 struct EnemyInGameData 
 {
 	int itemtag;
+	float x;
+	float y;
 	int life;
 	int elayer;
 	BYTE etype;
@@ -81,13 +88,15 @@ public:
 	void EnterMission();
 	bool ClearMission();
 
+	void SetHPAPSP(int hp, int ap, int sp);
+
 	int GetState(int *stateST=NULL, int *stateAction=NULL, int *stateStep=NULL);
 	int SetState(int stateST, int stateAction=-1, int stateStep=-1);
 
 	void Update();
 	bool CheckMissionOver();
 
-	int AddEnemy(int itemtag, BYTE etype, int life, int elayer, BYTE enemiesindex=ENEMY_ONSIDE);
+	int AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer, BYTE enemiesindex=ENEMY_ONSIDE);
 	int DoRemoveEnemy(BYTE enemiesindex=ENEMY_ONSIDE);
 	void RemoveEnemy(int index, BYTE enemiesindex=ENEMY_ONSIDE);
 	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex=ENEMY_ONSIDE);
@@ -126,6 +135,8 @@ public:
 	BYTE itemtypecount;
 
 	int stateflag;
+
+	bio3DPoint ptfar;
 
 	vector<list<EnemyInGameData>> enemies;
 

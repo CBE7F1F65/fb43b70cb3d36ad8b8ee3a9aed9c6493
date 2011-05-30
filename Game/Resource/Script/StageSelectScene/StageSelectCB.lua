@@ -18,7 +18,7 @@ function StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, se
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
 	
-	local menu = game.GetNode({toplayer, layertag, grouptag});
+	local menu = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menu, false);
 	
 	local menus = {};
@@ -27,7 +27,7 @@ function StageSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, se
 	
 	for i=0, 8 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(8-i)*0.05;
 		

@@ -208,12 +208,18 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 	
 	if LGlobal_PlayData.nowhp ~= hp then
 		LGlobal_PlayData.nowhp = hp;
+		if hp < 0 then
+			hp = 0;
+		end
 		local hpscaleaction = game.ActionScale(CCAF_To, hp/10000.0, 1, LConst_HPAPChangeTime, true);
 		game.RunAction(hpbar, hpscaleaction);
 	end
 	
 	if LGlobal_PlayData.nowap ~= ap then
 		LGlobal_PlayData.nowap = ap;
+		if ap < 0 then
+			ap = 0;
+		end
 		local apscaleaction = game.ActionScale(CCAF_To, ap/10000.0, 1, LConst_HPAPChangeTime, true);
 		game.RunAction(apbar, apscaleaction);
 	end

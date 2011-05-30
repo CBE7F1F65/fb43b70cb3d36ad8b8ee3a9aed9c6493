@@ -37,6 +37,10 @@ GameMain::GameMain()
 	itemtypecount = 0;
 	stateflag = GAMESTATE_ST_NULL;
 
+	ptfar.x = M_SCREEN_XCENTER;
+	ptfar.y = M_SCREEN_YCENTER;
+	ptfar.z = M_SCREEN_Z;
+
 	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
 	{
 		list<EnemyInGameData> _enemiesgroup;
@@ -46,10 +50,6 @@ GameMain::GameMain()
 
 GameMain::~GameMain()
 {
-	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
-	{
-		enemies[i].clear();
-	}
 	if (g_GameMainSingleton)
 	{
 		delete g_GameMainSingleton;
@@ -395,6 +395,25 @@ bool GameMain::ClearMission()
 	return InsertScore(totalscore);
 }
 
+void GameMain::SetHPAPSP(int hp, int ap, int sp)
+{
+	nowhp = hp;
+	nowap = ap;
+	nowsp = sp;
+	if (nowhp > M_GAMEHPMAX)
+	{
+		nowhp = M_GAMEHPMAX;
+	}
+	if (nowap > M_GAMEAPMAX)
+	{
+		nowap = M_GAMEAPMAX;
+	}
+	if (nowsp > M_GAMESPMAX)
+	{
+		nowsp = M_GAMESPMAX;
+	}
+}
+
 int GameMain::GetState(int *stateST/* =NULL */, int *stateAction/* =NULL */, int *stateStep/* =NULL */)
 {
 	if (stateST)
@@ -490,11 +509,13 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
-int GameMain::AddEnemy(int itemtag, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/)
+int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/)
 {
 	EnemyInGameData _edata;
 
 	_edata.itemtag = itemtag;
+	_edata.x = x;
+	_edata.y = y;
 	_edata.etype = etype;
 	_edata.life = life;
 	_edata.elayer = elayer;

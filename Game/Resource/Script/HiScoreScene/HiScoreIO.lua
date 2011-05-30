@@ -54,7 +54,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_03, grouptag});
 	
 	local spriteBG = game.CreateSprite(SI_White, {340, 230, 0, 600, 380});
-	game.AddSpriteChild(spriteBG, {toplayer, layertag, grouptag});
+	game.AddSpriteChild(spriteBG, {toplayer, grouptag});
 	game.SetColor(spriteBG, global.ARGB(0x1f, 0xffffff));
 	
 	local texts = {};
@@ -87,7 +87,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..hiscoretext;
 		
-		texts[i+1] = game.AddTextChild({toplayer, layertag, grouptag}, {x, y, CCTag_Menu_03, grouptag+i+1}, text, LConst_FontSize*0.8);
+		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTag_Menu_03, grouptag+i+1}, text, LConst_FontSize*0.8);
 		game.SetAnchor(texts[i+1], 0, 0);
 	end
 	
@@ -96,7 +96,7 @@ end
 function _TitleScene_UpdateHiScore(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_03;
 	local grouptag = layertag + CCTag_Menu_03;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 	_TitleScene_AddHiScoreDisplay(toplayer, toptag);
 end
 
@@ -155,7 +155,7 @@ end
 function _TitleScene_LeaveOKCancelHiScoreLayer(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_03;
 	local grouptag = layertag + CCTag_Menu_04;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 end
 
 function _TitleScene_EnterHiScoreLayer(toplayer, toptag)

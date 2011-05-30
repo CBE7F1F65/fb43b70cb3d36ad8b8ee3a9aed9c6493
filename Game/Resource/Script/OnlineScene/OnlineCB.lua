@@ -12,14 +12,16 @@ function TitleScene_CB_Online(itemtag, toplayer, toptag, sublayertag, selgroupta
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+selgrouptag;
 	
-	local menu = game.GetNode({toplayer, layertag, grouptag});
-	game.SetTouchEnabled(menu, false);
+	local menu = game.GetNode({toplayer, grouptag});
+	if toquit then
+		game.SetTouchEnabled(menu, false);
+	end
 	
 	local menus = {};
 	local xmove = 400;
 	for i=0, 2 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(2-i)*0.05;
 		

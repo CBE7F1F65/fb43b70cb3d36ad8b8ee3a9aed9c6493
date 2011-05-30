@@ -20,13 +20,13 @@ function StoryScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroup
 	local menus = {};
 	local xmove = 400;
 	
-	local menu = game.GetNode({toplayer, layertag, grouptag});
+	local menu = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menu, false);
 	
 --	for i=0, 2 do
 	local i = 0;
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3;
 		

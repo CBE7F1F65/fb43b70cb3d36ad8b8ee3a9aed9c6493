@@ -159,7 +159,7 @@ end
 function _TitleScene_LeaveOKCancelOptionLayer(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_05;
 	local grouptag = layertag + CCTag_Menu_04;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 end
 
 

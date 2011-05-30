@@ -23,9 +23,9 @@ LGlobal_EnemyPosTable	=
 			{
 				--Enemy1
 				-- x, y, type, layer
-				{150, 350, 0, CCZ_eLayer_01},
-				{250, 450, 0, CCZ_eLayer_02},
-				{550, 450, 0, CCZ_eLayer_03},
+				{150, 350, 4, CCZ_eLayer_01},
+				{250, 450, 5, CCZ_eLayer_02},
+				{550, 450, 6, CCZ_eLayer_03},
 			},
 			--Turn1
 			-- xorig, yorig, type, angle

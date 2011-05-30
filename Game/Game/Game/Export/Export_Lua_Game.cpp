@@ -51,6 +51,10 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("ENEMY_InScene", ENEMY_INSCENE);
 	obj->SetInteger("ENEMY_OnSide", ENEMY_ONSIDE);
 
+	obj->SetInteger("HPMax", M_GAMEHPMAX);
+	obj->SetInteger("APMax", M_GAMEAPMAX);
+	obj->SetInteger("SPMax", M_GAMESPMAX);
+
 	return true;
 }
 
@@ -108,9 +112,13 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("SetTouchEnabled", LuaFn_Game_SetTouchEnabled);
 	_gameobj.Register("SetIsVisible", LuaFn_Game_SetIsVisible);
 
+	_gameobj.Register("GetSubTags", LuaFn_Game_GetSubTags);
+
 
 	_gameobj.Register("SetPosition", LuaFn_Game_SetPosition);
 	_gameobj.Register("GetPosition", LuaFn_Game_GetPosition);
+	_gameobj.Register("SetZ", LuaFn_Game_SetZ);
+	_gameobj.Register("GetZ", LuaFn_Game_GetZ);
 	_gameobj.Register("SetAngle", LuaFn_Game_SetAngle);
 	_gameobj.Register("GetAngle", LuaFn_Game_GetAngle);
 	_gameobj.Register("SetScale", LuaFn_Game_SetScale);
@@ -1270,6 +1278,24 @@ int Export_Lua_Game::LuaFn_Game_SetIsVisible(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_GetSubTags(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	int _itemtag = node.iNextGet();
+	int toptag = Export_Lua_Scene::_GetTopTag(_itemtag);
+	int sublayertag = Export_Lua_Scene::_GetSubLayerTag(_itemtag);
+	int menugrouptag = Export_Lua_Scene::_GetMenuGroupTag(_itemtag);
+	int menuitemtag = Export_Lua_Scene::_GetMenuItemTag(_itemtag);
+
+	node.PInt(toptag);
+	node.PInt(sublayertag);
+	node.PInt(menugrouptag);
+	node.PInt(menuitemtag);
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_SetPosition(LuaState * ls)
 {
 	_ENTERFUNC_LUA(3);
@@ -1301,6 +1327,38 @@ int Export_Lua_Game::LuaFn_Game_GetPosition(LuaState * ls)
 	pos = BGlobal::RScalerPoint(pos);
 	node.PFloat(pos.x);
 	node.PFloat(pos.y);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetZ(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// item z
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	int _z = node.iNextGet();
+	_item->getParent()->reorderChild(_item, _z);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetZ(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	int zOrder = _item->getZOrder();
+	node.PInt(zOrder);
 
 	_LEAVEFUNC_LUA;
 }

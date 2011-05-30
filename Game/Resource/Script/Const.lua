@@ -15,3 +15,6 @@ LConst_DelayActionTime = 0.3;
 
 LConst_EnemySpriteFadeTime = 0.3;
 LConst_EnemyEnterDelayTime = 0.1;
+
+LConst_HPRegainRate = 0.2;
+LConst_APRegainRate = 1.0;

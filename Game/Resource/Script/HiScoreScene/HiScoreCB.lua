@@ -10,7 +10,7 @@ function TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgroupt
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -19,7 +19,7 @@ function TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgroupt
 	
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -71,7 +71,7 @@ function TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, s
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -79,7 +79,7 @@ function TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, s
 	local xmove = 350;
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		

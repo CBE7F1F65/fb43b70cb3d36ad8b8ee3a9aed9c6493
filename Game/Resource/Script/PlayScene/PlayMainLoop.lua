@@ -159,11 +159,6 @@ function _PlayScene_ShowTarget(toplayer, toptag)
 	return false;
 end
 
-function _PlayScene_CalculatePos(x, y, elayer)
-	-- TODO
-	return x, y, 1, 1;
-end
-
 function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer)
 
 	local layertag = toptag + CCTag_Layer_02;
@@ -177,17 +172,17 @@ function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowt
 		elayer = defelayer;
 	end
 	
-	x, y, xscale, yscale = _PlayScene_CalculatePos(x, y, elayer);
+	x, y, scale = game.Transform3DPoint(x, y, 3-elayer/CCZ_eLayer_01);
 	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
-		game.AddNullChild({toplayer, layertag}, {0, 0, CCZ_Max-(menugroup+elayer), grouptag});
+		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
-	
-	local spEnemy = game.CreateSprite(siid, {x, y, 0, xscale, yscale}, grouptag+selitemtag);
-	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag}, elayer);
 
-	game.AddEnemy(grouptag+selitemtag, etype, life, elayer, ENEMY_InScene);
+	game.AddEnemy(grouptag+selitemtag, x, y, etype, life, elayer, ENEMY_InScene);	
+	
+	local spEnemy = game.CreateSprite(siid, {x, y, 0, scale, scale}, grouptag+selitemtag);
+	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag}, elayer);
 	
 	return enemynode, layertag, grouptag, selitemtag;
 end
@@ -219,20 +214,7 @@ function _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmi
 	return false;
 end
 
-function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
-	local layertag = toptag + CCTag_Layer_08;
-	local grouptag = layertag + CCTag_MenuSub_01*(nowturn+1);
-	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
-	if index >= enemyonsidecount then
-		return true;
-	end
-	local selitemtag = index + 1;
-	local itemtag, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_OnSide);
-	local enemyonsidenode = game.GetNode({toplayer, itemtag});
-
-	local x, y = game.GetPosition(enemyonsidenode);
-	local angle = game.GetAngle(enemyonsidenode);
-	
+function _PlayScene_SidePosToScenePos(x, y, angle)
 	local r;
 	if x <= LGlobal_EnemySideLEdge then
 		r = x*(480-LGlobal_EnemySideEdge)/LGlobal_EnemySideEdge+(LGlobal_EnemySideLEdge-x);
@@ -245,29 +227,46 @@ function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowm
 	if r ~= nil then
 		x = x+r*global.SINT(angle);
 		y = y+r*global.COST(angle);
-		local enemyonsidenode = game.GetNode({toplayer, itemtag});
-		local onsidemoveaction = game.ActionMove(CCAF_To, x, y, LConst_EnemySpriteFadeTime*2);
-		local onsidealphaaction = game.ActionFade(CCAF_To, 0, LConst_EnemySpriteFadeTime*3);
-		local onsidedeleteaction = game.ActionDelete();
-		onsidedeleteaction = game.ActionSequence({onsidealphaaction, onsidedeleteaction});
-		local onsideaction = game.ActionSpawn({onsidemoveaction, onsidedeleteaction});
-		onsideaction = game.ActionEase(CCAF_In, onsideaction, 0.35);
-		game.RunAction(enemyonsidenode, onsideaction);
-		
-		game.RemoveEnemy(index, ENEMY_OnSide);
-				
-		local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
-		game.SetColor(enemynode, global.ARGB(0, 0xffffff));
-		local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
-		game.RunAction(enemynode, enemyaction);
-		
-		local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
-		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-		local callnodegrouptag = layertag + CCTag_Menu_11;
-		local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
-		game.RunAction(callnode, callfuncaction);
-		
 	end
+	return x, y;
+end
+
+function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
+	local layertag = toptag + CCTag_Layer_08;
+	local grouptag = layertag + CCTag_MenuSub_01*(nowturn+1);
+	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
+	if index >= enemyonsidecount then
+		return true;
+	end
+	local selitemtag = index + 1;
+	local itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_OnSide);
+	local enemyonsidenode = game.GetNode({toplayer, itemtag});
+
+	local angle = game.GetAngle(enemyonsidenode);
+		
+	local tx, ty, scale = game.Transform3DPoint(x, y, 1);
+	
+	local enemyonsidenode = game.GetNode({toplayer, itemtag});
+	local onsidemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime*2);
+	local onsidealphaaction = game.ActionFade(CCAF_To, 0, LConst_EnemySpriteFadeTime*3);
+	local onsidedeleteaction = game.ActionDelete();
+	onsidedeleteaction = game.ActionSequence({onsidealphaaction, onsidedeleteaction});
+	local onsideaction = game.ActionSpawn({onsidemoveaction, onsidedeleteaction});
+	onsideaction = game.ActionEase(CCAF_In, onsideaction, 0.35);
+	game.RunAction(enemyonsidenode, onsideaction);
+		
+	game.RemoveEnemy(index, ENEMY_OnSide);
+
+	local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
+	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
+	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
+	game.RunAction(enemynode, enemyaction);
+		
+	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
+	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	game.RunAction(callnode, callfuncaction);
 	
 	return false;
 	
@@ -289,66 +288,6 @@ function _PlayScene_EnemyEnter(toplayer, toptag, index)
 	
 	return false;
 end
---[[
-function _PlayScene_CalculateSidePos(x, y)
-		
-	local lx, rx, ty, by = 32, 928, 64, 608;
-	
-	local r = 512;
-	
-	local vcount = 0;
-	local vpoints = {};
-	--checkbottom
-	if r > by-y then
-		local c = global.DIST(r, 0, (by-y), 0);
-		local plx = x-c;
-		local prx = x+c;
-		if plx >= lx then
-			vcount = vcount+1;
-			vpoints[vcount] = {plx, by};
-		end
-		if prx <= rx then
-			vcount = vcount+1;
-			vpoints[vcount] = {prx, by};
-		end
-	end
-	--checkleft
-	if r > x-lx then
-		local c = global.DIST(r, 0, (x-lx), 0);
-		local pty = y-c;
-		local pby = y+c;
-		if pty >= ty then
-			vcount = vcount+1;
-			vpoints[vcount] = {lx, pty};
-		end
-		if pby <= by then
-			vcount = vcount+1;
-			vpoints[vcount] = {lx, pby};
-		end
-	end
-	--checkright
-	if r > rx-x then
-		local c = global.DIST(r, 0, (rx-x), 0);
-		local pty = y-c;
-		local pby = y+c;
-		if pty >= ty then
-			vcount = vcount+1;
-			vpoints[vcount] = {rx, pty};
-		end
-		if pby <= by then
-			vcount = vcount+1;
-			vpoints[vcount] = {rx, pby};
-		end
-	end
-	
-	local randval = RANDT(1, table.getn(vpoints));
-	
-	local px, py = vpoints[randval][1], vpoints[randval][2];
-	local angle = global.AMA(px, py, x, y)+9000;
-	
-	return px, py, angle;
-end
---]]
 
 function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn)
 	local layertag = toptag + CCTag_Layer_08;
@@ -361,13 +300,15 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
-		game.AddNullChild({toplayer, layertag}, {0, 0, CCZ_Max-(menugroup+elayer), grouptag});
+		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
 	
 	local spEnemy = game.CreateSprite(sidesiid, {x, y, angle}, grouptag+selitemtag);
-	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, layertag, grouptag});
+	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag});
 
-	game.AddEnemy(grouptag+selitemtag, etype, life, elayer, ENEMY_OnSide);
+	local tx, ty = _PlayScene_SidePosToScenePos(x, y, angle)
+
+	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, life, elayer, ENEMY_OnSide);
 	
 	return enemynode, layertag, grouptag, selitemtag;
 end
@@ -416,6 +357,11 @@ end
 
 function _PlayScene_HPAPRegain(toplayer, toptag)
 	-- Add HPAP
+	
+	local hp, ap, sp = game.GetHPAPSP();
+	hp = hp + HPMax*LConst_HPRegainRate;
+	ap = ap + APMax*LConst_APRegainRate;
+	game.SetHPAPSP(hp, ap, sp);
 	return true;
 end
 
@@ -439,15 +385,42 @@ function _PlayScene_SelfAction(toplayer, toptag, index)
 end
 
 function _PlayScene_EnemyAttack(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer)
-	local atk = game.GetEnemyATK(etype, elayer/CCZ_eLayer_01);
+	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, elayer/CCZ_eLayer_01);
+	local hp, ap, sp = game.GetHPAPSP();
+	hp = hp - atk;
+	ap = ap - apatk;
+	game.SetHPAPSP(hp, ap, sp);
+	if hpregainatk > 0 then
+		-- Add Enemy HP
+	end
 end
 
 function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer)
 	local elayeradvance = game.GetEnemyELayerAdvance(etype);
+	if elayer == CCZ_eLayer_03 or elayeradvance == 0 then
+		return;
+	end
+	
 	elayer = elayer + elayeradvance;
 	if elayer > CCZ_eLayer_03 then
 		elayer = CCZ_eLayer_03;
 	end
+	local itemtag, x, y, etype, life = game.GetActiveEnemyData(index, ENEMY_InScene);
+
+	local tx, ty, scale = game.Transform3DPoint(x, y, 3-elayer/CCZ_eLayer_01);
+	
+	local aemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime);
+	local aescaleaction = game.ActionScale(CCAF_To, scale, scale, LConst_EnemySpriteFadeTime, true);
+	local aeaction = game.ActionSpawn({aemoveaction, aescaleaction});
+	local enemynode = game.GetNode({toplayer, itemtag});
+
+	game.RunAction(enemynode, aeaction);
+	
+	local ttoptag, tsublayertag, tmenugrouptag, tmenuitemtag = game.GetSubTags(itemtag);
+	local menugroup = itemtag-tmenuitemtag;
+	game.SetZ(enemynode, menugroup+elayer);
+	game.SetActiveEnemyData(index, ENEMY_InScene, life, elayer);
+	
 end
 
 function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
@@ -456,18 +429,20 @@ function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission,
 		return true;
 	end
 	local layertag;
-	local itemtag, etype, life, elayer;
+	local itemtag, x, y, etype, life, elayer;
 	if index < enemyinscenecount then
 		layertag = toptag + CCTag_Layer_02;
-		itemtag, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
+		itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
 		_PlayScene_EnemyAttack(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer);
 		_PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer);
 	else
 		local eindex = index-enemyinscenecount;
 		layertag = toptag + CCTag_Layer_08;
-		itemtag, etype, life, elayer = game.GetActiveEnemyData(eindex, ENEMY_InScene);
+		itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(eindex, ENEMY_OnSide);
 		_PlayScene_EnemyAttack(toplayer, toptag, eindex, nowstage, nowmission, nowturn, etype, 0);
 	end
+
+	local enemynode = game.GetNode({toplayer, itemtag});
 
 	local dataindex = LGlobal_SaveData(STATE_EnemyAction);
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);

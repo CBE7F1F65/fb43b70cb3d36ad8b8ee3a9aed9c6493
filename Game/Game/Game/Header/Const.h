@@ -40,6 +40,9 @@ enum
 
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f
+#define M_SCREEN_XCENTER	(M_SCREEN_WIDTH/2.0f)
+#define M_SCREEN_YCENTER	(M_SCREEN_HEIGHT/2.0f)
+#define M_SCREEN_Z			(M_SCREEN_WIDTH/2.0f)
 
 #define M_CCACTIONFLAG_NULL		0x0000
 #define M_CCACTIONFLAG_IN		0x0001
@@ -67,6 +70,7 @@ enum
 
 #define M_GAMEHPMAX	10000
 #define M_GAMEAPMAX	10000
+#define M_GAMESPMAX	4
 
 #define LOG_FILENAME		"log.log"
 #define INI_FILENAME		"config.ini"
@@ -76,6 +80,6 @@ enum
 #define M_TOUCH_MINIMUMPRESSDURATION	0.5f
 
 #define M_TOUCHMAX	2
-
-#define M_ENEMYMAX	64
 #define M_ENEMY_ELAYERMAX	4
+
+#define M_TURNMAX	0xfff;

@@ -155,14 +155,14 @@ end
 function _HelpScene_LeaveCatagoryMenu(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_02;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 end
 
 function _HelpScene_EnterSubLayer(toplayer, toptag, helptype, helpindex)
 	layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 2 do
-		local menuitem = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		local menuitem = game.GetNode({toplayer, grouptag+i+1});
 		game.SetTouchEnabled(menuitem, true);
 		game.SetIsVisible(menuitem, true);
 	end
@@ -177,7 +177,7 @@ function _HelpScene_LeaveSubLayer(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 2 do
-		local menuitem = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		local menuitem = game.GetNode({toplayer, grouptag+i+1});
 		game.SetTouchEnabled(menuitem, false);
 		game.SetIsVisible(menuitem, false);
 	end

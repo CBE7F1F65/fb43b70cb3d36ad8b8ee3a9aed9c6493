@@ -67,8 +67,12 @@ public:
 	static int LuaFn_Game_SetTouchEnabled(LuaState * ls);
 	static int LuaFn_Game_SetIsVisible(LuaState * ls);
 
+	static int LuaFn_Game_GetSubTags(LuaState * ls);
+
 	static int LuaFn_Game_SetPosition(LuaState * ls);
 	static int LuaFn_Game_GetPosition(LuaState * ls);
+	static int LuaFn_Game_SetZ(LuaState * ls);
+	static int LuaFn_Game_GetZ(LuaState * ls);
 	static int LuaFn_Game_SetAngle(LuaState * ls);
 	static int LuaFn_Game_GetAngle(LuaState * ls);
 	static int LuaFn_Game_SetScale(LuaState * ls);
@@ -112,6 +116,8 @@ public:
 
 	// In Game
 
+	static int LuaFn_Game_Transform3DPoint(LuaState * ls);
+
 	static int LuaFn_Game_Update(LuaState * ls);
 
 	static int LuaFn_Game_AddTurn(LuaState * ls);
@@ -125,6 +131,7 @@ public:
 	static int LuaFn_Game_GetHelpAccessInfo(LuaState * ls);
 	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
 
+	static int LuaFn_Game_SetHPAPSP(LuaState * ls);
 	static int LuaFn_Game_GetHPAPSP(LuaState * ls);
 
 	static int LuaFn_Game_GetEnemyTypeData(LuaState * ls);
@@ -134,6 +141,7 @@ public:
 	static int LuaFn_Game_AddEnemy(LuaState * ls);
 	static int LuaFn_Game_RemoveEnemy(LuaState * ls);
 	static int LuaFn_Game_DoRemoveEnemy(LuaState * ls);
+	static int LuaFn_Game_SetActiveEnemyData(LuaState * ls);
 	static int LuaFn_Game_GetActiveEnemyData(LuaState * ls);
 
 	static int LuaFn_Game_GetState(LuaState * ls);

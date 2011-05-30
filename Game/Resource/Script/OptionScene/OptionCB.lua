@@ -11,7 +11,7 @@ function TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgroupta
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -19,7 +19,7 @@ function TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgroupta
 	local xmove = 350;
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -72,7 +72,7 @@ function TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, se
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -80,7 +80,7 @@ function TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, se
 	local xmove = 400;
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -132,11 +132,11 @@ function _TitleScene_UpdateBGMSE(toplayer, toptag)
 	bgmvol, sevol = game.GetBGMSEVol();
 	
 	layertag = toptag + CCTag_Layer_06;
-	local bgmbar = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local bgmbar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetScale(bgmbar, bgmvol/100.0, 1);
 	
 	local layertag = toptag + CCTag_Layer_07;
-	local sebar = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local sebar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetScale(sebar, sevol/100.0, 1);
 	
 end

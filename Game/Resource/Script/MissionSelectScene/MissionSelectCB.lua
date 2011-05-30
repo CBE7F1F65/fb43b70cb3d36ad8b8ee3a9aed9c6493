@@ -24,7 +24,7 @@ function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, 
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -34,7 +34,7 @@ function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, 
 	
 	for i=0, nodecount do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(nodecount-i)*0.01;
 		

@@ -103,7 +103,7 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 end
 
 function _TitleScene_RunInputHintAction(toplayer, layertag)
-	local spritehint = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_13});
+	local spritehint = game.GetNode({toplayer, layertag+CCTag_Menu_13});
 	local inputhintactionpre = game.ActionTint(CCAF_To, 0xff7f7f, 0.3);
 	local inputhintactionpost = game.ActionTint(CCAF_To, 0xffffff, 0.5);
 	local inputhintaction = game.ActionSequence({inputhintactionpre, inputhintactionpost});
@@ -111,7 +111,7 @@ function _TitleScene_RunInputHintAction(toplayer, layertag)
 end
 
 function _TitleScene_StopInputHintAction(toplayer, layertag)
-	local spritehint = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_13});
+	local spritehint = game.GetNode({toplayer, layertag+CCTag_Menu_13});
 	game.StopAction(spritehint);
 	game.SetColor(spritehint, global.ARGB(0xff, 0xffffff));
 end
@@ -150,14 +150,14 @@ end
 function _TitleScene_PauseMenuLayer(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
-	local menulayer = game.GetNode({toplayer, layertag, grouptag});
+	local menulayer = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menulayer, false);
 end
 
 function _TitleScene_ResumeMenuLayer(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
-	local menulayer = game.GetNode({toplayer, layertag, grouptag});
+	local menulayer = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menulayer, true);
 end
 

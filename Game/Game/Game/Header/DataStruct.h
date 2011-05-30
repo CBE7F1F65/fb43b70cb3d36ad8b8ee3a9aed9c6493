@@ -73,6 +73,7 @@ struct enemyData
 	int elayer;
 	int elayeradvance;
 	int atk[M_ENEMY_ELAYERMAX];
+	BYTE attackflag;
 };
 
 #define M_MISSIONTARGETMAX	3
