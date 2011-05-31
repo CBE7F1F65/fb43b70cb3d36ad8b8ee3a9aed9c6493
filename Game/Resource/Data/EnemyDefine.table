@@ -1,12 +1,12 @@
-130	h5nc	59									
-Comment	Index	SIID	SideSIID	Life	eLayer	eLayerAdvance	AttackFlag	ATK_00	ATK_01	ATK_02	ATK_03
--	0	SI_Enemy_Soldier	SI_Enemy_Soldier	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1200	1500	1800
--	1	SI_Enemy_Warrior	SI_Enemy_Warrior	1200	CCZ_eLayer_02	CCZ_eLayer_01	0	0	1800	2300	2800
--	2	SI_Enemy_Magician	SI_Enemy_Magician	1200	CCZ_eLayer_01	CCZ_eLayer_01	1	0	1500	1500	1500
--	3	SI_Enemy_Rifle	SI_Enemy_Rifle	1200	CCZ_eLayer_01	CCZ_eLayer_02	0	0	2300	1900	1500
--	4	SI_Enemy_Angel	SI_Enemy_Angel	1200	CCZ_eLayer_01	0	2	0	2500	2500	2500
--	5	SI_Enemy_Shield	SI_Enemy_Shield	1200	CCZ_eLayer_03	0	0	0	1000	1000	1000
--	6	SI_Enemy_Ghost	SI_Enemy_Ghost	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1200	1200	1200
--	7	SI_Enemy_Ninja	SI_Enemy_Ninja	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1000	1750	2500
--	8	SI_Enemy_Archer	SI_Enemy_Archer	1200	CCZ_eLayer_01	0	0	800	800	800	800
--	9	SI_Enemy_Boss	SI_Enemy_Boss	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	2000	2300	2600
+130	h5nc	59										
+Comment	Index	SIID	SideSIID	SideArrowSIID	Life	eLayer	eLayerAdvance	AttackFlag	ATK_00	ATK_01	ATK_02	ATK_03
+-	0	SI_Enemy_Soldier	SI_EnemySide_Soldier	SI_EnemySide_Soldier_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1200	1500	1800
+-	1	SI_Enemy_Warrior	SI_EnemySide_Warrior	SI_EnemySide_Warrior_Arrow	1200	CCZ_eLayer_02	CCZ_eLayer_01	0	0	1800	2300	2800
+-	2	SI_Enemy_Magician	SI_EnemySide_Magician	SI_EnemySide_Magician_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_01	1	0	1500	1500	1500
+-	3	SI_Enemy_Rifle	SI_EnemySide_Rifle	SI_EnemySide_Rifle_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_02	0	0	2300	1900	1500
+-	4	SI_Enemy_Angel	SI_EnemySide_Angel	SI_EnemySide_Angel_Arrow	1200	CCZ_eLayer_01	0	2	0	2500	2500	2500
+-	5	SI_Enemy_Shield	SI_EnemySide_Shield	SI_EnemySide_Shield_Arrow	1200	CCZ_eLayer_03	0	0	0	1000	1000	1000
+-	6	SI_Enemy_Ghost	SI_EnemySide_Ghost	SI_EnemySide_Ghost_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1200	1200	1200
+-	7	SI_Enemy_Ninja	SI_EnemySide_Ninja	SI_EnemySide_Ninja_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	1000	1750	2500
+-	8	SI_Enemy_Archer	SI_EnemySide_Archer	SI_EnemySide_Archer_Arrow	1200	CCZ_eLayer_01	0	0	800	800	800	800
+-	9	SI_Enemy_King	SI_EnemySide_King	SI_EnemySide_King_Arrow	1200	CCZ_eLayer_01	CCZ_eLayer_01	0	0	2000	2300	2600

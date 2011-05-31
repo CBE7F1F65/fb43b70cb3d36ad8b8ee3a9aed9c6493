@@ -521,8 +521,8 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 		local x = xorig + xmove;
 		local y = yorig + ymove;
 		
-		spMenus[i+1] = game.CreateSprite(SI_GUISub_Quit+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Quit_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_GUISub_Exit+i*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Exit_Down+i*2);
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCTag_Menu_04, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 

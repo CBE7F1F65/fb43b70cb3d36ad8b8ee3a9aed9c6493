@@ -5,20 +5,20 @@ function _TitleScene_AddHiScoreItems(toplayer, toptag)
 	local spHiScoreTitle = game.CreateSprite(SI_TUI_HiScore_Title, {340, 460});
 	game.AddSpriteChild(spHiScoreTitle, {toplayer, layertag});
 	
-	local xorig = 1180;
-	local xcen = 780;
-	local ybegin = 284;
-	local yoffset = 108;
+	local xorig = 1224;
+	local xcen = 824;
+	local ybegin = 260;
+	local yoffset = 160;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
 	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 1 do
-		local y = ybegin - (1-i)*yoffset;
+		local y = ybegin - i*yoffset;
 		
-		spMenus[i+1] = game.CreateSprite(SI_TUI_Close+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Close_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_TUI_Reset+i*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Reset_Down+i*2);
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
@@ -104,10 +104,10 @@ function _TitleScene_AddHiScoreOKCancelItems(toplayer, toptag)
 	
 	local layertag = toptag + CCTag_Layer_03;
 		
-	local xorig = 780;
-	local xcen = 530;
-	local ybegin = 338;
-	local yoffset = 108;
+	local xorig = 824;
+	local xcen = 664;
+	local ybegin = 340;
+	local yoffset = 160;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};

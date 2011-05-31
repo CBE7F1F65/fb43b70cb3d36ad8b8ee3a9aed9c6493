@@ -58,6 +58,7 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
+	local spDisabledMenus = {};
 	local menus = {};
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -71,19 +72,16 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 				enabled = false;
 			end
 			
-			if enabled then
-				spMenus[i+1] = game.CreateSprite(SI_SSUI_World_1+i);
-				spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_World_1_Down+i);
-			else
-				spMenus[i+1] = game.CreateSprite(SI_SSUI_Locked);
-				spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_Locked_Down);
-			end
+			spMenus[i+1] = game.CreateSprite(SI_SSUI_World_1+i);
+			spSelectedMenus[i+1] = game.CreateSprite(SI_SSUI_World_1_Down+i);
+			spDisabledMenus[i+1] = game.CreateSprite(SI_SSUI_Locked);
 		else
-			spMenus[i+1] = game.CreateSprite(SI_TUI_Menu);
-			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Menu_Down);
+			spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
+			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
+			spDisabledMenus[i+1] = nil;
 		end
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen[i+1]+40, ycen[i+1]+40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen[i+1]+40, ycen[i+1]+40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
 		
 		if not enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);

@@ -2,7 +2,7 @@
 #define __DATASTRUCT_H__
 
 #define DATASTRUCT_CUSTOMCONSTMAX	0x100
-#define DATASTRUCT_TEXMAX			0x40
+#define DATASTRUCT_TEXMAX			0x80
 #define DATASTRUCT_MUSICMAX			0x10
 #define DATASTRUCT_SEMAX			0x40
 #define DATASTRUCT_EFFECTMAX		0x40
@@ -69,6 +69,7 @@ struct enemyData
 {
 	int siid;
 	int sidesiid;
+	int sidearrowsiid;
 	int life;
 	int elayer;
 	int elayeradvance;

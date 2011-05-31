@@ -468,7 +468,7 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyTypeData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// type -> siid, sidesiid, life, elayer
+	// type -> siid, sidesiid, sidearrowsiid, life, elayer
 
 	int _etype = node.iNextGet();
 
@@ -476,6 +476,7 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyTypeData(LuaState * ls)
 	
 	node.PInt(item->siid);
 	node.PInt(item->sidesiid);
+	node.PInt(item->sidearrowsiid);
 	node.PInt(item->life);
 	node.PInt(item->elayer);
 
@@ -542,13 +543,19 @@ int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 	int _life = node.iNextGet();
 	int _elayer = node.iNextGet();
 	BYTE _enemiesindex = ENEMY_ONSIDE;
+	int _angle = 0;
 	node.jNextGet();
 	if (node.bhavenext)
 	{
 		_enemiesindex = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_angle = node.iGet();
+		}
 	}
 
-	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _life, _elayer, _enemiesindex);
+	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _life, _elayer, _enemiesindex, _angle);
 	node.PInt(enemycount);
 
 	_LEAVEFUNC_LUA;
@@ -638,6 +645,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		BYTE etype = item->etype;
 		int life = item->life;
 		int elayer = item->elayer;
+		int angle = item->angle;
 
 		node.PInt(itemtag);
 		node.PFloat(x);
@@ -645,6 +653,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		node.PInt(etype);
 		node.PInt(life);
 		node.PInt(elayer);
+		node.PInt(angle);
 	}
 
 	_LEAVEFUNC_LUA;

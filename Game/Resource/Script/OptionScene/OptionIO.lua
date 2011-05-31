@@ -3,7 +3,7 @@
 function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	
 	local xcen = 780;
-	local ycen = 500;
+	local ycen = 550;
 	
 	local width, height = game.GetSIData(SI_TUI_BGMSE_Bar);
 	local bgmvol, sevol = game.GetBGMSEVol();
@@ -21,7 +21,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgBGMFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgBGMFrame, {toplayer, layertag});
 	
-	local spriteBGM = game.CreateSprite(SI_TUI_BGM, {xcen, ycen});
+	local spriteBGM = game.CreateSprite(SI_TUI_BGM, {xcen-160, ycen});
 	game.AddSpriteChild(spriteBGM, {toplayer, layertag});
 	game.SetColor(spriteBGM, global.ARGB(0x7f, 0xffffff));
 		
@@ -44,7 +44,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgSEFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgSEFrame, {toplayer, layertag});
 	
-	local spriteSE = game.CreateSprite(SI_TUI_SE, {xcen, ycen});
+	local spriteSE = game.CreateSprite(SI_TUI_SE, {xcen-160, ycen});
 	game.AddSpriteChild(spriteSE, {toplayer, layertag});
 	game.SetColor(spriteSE, global.ARGB(0x7f, 0xffffff));
 		
@@ -63,20 +63,20 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 	local spOptionTitle = game.CreateSprite(SI_TUI_Option_Title, {340, 460});
 	game.AddSpriteChild(spOptionTitle, {toplayer, layertag});
 	
-	local xorig = 1180;
-	local xcen = 780;
-	local ybegin = 284;
-	local yoffset = 108;
+	local xorig = 1224;
+	local xcen = 824;
+	local ybegin = 260;
+	local yoffset = 160;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
 	local grouptag = layertag + CCTag_Menu_01;
 	for i=0, 1 do
-		local y = ybegin - (1-i)*yoffset;
+		local y = ybegin - i*yoffset;
 		
-		spMenus[i+1] = game.CreateSprite(SI_TUI_Close+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Close_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_TUI_Reset+i*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Reset_Down+i*2);
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
@@ -108,10 +108,10 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 	
 	local layertag = toptag + CCTag_Layer_05;
 		
-	local xorig = 780;
-	local xcen = 530;
-	local ybegin = 338;
-	local yoffset = 108;
+	local xorig = 824;
+	local xcen = 664;
+	local ybegin = 340;
+	local yoffset = 160;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};

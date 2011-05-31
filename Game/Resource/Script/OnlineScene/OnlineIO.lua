@@ -6,10 +6,10 @@ function _TitleScene_AddOnlineItems(toplayer, toptag)
 	local spOnlineTitle = game.CreateSprite(SI_TUI_Online_Title, {340, 460});
 	game.AddSpriteChild(spOnlineTitle, {toplayer, layertag});
 	
-	local xorig = 1180;
-	local xcen = 780;
-	local ybegin = 500;
-	local yoffset = 108;
+	local xorig = 1224;
+	local xcen = 824;
+	local ybegin = 420;
+	local yoffset = 160;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
@@ -20,9 +20,8 @@ function _TitleScene_AddOnlineItems(toplayer, toptag)
 		local normalsiid = SI_TUI_LeaderBoard + i*2;
 		local selectedsiid = SI_TUI_LeaderBoard_Down + i*2;
 		if i == 2 then
-			y = y - yoffset;
-			normalsiid = SI_TUI_Close;
-			selectedsiid = SI_TUI_Close_Down;
+			normalsiid = SI_TUI_Exit;
+			selectedsiid = SI_TUI_Exit_Down;
 		end
 		
 		spMenus[i+1] = game.CreateSprite(normalsiid);

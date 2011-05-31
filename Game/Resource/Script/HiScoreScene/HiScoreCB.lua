@@ -1,7 +1,7 @@
 function TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	local toquit = true;
-	if selitemtag == 2 then
+	if selitemtag == 1 then
 		_TitleScene_EnterOKCancelHiScoreLayer(toplayer, toptag);
 		toquit = false;
 	end
@@ -76,7 +76,7 @@ function TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, s
 	end
 	
 	local menus = {};
-	local xmove = 350;
+	local xmove = 160;
 	for i=0, 1 do
 	
 		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});

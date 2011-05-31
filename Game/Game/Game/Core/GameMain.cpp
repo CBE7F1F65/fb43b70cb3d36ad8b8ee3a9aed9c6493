@@ -509,7 +509,7 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
-int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/)
+int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/, int angle/*=0*/)
 {
 	EnemyInGameData _edata;
 
@@ -519,6 +519,7 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int 
 	_edata.etype = etype;
 	_edata.life = life;
 	_edata.elayer = elayer;
+	_edata.angle = angle;
 
 	int retval = 0;
 	enemies[enemiesindex].push_back(_edata);

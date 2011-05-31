@@ -4,12 +4,13 @@ Comment	Index	Texture	TexW	TexH
 -	0	Graphic/white.png	1	1
 #		UI(4~11)		
 -	4	Graphic/UI/GameUI.png	1024	1024
+-	5	Graphic/UI/MissionOverUI.png	1024	1024
 -	8	Graphic/UI/TitleUI.png	1024	1024
 -	10	Graphic/UI/StageSelectUI.png	1024	1024
 -	11	Graphic/Help/HelpUI.png	1024	1024
 #		Sprite(12~23)		
 -	12	Graphic/Sprite/MapSprite.png	256	256
--	16	Graphic/Sprite/Enemy.png	1024	1024
+-	16	Graphic/Sprite/EnemySide.png	512	512
 -	20	Graphic/Sprite/AttackItem.png	512	512
 #		SpecialScene(24~31)		
 -	24	Graphic/Scene/Special/Title.png	960	640
@@ -19,3 +20,14 @@ Comment	Index	Texture	TexW	TexH
 -	32	Graphic/Scene/World/World_01.png	1024	1024
 #		Scene(48~63)		
 -	48	Graphic/Scene/Scene/Scene_01_02.png	1024	1024
+#		Enemy(64~79)		
+-	64	Graphic/Sprite/Enemy_Soldier.png	512	512
+-	65	Graphic/Sprite/Enemy_Warrior.png	512	512
+-	66	Graphic/Sprite/Enemy_Magician.png	512	512
+-	67	Graphic/Sprite/Enemy_Rifle.png	512	512
+-	68	Graphic/Sprite/Enemy_Angel.png	512	512
+-	69	Graphic/Sprite/Enemy_Shield.png	512	512
+-	70	Graphic/Sprite/Enemy_Ghost.png	512	512
+-	71	Graphic/Sprite/Enemy_Ninja.png	512	512
+-	72	Graphic/Sprite/Enemy_Archer.png	512	512
+-	73	Graphic/Sprite/Enemy_King.png	1024	1024

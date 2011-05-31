@@ -510,7 +510,7 @@ bool DataTable::ReadEnemyDefineTable()
 	pbres->ClearEnemyData();
 
 
-	_READSTRINGBUFFERLINE(12);
+	_READSTRINGBUFFERLINE(13);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -519,12 +519,13 @@ bool DataTable::ReadEnemyDefineTable()
 		enemyData * item = &(pbres->enemydata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s%s%d%s%s%x%d%d%d%d", 
+		fscanf(file, "%s%s%s%d%s%s%x%d%d%d%d", 
 			strbuffer[0], 
 			strbuffer[1], 
-			&(item->life), 
 			strbuffer[2], 
+			&(item->life), 
 			strbuffer[3], 
+			strbuffer[4], 
 			_SAVETINT, 
 			&(item->atk[0]), 
 			&(item->atk[1]), 
@@ -536,8 +537,9 @@ bool DataTable::ReadEnemyDefineTable()
 
 		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->sidesiid = SpriteItemManager::GetIndexByName(strbuffer[1]);
-		BResource::getInstance()->GetCustomConstDataByName(strbuffer[2], &item->elayer);
-		BResource::getInstance()->GetCustomConstDataByName(strbuffer[3], &item->elayeradvance);
+		item->sidearrowsiid = SpriteItemManager::GetIndexByName(strbuffer[2]);
+		BResource::getInstance()->GetCustomConstDataByName(strbuffer[3], &item->elayer);
+		BResource::getInstance()->GetCustomConstDataByName(strbuffer[4], &item->elayeradvance);
 		item->attackflag = _LOADTINT;
 	}
 

@@ -47,6 +47,7 @@ struct EnemyInGameData
 	float y;
 	int life;
 	int elayer;
+	int angle;
 	BYTE etype;
 };
 
@@ -96,7 +97,7 @@ public:
 	void Update();
 	bool CheckMissionOver();
 
-	int AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer, BYTE enemiesindex=ENEMY_ONSIDE);
+	int AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer, BYTE enemiesindex=ENEMY_ONSIDE, int angle=0);
 	int DoRemoveEnemy(BYTE enemiesindex=ENEMY_ONSIDE);
 	void RemoveEnemy(int index, BYTE enemiesindex=ENEMY_ONSIDE);
 	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex=ENEMY_ONSIDE);

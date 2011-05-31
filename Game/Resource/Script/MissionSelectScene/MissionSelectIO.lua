@@ -39,6 +39,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		
 	local spMenus = {};
 	local spSelectedMenus = {};
+	local spDisabledMenus = {};
 	local menus = {};
 	local layertag = toptag + CCTag_Layer_01;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -66,21 +67,18 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 					enabled = false;
 				end
 			
-				if enabled then
-					if missiontriedtime > 0 then
-						spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Tried);
-					else
-						spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission);
-					end
+				if missiontriedtime > 0 then
+					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Tried);
 				else
-					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Disabled);
+					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission);
 				end
+				spDisabledMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Disabled);
 				spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Down);
 			end
 		--back
 		else
-			spMenus[i+1] = game.CreateSprite(SI_TUI_Back);
-			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Back_Down);
+			spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
+			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
 		end
 		
 		if i < nodecount then
@@ -91,7 +89,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 			ycen = 120;
 		end
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen+40, ycen-40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen+40, ycen-40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
 		
 		if not enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);

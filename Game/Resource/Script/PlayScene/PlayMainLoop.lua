@@ -167,7 +167,7 @@ function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowt
 	
 	local selitemtag = index+1;
 	
-	local siid, sidesiid, life, defelayer = game.GetEnemyTypeData(etype);
+	local siid, sidesiid, sidearrowsiid, life, defelayer = game.GetEnemyTypeData(etype);
 	if elayer == nil then
 		elayer = defelayer;
 	end
@@ -239,11 +239,7 @@ function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowm
 		return true;
 	end
 	local selitemtag = index + 1;
-	local itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_OnSide);
-	local enemyonsidenode = game.GetNode({toplayer, itemtag});
-
-	local angle = game.GetAngle(enemyonsidenode);
-		
+	local itemtag, x, y, etype, life, elayer, angle = game.GetActiveEnemyData(index, ENEMY_OnSide);
 	local tx, ty, scale = game.Transform3DPoint(x, y, 1);
 	
 	local enemyonsidenode = game.GetNode({toplayer, itemtag});
@@ -296,19 +292,22 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	
 	local selitemtag = index+1;
 
-	local siid, sidesiid, life, elayer = game.GetEnemyTypeData(etype);
+	local siid, sidesiid, sidearrowsiid, life, elayer = game.GetEnemyTypeData(etype);
 	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
 		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
-	
-	local spEnemy = game.CreateSprite(sidesiid, {x, y, angle}, grouptag+selitemtag);
+
+	local spEnemy = game.CreateSprite(sidesiid, {x, y}, grouptag+selitemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag});
+	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {64, 64, angle, 2, 2}, grouptag+selitemtag);
+	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, grouptag+selitemtag});
+	game.SetColor(enemysidearrownode, global.ARGB(0xCF, 0xffffff));
 
 	local tx, ty = _PlayScene_SidePosToScenePos(x, y, angle)
 
-	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, life, elayer, ENEMY_OnSide);
+	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, life, elayer, ENEMY_OnSide, angle);
 	
 	return enemynode, layertag, grouptag, selitemtag;
 end
