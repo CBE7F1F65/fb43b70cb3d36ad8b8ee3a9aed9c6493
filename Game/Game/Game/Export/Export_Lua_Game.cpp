@@ -138,6 +138,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("ActionRepeat", LuaFn_Game_ActionRepeat);
 	_gameobj.Register("ActionDelay", LuaFn_Game_ActionDelay);
 	_gameobj.Register("ActionDelete", LuaFn_Game_ActionDelete);
+	_gameobj.Register("ActionDeleteChildren", LuaFn_Game_ActionDeleteChildren);
 	_gameobj.Register("ActionCallFunc", LuaFn_Game_ActionCallFunc);
 
 	return true;
@@ -1855,8 +1856,50 @@ int Export_Lua_Game::LuaFn_Game_ActionDelete(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
+	// time
+	float _delaytime = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_delaytime = node.fGet();
+	}
 	CCAction * retval = CCActionDelete::action();
-	node.PDword((DWORD)retval);
+	if (_delaytime > 0)
+	{
+		CCFiniteTimeAction * delayaction = CCDelayTime::actionWithDuration(_delaytime);
+		CCFiniteTimeAction * delaydeleteaction = CCSequence::actionOneTwo(delayaction, (CCFiniteTimeAction*)retval);
+		node.PDword((DWORD)delaydeleteaction);
+	}
+	else
+	{
+		node.PDword((DWORD)retval);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionDeleteChildren(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// time
+	float _delaytime = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_delaytime = node.fGet();
+	}
+	CCAction * retval = CCActionDeleteChildren::action();
+	if (_delaytime > 0)
+	{
+		CCFiniteTimeAction * delayaction = CCDelayTime::actionWithDuration(_delaytime);
+		CCFiniteTimeAction * delaydeletechildrenaction = CCSequence::actionOneTwo(delayaction, (CCFiniteTimeAction*)retval);
+		node.PDword((DWORD)delaydeletechildrenaction);
+	}
+	else
+	{
+		node.PDword((DWORD)retval);
+	}
 
 	_LEAVEFUNC_LUA;
 }

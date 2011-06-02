@@ -244,10 +244,11 @@ function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowm
 	
 	local enemyonsidenode = game.GetNode({toplayer, itemtag});
 	local onsidemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime*2);
-	local onsidealphaaction = game.ActionFade(CCAF_To, 0, LConst_EnemySpriteFadeTime*3);
+	local onsidealphaaction = game.ActionFade(CCAF_To, 0, LConst_EnemySpriteFadeTime*2);
 	local onsidedeleteaction = game.ActionDelete();
 	onsidedeleteaction = game.ActionSequence({onsidealphaaction, onsidedeleteaction});
-	local onsideaction = game.ActionSpawn({onsidemoveaction, onsidedeleteaction});
+	local onsidedeletechildrenaction = game.ActionDeleteChildren(LConst_EnemySpriteFadeTime);
+	local onsideaction = game.ActionSpawn({onsidemoveaction, onsidedeleteaction, onsidedeletechildrenaction});
 	onsideaction = game.ActionEase(CCAF_In, onsideaction, 0.35);
 	game.RunAction(enemyonsidenode, onsideaction);
 		

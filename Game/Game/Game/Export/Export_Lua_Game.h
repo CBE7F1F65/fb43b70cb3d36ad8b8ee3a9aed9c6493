@@ -92,6 +92,7 @@ public:
 	static int LuaFn_Game_ActionRepeat(LuaState * ls);
 	static int LuaFn_Game_ActionDelay(LuaState * ls);
 	static int LuaFn_Game_ActionDelete(LuaState * ls);
+	static int LuaFn_Game_ActionDeleteChildren(LuaState * ls);
 	static int LuaFn_Game_ActionCallFunc(LuaState * ls);
 
 public:

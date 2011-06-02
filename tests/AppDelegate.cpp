@@ -14,6 +14,7 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
+    SimpleAudioEngine::end();
 }
 
 bool AppDelegate::initInstance()
@@ -56,6 +57,10 @@ bool AppDelegate::initInstance()
         CocosDenshion::SimpleAudioEngine::setResource("TestCocos2dx.zip");
 #endif
 
+#endif
+	
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_AIRPLAY)
+		CCDirector::sharedDirector()->setDeviceOrientation(CCDeviceOrientationLandscapeLeft);
 #endif
 
         bRet = true;

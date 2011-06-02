@@ -27,7 +27,8 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 	
 	local bgsiid = game.GetMissionBGData();
 	local spBG = game.CreateSprite(bgsiid, {480, 336});
-	game.AddSpriteChild(spBG, {toplayer, layertag});
+	local bgitem = game.AddSpriteChild(spBG, {toplayer, layertag});
+	game.SetColor(bgitem, global.ARGB(0xff, 0xAFAFAF));
 		
 end
 

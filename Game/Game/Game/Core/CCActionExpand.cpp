@@ -4,6 +4,7 @@
 
 namespace cocos2d {
 
+	// CCActionDelete
 	CCActionDelete* CCActionDelete::action()
 	{
 		CCActionDelete* pRet = new CCActionDelete();
@@ -16,4 +17,16 @@ namespace cocos2d {
 		pTarget->removeFromParentAndCleanup(true);
 	}
 
+	// CCActionDeleteChildren
+	CCActionDeleteChildren* CCActionDeleteChildren::action()
+	{
+		CCActionDeleteChildren* pRet = new CCActionDeleteChildren();
+		pRet->autorelease();
+		return pRet;
+	}
+	void CCActionDeleteChildren::startWithTarget(CCNode *pTarget)
+	{
+		CCActionInstant::startWithTarget(pTarget);
+		pTarget->removeAllChildrenWithCleanup(true);
+	}
 }

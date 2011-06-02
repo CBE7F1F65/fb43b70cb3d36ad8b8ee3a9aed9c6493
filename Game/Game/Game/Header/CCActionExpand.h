@@ -20,4 +20,21 @@ namespace cocos2d {
 
 }
 
+namespace cocos2d {
+
+	class CCActionDeleteChildren : public CCActionInstant
+	{
+	public:
+		CCActionDeleteChildren(){}
+		virtual ~CCActionDeleteChildren(){}
+		//super methods
+		virtual void startWithTarget(CCNode *pTarget);
+	public:
+		//override static method
+		/** Allocates and initializes the action */
+		static CCActionDeleteChildren * action();
+	};
+
+}
+
 #endif
