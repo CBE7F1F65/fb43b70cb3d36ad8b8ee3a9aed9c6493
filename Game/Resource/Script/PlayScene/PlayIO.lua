@@ -45,6 +45,13 @@ function _PlayScene_AddFrameItems(toplayer, toptag)
 	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
 end
 
+function _PlayScene_AddPlanningRenderTexture(toplayer, toptag)
+	local layertag = toptag+CCTag_Layer_11;
+	local grouptag = layertag+CCTag_Menu_01;
+	
+	local rendertextureitem = game.AddRenderTextureChild(960, 640, {toplayer, layertag}, {480, 320, CCTag_Layer_11, grouptag});
+end
+
 function PlayScene_OnInit(toplayer, toptag)
 	
 	local layertag = toptag;
@@ -94,6 +101,11 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_10;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_10, layertag});
 	
+	-- Plan
+	layertag = toptag + CCTag_Layer_11;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
+	
+	_PlayScene_AddPlanningRenderTexture(toplayer, toptag);
 	
 	-- Clear GameOver
 	layertag = toptag + CCTag_Layer_12;
@@ -255,6 +267,8 @@ function _PlayScene_AddTouchLayer(toplayer, toptag)
 	local ycen = 272;
 	local width = 960;
 	local height = 544;
+	local x = xcen-width/2;
+	local y = ycen-height/2;
 	
 	local layertag = toptag + CCTag_Layer_06;
 	

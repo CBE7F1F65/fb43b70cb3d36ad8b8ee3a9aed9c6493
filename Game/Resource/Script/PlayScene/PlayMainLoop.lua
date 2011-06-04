@@ -76,6 +76,10 @@ function _PlayScene_UpdateState(toplayer, toptag)
 	elseif stateAction == STATE_Planning then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
+		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
+		elseif stateST == STATE_ST_Progressing then
+			_PlayScene_UpdatePlanning(toplayer, toptag, stateStep);
 		end
 	elseif stateAction == STATE_SelfAction then
 		if stateST == STATE_ST_Null then
@@ -113,6 +117,50 @@ function _PlayScene_UpdateState(toplayer, toptag)
 --	LOGSTATE("Post:", stateST, stateAction, stateStep, toplayer, toptag);
 end
 
+function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
+	
+	local layertag = toptag + CCTag_Layer_11;
+	local grouptag = layertag + CCTag_Menu_01;
+	local nLines = table.getn(LGlobal_PlayData.planlines);
+	if nLines > 0 then
+		local rendertextureitem = game.GetNode({toplayer, grouptag});
+		game.RenderTextureBegin(rendertextureitem);
+		local nFinishedLines = 0;
+		for i=1, nLines do
+			if LGlobal_PlayData.planlines[i].time < LConst_PlanBrushFrame then
+				local item = LGlobal_PlayData.planlines[i];
+				
+				local stepstogonow = item.stepstogo[item.time+1].now;
+				local stepstogoacc = item.stepstogo[item.time+1].acc;
+				
+				for j=0, stepstogonow-1 do
+					local nowstepindex = stepstogoacc+j;
+					local scale = RANDTF(0.5, 1);
+					if nowstepindex >= item.steps-LConst_PlanBrushFadeInStep and nowstepindex >= math.ceil(item.steps/2) then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(item.steps-nowstepindex+1);
+					elseif nowstepindex < LConst_PlanBrushFadeInStep then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(nowstepindex+1);
+					end
+					game.SetScale(LGlobal_PlayData.planbrush, scale, scale);
+					game.SetAngle(LGlobal_PlayData.planbrush, RANDT());
+					
+					local interval = item.space * (nowstepindex) / item.dist;
+					game.NodeVisit(LGlobal_PlayData.planbrush, global.INTER(item.xb, item.xe, interval), global.INTER(item.yb, item.ye, interval));
+				end
+				
+				LGlobal_PlayData.planlines[i].time = item.time+1;
+			else
+				nFinishedLines = nFinishedLines + 1;
+			end
+		end
+		game.RenderTextureEnd(rendertextureitem);
+		if nFinishedLines == nLines then
+			LGlobal_PlayData.planlines = {};
+		end
+	end
+	
+	return false;
+end
 
 function _PlayScene_ShowHelp(toplayer, toptag)
 		
@@ -304,7 +352,15 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag});
 	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {64, 64, angle, 2, 2}, grouptag+selitemtag);
 	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, grouptag+selitemtag});
-	game.SetColor(enemysidearrownode, global.ARGB(0xCF, 0xffffff));
+	
+	game.SetColor(enemysidearrownode, global.ARGB(0, 0xffffff));
+	local blinktimepre = 0.5;
+	local blinktimepost = 0.9;
+	local arrowfadeactionpre = game.ActionFade(CCAF_To, 0xCF, blinktimepre);
+	local arrowfadeactionpost = game.ActionFade(CCAF_To, 0x1F, blinktimepost);
+	local arrowfadeaction = game.ActionSequence({arrowfadeactionpre, arrowfadeactionpost});
+	arrowfadeaction = game.ActionRepeat(arrowfadeaction);
+	game.RunAction(enemysidearrownode, arrowfadeaction);
 
 	local tx, ty = _PlayScene_SidePosToScenePos(x, y, angle)
 

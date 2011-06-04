@@ -556,6 +556,14 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 end
 
 function _PlayScene_CB_Action(toplayer, toptag)
+	local layertag = toptag+CCTag_Layer_11;
+	local grouptag = layertag+CCTag_Menu_01;
+	local rendertextureitem = game.GetNode({toplayer, grouptag});
+	game.RenderTextureBegin(rendertextureitem, true);
+	game.RenderTextureEnd(rendertextureitem);
+	LGlobal_PlayData.planlines = {};
+	LGlobal_PlayData.plandots = {};
+	LGlobal_PlayData.plancircles = {};
 	_PlayScene_StateFinish(STATE_Planning);
 end
 

@@ -46,6 +46,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 
 	obj->Register("GetEnemyTypeData", LuaFn_Game_GetEnemyTypeData);
 	obj->Register("GetEnemyATK", LuaFn_Game_GetEnemyATK);
+	obj->Register("GetEnemyDEF", LuaFn_Game_GetEnemyDEF);
 	obj->Register("GetEnemyELayerAdvance", LuaFn_Game_GetEnemyELayerAdvance);
 
 	obj->Register("AddEnemy", LuaFn_Game_AddEnemy);
@@ -514,6 +515,19 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyATK(LuaState * ls)
 		node.PInt(item->atk[_atkindex]);
 		break;
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetEnemyDEF(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// etype, atkindex -> Def
+	BYTE _etype = node.iNextGet();
+	int _defindex = node.iNextGet();
+	enemyData * item = &(BResource::getInstance()->enemydata[_etype]);
+	node.PInt(item->def[_defindex]);
 
 	_LEAVEFUNC_LUA;
 }

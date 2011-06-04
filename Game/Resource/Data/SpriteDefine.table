@@ -250,3 +250,5 @@ Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
 -	437	SI_Enemy_King_Wounded	73	0	0	256	320
 -	438	SI_Enemy_King_Attack	73	0	0	256	320
 -	439	SI_Enemy_King_Dead	73	0	0	256	320
+#		GameSprite(460~499)					
+-	460	SI_Game_PlanBrush	20	0	448	32	32

@@ -1,17 +1,16 @@
-function TouchLayer_CB(itemtag, toplayer, eventtag, toptag, sublayertag, touchlayer, index)
+function TouchLayer_CB(toplayer, eventtag, toptag, sublayertag, touchlayer, index, gesture)
 	
 	if toptag == ktag_PlaySceneLayer then
-		
 		if sublayertag == CCTag_Layer_06 then
 			local layertag = toptag + sublayertag;
 			if eventtag == CCTI_Began then
-				_PlayScene_CB_Touch_Began(toplayer, toptag, touchlayer, index);
+				_PlayScene_CB_Touch_Began(toplayer, toptag, touchlayer, index, gesture);
 			elseif eventtag == CCTI_Moved then
-				_PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index);
+				_PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture);
 			elseif eventtag == CCTI_Ended then
-				_PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index);
+				_PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture);
 			else
-				_PlayScene_CB_Touch_Canceled(toplayer, toptag, touchlayer, index);
+				_PlayScene_CB_Touch_Canceled(toplayer, toptag, touchlayer, index, gesture);
 			end
 		end
 	

@@ -48,6 +48,12 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("STATE_EnemyAction", GAMESTATE_ENEMYACTION);
 	obj->SetInteger("STATE_Over", GAMESTATE_OVER);
 
+	obj->SetInteger("GESTURE_Unknown", M_TOUCHGESTURE_UNKNOWN);
+	obj->SetInteger("GESTURE_OneNoMove", M_TOUCHGESTURE_ONE_NOMOVE);
+	obj->SetInteger("GESTURE_OneMoved", M_TOUCHGESTURE_ONE_MOVED);
+	obj->SetInteger("GESTURE_TwoNoMove", M_TOUCHGESTURE_TWO_NOMOVE);
+	obj->SetInteger("GESTURE_TwoMoved", M_TOUCHGESTURE_TWO_MOVED);
+
 	obj->SetInteger("ENEMY_InScene", ENEMY_INSCENE);
 	obj->SetInteger("ENEMY_OnSide", ENEMY_ONSIDE);
 
@@ -82,6 +88,12 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("AddNullChild", LuaFn_Game_AddNullChild);
 	_gameobj.Register("RemoveChild", LuaFn_Game_RemoveChild);
 	_gameobj.Register("RemoveAllChildren", LuaFn_Game_RemoveAllChildren);
+
+	// RenderTexture
+	_gameobj.Register("AddRenderTextureChild", LuaFn_Game_AddRenderTextureChild);
+	_gameobj.Register("RenderTextureBegin", LuaFn_Game_RenderTextureBegin);
+	_gameobj.Register("RenderTextureEnd", LuaFn_Game_RenderTextureEnd);
+	_gameobj.Register("NodeVisit", LuaFn_Game_NodeVisit);
 
 	// Sprite
 	_gameobj.Register("GetSIData", LuaFn_Game_GetSIData);
@@ -623,6 +635,115 @@ int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
 		_bcleanup = node.bGet();
 	}
 	nownode->removeAllChildrenWithCleanup(_bcleanup);
+
+	_LEAVEFUNC_LUA;
+}
+
+/************************************************************************/
+/* RenderTexture                                                        */
+/************************************************************************/
+
+int Export_Lua_Game::LuaFn_Game_AddRenderTextureChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(3);
+
+	// (width, height, {nodelist}, {XYZT})
+	float _width = BGlobal::ScalerX(node.fNextGet());
+	float _height = BGlobal::ScalerY(node.fNextGet());
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode tcnode(ls, &(node._obj), &node);
+		CCNode * nownode = _GetNowNode(&tcnode);
+		if (!nownode)
+		{
+			break;
+		}
+		float _x = 0;
+		float _y = 0;
+		int _zOrder = 0;
+		int _tag = kCCNodeTagInvalid;
+
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_LObjNode cnode(ls, &(node._obj), &node);
+			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
+		}
+
+		CCRenderTexture * item = CCRenderTexture::renderTextureWithWidthAndHeight(_width, _height);
+		nownode->addChild(item, _zOrder, _tag);
+		item->setPosition(BGlobal::TranslatePosition(_x, _y));
+
+		node.PDword((DWORD)item);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_RenderTextureBegin(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item bclean
+	CCRenderTexture * _item = (CCRenderTexture *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	bool _bclean = false;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bclean = node.bGet();
+	}
+	if (_bclean)
+	{
+		_item->beginWithClear(0, 0, 0, 0);
+	}
+	else
+	{
+		_item->begin();
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_RenderTextureEnd(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item
+	CCRenderTexture * _item = (CCRenderTexture *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	_item->end();
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_NodeVisit(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item, x, y
+	CCNode * _item = (CCNode *)node.dNextGet();
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		float _x = node.fGet();
+		float _y = BGlobal::RScalerY(_item->getPosition().y);
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_y = node.fGet();
+		}
+		_item->setPosition(BGlobal::TranslatePosition(_x, _y));
+	}
+	_item->visit();
 
 	_LEAVEFUNC_LUA;
 }

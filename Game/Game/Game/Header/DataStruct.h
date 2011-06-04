@@ -57,7 +57,8 @@ struct effectData
 
 struct weaponData 
 {
-	int siid;
+	int apcost;
+	int atk;
 };
 
 struct itemData
@@ -74,6 +75,7 @@ struct enemyData
 	int elayer;
 	int elayeradvance;
 	int atk[M_ENEMY_ELAYERMAX];
+	int def[M_WEAPONTYPEMAX];
 	BYTE attackflag;
 };
 

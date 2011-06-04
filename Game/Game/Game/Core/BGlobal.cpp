@@ -92,7 +92,7 @@ bool BGlobal::IsTap(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLO
 {
 	if (DIST2(beginpos.x, beginpos.y, endpos.x, endpos.y) < M_TOUCH_ALLOWABLEMOVEMENT*M_TOUCH_ALLOWABLEMOVEMENT)
 	{
-		if (!((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION))
+		if ((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION)
 		{
 			return true;
 		}
@@ -104,7 +104,7 @@ bool BGlobal::IsHold(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGL
 {
 	if (DIST2(beginpos.x, beginpos.y, endpos.x, endpos.y) < M_TOUCH_ALLOWABLEMOVEMENT*M_TOUCH_ALLOWABLEMOVEMENT)
 	{
-		if ((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION)
+		if (!((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION))
 		{
 			return true;
 		}
@@ -124,4 +124,59 @@ bool BGlobal::IsMove(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGL
 bool BGlobal::PointInRect(CCPoint point, CCRect rect)
 {
 	return CCRect::CCRectContainsPoint(rect, point);
+}
+
+BYTE BGlobal::GetGesture(CCPoint beginpos0, CCPoint endpos0, LONGLONG begintime0, LONGLONG endtime0, CCPoint beginpos1, CCPoint endpos1, LONGLONG begintime1, LONGLONG endtime1, bool bTwoFingers /*=false*/, bool bFinal /*=false*/)
+{
+	if (!bTwoFingers)
+	{
+		if (bFinal)
+		{
+			if (!IsMove(beginpos0, endpos0, begintime0, endtime0))
+			{
+				return M_TOUCHGESTURE_ONE_NOMOVE;
+			}
+			else
+			{
+				return M_TOUCHGESTURE_ONE_MOVED;
+			}
+		}
+		else
+		{
+			if ((endtime0-begintime0) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_DOUBLEPRESSWAITDURATION)
+			{
+				return M_TOUCHGESTURE_UNKNOWN;
+			}
+			else
+			{
+				if (IsMove(beginpos0, endpos0, begintime0, endtime0))
+				{
+					return M_TOUCHGESTURE_ONE_MOVED;
+				}
+				else
+				{
+					return M_TOUCHGESTURE_UNKNOWN;
+				}
+			}
+		}
+	}
+	else
+	{
+		if (IsMove(beginpos0, endpos0, begintime0, endtime0) || IsMove(beginpos1, endpos1, begintime1, endtime1))
+		{
+			return M_TOUCHGESTURE_TWO_MOVED;
+		}
+		else
+		{
+			if (bFinal)
+			{
+				return M_TOUCHGESTURE_TWO_NOMOVE;
+			}
+			else
+			{
+				return M_TOUCHGESTURE_UNKNOWN;
+			}
+		}
+	}
+	return M_TOUCHGESTURE_UNKNOWN;
 }

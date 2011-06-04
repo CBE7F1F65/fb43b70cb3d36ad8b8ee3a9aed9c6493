@@ -456,8 +456,31 @@ bool DataTable::ReadEffectDefineTable()
 
 bool DataTable::ReadWeaponDefineTable()
 {
+	if (!CheckHeader(DATATYPE_WEAPONDEFINE))
+	{
+		return false;
+	}
+
 	BResource * pbres = BResource::getInstance();
+
 	pbres->ClearWeaponData();
+
+	_READSTRINGBUFFERLINE(4);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		weaponData * item = &(pbres->weapondata[tindex]);
+		_CHECKEOF_DATATABLE;
+
+		fscanf(file, "%d%d", 
+			&(item->apcost), 
+			&(item->atk));
+
+		_DOSWAPTINT;
+		_INITTINT;
+	}
 	return true;
 }
 
@@ -510,7 +533,7 @@ bool DataTable::ReadEnemyDefineTable()
 	pbres->ClearEnemyData();
 
 
-	_READSTRINGBUFFERLINE(13);
+	_READSTRINGBUFFERLINE(16);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -519,7 +542,7 @@ bool DataTable::ReadEnemyDefineTable()
 		enemyData * item = &(pbres->enemydata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s%s%s%d%s%s%x%d%d%d%d", 
+		fscanf(file, "%s%s%s%d%s%s%x%d%d%d%d%d%d%d", 
 			strbuffer[0], 
 			strbuffer[1], 
 			strbuffer[2], 
@@ -530,7 +553,10 @@ bool DataTable::ReadEnemyDefineTable()
 			&(item->atk[0]), 
 			&(item->atk[1]), 
 			&(item->atk[2]), 
-			&(item->atk[3]));
+			&(item->atk[3]), 
+			&(item->def[0]), 
+			&(item->def[1]), 
+			&(item->def[2]));
 
 		_DOSWAPTINT;
 		_INITTINT;

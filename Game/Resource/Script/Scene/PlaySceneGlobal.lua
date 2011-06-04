@@ -9,6 +9,12 @@ LGlobal_PlayData =
 	pushedMenuData = {};
 	
 	itemCount = 0;
+	
+	planlines = {};
+	plandots = {};
+	plancircles = {};
+	
+	planbrush = nil;
 }
 
 
@@ -19,6 +25,10 @@ function LGlobal_PlayScene_InitGlobal(toplayer, toptag)
 	LGlobal_PlayData.pushedMenuData = {};
 	LGlobal_PlayData.itemCount = game.GetItemData();
 	LGlobal_PlayData.btrasitioning = true;
+	LGlobal_PlayData.planlines = {};
+	LGlobal_PlayData.plandots = {};
+	LGlobal_PlayData.plancircles = {};
+	LGlobal_PlayData.planbrush = game.CreateSprite(SI_Game_PlanBrush);
 end
 
 function LGobal_PushPlaySceneMenuData(itemtag, posdata)

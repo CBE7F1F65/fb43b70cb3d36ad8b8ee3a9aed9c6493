@@ -16,6 +16,7 @@ void TouchLayer::initWithRect(CCLayer * _toplayer, CCRect rect)
 {
 	toplayer = _toplayer;
 	touchrect = rect;
+	gesture = M_TOUCHGESTURE_UNKNOWN;
 }
 
 TouchLayer::~TouchLayer()
@@ -25,6 +26,11 @@ TouchLayer::~TouchLayer()
 
 void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 {
+	if (gesture)
+	{
+		return;
+	}
+
 	CCSetIterator it = pTouches->begin();
 	for (; it!=pTouches->end(); ++it)
 	{
@@ -61,7 +67,8 @@ void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 
 		touchdata[i].bPressing = true;
 		touchdata[i].touch = touch;
-		Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_BEGAN, this, i);
+
+		Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_BEGAN, this, i, gesture);
 	}
 }
 
@@ -82,7 +89,21 @@ void TouchLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].endPos = touchdata[i].nowPos;
 				touchdata[i].endPressTime = touchdata[i].nowPressTime;
 
-				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_MOVED, this, i);
+				if (!gesture)
+				{
+					gesture = BGlobal::GetGesture(
+						touchdata[i].beginPos, 
+						touchdata[i].endPos, 
+						touchdata[i].beginPressTime, 
+						touchdata[i].endPressTime, 
+						touchdata[1-i].beginPos, 
+						touchdata[1-i].endPos, 
+						touchdata[1-i].beginPressTime, 
+						touchdata[1-i].endPressTime, 
+						touchdata[1-i].bPressing);
+				}
+
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_MOVED, this, i, gesture);
 				break;
 			}
 		}
@@ -104,11 +125,35 @@ void TouchLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 				touchdata[i].bPressing = false;
 				touchdata[i].touch = NULL;
-				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+
+				if (!gesture)
+				{
+					gesture = BGlobal::GetGesture(
+						touchdata[i].beginPos, 
+						touchdata[i].endPos, 
+						touchdata[i].beginPressTime, 
+						touchdata[i].endPressTime, 
+						touchdata[1-i].beginPos, 
+						touchdata[1-i].endPos, 
+						touchdata[1-i].beginPressTime, 
+						touchdata[1-i].endPressTime, 
+						touchdata[1-i].bPressing, 
+						true);
+				}
+
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i, gesture);
 				break;
 			}
 		}
 	}
+	for (int i=0; i<M_TOUCHMAX; i++)
+	{
+		if (touchdata[i].bPressing)
+		{
+			return;
+		}
+	}
+	gesture = M_TOUCHGESTURE_UNKNOWN;
 }
 
 void TouchLayer::ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent)
@@ -126,11 +171,35 @@ void TouchLayer::ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent)
 				touchdata[i].endPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 				touchdata[i].bPressing = false;
 				touchdata[i].touch = NULL;
-				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i);
+
+				if (!gesture)
+				{
+					gesture = BGlobal::GetGesture(
+						touchdata[i].beginPos, 
+						touchdata[i].endPos, 
+						touchdata[i].beginPressTime, 
+						touchdata[i].endPressTime, 
+						touchdata[1-i].beginPos, 
+						touchdata[1-i].endPos, 
+						touchdata[1-i].beginPressTime, 
+						touchdata[1-i].endPressTime, 
+						touchdata[1-i].bPressing, 
+						true);
+				}
+
+				Export_Lua_Scene::ExecuteCBTouchLayer(this->getTag(), toplayer, M_CCTOUCHINDICATOR_ENDED, this, i, gesture);
 				break;
 			}
 		}
 	}
+	for (int i=0; i<M_TOUCHMAX; i++)
+	{
+		if (touchdata[i].bPressing)
+		{
+			return;
+		}
+	}
+	gesture = M_TOUCHGESTURE_UNKNOWN;
 }
 
 void TouchLayer::onEnter()

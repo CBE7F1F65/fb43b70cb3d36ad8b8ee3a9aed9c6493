@@ -46,6 +46,7 @@ public:
 	CCLayer * toplayer;
 	CCRect touchrect;
 
+	BYTE gesture;
 	TouchData touchdata[M_TOUCHMAX];
 };
 

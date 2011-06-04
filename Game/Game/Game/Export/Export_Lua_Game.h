@@ -45,6 +45,11 @@ public:
 	static int LuaFn_Game_RemoveChild(LuaState * ls);
 	static int LuaFn_Game_RemoveAllChildren(LuaState * ls);
 
+	static int LuaFn_Game_AddRenderTextureChild(LuaState * ls);
+	static int LuaFn_Game_RenderTextureBegin(LuaState * ls);
+	static int LuaFn_Game_RenderTextureEnd(LuaState * ls);
+	static int LuaFn_Game_NodeVisit(LuaState * ls);
+
 	static int LuaFn_Game_GetSIData(LuaState * ls);
 
 	static int LuaFn_Game_CreateSprite(LuaState * ls);
@@ -137,6 +142,7 @@ public:
 
 	static int LuaFn_Game_GetEnemyTypeData(LuaState * ls);
 	static int LuaFn_Game_GetEnemyATK(LuaState * ls);
+	static int LuaFn_Game_GetEnemyDEF(LuaState * ls);
 	static int LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls);
 
 	static int LuaFn_Game_AddEnemy(LuaState * ls);

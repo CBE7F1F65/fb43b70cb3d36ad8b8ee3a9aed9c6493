@@ -18,3 +18,9 @@ LConst_EnemyEnterDelayTime = 0.1;
 
 LConst_HPRegainRate = 0.2;
 LConst_APRegainRate = 1.0;
+
+LConst_PlanBrushFrame = 8;
+LConst_PlanBrushSpace = 5;
+LConst_PlanBrushFadeInStep = 9;
+
+LConst_APCostMin = APMax/8;

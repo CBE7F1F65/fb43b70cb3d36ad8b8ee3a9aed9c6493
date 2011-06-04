@@ -6,6 +6,8 @@ using namespace cocos2d;
 
 #include "MainDependency.h"
 
+#include "../Classes/TouchLayer.h"
+
 class BGlobal
 {
 public:
@@ -32,6 +34,8 @@ public:
 	static bool IsMove(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 
 	static bool PointInRect(CCPoint point, CCRect rect);
+
+	static BYTE GetGesture(CCPoint beginpos0, CCPoint endpos0, LONGLONG begintime0, LONGLONG endtime0, CCPoint beginpos1, CCPoint endpos1, LONGLONG begintime1, LONGLONG endtime1, bool bTwoFingers=false, bool bFinal=false);
 
 public:
 	static int pushedscenecount;
