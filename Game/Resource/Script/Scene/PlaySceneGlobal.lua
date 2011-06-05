@@ -31,6 +31,7 @@ function LGlobal_PlayScene_InitGlobal(toplayer, toptag)
 	LGlobal_PlayData.plandots = {};
 	LGlobal_PlayData.plancircles = {};
 	LGlobal_PlayData.planbrush.laser = game.CreateSprite(SI_Game_PlanBrush_Laser);
+
 	LGlobal_PlayData.planbrush.bomb = game.CreateSprite(SI_Game_PlanBrush_Bomb);
 	LGlobal_PlayData.planbrush.sniper = game.CreateSprite(SI_Game_PlanBrush_Sniper);
 	LGlobal_PlayData.bZoomed = false;

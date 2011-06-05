@@ -139,7 +139,7 @@ public:
 
 	bio3DPoint ptfar;
 
-	vector<list<EnemyInGameData>> enemies;
+	vector< list<EnemyInGameData> > enemies;
 
 public:
 	static GameMain * getInstance();

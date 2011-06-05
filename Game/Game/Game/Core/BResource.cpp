@@ -262,6 +262,17 @@ bool BResource::PackData()
 
 	bool bret = BIOInterface::getInstance()->Resource_CreatePack(RESOURCE_RESBINFILE, RESOURCE_RESBINPASSWORD, &memfile, NULL);
 
+	ClearCustomConstData();
+	ClearMusicData();
+	ClearSEData();
+	ClearTextureData();
+	ClearSpriteData();
+	ClearEffectData();
+	ClearWeaponData();
+	ClearItemData();
+	ClearEnemyData();
+	ClearMissionData();
+
 	free(content);
 	return bret;
 }

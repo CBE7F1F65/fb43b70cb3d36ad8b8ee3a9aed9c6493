@@ -122,6 +122,7 @@ function PlayScene_OnInit(toplayer, toptag)
 end
 
 function PlayScene_OnEnter(toplayer, toptag)
+	LGlobal_PlayScene_InitGlobal(toplayer, toptag);
 	game.EnterMission();
 end
 
