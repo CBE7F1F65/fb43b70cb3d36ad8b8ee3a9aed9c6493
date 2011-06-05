@@ -287,3 +287,22 @@ bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *
 	}
 	return true;
 }
+
+void TouchLayer::TerminateTouch(int index/* =-1 */)
+{
+	if (index >= M_TOUCHMAX)
+	{
+		return;
+	}
+	for (int i=0; i<M_TOUCHMAX; i++)
+	{
+		if (touchdata[i].bPressing && touchdata[i].touch)
+		{
+			if (index < 0 || index == i)
+			{
+				touchdata[i].bPressing = false;
+				touchdata[i].touch = NULL;
+			}
+		}
+	}
+}

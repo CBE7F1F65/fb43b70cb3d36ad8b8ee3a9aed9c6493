@@ -11,7 +11,7 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 		if gesture == GESTURE_TwoMoved then
 			local oxb, oyb = game.GetTouchInfo(touchlayer, 1-index, CCTI_Began);
 			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, (xb+oxb)/2, (yb+oyb)/2);
-			game.TerminateTouch();
+			game.TerminateTouch(touchlayer);
 			
 		else
 			if LGlobal_PlayData.bZoomed then

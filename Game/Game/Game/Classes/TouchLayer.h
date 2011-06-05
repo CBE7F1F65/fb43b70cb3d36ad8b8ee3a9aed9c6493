@@ -46,6 +46,8 @@ public:
 	int GetTouchType(int index);
 	bool GetTouchData(int index, int flag, float *x=NULL, float *y = NULL, LONGLONG *time=NULL, CCRect *rect=NULL);
 
+	void TerminateTouch(int index=-1);
+
 public:
 	CCLayer * toplayer;
 	CCRect touchrect;
