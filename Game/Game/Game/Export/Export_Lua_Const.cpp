@@ -19,6 +19,8 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetNumber("ScreenWidth", M_SCREEN_WIDTH);
 	obj->SetNumber("ScreenHeight", M_SCREEN_HEIGHT);
 
+	obj->SetNumber("M_PI", M_PI);
+
 	obj->SetInteger("CCAF_Null", M_CCACTIONFLAG_NULL);
 	obj->SetInteger("CCAF_In", M_CCACTIONFLAG_IN);
 	obj->SetInteger("CCAF_Out", M_CCACTIONFLAG_OUT);
@@ -32,6 +34,7 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 
 	obj->SetInteger("CCTI_Began", M_CCTOUCHINDICATOR_BEGAN);
 	obj->SetInteger("CCTI_Moved", M_CCTOUCHINDICATOR_MOVED);
+	obj->SetInteger("CCTI_LastMoved", M_CCTOUCHINDICATOR_LASTMOVED);
 	obj->SetInteger("CCTI_Ended", M_CCTOUCHINDICATOR_ENDED);
 	obj->SetInteger("CCTI_Canceled", M_CCTOUCHINDICATOR_CANCELED);
 

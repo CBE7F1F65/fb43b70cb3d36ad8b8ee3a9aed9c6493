@@ -14,6 +14,7 @@
 #include "../Header/GameMain.h"
 
 #include "../Header/CCActionExpand.h"
+#include "../Header/SceneConst.h"
 
 
 #if defined __IPHONE
@@ -21,6 +22,10 @@
 #else
 #define M_DEFAULT_FONTNAME	"Courier New Bold"
 #endif
+
+#define M_CAMERA_EYE	0x00
+#define M_CAMERA_CENTER	0x01
+#define M_CAMERA_UP		0x02
 
 using namespace cocos2d;
 
@@ -53,6 +58,19 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("GESTURE_OneMoved", M_TOUCHGESTURE_ONE_MOVED);
 	obj->SetInteger("GESTURE_TwoNoMove", M_TOUCHGESTURE_TWO_NOMOVE);
 	obj->SetInteger("GESTURE_TwoMoved", M_TOUCHGESTURE_TWO_MOVED);
+
+	obj->SetInteger("TOUCH_Tap", M_CCTOUCH_TAP);
+	obj->SetInteger("TOUCH_Hold", M_CCTOUCH_HOLD);
+	obj->SetInteger("TOUCH_Move", M_CCTOUCH_MOVE);
+	obj->SetInteger("TOUCH_HoldAndMove", M_CCTOUCH_HOLDANDMOVE);
+
+	obj->SetInteger("CAMERA_Eye", M_CAMERA_EYE);
+	obj->SetInteger("CAMERA_Center", M_CAMERA_CENTER);
+	obj->SetInteger("CAMERA_Up", M_CAMERA_UP);
+
+	obj->SetInteger("WEAPON_Laser", M_WEAPON_LASER);
+	obj->SetInteger("WEAPON_Bomb", M_WEAPON_BOMB);
+	obj->SetInteger("WEAPON_Sniper", M_WEAPON_SNIPER);
 
 	obj->SetInteger("ENEMY_InScene", ENEMY_INSCENE);
 	obj->SetInteger("ENEMY_OnSide", ENEMY_ONSIDE);
@@ -106,14 +124,20 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	// Menu
 	_gameobj.Register("CreateMenuItem", LuaFn_Game_CreateMenuItem);
+	_gameobj.Register("SetMenuEnabled", LuaFn_Game_SetMenuEnabled);
 	_gameobj.Register("SetMenuItemEnabled", LuaFn_Game_SetMenuItemEnabled);
 	_gameobj.Register("AddMenuChild", LuaFn_Game_AddMenuChild);
 	
+	// Overlay
+	_gameobj.Register("AddOverlayLayerChild", LuaFn_Game_AddOverlayChild);
+	_gameobj.Register("GetOverlayLayer", LuaFn_Game_GetOverlayLayer);
+
 	// Input
 	_gameobj.Register("AddInputLayerChild", LuaFn_Game_AddInputLayerChild);
 
 	// Touch
 	_gameobj.Register("AddTouchLayerChild", LuaFn_Game_AddTouchLayerChild);
+	_gameobj.Register("SetTouchLayerRect", LuaFn_Game_SetTouchLayerRect);
 	_gameobj.Register("GetTouchInfo", LuaFn_Game_GetTouchInfo);
 
 	// Action
@@ -126,6 +150,9 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	_gameobj.Register("GetSubTags", LuaFn_Game_GetSubTags);
 
+	// Camera
+	_gameobj.Register("CameraGet", LuaFn_Game_CameraGet);
+	_gameobj.Register("CameraSet", LuaFn_Game_CameraSet);
 
 	_gameobj.Register("SetPosition", LuaFn_Game_SetPosition);
 	_gameobj.Register("GetPosition", LuaFn_Game_GetPosition);
@@ -1047,6 +1074,40 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_SetMenuEnabled(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	CCMenu * _item = (CCMenu *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+	bool _benable = true;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_benable = node.bGet();
+	}
+
+	CCArray * pChildren = _item->getChildren();
+	if (pChildren && pChildren->count() > 0)
+	{
+		CCObject* pObject = NULL;
+		CCARRAY_FOREACH(pChildren, pObject)
+		{
+			CCMenuItem* pChild = (CCMenuItem*) pObject;
+			if (pChild)
+			{
+				pChild->setIsEnabled(_benable);
+			}
+		}
+	}	
+
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_SetMenuItemEnabled(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
@@ -1127,6 +1188,49 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 		}
 		node.PDword((DWORD)menu);
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddOverlayChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	CCLayer * _toplayer = (CCLayer *)node.dNextGet();
+	if (!_toplayer)
+	{
+		break;
+	}
+	float _x = 0.0f;
+	float _y = 0.0f;
+	int _zOrder = 0;
+	int _tag = KTAG_OVERLAYLAYER;
+	node.jNextGet();
+	if (node.bhavenext && node.ObjIsTable())
+	{
+		int _ttag;
+		_LObjNode tcnode(ls, &(node._obj), &node);
+		_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_ttag);
+	}
+	CCLayer * addednode = CCLayer::node();
+	addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
+	_toplayer->getParent()->addChild(addednode, _zOrder, _tag);
+	node.PDword((DWORD)addednode);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetOverlayLayer(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	CCLayer * _toplayer = (CCLayer *)node.dNextGet();
+	if (!_toplayer)
+	{
+		break;
+	}
+	CCNode * layer = _toplayer->getParent()->getChildByTag(KTAG_OVERLAYLAYER);
+	node.PDword((DWORD)layer);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1245,11 +1349,31 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_SetTouchLayerRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	TouchLayer * _touchlayer = (TouchLayer *)node.dNextGet();
+	if (!_touchlayer)
+	{
+		break;
+	}
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode cnode(ls, &(node._obj), &node);
+		CCRect _rect = _GetRect(&cnode);
+		_touchlayer->setTouchRect(_rect);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// touchlayer, index, ccti -> x, y, time, rectx, recty, rectw, recth
+	// touchlayer, index, ccti -> x, y, time, touchtype, rectx, recty, rectw, recth
 
 	TouchLayer * _touchlayer = (TouchLayer *)node.dNextGet();
 	if (!_touchlayer)
@@ -1275,6 +1399,11 @@ int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 	CCRect rect;
 
 	_touchlayer->GetTouchData(_index, _flag, &x, &y, &time, &rect);
+	int touchtype = M_CCTOUCH_TAP;
+	if (_flag != M_CCTOUCHINDICATOR_BEGAN)
+	{
+		touchtype = _touchlayer->GetTouchType(_index);
+	}
 
 	x = BGlobal::RScalerX(x);
 	y = BGlobal::RScalerX(y);
@@ -1282,6 +1411,7 @@ int Export_Lua_Game::LuaFn_Game_GetTouchInfo(LuaState * ls)
 	node.PFloat(x);
 	node.PFloat(y);
 	node.PLongLong(time);
+	node.PInt(touchtype);
 	node.PFloat(rect.origin.x);
 	node.PFloat(rect.origin.y);
 	node.PFloat(rect.size.width);
@@ -1414,6 +1544,102 @@ int Export_Lua_Game::LuaFn_Game_GetSubTags(LuaState * ls)
 	node.PInt(sublayertag);
 	node.PInt(menugrouptag);
 	node.PInt(menuitemtag);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_CameraGet(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+
+	float x=0;
+	float y=0;
+	float z=0;
+	int _flag = node.iNextGet();
+	switch (_flag)
+	{
+	case M_CAMERA_EYE:
+		_item->getCamera()->getEyeXYZ(&x, &y, &z);
+		break;
+	case M_CAMERA_CENTER:
+		_item->getCamera()->getCenterXYZ(&x, &y, &z);
+		break;
+	case M_CAMERA_UP:
+		_item->getCamera()->getUpXYZ(&x, &y, &z);
+		break;
+	}
+
+	x = BGlobal::RScalerX(x);
+	y = BGlobal::RScalerY(y);
+	z = BGlobal::RScaler(z);
+
+	node.PFloat(x);
+	node.PFloat(y);
+	node.PFloat(z);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_CameraSet(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
+
+	float x=0;
+	float y=0;
+	float z=0;
+	int _flag = node.iNextGet();
+	switch (_flag)
+	{
+	case M_CAMERA_EYE:
+		_item->getCamera()->getEyeXYZ(&x, &y, &z);
+		break;
+	case M_CAMERA_CENTER:
+		_item->getCamera()->getCenterXYZ(&x, &y, &z);
+		break;
+	case M_CAMERA_UP:
+		_item->getCamera()->getUpXYZ(&x, &y, &z);
+		break;
+	}
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		x = BGlobal::ScalerX(node.fGet());
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			y = BGlobal::ScalerY(node.fGet());
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				z = BGlobal::Scaler(node.fGet());
+			}
+		}
+	}
+	switch (_flag)
+	{
+	case M_CAMERA_EYE:
+		_item->getCamera()->setEyeXYZ(x, y, z);
+		break;
+	case M_CAMERA_CENTER:
+		_item->getCamera()->setCenterXYZ(x, y, z);
+		break;
+	case M_CAMERA_UP:
+		_item->getCamera()->setUpXYZ(x, y, z);
+		break;
+	}
 
 	_LEAVEFUNC_LUA;
 }

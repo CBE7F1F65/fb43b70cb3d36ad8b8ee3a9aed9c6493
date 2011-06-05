@@ -1,5 +1,5 @@
-130	h5nc	57	
-Comment	Index	AP	ATK
--	0	10	1500
--	1	1500	2000
--	2	3500	5000
+130	h5nc	57		
+Comment	Index	AP	ATK	Para
+-	0	10	1500	1250
+-	1	1500	2000	48
+-	2	3500	5000	5

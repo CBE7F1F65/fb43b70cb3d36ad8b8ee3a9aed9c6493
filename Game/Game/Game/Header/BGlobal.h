@@ -29,7 +29,6 @@ public:
 	static CCSize RScalerSize(CCSize size);
 	static CCRect RScalerRect(CCRect rect);
 
-	static bool IsTap(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 	static bool IsHold(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 	static bool IsMove(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime);
 

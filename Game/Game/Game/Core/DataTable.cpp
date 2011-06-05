@@ -465,7 +465,7 @@ bool DataTable::ReadWeaponDefineTable()
 
 	pbres->ClearWeaponData();
 
-	_READSTRINGBUFFERLINE(4);
+	_READSTRINGBUFFERLINE(5);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -474,9 +474,10 @@ bool DataTable::ReadWeaponDefineTable()
 		weaponData * item = &(pbres->weapondata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%d%d", 
+		fscanf(file, "%d%d%d", 
 			&(item->apcost), 
-			&(item->atk));
+			&(item->atk), 
+			&(item->para));
 
 		_DOSWAPTINT;
 		_INITTINT;

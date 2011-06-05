@@ -59,6 +59,7 @@ struct weaponData
 {
 	int apcost;
 	int atk;
+	int para;
 };
 
 struct itemData

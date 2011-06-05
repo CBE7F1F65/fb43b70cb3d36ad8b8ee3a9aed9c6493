@@ -251,4 +251,8 @@ Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
 -	438	SI_Enemy_King_Attack	73	0	0	256	320
 -	439	SI_Enemy_King_Dead	73	0	0	256	320
 #		GameSprite(460~499)					
--	460	SI_Game_PlanBrush	20	0	448	32	32
+-	460	SI_Game_PlanBrush_Laser	20	0	448	32	32
+-	461	SI_Game_PlanBrush_Bomb	20	32	448	32	32
+-	462	SI_Game_PlanBrush_Sniper	20	64	448	32	32
+-	463	SI_Game_Sniper_Scope	20	0	0	256	256
+-	464	SI_Game_Sniper_FrontSight	20	0	256	128	128

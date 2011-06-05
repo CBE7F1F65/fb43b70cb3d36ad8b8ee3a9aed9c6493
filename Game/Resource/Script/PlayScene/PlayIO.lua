@@ -111,12 +111,28 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_12;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_12, layertag});
 	
-	LGlobal_PlayScene_InitGlobal(toplayer, toptag);
+	-- Overlay
+	local overlaylayer = game.AddOverlayLayerChild(toplayer, {0, 0, CCZ_Max});
+	-- Sniper Scope
+	layertag = ktag_OverlayLayer + CCTag_Layer_01;
+	game.AddNullChild({overlaylayer, ktag_OverlayLayer}, {0, 0, CCTag_Layer_01, layertag});
+	grouptag = layertag + CCTag_Menu_01;
+	game.AddNullChild({overlaylayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 			
 end
 
 function PlayScene_OnEnter(toplayer, toptag)
 	game.EnterMission();
+end
+
+function _PlayScene_ToggleMenuEnable(toplayer, toptag, bEnable)
+	
+	local layertag = toptag + CCTag_Layer_10;
+	local grouptag = layertag + CCTag_Menu_01;
+	
+	local menunode = game.GetNode({toplayer, grouptag});
+	game.SetMenuEnabled(menunode, bEnable);
+	
 end
 
 function _PlayScene_AddHPAPSPItems(toplayer, toptag)
@@ -262,21 +278,44 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 end
 
 function _PlayScene_AddTouchLayer(toplayer, toptag)
+		
+	local layertag = toptag + CCTag_Layer_06;
+	local grouptag = layertag + CCTag_Menu_01;
 	
-	local xcen = 480;
-	local ycen = 272;
-	local width = 960;
-	local height = 544;
+	local touchlayer = game.AddTouchLayerChild(
+			{toplayer, {0, 0, 0, 0}},
+			{toplayer, layertag},
+			{0, 0, CCTag_Layer_06, grouptag}
+		);
+	_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
+	
+end
+
+function _PlayScene_ChangeTouchLayerRect(toplayer, toptag)
+	
+	local layertag = toptag + CCTag_Layer_06;
+	local grouptag = layertag + CCTag_Menu_01;
+	
+	local touchlayer = game.GetNode({toplayer, grouptag});
+	
+	local xcen, ycen, width, height;
+	
+	if LGlobal_PlayData.bZoomed then
+		xcen = 480;
+		ycen = 320;
+		width = 960;
+		height = 640;
+	else
+		xcen = 480;
+		ycen = 272;
+		width = 832;
+		height = 544;
+	end
+	
 	local x = xcen-width/2;
 	local y = ycen-height/2;
 	
-	local layertag = toptag + CCTag_Layer_06;
-	
-	local touchlayer = game.AddTouchLayerChild(
-			{toplayer, {x, y, width, height}},
-			{toplayer, layertag},
-			{0, 0, CCTag_Layer_06, layertag+CCTag_Menu_01}
-		);
+	game.SetTouchLayerRect(touchlayer, {x, y, width, height})
 	
 end
 

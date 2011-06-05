@@ -10,10 +10,12 @@ using namespace cocos2d;
 struct TouchData 
 {
 	CCPoint		beginPos;
+	CCPoint		lastPos;
 	CCPoint		nowPos;
 	CCPoint		endPos;
 
 	LONGLONG	beginPressTime;
+	LONGLONG	lastPressTime;
 	LONGLONG	nowPressTime;
 	LONGLONG	endPressTime;
 
@@ -29,6 +31,7 @@ public:
 	~TouchLayer();
 
 	void initWithRect(CCLayer * toplayer, CCRect rect);
+	void setTouchRect(CCRect rect);
 
 	LAYER_NODE_FUNC(TouchLayer);
 
@@ -40,6 +43,7 @@ public:
 
 	virtual void onEnter();
 
+	int GetTouchType(int index);
 	bool GetTouchData(int index, int flag, float *x=NULL, float *y = NULL, LONGLONG *time=NULL, CCRect *rect=NULL);
 
 public:

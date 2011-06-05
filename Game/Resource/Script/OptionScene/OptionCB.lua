@@ -143,7 +143,7 @@ end
 
 function _TitleScene_CB_BGMTouch_SetValue(toplayer, toptag, touchlayer, index, flag)
 	
-	local x, y, time, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
+	local x, y, time, touchtype, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
 	
 	local layertag = toptag + CCTag_Layer_06;
 	
@@ -162,7 +162,7 @@ end
 
 function _TitleScene_CB_SETouch_SetValue(toplayer, toptag, touchlayer, index, flag)
 	
-	local x, y, time, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
+	local x, y, time, touchtype, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
 	
 	local layertag = toptag + CCTag_Layer_07;
 	

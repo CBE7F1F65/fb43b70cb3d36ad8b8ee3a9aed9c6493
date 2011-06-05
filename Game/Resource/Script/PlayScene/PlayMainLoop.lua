@@ -121,10 +121,13 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	
 	local layertag = toptag + CCTag_Layer_11;
 	local grouptag = layertag + CCTag_Menu_01;
+	
+	local rendertextureitem = game.GetNode({toplayer, grouptag});
+	game.RenderTextureBegin(rendertextureitem);
+	
 	local nLines = table.getn(LGlobal_PlayData.planlines);
+	
 	if nLines > 0 then
-		local rendertextureitem = game.GetNode({toplayer, grouptag});
-		game.RenderTextureBegin(rendertextureitem);
 		local nFinishedLines = 0;
 		for i=1, nLines do
 			if LGlobal_PlayData.planlines[i].time < LConst_PlanBrushFrame then
@@ -141,11 +144,11 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					elseif nowstepindex < LConst_PlanBrushFadeInStep then
 						scale = 1/(LConst_PlanBrushFadeInStep+1)*(nowstepindex+1);
 					end
-					game.SetScale(LGlobal_PlayData.planbrush, scale, scale);
-					game.SetAngle(LGlobal_PlayData.planbrush, RANDT());
+					game.SetScale(LGlobal_PlayData.planbrush.laser, scale, scale);
+					game.SetAngle(LGlobal_PlayData.planbrush.laser, RANDT());
 					
 					local interval = item.space * (nowstepindex) / item.dist;
-					game.NodeVisit(LGlobal_PlayData.planbrush, global.INTER(item.xb, item.xe, interval), global.INTER(item.yb, item.ye, interval));
+					game.NodeVisit(LGlobal_PlayData.planbrush.laser, global.INTER(item.xb, item.xe, interval), global.INTER(item.yb, item.ye, interval));
 				end
 				
 				LGlobal_PlayData.planlines[i].time = item.time+1;
@@ -153,11 +156,55 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				nFinishedLines = nFinishedLines + 1;
 			end
 		end
-		game.RenderTextureEnd(rendertextureitem);
 		if nFinishedLines == nLines then
 			LGlobal_PlayData.planlines = {};
 		end
 	end
+	
+	local nCircles = table.getn(LGlobal_PlayData.plancircles);
+	
+	if nCircles > 0 then
+		local nFinishedCircles = 0;
+		for i=1, nCircles do
+			if LGlobal_PlayData.plancircles[i].time < LConst_PlanBrushFrame then
+				local item = LGlobal_PlayData.plancircles[i];
+				
+				local stepstogonow = item.stepstogo;
+				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
+
+				for j=0, stepstogonow-1 do
+					local nowstepindex = item.stepstogo*item.time+j;
+					local nowangle = item.startangle+nowstepindex*item.anglestep;
+					
+					local r = item.r;
+					r = r * (nowstepindex/totalsteps * 0.6 + 0.4);
+					local x = item.x + global.SINT(nowangle)*r;
+					local y = item.y + global.COST(nowangle)*r;
+					
+					local scale = RANDTF(0.5, 1);
+					if nowstepindex >= totalsteps-LConst_PlanBrushFadeInStep then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(totalsteps-nowstepindex+1);
+					elseif nowstepindex < LConst_PlanBrushFadeInStep then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(nowstepindex+1);
+					end
+
+					game.SetScale(LGlobal_PlayData.planbrush.bomb, scale, scale);
+					game.SetAngle(LGlobal_PlayData.planbrush.bomb, RANDT());
+				
+					game.NodeVisit(LGlobal_PlayData.planbrush.bomb, x, y);
+				end
+				
+				LGlobal_PlayData.plancircles[i].time = item.time+1;
+			else
+				nFinishedCircles = nFinishedCircles + 1;
+			end
+		end
+		if nFinishedCircles == nCircles then
+			LGlobal_PlayData.plancircles = {};
+		end
+	end
+	
+	game.RenderTextureEnd(rendertextureitem);
 	
 	return false;
 end

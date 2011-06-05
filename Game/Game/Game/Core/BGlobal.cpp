@@ -88,26 +88,11 @@ CCRect BGlobal::RScalerRect(CCRect rect)
 	return CCRectMake(point.x, point.y, size.width, size.height);
 }
 
-bool BGlobal::IsTap(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime)
-{
-	if (DIST2(beginpos.x, beginpos.y, endpos.x, endpos.y) < M_TOUCH_ALLOWABLEMOVEMENT*M_TOUCH_ALLOWABLEMOVEMENT)
-	{
-		if ((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 bool BGlobal::IsHold(CCPoint beginpos, CCPoint endpos, LONGLONG begintime, LONGLONG endtime)
 {
-	if (DIST2(beginpos.x, beginpos.y, endpos.x, endpos.y) < M_TOUCH_ALLOWABLEMOVEMENT*M_TOUCH_ALLOWABLEMOVEMENT)
+	if (!((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION))
 	{
-		if (!((endtime-begintime) < BIOInterface::getInstance()->Timer_GetPerformanceFrequency() * M_TOUCH_MINIMUMPRESSDURATION))
-		{
-			return true;
-		}
+		return true;
 	}
 	return false;
 }

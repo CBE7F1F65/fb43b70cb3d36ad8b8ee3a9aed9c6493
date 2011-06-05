@@ -44,6 +44,8 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("SetHPAPSP", LuaFn_Game_SetHPAPSP);
 	obj->Register("GetHPAPSP", LuaFn_Game_GetHPAPSP);
 
+	obj->Register("GetWeaponData", LuaFn_Game_GetWeaponData);
+
 	obj->Register("GetEnemyTypeData", LuaFn_Game_GetEnemyTypeData);
 	obj->Register("GetEnemyATK", LuaFn_Game_GetEnemyATK);
 	obj->Register("GetEnemyDEF", LuaFn_Game_GetEnemyDEF);
@@ -461,6 +463,21 @@ int Export_Lua_Game::LuaFn_Game_GetHPAPSP(LuaState * ls)
 	node.PInt(nowhp);
 	node.PInt(nowap);
 	node.PInt(nowsp);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetWeaponData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// weapon -> atk ap para
+	int _index = node.iNextGet();
+	weaponData * item = &(BResource::getInstance()->weapondata[_index]);
+
+	node.PInt(item->atk);
+	node.PInt(item->apcost);
+	node.PInt(item->para);
 
 	_LEAVEFUNC_LUA;
 }

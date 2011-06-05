@@ -45,6 +45,7 @@ bool Export_Lua_Scene::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("ktag_StorySceneLayer", KTAG_STORYSCENELAYER);
 
 	obj->SetInteger("ktag_PlaySceneLayer", KTAG_PLAYSCENELAYER);
+	obj->SetInteger("ktag_OverlayLayer", KTAG_OVERLAYLAYER);
 
 	return true;
 }

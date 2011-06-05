@@ -15,8 +15,13 @@ TouchLayer::TouchLayer()
 void TouchLayer::initWithRect(CCLayer * _toplayer, CCRect rect)
 {
 	toplayer = _toplayer;
-	touchrect = rect;
+	setTouchRect(rect);
 	gesture = M_TOUCHGESTURE_UNKNOWN;
+}
+
+void TouchLayer::setTouchRect(CCRect rect)
+{
+	touchrect = rect;
 }
 
 TouchLayer::~TouchLayer()
@@ -59,6 +64,9 @@ void TouchLayer::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		touchdata[i].beginPos = beginpos;		
 		touchdata[i].beginPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
 
+		touchdata[i].lastPos = touchdata[i].beginPos;
+		touchdata[i].lastPressTime = touchdata[i].beginPressTime;
+
 		touchdata[i].nowPos = touchdata[i].beginPos;
 		touchdata[i].nowPressTime = touchdata[i].beginPressTime;
 
@@ -82,6 +90,9 @@ void TouchLayer::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 		{
 			if (touchdata[i].bPressing && touchdata[i].touch == touch)
 			{
+				touchdata[i].lastPos = touchdata[i].nowPos;
+				touchdata[i].lastPressTime = touchdata[i].nowPressTime;
+
 				touchdata[i].nowPos = touch->locationInView( touch->view() );	
 				touchdata[i].nowPos = CCDirector::sharedDirector()->convertToGL(touchdata[i].nowPos);
 				touchdata[i].nowPressTime = BIOInterface::getInstance()->Timer_GetCurrentSystemTime();
@@ -209,6 +220,20 @@ void TouchLayer::onEnter()
 	setIsTouchEnabled(true);
 }
 
+int TouchLayer::GetTouchType(int index)
+{
+	int touchtype = M_CCTOUCH_TAP;
+	if (index < 0 || index >= M_TOUCHMAX)
+	{
+		return touchtype;
+	}
+	bool bIsMove = BGlobal::IsMove(touchdata[index].beginPos, touchdata[index].endPos, touchdata[index].beginPressTime, touchdata[index].endPressTime);
+	bool bIsHold = BGlobal::IsHold(touchdata[index].beginPos, touchdata[index].endPos, touchdata[index].beginPressTime, touchdata[index].endPressTime);
+	touchtype |= (bIsMove?M_CCTOUCH_MOVE:0);
+	touchtype |= (bIsHold?M_CCTOUCH_HOLD:0);
+	return touchtype;
+}
+
 bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *_y /* = NULL */, LONGLONG *_time/* =NULL */, CCRect * _rect/* =NULL */)
 {
 	if (index < 0 || index >= M_TOUCHMAX)
@@ -231,6 +256,11 @@ bool TouchLayer::GetTouchData(int index, int flag, float *_x/* =NULL */, float *
 		x = touchdata[index].nowPos.x;
 		y = touchdata[index].nowPos.y;
 		time = touchdata[index].nowPressTime;
+		break;
+	case M_CCTOUCHINDICATOR_LASTMOVED:
+		x = touchdata[index].lastPos.x;
+		y = touchdata[index].lastPos.y;
+		time = touchdata[index].lastPressTime;
 		break;
 	case M_CCTOUCHINDICATOR_ENDED:
 		x = touchdata[index].endPos.x;

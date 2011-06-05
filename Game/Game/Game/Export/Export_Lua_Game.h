@@ -58,12 +58,17 @@ public:
 	static int LuaFn_Game_AddTextChild(LuaState * ls);
 
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
+	static int LuaFn_Game_SetMenuEnabled(LuaState * ls);
 	static int LuaFn_Game_SetMenuItemEnabled(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
+
+	static int LuaFn_Game_AddOverlayChild(LuaState * ls);
+	static int LuaFn_Game_GetOverlayLayer(LuaState * ls);
 
 	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
 
 	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
+	static int LuaFn_Game_SetTouchLayerRect(LuaState * ls);
 	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
 
 	static int LuaFn_Game_RunAction(LuaState * ls);
@@ -73,6 +78,9 @@ public:
 	static int LuaFn_Game_SetIsVisible(LuaState * ls);
 
 	static int LuaFn_Game_GetSubTags(LuaState * ls);
+
+	static int LuaFn_Game_CameraGet(LuaState * ls);
+	static int LuaFn_Game_CameraSet(LuaState * ls);
 
 	static int LuaFn_Game_SetPosition(LuaState * ls);
 	static int LuaFn_Game_GetPosition(LuaState * ls);
@@ -139,6 +147,8 @@ public:
 
 	static int LuaFn_Game_SetHPAPSP(LuaState * ls);
 	static int LuaFn_Game_GetHPAPSP(LuaState * ls);
+
+	static int LuaFn_Game_GetWeaponData(LuaState * ls);
 
 	static int LuaFn_Game_GetEnemyTypeData(LuaState * ls);
 	static int LuaFn_Game_GetEnemyATK(LuaState * ls);
