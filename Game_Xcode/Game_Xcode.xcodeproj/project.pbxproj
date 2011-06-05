@@ -20,6 +20,9 @@
 		50F4144810692EE7002A0D5E /* blocks.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144310692EE7002A0D5E /* blocks.png */; };
 		50F4144910692EE7002A0D5E /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144410692EE7002A0D5E /* Default.png */; };
 		50F4144B10692EE7002A0D5E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 50F4144610692EE7002A0D5E /* Icon.png */; };
+		719ABFA3138E14330093DA3B /* Export_Lua_Game_Mission.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 719ABFA2138E14330093DA3B /* Export_Lua_Game_Mission.cpp */; };
+		719ABFA6138E14530093DA3B /* StoryScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 719ABFA5138E14530093DA3B /* StoryScene.cpp */; };
+		719ABFA9138E14790093DA3B /* CCActionExpand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 719ABFA8138E14790093DA3B /* CCActionExpand.cpp */; };
 		71A14F29138AFF9A009B6F40 /* TouchLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */; };
 		71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */; };
 		71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */; };
@@ -28,11 +31,8 @@
 		71AC310B1385C9900029F185 /* BaseScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC30FF1385C9900029F185 /* BaseScene.cpp */; };
 		71AC310C1385C9900029F185 /* HelloWorldScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31001385C9900029F185 /* HelloWorldScene.cpp */; };
 		71AC310D1385C9900029F185 /* HelpScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31011385C9900029F185 /* HelpScene.cpp */; };
-		71AC310E1385C9900029F185 /* HiScoreScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31021385C9900029F185 /* HiScoreScene.cpp */; };
 		71AC310F1385C9900029F185 /* LoadingScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31031385C9900029F185 /* LoadingScene.cpp */; };
 		71AC31101385C9900029F185 /* MissionSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31041385C9900029F185 /* MissionSelectScene.cpp */; };
-		71AC31111385C9900029F185 /* OnlineScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31051385C9900029F185 /* OnlineScene.cpp */; };
-		71AC31121385C9900029F185 /* OptionScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31061385C9900029F185 /* OptionScene.cpp */; };
 		71AC31131385C9900029F185 /* PlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31071385C9900029F185 /* PlayScene.cpp */; };
 		71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31081385C9900029F185 /* StageSelectScene.cpp */; };
 		71AC31151385C9900029F185 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31091385C9900029F185 /* TitleScene.cpp */; };
@@ -274,6 +274,13 @@
 		50F4144310692EE7002A0D5E /* blocks.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blocks.png; sourceTree = "<group>"; };
 		50F4144410692EE7002A0D5E /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		50F4144610692EE7002A0D5E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		719ABFA2138E14330093DA3B /* Export_Lua_Game_Mission.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Export_Lua_Game_Mission.cpp; sourceTree = "<group>"; };
+		719ABFA4138E14530093DA3B /* StoryScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoryScene.h; sourceTree = "<group>"; };
+		719ABFA5138E14530093DA3B /* StoryScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StoryScene.cpp; sourceTree = "<group>"; };
+		719ABFA8138E14790093DA3B /* CCActionExpand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCActionExpand.cpp; sourceTree = "<group>"; };
+		719ABFAA138E148A0093DA3B /* CCActionExpand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCActionExpand.h; sourceTree = "<group>"; };
+		719ABFAB138E14990093DA3B /* GameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameData.h; sourceTree = "<group>"; };
+		719ABFAC138E14A20093DA3B /* StageMissionData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageMissionData.h; sourceTree = "<group>"; };
 		71A14F27138AFF9A009B6F40 /* TouchLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchLayer.h; sourceTree = "<group>"; };
 		71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TouchLayer.cpp; sourceTree = "<group>"; };
 		71A9A29B13885B3B00BBA5B4 /* GameMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameMain.h; sourceTree = "<group>"; };
@@ -286,11 +293,8 @@
 		71AC30F31385C9900029F185 /* BaseScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseScene.h; sourceTree = "<group>"; };
 		71AC30F41385C9900029F185 /* HelloWorldScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorldScene.h; sourceTree = "<group>"; };
 		71AC30F51385C9900029F185 /* HelpScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpScene.h; sourceTree = "<group>"; };
-		71AC30F61385C9900029F185 /* HiScoreScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HiScoreScene.h; sourceTree = "<group>"; };
 		71AC30F71385C9900029F185 /* LoadingScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingScene.h; sourceTree = "<group>"; };
 		71AC30F81385C9900029F185 /* MissionSelectScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionSelectScene.h; sourceTree = "<group>"; };
-		71AC30F91385C9900029F185 /* OnlineScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnlineScene.h; sourceTree = "<group>"; };
-		71AC30FA1385C9900029F185 /* OptionScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionScene.h; sourceTree = "<group>"; };
 		71AC30FB1385C9900029F185 /* PlayScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayScene.h; sourceTree = "<group>"; };
 		71AC30FC1385C9900029F185 /* StageSelectScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StageSelectScene.h; sourceTree = "<group>"; };
 		71AC30FD1385C9900029F185 /* TitleScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleScene.h; sourceTree = "<group>"; };
@@ -298,11 +302,8 @@
 		71AC30FF1385C9900029F185 /* BaseScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseScene.cpp; sourceTree = "<group>"; };
 		71AC31001385C9900029F185 /* HelloWorldScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelloWorldScene.cpp; sourceTree = "<group>"; };
 		71AC31011385C9900029F185 /* HelpScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HelpScene.cpp; sourceTree = "<group>"; };
-		71AC31021385C9900029F185 /* HiScoreScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HiScoreScene.cpp; sourceTree = "<group>"; };
 		71AC31031385C9900029F185 /* LoadingScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoadingScene.cpp; sourceTree = "<group>"; };
 		71AC31041385C9900029F185 /* MissionSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MissionSelectScene.cpp; sourceTree = "<group>"; };
-		71AC31051385C9900029F185 /* OnlineScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OnlineScene.cpp; sourceTree = "<group>"; };
-		71AC31061385C9900029F185 /* OptionScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OptionScene.cpp; sourceTree = "<group>"; };
 		71AC31071385C9900029F185 /* PlayScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayScene.cpp; sourceTree = "<group>"; };
 		71AC31081385C9900029F185 /* StageSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageSelectScene.cpp; sourceTree = "<group>"; };
 		71AC31091385C9900029F185 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
@@ -806,30 +807,26 @@
 			isa = PBXGroup;
 			children = (
 				71AC30F21385C9900029F185 /* AppDelegate.h */,
+				71AC30FE1385C9900029F185 /* AppDelegate.cpp */,
 				71AC30F31385C9900029F185 /* BaseScene.h */,
 				71AC30F41385C9900029F185 /* HelloWorldScene.h */,
 				71AC30F51385C9900029F185 /* HelpScene.h */,
-				71AC30F61385C9900029F185 /* HiScoreScene.h */,
+				719ABFA5138E14530093DA3B /* StoryScene.cpp */,
+				719ABFA4138E14530093DA3B /* StoryScene.h */,
 				71AC30F71385C9900029F185 /* LoadingScene.h */,
 				71A9A29E13885B6400BBA5B4 /* InputLayer.h */,
 				71A9A29F13885B6400BBA5B4 /* InputLayer.cpp */,
 				71AC30F81385C9900029F185 /* MissionSelectScene.h */,
-				71AC30F91385C9900029F185 /* OnlineScene.h */,
-				71AC30FA1385C9900029F185 /* OptionScene.h */,
 				71AC30FB1385C9900029F185 /* PlayScene.h */,
 				71AC30FC1385C9900029F185 /* StageSelectScene.h */,
 				71AC30FD1385C9900029F185 /* TitleScene.h */,
 				71A14F27138AFF9A009B6F40 /* TouchLayer.h */,
 				71A14F28138AFF9A009B6F40 /* TouchLayer.cpp */,
-				71AC30FE1385C9900029F185 /* AppDelegate.cpp */,
 				71AC30FF1385C9900029F185 /* BaseScene.cpp */,
 				71AC31001385C9900029F185 /* HelloWorldScene.cpp */,
 				71AC31011385C9900029F185 /* HelpScene.cpp */,
-				71AC31021385C9900029F185 /* HiScoreScene.cpp */,
 				71AC31031385C9900029F185 /* LoadingScene.cpp */,
 				71AC31041385C9900029F185 /* MissionSelectScene.cpp */,
-				71AC31051385C9900029F185 /* OnlineScene.cpp */,
-				71AC31061385C9900029F185 /* OptionScene.cpp */,
 				71AC31071385C9900029F185 /* PlayScene.cpp */,
 				71AC31081385C9900029F185 /* StageSelectScene.cpp */,
 				71AC31091385C9900029F185 /* TitleScene.cpp */,
@@ -847,9 +844,10 @@
 				71EF55381383455400B242B4 /* BIOInterface_Math.cpp */,
 				71EF55391383455400B242B4 /* BIOInterface_System.cpp */,
 				71EF553A1383455400B242B4 /* BMath.cpp */,
-				71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */,
 				71EF553B1383455400B242B4 /* BResource.cpp */,
+				719ABFA8138E14790093DA3B /* CCActionExpand.cpp */,
 				71EF553C1383455400B242B4 /* DataTable.cpp */,
+				71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */,
 				71EF553D1383455400B242B4 /* SpriteItemManager.cpp */,
 			);
 			name = Core;
@@ -868,6 +866,7 @@
 				71EF55451383455400B242B4 /* Export_Lua_Function.cpp */,
 				71EF55461383455400B242B4 /* Export_Lua_Game.cpp */,
 				71EF55471383455400B242B4 /* Export_Lua_Game.h */,
+				719ABFA2138E14330093DA3B /* Export_Lua_Game_Mission.cpp */,
 				71EF55481383455400B242B4 /* Export_Lua_Scene.cpp */,
 				71EF55491383455400B242B4 /* Export_Lua_Scene.h */,
 			);
@@ -882,14 +881,17 @@
 				71EF554C1383455400B242B4 /* BIOInterface.h */,
 				71EF554D1383455400B242B4 /* BMath.h */,
 				71EF554E1383455400B242B4 /* BResource.h */,
+				719ABFAA138E148A0093DA3B /* CCActionExpand.h */,
 				71EF554F1383455400B242B4 /* Const.h */,
 				71EF55501383455400B242B4 /* DataStruct.h */,
 				71EF55511383455400B242B4 /* DataTable.h */,
 				71EF55521383455400B242B4 /* HTexture.h */,
 				71EF55531383455400B242B4 /* MainDependency.h */,
+				719ABFAB138E14990093DA3B /* GameData.h */,
 				71A9A29B13885B3B00BBA5B4 /* GameMain.h */,
 				71EF55541383455400B242B4 /* SceneConst.h */,
 				71EF55551383455400B242B4 /* SpriteItemManager.h */,
+				719ABFAC138E14A20093DA3B /* StageMissionData.h */,
 			);
 			name = Header;
 			path = ../Game/Game/Game/Header;
@@ -1781,17 +1783,17 @@
 				71AC310B1385C9900029F185 /* BaseScene.cpp in Sources */,
 				71AC310C1385C9900029F185 /* HelloWorldScene.cpp in Sources */,
 				71AC310D1385C9900029F185 /* HelpScene.cpp in Sources */,
-				71AC310E1385C9900029F185 /* HiScoreScene.cpp in Sources */,
 				71AC310F1385C9900029F185 /* LoadingScene.cpp in Sources */,
 				71AC31101385C9900029F185 /* MissionSelectScene.cpp in Sources */,
-				71AC31111385C9900029F185 /* OnlineScene.cpp in Sources */,
-				71AC31121385C9900029F185 /* OptionScene.cpp in Sources */,
 				71AC31131385C9900029F185 /* PlayScene.cpp in Sources */,
 				71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */,
 				71AC31151385C9900029F185 /* TitleScene.cpp in Sources */,
 				71A9A29D13885B4C00BBA5B4 /* GameMain.cpp in Sources */,
 				71A9A2A013885B6400BBA5B4 /* InputLayer.cpp in Sources */,
 				71A14F29138AFF9A009B6F40 /* TouchLayer.cpp in Sources */,
+				719ABFA3138E14330093DA3B /* Export_Lua_Game_Mission.cpp in Sources */,
+				719ABFA6138E14530093DA3B /* StoryScene.cpp in Sources */,
+				719ABFA9138E14790093DA3B /* CCActionExpand.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
