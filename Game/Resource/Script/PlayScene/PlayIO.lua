@@ -308,9 +308,9 @@ function _PlayScene_ChangeTouchLayerRect(toplayer, toptag)
 		height = 640;
 	else
 		xcen = 480;
-		ycen = 272;
+		ycen = 336;
 		width = 832;
-		height = 544;
+		height = 480;
 	end
 	
 	local x = xcen-width/2;

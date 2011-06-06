@@ -68,6 +68,7 @@ public:
 	static int LuaFn_Game_AddInputLayerChild(LuaState * ls);
 
 	static int LuaFn_Game_AddTouchLayerChild(LuaState * ls);
+	static int LuaFn_Game_GetTouchLayerRect(LuaState * ls);
 	static int LuaFn_Game_SetTouchLayerRect(LuaState * ls);
 	static int LuaFn_Game_GetTouchInfo(LuaState * ls);
 	static int LuaFn_Game_TerminateTouch(LuaState * ls);

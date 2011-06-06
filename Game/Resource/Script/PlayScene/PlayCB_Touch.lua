@@ -14,6 +14,8 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 			game.TerminateTouch(touchlayer);
 			
 		else
+			-- OneMoved
+			
 			if LGlobal_PlayData.bZoomed then
 				local xl, yl = game.GetTouchInfo(touchlayer, index, CCTI_LastMoved);
 				_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, xe-xl, ye-yl);
@@ -142,11 +144,47 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 	
 end
 
+function _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap)
+	local dist = math.floor(global.DIST(xb, yb, xe, ye));
+	local nowxb, nowyb, nowxe, nowye = xb, yb, xe, ye;
+	
+	if dist*apperdist > nowap then
+		--restrict ap
+		local maxdist = math.floor(nowap/apperdist);
+		local interval = maxdist/dist;
+		nowxe = global.INTER(nowxb, nowxe, interval);
+		nowye = global.INTER(nowyb, nowye, interval);
+	end
+	
+	local rectx, recty, rectw, recth = game.GetTouchLayerRect(touchlayer);
+	if nowxe < rectx then
+		nowxe = rectx;
+		nowye = global.INTER(nowyb, nowye, (nowxe-xb)/(xe-xb));
+	elseif nowxe > rectx+rectw then
+		nowxe = rectx+rectw;
+		nowye = global.INTER(nowyb, nowye, (nowxe-xb)/(xe-xb));
+	end
+	
+	if nowye < recty then
+		nowye = recty;
+		nowxe = global.INTER(nowxb, nowxe, (nowye-yb)/(ye-yb));
+	elseif nowye > recty+recth then
+		nowye = recty+recth;
+		nowxe = global.INTER(nowxb, nowxe, (nowye-yb)/(ye-yb));
+	end
+	
+	dist = math.floor(global.DIST(nowxb, nowyb, nowxe, nowye));
+	
+	return nowxb, nowyb, nowxe, nowye, dist;
+end
+
 function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 
 	if gesture == GESTURE_TwoNoMove then
 		return
 	end
+	
+	local nowhp, nowap = game.GetHPAPSP();
 	
 	local xb, yb = game.GetTouchInfo(touchlayer, index, CCTI_Began);
 	local xe, ye, timee, touchtype = game.GetTouchInfo(touchlayer, index, CCTI_Moved);
@@ -163,25 +201,78 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			-- Plan Dots
 			-- TODO: detect ap
 			local atk, ap, r = game.GetWeaponData(WEAPON_Sniper);
+			if nowap < ap then
+				-- TODO: Add Animation
+				return;
+			end
 			local nDots = table.getn(LGlobal_PlayData.plandots);
+			
+			game.SetHPAPSP(-1, nowap-ap);
+			
+			local nowx, nowy = game.GetPosition(toplayer);
+			x = 480 - nowx/2;
+			y = 320 - nowy/2;
+			
 			nDots = nDots+1;
 			LGlobal_PlayData.plandots[nDots] = {};
-			LGlobal_PlayData.plandots[nDots].x = xb;
-			LGlobal_PlayData.plandots[nDots].y = yb;	
-			LGlobal_PlayData.plandots[nDots].startangle = RANDT();
-			LGlobal_PlayData.plandots[nDots].time = 0;
+			LGlobal_PlayData.plandots[nDots].x = x;
+			LGlobal_PlayData.plandots[nDots].y = y;
+			
+			local space1 = LConst_PlanBrushSpace * RANDTF(0.8, 1.2);
+			local space2 = LConst_PlanBrushSpace * RANDTF(0.8, 1.2);
+			local startangle1 = RANDT();
+			local startangle2 = RANDT(8000, 10000) + startangle1;
+			
+			local xplus1 = global.SINT(startangle1)*space1;
+			local yplus1 = global.COST(startangle1)*space1;
+			local xplus2 = global.SINT(startangle2)*space2;
+			local yplus2 = global.COST(startangle2)*space2;
+			local stepstogo = math.ceil(LConst_PlanBrushCrossLength*2/LConst_PlanBrushSpace/LConst_PlanBrushFrame);
+			local steps = stepstogo*LConst_PlanBrushFrame/2;
+			local x1 = x - xplus1*steps/2;
+			local y1 = y - yplus1*steps/2;
+			local x2 = x - xplus2*steps/2;
+			local y2 = y - yplus2*steps/2;
+			
+			LGlobal_PlayData.plandots[nDots].xplus = {};
+			LGlobal_PlayData.plandots[nDots].yplus = {};
+			LGlobal_PlayData.plandots[nDots].xplus[1] = xplus1;
+			LGlobal_PlayData.plandots[nDots].yplus[1] = yplus1;
+			LGlobal_PlayData.plandots[nDots].xplus[2] = xplus2;
+			LGlobal_PlayData.plandots[nDots].yplus[2] = yplus2;
+			
+			
+			LGlobal_PlayData.plandots[nDots].startx = {};
+			LGlobal_PlayData.plandots[nDots].starty = {};
+			LGlobal_PlayData.plandots[nDots].startx[1] = x1;
+			LGlobal_PlayData.plandots[nDots].starty[1] = y1;
+			LGlobal_PlayData.plandots[nDots].startx[2] = x2;
+			LGlobal_PlayData.plandots[nDots].starty[2] = y2;
+						
+			LGlobal_PlayData.plandots[nDots].stepstogo = stepstogo;
+			
+			LGlobal_PlayData.plandots[nDots].time = -LConst_ZoomActionTime*FPS-1;
 			LGlobal_PlayData.plandots[nDots].atk = atk;
 			LGlobal_PlayData.plandots[nDots].ap = ap;
 			LGlobal_PlayData.plandots[nDots].r = r;
+			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, -nowx, -nowy);
 		end
 		return false;
 	end
 	
 	if gesture == GESTURE_OneMoved then
 		-- Plan lines
-		local dist = math.ceil(global.DIST(xb, yb, xe, ye));
-		-- TODO: detect ap
 		local atk, ap, leastap = game.GetWeaponData(WEAPON_Laser);
+		if nowap < leastap then
+			-- TODO: Add Animation
+			return;
+		end
+		local dist;
+		xb, yb, xe, ye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, ap, nowap);
+		local apcost = ap*dist;
+		if apcost < leastap then
+			apcost = leastap;
+		end
 		if dist > 0 then
 			local nLines = table.getn(LGlobal_PlayData.planlines);
 			nLines = nLines+1;
@@ -191,7 +282,8 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			LGlobal_PlayData.planlines[nLines].xe = xe;
 			LGlobal_PlayData.planlines[nLines].ye = ye;
 			LGlobal_PlayData.planlines[nLines].atk = atk;
-			LGlobal_PlayData.planlines[nLines].ap = ap;	--TODO: ap
+			LGlobal_PlayData.planlines[nLines].ap = apcost;
+			game.SetHPAPSP(-1, nowap-apcost);
 			LGlobal_PlayData.planlines[nLines].time = 0;
 			LGlobal_PlayData.planlines[nLines].dist = dist;
 			local steps = math.ceil(dist/LConst_PlanBrushSpace);
@@ -222,6 +314,11 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 	elseif gesture == GESTURE_OneNoMove then
 		-- Plan Circles
 		local atk, ap, r = game.GetWeaponData(WEAPON_Bomb);
+		if nowap < ap then
+			-- TODO: Add Animation
+			return;
+		end
+		game.SetHPAPSP(-1, nowap-ap);
 		-- TODO: detect ap
 		local nCircles = table.getn(LGlobal_PlayData.plancircles);
 		nCircles = nCircles + 1;

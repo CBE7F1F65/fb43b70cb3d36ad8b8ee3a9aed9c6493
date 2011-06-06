@@ -137,6 +137,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	// Touch
 	_gameobj.Register("AddTouchLayerChild", LuaFn_Game_AddTouchLayerChild);
+	_gameobj.Register("GetTouchLayerRect", LuaFn_Game_GetTouchLayerRect);
 	_gameobj.Register("SetTouchLayerRect", LuaFn_Game_SetTouchLayerRect);
 	_gameobj.Register("GetTouchInfo", LuaFn_Game_GetTouchInfo);
 	_gameobj.Register("TerminateTouch", LuaFn_Game_TerminateTouch);
@@ -1346,6 +1347,28 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 			}
 		}
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetTouchLayerRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	TouchLayer * _touchlayer = (TouchLayer *)node.dNextGet();
+	if (!_touchlayer)
+	{
+		break;
+	}
+	float x, y, width, height;
+	x = BGlobal::RScalerX(_touchlayer->touchrect.origin.x);
+	y = BGlobal::RScalerY(_touchlayer->touchrect.origin.y);
+	width = BGlobal::RScalerX(_touchlayer->touchrect.size.width);
+	height = BGlobal::RScalerY(_touchlayer->touchrect.size.height);
+	node.PFloat(x);
+	node.PFloat(y);
+	node.PFloat(width);
+	node.PFloat(height);
 
 	_LEAVEFUNC_LUA;
 }

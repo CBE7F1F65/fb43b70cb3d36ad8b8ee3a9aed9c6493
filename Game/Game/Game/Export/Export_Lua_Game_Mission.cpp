@@ -441,11 +441,27 @@ int Export_Lua_Game::LuaFn_Game_SetHelpIndex(LuaState * ls)
 
 int Export_Lua_Game::LuaFn_Game_SetHPAPSP(LuaState * ls)
 {
-	_ENTERFUNC_LUA(3);
+	_ENTERFUNC_LUA(0);
 
-	int _hp = node.iNextGet();
-	int _ap = node.iNextGet();
-	int _sp = node.iNextGet();
+	int _hp = -1;
+	int _ap = -1;
+	int _sp = -1;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_hp = node.iGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_ap = node.iGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_sp = node.iGet();
+			}
+		}
+	}
 
 	GameMain::getInstance()->SetHPAPSP(_hp, _ap, _sp);
 

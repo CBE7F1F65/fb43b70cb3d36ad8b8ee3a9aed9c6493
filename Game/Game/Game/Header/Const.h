@@ -11,6 +11,8 @@
 #define M_MESSAGESTRMAX 0x100
 #define M_STRITOAMAX	0x10
 
+#define M_FPS	60.0f
+
 
 // Zorder
 enum

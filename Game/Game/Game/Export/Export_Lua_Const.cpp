@@ -16,6 +16,8 @@ bool Export_Lua::_LuaRegistConst(LuaObject * obj)
 	obj->SetBoolean("_DEBUG", false);
 #endif // _DEBUG
 
+	obj->SetNumber("FPS", M_FPS);
+
 	obj->SetNumber("ScreenWidth", M_SCREEN_WIDTH);
 	obj->SetNumber("ScreenHeight", M_SCREEN_HEIGHT);
 

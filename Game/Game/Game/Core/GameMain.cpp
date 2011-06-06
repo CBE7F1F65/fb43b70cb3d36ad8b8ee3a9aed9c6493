@@ -397,9 +397,18 @@ bool GameMain::ClearMission()
 
 void GameMain::SetHPAPSP(int hp, int ap, int sp)
 {
-	nowhp = hp;
-	nowap = ap;
-	nowsp = sp;
+	if (hp >= 0)
+	{
+		nowhp = hp;
+	}
+	if (ap >= 0)
+	{
+		nowap = ap;
+	}
+	if (sp >= 0)
+	{
+		nowsp = sp;
+	}
 	if (nowhp > M_GAMEHPMAX)
 	{
 		nowhp = M_GAMEHPMAX;

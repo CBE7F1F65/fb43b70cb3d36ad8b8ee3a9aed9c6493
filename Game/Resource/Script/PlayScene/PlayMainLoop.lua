@@ -204,6 +204,54 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 		end
 	end
 	
+	local nDots = table.getn(LGlobal_PlayData.plandots);
+	
+	if nDots > 0 then
+		local nFinishedDots = 0;
+		for i=1, nDots do
+			if LGlobal_PlayData.plandots[i].time < 0 then
+				LGlobal_PlayData.plandots[i].time = LGlobal_PlayData.plandots[i].time+1;
+			elseif LGlobal_PlayData.plandots[i].time < LConst_PlanBrushFrame then
+				local item = LGlobal_PlayData.plandots[i];
+				
+				local stepstogonow = item.stepstogo;
+				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
+				
+				for j=0, stepstogonow-1 do
+					local nowstepindex = item.stepstogo*item.time+j;
+					local index = 1;
+					if item.time >= math.floor(LConst_PlanBrushFrame/2) then
+						index = 2;
+						nowstepindex = nowstepindex - item.stepstogo*math.floor(LConst_PlanBrushFrame/2);
+					end
+					local x = item.startx[index] + item.xplus[index]*nowstepindex;
+					local y = item.starty[index] + item.yplus[index]*nowstepindex;
+					
+					local scale = RANDTF(0.5, 1);
+					if nowstepindex >= totalsteps/2-LConst_PlanBrushFadeInStep then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(totalsteps/2-nowstepindex+1);
+					elseif nowstepindex < LConst_PlanBrushFadeInStep then
+						scale = 1/(LConst_PlanBrushFadeInStep+1)*(nowstepindex+1);
+					end
+					
+					scale = scale * 0.75;
+										
+					game.SetScale(LGlobal_PlayData.planbrush.sniper, scale, scale);
+					game.SetAngle(LGlobal_PlayData.planbrush.sniper, RANDT());
+				
+					game.NodeVisit(LGlobal_PlayData.planbrush.sniper, x, y);
+				end
+				
+				LGlobal_PlayData.plandots[i].time = item.time+1;
+			else
+				nFinishedDots = nFinishedDots + 1;
+			end
+		end
+		if nFinishedDots == nDots then
+			LGlobal_PlayData.plandots = {};
+		end
+	end
+	
 	game.RenderTextureEnd(rendertextureitem);
 	
 	return false;
