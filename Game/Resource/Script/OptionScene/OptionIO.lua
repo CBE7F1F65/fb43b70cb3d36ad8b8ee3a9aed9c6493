@@ -5,7 +5,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local xcen = 780;
 	local ycen = 550;
 	
-	local width, height = game.GetSIData(SI_TUI_BGMSE_Bar);
+	local texx, texy, width, height = game.GetSIData(SI_TUI_BGMSE_Bar);
 	local bgmvol, sevol = game.GetBGMSEVol();
 	
 	local x = xcen - width / 2;
@@ -16,7 +16,6 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgBGM = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTag_Menu_01);
 	game.AddSpriteChild(spritebgBGM, {toplayer, layertag});
 	game.SetAnchor(spritebgBGM, 0, 0);
-	game.SetScale(spritebgBGM, bgmvol/100.0, 1);
 	
 	local spritebgBGMFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgBGMFrame, {toplayer, layertag});
@@ -38,8 +37,6 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgSE = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTag_Menu_01);
 	game.AddSpriteChild(spritebgSE, {toplayer, layertag});
 	game.SetAnchor(spritebgSE, 0, 0);
-
-	game.SetScale(spritebgSE, sevol/100.0, 1);
 	
 	local spritebgSEFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgSEFrame, {toplayer, layertag});
@@ -53,7 +50,7 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 			{toplayer, layertag},
 			{0, 0, CCTag_Layer_07, layertag+CCTag_Menu_01}
 		);
-	
+	_TitleScene_UpdateBGMSE(toplayer, toptag)
 end
 
 function _TitleScene_AddOptionItems(toplayer, toptag)
@@ -84,12 +81,9 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
@@ -129,13 +123,10 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
-		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
+				
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});

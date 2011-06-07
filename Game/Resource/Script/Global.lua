@@ -118,6 +118,7 @@ LOG	=	Debug_Log;
 LOGSTATE = Debug_LogState;
 
 DtoI = luastate.DWORDToInt;
+ItoD = luastate.IntToDWORD;
 
 RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;

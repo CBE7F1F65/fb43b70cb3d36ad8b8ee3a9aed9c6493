@@ -34,6 +34,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 
 	obj->Register("GetMissionBGData", LuaFn_Game_GetMissionBGData);
 	obj->Register("GetMissionHelpData", LuaFn_Game_GetMissionHelpData);
+	obj->Register("GetMissionTargetData", LuaFn_Game_GetMissionTargetData);
 
 	obj->Register("EnterMission", LuaFn_Game_EnterMission);
 	obj->Register("ClearMission", LuaFn_Game_ClearMission);
@@ -372,6 +373,37 @@ int Export_Lua_Game::LuaFn_Game_GetMissionHelpData(LuaState * ls)
 	{
 		node.PInt(helptype[i]);
 		node.PInt(helpindex[i]);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetMissionTargetData(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	missionData * item = GameMain::getInstance()->GetMissionData();
+	if (!node.argscount)
+	{
+		BYTE missiontype = item->missiontype;
+		node.PInt(missiontype);
+	}
+	else
+	{
+		BYTE _missiontype = node.iNextGet();
+		switch (_missiontype)
+		{
+		case M_MISSIONTYPE_TARGET:
+			for (int i=0; i<M_MISSIONTARGETMAX; i++)
+			{
+				node.PInt(item->targets[i].enemytype);
+				node.PInt(item->targets[i].num);
+			}
+			break;
+		case M_MISSIONTYPE_DEFEND:
+			node.PInt(item->defend.defendturn);
+			break;
+		}
 	}
 
 	_LEAVEFUNC_LUA;

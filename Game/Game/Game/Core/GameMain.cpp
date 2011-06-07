@@ -360,6 +360,12 @@ void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 	}
 }
 
+missionData * GameMain::GetMissionData()
+{
+	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
+	return &(BResource::getInstance()->missiondata[index]);
+}
+
 void GameMain::EnterMission()
 {
 	nowhp = M_GAMEHPMAX;

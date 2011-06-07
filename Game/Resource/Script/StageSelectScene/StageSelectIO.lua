@@ -38,7 +38,7 @@ end
 
 function _StageSelectScene_AddMainItems(toplayer, toptag)
 	
-	local width, height = game.GetSIData(SI_SSUI_Locked);
+	local texx, texy, width, height = game.GetSIData(SI_SSUI_Locked);
 	local margin = 30;
 	
 	local xcen = {};
@@ -91,12 +91,9 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 		local menumoveaction = game.ActionMove(CCAF_To, xcen[i+1], ycen[i+1], fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});

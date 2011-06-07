@@ -14,6 +14,8 @@ LConst_CommandCount = 4;
 LConst_DelayActionTime = 0.3;
 LConst_ZoomActionTime = 0.2;
 
+LConst_ItemVanishTime = 0.3;
+
 LConst_EnemySpriteFadeTime = 0.3;
 LConst_EnemyEnterDelayTime = 0.1;
 
@@ -23,9 +25,15 @@ LConst_SniperScopeScale = 3.75;
 LConst_HPRegainRate = 0.2;
 LConst_APRegainRate = 1.0;
 
-LConst_PlanBrushFrame = 8;
+LConst_PlanBrushFrame = 12;
 LConst_PlanBrushSpace = 5;
 LConst_PlanBrushCrossLength = 100;
 LConst_PlanBrushFadeInStep = 9;
 
 LConst_APCostMin = APMax/8;
+
+LConst_BlinkTimePre = 0.5;
+LConst_BlinkTimePost = 0.9;
+
+LConst_BoardMoveTime = 0.2;
+LConst_BoardShowTime = 0.6;

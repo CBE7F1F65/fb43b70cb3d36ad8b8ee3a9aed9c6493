@@ -1,4 +1,8 @@
 function _PlayScene_CB_Touch_Began(toplayer, toptag, touchlayer, index, gesture)
+	local stateST, stateAction, stateStep = game.GetState();
+	if stateAction ~= STATE_Planning or stateST ~= STATE_ST_Progressing then
+		game.TerminateTouch(touchlayer);
+	end
 end
 
 function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
@@ -15,15 +19,50 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 			
 		else
 			-- OneMoved
-			
 			if LGlobal_PlayData.bZoomed then
 				local xl, yl = game.GetTouchInfo(touchlayer, index, CCTI_LastMoved);
 				_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, xe-xl, ye-yl);
+--			else
+--				local nowhp, nowap = game.GetHPAPSP();
+--				local atk, apperdist, leastap = game.GetWeaponData(WEAPON_Laser);
+--				if nowap < leastap then
+--					_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
+--				else
+--					local nowxb, nowyb, nowxem, nowye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
+--					if nowap < dist*apperdist then
+--						_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
+--					end
+--				end
 			end
 			
 		end
-		
 	end
+end
+
+function _PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, weaponindex, delaytime)
+	-- TODO
+	local layertag = toptag + CCTag_Layer_11;
+	local grouptag = layertag + CCTag_Menu_10;
+	local spnode = game.GetNode({toplayer, grouptag});
+	if DtoI(spnode) ~= NULL then
+		return;
+	end
+	
+	local sprite = game.CreateSprite(SI_Game_PlanBrush_Feather_N, {x, y}, grouptag);
+	spnode = game.AddSpriteChild(sprite, {toplayer, layertag});
+	game.SetAnchor(spnode, 0.5, 0);
+	local scaleval = 1.05;
+	local scaleactionpre = game.ActionScale(CCAF_By, scaleval, scaleval, 0.1);
+	local scaleactionpost = game.ActionScale(CCAF_By, 1/scaleval, 1/scaleval, 0.1);
+	local scaleaction = game.ActionSequence({scaleactionpre, scaleactionpost});
+	local fadeoutaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+	local deleteaction = game.ActionDelete();
+	local spriteaction = game.ActionSequence({scaleaction, fadeoutaction, deleteaction});
+	if delaytime ~= nil then
+		local delayaction = game.ActionDelay(delaytime);
+		spriteaction = game.ActionSequence({delayaction, spriteaction});
+	end
+	game.RunAction(spnode, spriteaction);
 	
 end
 
@@ -71,8 +110,8 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		local spScope = game.CreateSprite(SI_Game_Sniper_Scope, {480, 320, 0, LConst_SniperScopeScale, LConst_SniperScopeScale}, grouptag+1);
 		local spFrontSight = game.CreateSprite(SI_Game_Sniper_FrontSight, {480, 320}, grouptag+2);
 		
-		local spTop = game.CreateSprite(SI_White, {480, -96, 0, 960, 192}, grouptag+3);
-		local spBottom = game.CreateSprite(SI_White, {480, 736, 0, 960, 192}, grouptag+4);
+		local spTop = game.CreateSprite(SI_White, {480, -336, 0, 960, 352}, grouptag+3);
+		local spBottom = game.CreateSprite(SI_White, {480, 976, 0, 960, 352}, grouptag+4);
 		local spLeft = game.CreateSprite(SI_White, {-176, 320, 0, 352, 640}, grouptag+5);
 		local spRight = game.CreateSprite(SI_White, {1136, 320, 0, 352, 640}, grouptag+6);
 		local topnode = game.AddSpriteChild(spTop, {overlaylayer, grouptag});
@@ -84,8 +123,8 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		game.SetColor(bottomnode, blackcol);
 		game.SetColor(leftnode, blackcol);
 		game.SetColor(rightnode, blackcol);
-		local topaction = game.ActionMove(CCAF_By, 0, 192, LConst_ZoomActionTime);
-		local bottomaction = game.ActionMove(CCAF_By, 0, -192, LConst_ZoomActionTime);
+		local topaction = game.ActionMove(CCAF_By, 0, 352, LConst_ZoomActionTime);
+		local bottomaction = game.ActionMove(CCAF_By, 0, -352, LConst_ZoomActionTime);
 		local leftaction = game.ActionMove(CCAF_By, 352, 0, LConst_ZoomActionTime);
 		local rightaction = game.ActionMove(CCAF_By, -352, 0, LConst_ZoomActionTime);
 		game.RunAction(topnode, topaction);
@@ -124,8 +163,8 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		local rightnode = game.GetNode({overlaylayer, grouptag+6});
 		local topaction = game.ActionMove(CCAF_By, 0, -352, LConst_ZoomActionTime);
 		local bottomaction = game.ActionMove(CCAF_By, 0, 352, LConst_ZoomActionTime);
-		local leftaction = game.ActionMove(CCAF_By, -176, 0, LConst_ZoomActionTime);
-		local rightaction = game.ActionMove(CCAF_By, 176, 0, LConst_ZoomActionTime);
+		local leftaction = game.ActionMove(CCAF_By, -352, 0, LConst_ZoomActionTime);
+		local rightaction = game.ActionMove(CCAF_By, 352, 0, LConst_ZoomActionTime);
 		game.RunAction(topnode, topaction);
 		game.RunAction(bottomnode, bottomaction);
 		game.RunAction(leftnode, leftaction);
@@ -199,19 +238,21 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 	if LGlobal_PlayData.bZoomed then
 		if gesture == GESTURE_OneNoMove and touchtype == TOUCH_Tap then
 			-- Plan Dots
-			-- TODO: detect ap
 			local atk, ap, r = game.GetWeaponData(WEAPON_Sniper);
+			local nowx, nowy = game.GetPosition(toplayer);
+			x = 480 - nowx/2;
+			y = 320 - nowy/2;
+			
+			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, -nowx, -nowy);
+			
 			if nowap < ap then
-				-- TODO: Add Animation
+				_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, WEAPON_Sniper, LConst_ZoomActionTime);
 				return;
 			end
 			local nDots = table.getn(LGlobal_PlayData.plandots);
 			
 			game.SetHPAPSP(-1, nowap-ap);
 			
-			local nowx, nowy = game.GetPosition(toplayer);
-			x = 480 - nowx/2;
-			y = 320 - nowy/2;
 			
 			nDots = nDots+1;
 			LGlobal_PlayData.plandots[nDots] = {};
@@ -255,21 +296,20 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			LGlobal_PlayData.plandots[nDots].atk = atk;
 			LGlobal_PlayData.plandots[nDots].ap = ap;
 			LGlobal_PlayData.plandots[nDots].r = r;
-			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, -nowx, -nowy);
 		end
 		return false;
 	end
 	
 	if gesture == GESTURE_OneMoved then
 		-- Plan lines
-		local atk, ap, leastap = game.GetWeaponData(WEAPON_Laser);
+		local atk, apperdist, leastap = game.GetWeaponData(WEAPON_Laser);
 		if nowap < leastap then
-			-- TODO: Add Animation
+			_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
 			return;
 		end
 		local dist;
-		xb, yb, xe, ye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, ap, nowap);
-		local apcost = ap*dist;
+		xb, yb, xe, ye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
+		local apcost = apperdist*dist;
 		if apcost < leastap then
 			apcost = leastap;
 		end
@@ -315,11 +355,10 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 		-- Plan Circles
 		local atk, ap, r = game.GetWeaponData(WEAPON_Bomb);
 		if nowap < ap then
-			-- TODO: Add Animation
+			_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xb, yb, WEAPON_Bomb);
 			return;
 		end
 		game.SetHPAPSP(-1, nowap-ap);
-		-- TODO: detect ap
 		local nCircles = table.getn(LGlobal_PlayData.plancircles);
 		nCircles = nCircles + 1;
 		LGlobal_PlayData.plancircles[nCircles] = {};

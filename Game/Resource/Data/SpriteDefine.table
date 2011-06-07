@@ -176,18 +176,18 @@ Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
 -	318	SI_GUIDigit_8	4	768	704	64	64
 -	319	SI_GUIDigit_9	4	832	704	64	64
 #		MissionOverUI(320~339)					
--	320	SI_MOUI_Board	5	0	0	640	704
--	321	SI_MOUI_Failed	5	640	0	384	384
--	322	SI_MOUI_Succeeded	5	640	384	384	384
--	323	SI_MOUI_Target	5	0	704	256	256
--	324	SI_MOUI_Defend	5	256	704	256	256
+-	320	SI_MOUI_Board	5	0	0	512	576
+-	321	SI_MOUI_Failed	5	512	0	384	384
+-	322	SI_MOUI_Succeeded	5	512	384	384	384
+-	323	SI_MOUI_Target	5	0	640	128	128
+-	324	SI_MOUI_Defend	5	128	640	128	128
 -	325	SI_MOUI_Next	5	512	768	128	128
 -	326	SI_MOUI_Next_Down	5	640	768	128	128
 -	327	SI_MOUI_Restart	5	512	896	128	128
 -	328	SI_MOUI_Restart_Down	5	640	896	128	128
 -	329	SI_MOUI_Exit	5	768	768	128	128
 -	330	SI_MOUI_Exit_Down	5	896	768	128	128
--	331	SI_MOUI_Multiply	5	768	896	128	128
+-	331	SI_MOUI_Multiply	5	0	768	128	128
 #		EnemySide(340~359)					
 -	340	SI_EnemySide_Soldier	16	0	0	64	64
 -	341	SI_EnemySide_Warrior	16	64	0	64	64
@@ -251,8 +251,10 @@ Comment	Index	SI_Name	Tex	Tex_x	Tex_y	Tex_w	Tex_h
 -	438	SI_Enemy_King_Attack	73	0	0	256	320
 -	439	SI_Enemy_King_Dead	73	0	0	256	320
 #		GameSprite(460~499)					
--	460	SI_Game_PlanBrush_Laser	20	0	448	32	32
--	461	SI_Game_PlanBrush_Bomb	20	32	448	32	32
--	462	SI_Game_PlanBrush_Sniper	20	64	448	32	32
--	463	SI_Game_Sniper_Scope	20	0	0	256	256
--	464	SI_Game_Sniper_FrontSight	20	0	256	128	128
+-	460	SI_Game_PlanBrush_Feather	20	128	320	128	192
+-	461	SI_Game_PlanBrush_Feather_N	20	256	320	128	192
+-	462	SI_Game_PlanBrush_Laser	20	0	448	32	32
+-	463	SI_Game_PlanBrush_Bomb	20	32	448	32	32
+-	464	SI_Game_PlanBrush_Sniper	20	64	448	32	32
+-	465	SI_Game_Sniper_Scope	20	0	0	256	256
+-	466	SI_Game_Sniper_FrontSight	20	0	256	128	128

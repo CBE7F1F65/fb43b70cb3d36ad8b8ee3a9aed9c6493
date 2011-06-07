@@ -5,6 +5,7 @@
 #include "StageMissionData.h"
 #include "VectorList.h"
 #include "BIOInterface.h"
+#include "DataStruct.h"
 
 #include "cocos2d.h"
 using namespace cocos2d;
@@ -85,6 +86,7 @@ public:
 	// In Game
 	int GetMissionBGSIID();
 	void GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs);
+	missionData * GetMissionData();
 
 	void EnterMission();
 	bool ClearMission();

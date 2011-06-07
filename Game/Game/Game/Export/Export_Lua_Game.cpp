@@ -79,6 +79,11 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("APMax", M_GAMEAPMAX);
 	obj->SetInteger("SPMax", M_GAMESPMAX);
 
+	obj->SetInteger("MISSIONTYPE_Normal", M_MISSIONTYPE_NORMAL);
+	obj->SetInteger("MISSIONTYPE_Target", M_MISSIONTYPE_TARGET);
+	obj->SetInteger("MISSIONTYPE_Defend", M_MISSIONTYPE_DEFEND);
+	obj->SetInteger("MISSIONTYPE_Suicide", M_MISSIONTYPE_SUICIDE);
+
 	return true;
 }
 
@@ -167,6 +172,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("SetColor", LuaFn_Game_SetColor);
 	_gameobj.Register("GetColor", LuaFn_Game_GetColor);
 	_gameobj.Register("SetAnchor", LuaFn_Game_SetAnchor);
+	_gameobj.Register("SetTexRect", LuaFn_Game_SetTexRect);
 
 	_gameobj.Register("ActionMove", LuaFn_Game_ActionMove);
 	_gameobj.Register("ActionRotate", LuaFn_Game_ActionRotate);
@@ -785,16 +791,22 @@ int Export_Lua_Game::LuaFn_Game_GetSIData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// siid -> width, height
+	// siid -> x, y, width, height
 	int _siid = node.iNextGet();
+	float _x = 0;
+	float _y = 0;
 	float _width = 0;
 	float _height = 0;
 	spriteData * spdata = SpriteItemManager::CastSprite(_siid);
 	if (spdata)
 	{
+		_x = spdata->tex_x;
+		_y = spdata->tex_y;
 		_width = spdata->tex_w;
 		_height = spdata->tex_h;
 	}
+	node.PFloat(_x);
+	node.PFloat(_y);
 	node.PFloat(_width);
 	node.PFloat(_height);
 
@@ -1887,6 +1899,38 @@ int Export_Lua_Game::LuaFn_Game_SetAnchor(LuaState * ls)
 		}
 		_item->setAnchorPoint(ccp(_anchorx, _anchory));
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetTexRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	CCSprite * _item = (CCSprite *)node.dNextGet();
+	CCRect rect = _item->getTextureRect();
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		rect.origin.x = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			rect.origin.y = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				rect.size.width = node.fGet();
+				node.jNextGet();
+				if (node.bhavenext)
+				{
+					rect.size.height = node.fGet();
+				}
+			}
+		}
+	}
+	_item->setTextureRect(rect);
 
 	_LEAVEFUNC_LUA;
 }

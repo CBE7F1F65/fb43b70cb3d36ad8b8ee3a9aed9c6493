@@ -28,6 +28,8 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		elseif stateST == STATE_ST_Standby then
 			if _PlayScene_ShowTarget(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
+			else
+				stateST = STATE_ST_Progressing;
 			end
 		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Finished;
@@ -67,16 +69,18 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 			game.AddTurn();
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_ShowTurnStart(toplayer, toptag) then
-				stateST = STATE_ST_Finished;
-			end
+			_PlayScene_ShowTurnStart(toplayer, toptag)
+			stateST = STATE_ST_Progressing;
 		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Finished;
 		end
 	elseif stateAction == STATE_Planning then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
-		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+		elseif stateST == STATE_ST_Standby then
+			_PlayScene_PreparePlanning(toplayer, toptag);
+			stateST = STATE_ST_Progressing;
+		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
 		elseif stateST == STATE_ST_Progressing then
 			_PlayScene_UpdatePlanning(toplayer, toptag, stateStep);
@@ -117,10 +121,49 @@ function _PlayScene_UpdateState(toplayer, toptag)
 --	LOGSTATE("Post:", stateST, stateAction, stateStep, toplayer, toptag);
 end
 
+function _PlayScene_PreparePlanning(toplayer, toptag)
+	LGlobal_PlayData.planlines = {};
+	LGlobal_PlayData.plancircles = {};
+	LGlobal_PlayData.plandots = {};
+	_PlayScene_ToggleMenuEnable(toplayer, toptag, true);
+end
+
+function _PlayScene_ExitPlanning(toplayer, toptag)
+	_PlayScene_ToggleMenuEnable(toplayer, toptag, false);
+end
+
+function _PlayScene_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy, time, index)
+	
+	if brushx == nil or brushy == nil then
+		return;
+	end
+	
+	local feathernode;
+	if time == 0 then
+		local spfeather = game.CreateSprite(SI_Game_PlanBrush_Feather, {brushx, brushy}, grouptag+index);
+		feathernode = game.AddSpriteChild(spfeather, {toplayer, grouptag});
+		game.SetAnchor(feathernode, 0.5, 0);
+	else
+		feathernode = game.GetNode({toplayer, grouptag+index});
+		game.SetPosition(feathernode, brushx, brushy);
+	end
+	
+	if time == LConst_PlanBrushFrame-1 then
+		local fadeoutaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+		local deleteaction = game.ActionDelete();
+		local featheraction = game.ActionSequence({fadeoutaction, deleteaction});
+		game.RunAction(feathernode, featheraction);
+	end
+end
+
 function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	
 	local layertag = toptag + CCTag_Layer_11;
 	local grouptag = layertag + CCTag_Menu_01;
+	
+	local linesgrouptag = layertag+CCTag_Menu_04;
+	local circlesgrouptag = layertag+CCTag_Menu_05;
+	local dotsgrouptag = layertag+CCTag_Menu_06;
 	
 	local rendertextureitem = game.GetNode({toplayer, grouptag});
 	game.RenderTextureBegin(rendertextureitem);
@@ -128,7 +171,6 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	local nLines = table.getn(LGlobal_PlayData.planlines);
 	
 	if nLines > 0 then
-		local nFinishedLines = 0;
 		for i=1, nLines do
 			if LGlobal_PlayData.planlines[i].time < LConst_PlanBrushFrame then
 				local item = LGlobal_PlayData.planlines[i];
@@ -136,6 +178,10 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local stepstogonow = item.stepstogo[item.time+1].now;
 				local stepstogoacc = item.stepstogo[item.time+1].acc;
 				
+				local brushx, brushy;
+				if item.time == 0 then
+					brushx, brushy = item.xb, item.yb;
+				end
 				for j=0, stepstogonow-1 do
 					local nowstepindex = stepstogoacc+j;
 					local scale = RANDTF(0.5, 1);
@@ -148,23 +194,20 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.SetAngle(LGlobal_PlayData.planbrush.laser, RANDT());
 					
 					local interval = item.space * (nowstepindex) / item.dist;
-					game.NodeVisit(LGlobal_PlayData.planbrush.laser, global.INTER(item.xb, item.xe, interval), global.INTER(item.yb, item.ye, interval));
+					brushx, brushy = global.INTER(item.xb, item.xe, interval), global.INTER(item.yb, item.ye, interval);
+					game.NodeVisit(LGlobal_PlayData.planbrush.laser, brushx, brushy);
 				end
 				
+				_PlayScene_Plan_DrawFeather(toplayer, toptag, linesgrouptag, brushx, brushy, item.time, i);
+				
 				LGlobal_PlayData.planlines[i].time = item.time+1;
-			else
-				nFinishedLines = nFinishedLines + 1;
 			end
-		end
-		if nFinishedLines == nLines then
-			LGlobal_PlayData.planlines = {};
 		end
 	end
 	
 	local nCircles = table.getn(LGlobal_PlayData.plancircles);
 	
 	if nCircles > 0 then
-		local nFinishedCircles = 0;
 		for i=1, nCircles do
 			if LGlobal_PlayData.plancircles[i].time < LConst_PlanBrushFrame then
 				local item = LGlobal_PlayData.plancircles[i];
@@ -172,6 +215,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
 
+				local brushx, brushy;
 				for j=0, stepstogonow-1 do
 					local nowstepindex = item.stepstogo*item.time+j;
 					local nowangle = item.startangle+nowstepindex*item.anglestep;
@@ -191,23 +235,20 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.SetScale(LGlobal_PlayData.planbrush.bomb, scale, scale);
 					game.SetAngle(LGlobal_PlayData.planbrush.bomb, RANDT());
 				
+					brushx, brushy = x, y;
 					game.NodeVisit(LGlobal_PlayData.planbrush.bomb, x, y);
 				end
 				
+				_PlayScene_Plan_DrawFeather(toplayer, toptag, circlesgrouptag, brushx, brushy, item.time, i);
+				
 				LGlobal_PlayData.plancircles[i].time = item.time+1;
-			else
-				nFinishedCircles = nFinishedCircles + 1;
 			end
-		end
-		if nFinishedCircles == nCircles then
-			LGlobal_PlayData.plancircles = {};
 		end
 	end
 	
 	local nDots = table.getn(LGlobal_PlayData.plandots);
 	
 	if nDots > 0 then
-		local nFinishedDots = 0;
 		for i=1, nDots do
 			if LGlobal_PlayData.plandots[i].time < 0 then
 				LGlobal_PlayData.plandots[i].time = LGlobal_PlayData.plandots[i].time+1;
@@ -217,6 +258,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
 				
+				local brushx, brushy;
 				for j=0, stepstogonow-1 do
 					local nowstepindex = item.stepstogo*item.time+j;
 					local index = 1;
@@ -239,16 +281,14 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.SetScale(LGlobal_PlayData.planbrush.sniper, scale, scale);
 					game.SetAngle(LGlobal_PlayData.planbrush.sniper, RANDT());
 				
+					brushx, brushy = x, y;
 					game.NodeVisit(LGlobal_PlayData.planbrush.sniper, x, y);
 				end
 				
+				_PlayScene_Plan_DrawFeather(toplayer, toptag, dotsgrouptag, brushx, brushy, item.time, i);
+				
 				LGlobal_PlayData.plandots[i].time = item.time+1;
-			else
-				nFinishedDots = nFinishedDots + 1;
 			end
-		end
-		if nFinishedDots == nDots then
-			LGlobal_PlayData.plandots = {};
 		end
 	end
 	
@@ -295,7 +335,7 @@ end
 
 function _PlayScene_ShowTarget(toplayer, toptag)
 	--Add Menu and Callback
-	if true then
+	if _PlayScene_DoShowTurnStart(toplayer, toptag, true) then
 		return true;
 	end
 --	_PlayScene_StepForward(STATE_ShowTarget);
@@ -449,10 +489,8 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, grouptag+selitemtag});
 	
 	game.SetColor(enemysidearrownode, global.ARGB(0, 0xffffff));
-	local blinktimepre = 0.5;
-	local blinktimepost = 0.9;
-	local arrowfadeactionpre = game.ActionFade(CCAF_To, 0xCF, blinktimepre);
-	local arrowfadeactionpost = game.ActionFade(CCAF_To, 0x1F, blinktimepost);
+	local arrowfadeactionpre = game.ActionFade(CCAF_To, 0xCF, LConst_BlinkTimePre);
+	local arrowfadeactionpost = game.ActionFade(CCAF_To, 0x1F, LConst_BlinkTimePost);
 	local arrowfadeaction = game.ActionSequence({arrowfadeactionpre, arrowfadeactionpost});
 	arrowfadeaction = game.ActionRepeat(arrowfadeaction);
 	game.RunAction(enemysidearrownode, arrowfadeaction);
@@ -516,9 +554,53 @@ function _PlayScene_HPAPRegain(toplayer, toptag)
 	return true;
 end
 
+function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
+	
+	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
+	local missiontype = game.GetMissionTargetData();
+	
+	if nowturn == 0 and missiontype == MISSIONTYPE_Normal then
+		return true;
+	end
+	
+	local layertag = toptag + CCTag_Layer_04;
+	local grouptag = layertag + CCTag_Menu_01;
+	
+	local spboard = game.CreateSprite(SI_MOUI_Board, {480, 240});
+	local boardnode = game.AddSpriteChild(spboard, {toplayer, grouptag}, CCTag_Menu_01);
+	
+	local sptarget = game.CreateSprite(SI_MOUI_Target, {480, 400});
+	local targetnode = game.AddSpriteChild(sptarget, {toplayer, grouptag}, CCTag_Menu_01);
+	
+	if nowturn > 0 then
+		local str = LGlobal_TranslateGameStr_NowTurn(nowturn);
+		game.AddTextChild({toplayer, grouptag}, {480, 280, CCTag_Menu_01}, str, 80);
+	end
+	
+	local moveupaction = game.ActionMove(CCAF_To, 0, 0, LConst_BoardMoveTime);
+	local layernode = game.GetNode({toplayer, layertag});
+	game.SetPosition(layernode, 0, -480);
+	
+	if bRequireClose == nil or not bRequireClose then
+		PlayScene_CB_Target(nil, toplayer, toptag, CCTag_Layer_04, nil, 1, LConst_BoardMoveTime+LConst_BoardShowTime);
+	else
+		grouptag = layertag + CCTag_Menu_04;
+		local menuitem = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+1);
+		local menu = game.AddMenuChild({menuitem}, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+	end
+	
+	game.RunAction(layernode, moveupaction);
+	
+	layertag = toptag + CCTag_Layer_11;
+	local planlayernode = game.GetNode({toplayer, layertag});
+	game.SetIsVisible(planlayernode, false);
+	
+	return false;
+end
+
 function _PlayScene_ShowTurnStart(toplayer, toptag)
 	--Add Menu and Callback
-	if true then
+	if _PlayScene_DoShowTurnStart(toplayer, toptag) then
 		return true;
 	end
 --	_PlayScene_StepForward(STATE_ShowTurnStart);
@@ -529,6 +611,14 @@ function _PlayScene_SelfAction(toplayer, toptag, index)
 	-- Check all self action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
 	if true then
+		local layertag = toptag+CCTag_Layer_11;
+		local grouptag = layertag+CCTag_Menu_01;
+		local rendertextureitem = game.GetNode({toplayer, grouptag});
+		game.RenderTextureBegin(rendertextureitem, true);
+		game.RenderTextureEnd(rendertextureitem);
+		LGlobal_PlayData.planlines = {};
+		LGlobal_PlayData.plandots = {};
+		LGlobal_PlayData.plancircles = {};
 		return true;
 	end
 	
@@ -627,17 +717,15 @@ function _PlayScene_StepForward(_stateAction)
 	if stateAction == _stateAction then
 		if stateST == STATE_ST_Progressing then
 			stateST = STATE_ST_StepForward;
+			game.SetState(stateST, stateAction, stateStep);
 		end
 	end
-	game.SetState(stateST, stateAction, stateStep);
 end
 
 function _PlayScene_StateFinish(_stateAction)
 	local stateST, stateAction, stateStep = game.GetState();
 	if stateAction == _stateAction then
---		if stateST == STATE_ST_Progressing then
-			stateST = STATE_ST_Finished;
---		end
+		stateST = STATE_ST_Finished;
+		game.SetState(stateST, stateAction, stateStep);
 	end
-	game.SetState(stateST, stateAction, stateStep);
 end

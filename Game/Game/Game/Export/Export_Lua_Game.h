@@ -95,6 +95,7 @@ public:
 	static int LuaFn_Game_SetColor(LuaState * ls);
 	static int LuaFn_Game_GetColor(LuaState * ls);
 	static int LuaFn_Game_SetAnchor(LuaState * ls);
+	static int LuaFn_Game_SetTexRect(LuaState * ls);
 
 	static int LuaFn_Game_ActionMove(LuaState * ls);
 	static int LuaFn_Game_ActionRotate(LuaState * ls);
@@ -140,6 +141,7 @@ public:
 
 	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
 	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
+	static int LuaFn_Game_GetMissionTargetData(LuaState * ls);
 
 	static int LuaFn_Game_EnterMission(LuaState * ls);
 	static int LuaFn_Game_ClearMission(LuaState * ls);

@@ -39,7 +39,21 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 		elseif selgrouptag == CCTag_Menu_12 then
 			return PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
+	
+	-- Target/Turn/Mission Over
+	elseif sublayertag == CCTag_Layer_04 then
+		-- Target menu
+		if selgrouptag == CCTag_Menu_04 then
+			return PlayScene_CB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_06 then
+			return PlayScene_CB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_09 then
+			return PlayScene_CBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCTag_Menu_11 then
+			return PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		end
 	end
+	
 end
 
 function PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
@@ -117,8 +131,10 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 	-- Menu
 	if callitemtag == grouptag+4 then
 		-- TODO: Target
-		--Quit
 		if selitemtag == 1 then
+			_PlayScene_DoShowTurnStart(toplayer, toptag, true);
+		--Quit
+		elseif selitemtag == 2 then
 			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 		--Restart
 		else
@@ -174,7 +190,7 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 
 	local toquit = true;
 	
-	if selitemtag < 3 then
+	if selitemtag < 4 then
 		if PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag, sublayertag, selitemtag) then
 			return
 		end
@@ -193,15 +209,15 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 	local xorig = posdata[1];
 	local yorigcen = posdata[2];
 	
-	for i=0, 1 do
+	for i=0, 2 do
 	
 		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
 		
-		local fadetime = 0.3+(1-i)*0.05;
+		local fadetime = 0.3+(2-i)*0.05;
 		
 		if i+1 ~= selitemtag then
 			
-			local yorig = yorigcen - (i-0.5)*70
+			local yorig = yorigcen - (i-1)*70
 			
 			if toquit then
 				local menumoveaction = game.ActionMove(CCAF_To, xorig, yorig, fadetime);
@@ -234,7 +250,7 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -478,12 +494,9 @@ function _PlayScene_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
@@ -515,14 +528,14 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 	local xmove = posdata[3];
 	local ymove = posdata[4];
 	
-	for i=0, 1 do
+	for i=0, 2 do
 		
-		local yorig = yorigcen - (i-0.5)*70;
+		local yorig = yorigcen - (i-1)*70;
 		local x = xorig + xmove;
 		local y = yorig + ymove;
 		
-		spMenus[i+1] = game.CreateSprite(SI_GUISub_Exit+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Exit_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_GUISub_Target+i*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Target_Down+i*2);
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCTag_Menu_04, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
@@ -530,12 +543,9 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
@@ -546,7 +556,7 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 		
 	end
 	
-	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+3);
+	menus[4] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+4);
 	
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
@@ -556,14 +566,7 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 end
 
 function _PlayScene_CB_Action(toplayer, toptag)
-	local layertag = toptag+CCTag_Layer_11;
-	local grouptag = layertag+CCTag_Menu_01;
-	local rendertextureitem = game.GetNode({toplayer, grouptag});
-	game.RenderTextureBegin(rendertextureitem, true);
-	game.RenderTextureEnd(rendertextureitem);
-	LGlobal_PlayData.planlines = {};
-	LGlobal_PlayData.plandots = {};
-	LGlobal_PlayData.plancircles = {};
+	_PlayScene_ExitPlanning(toplayer, toptag);
 	_PlayScene_StateFinish(STATE_Planning);
 end
 
@@ -584,8 +587,59 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 	elseif selitemtag == 3 then
 	-- menu
 	elseif selitemtag == 4 then
-		_PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 110});
---		_PlayScene_CB_AddOKCancel(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 110});
+		_PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});
 	end
 	
+end
+
+function PlayScene_CB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, delaytime)
+	
+	local layertag = toptag + sublayertag;
+	
+	local movedownaction = game.ActionMove(CCAF_To, 0, -480, LConst_BoardMoveTime);
+	local layernode = game.GetNode({toplayer, layertag});
+	
+	if delaytime ~= nil then
+		local delayaction = game.ActionDelay(delaytime);
+		movedownaction = game.ActionSequence({delayaction, movedownaction});
+	end
+	
+	game.RunAction(layernode, movedownaction);
+	
+	if delaytime == nil then
+		delaytime = LConst_DelayActionTime;
+	else
+		delaytime = delaytime + LConst_DelayActionTime;
+	end
+	
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime);
+	local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+selitemtag+1});
+
+	game.RunAction(callnode, callfuncaction);
+	
+end
+
+function PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	local layertag = toptag + sublayertag;
+	local grouptag = layertag + CCTag_Menu_01;
+	
+	game.RemoveAllChildren({toplayer, grouptag});
+	grouptag = layertag + CCTag_Menu_04;
+	game.RemoveChild({toplayer, grouptag});
+	
+	local layernode = game.GetNode({toplayer, layertag});
+	game.SetPosition(layernode, 0, 0);
+	_PlayScene_StateFinish(STATE_ShowTurnStart);
+	_PlayScene_StateFinish(STATE_ShowTarget);
+	
+	layertag = toptag + CCTag_Layer_11;
+	local planlayernode = game.GetNode({toplayer, layertag});
+	game.SetIsVisible(planlayernode, true);
+	
+end
+
+function PlayScene_CB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+end
+
+function PlayScene_CBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 end

@@ -78,6 +78,9 @@ function PlayScene_OnInit(toplayer, toptag)
 	-- Message
 	layertag = toptag + CCTag_Layer_04;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_04, layertag});
+	-- Target/Turn/Mission Over
+	grouptag = layertag + CCTag_Menu_01;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 	
 	-- Frame
 	layertag = toptag + CCTag_Layer_05;
@@ -105,9 +108,17 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_11;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
 	
+	-- feathers
+	grouptag = layertag + CCTag_Menu_04;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+	grouptag = layertag + CCTag_Menu_05;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_05, grouptag});
+	grouptag = layertag + CCTag_Menu_06;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_06, grouptag});
+	
 	_PlayScene_AddPlanningRenderTexture(toplayer, toptag);
 	
-	-- Clear GameOver
+	-- Clear GameOver ??
 	layertag = toptag + CCTag_Layer_12;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_12, layertag});
 	
@@ -150,18 +161,18 @@ function _PlayScene_AddHPAPSPItems(toplayer, toptag)
 		if i == 1 then
 			x = 960 - x;
 		end
-		local width, height = game.GetSIData(SI_GUI_HP_Bar+i*2);
+		local texx, texy, width, height = game.GetSIData(SI_GUI_HP_Bar+i*2);
 		
 		local spBar = game.CreateSprite(SI_GUI_HP_Bar+i*2, {x-width/2, y-height/2}, grouptag+i+1);
-		local nodebar = game.AddSpriteChild(spBar, {toplayer, layertag, grouptag});
+		local nodebar = game.AddSpriteChild(spBar, {toplayer, grouptag});
 		game.SetAnchor(nodebar, 0, 0);
 		game.SetScale(nodebar, 0, 1);
 		
 		local spFrame = game.CreateSprite(SI_GUI_HP_Frame+i*2, {x, y});
-		game.AddSpriteChild(spFrame, {toplayer, layertag, grouptag});
+		game.AddSpriteChild(spFrame, {toplayer, grouptag});
 		
 		local spTitle = game.CreateSprite(SI_GUI_HP+i, {x, y});
-		game.AddSpriteChild(spTitle, {toplayer, layertag, grouptag});
+		game.AddSpriteChild(spTitle, {toplayer, grouptag});
 	end
 	
 	grouptag = layertag + CCTag_Menu_02;
@@ -171,7 +182,7 @@ function _PlayScene_AddHPAPSPItems(toplayer, toptag)
 		x = xorig + i*32;
 		
 		local spSP = game.CreateSprite(SI_GUI_SP, {x, y}, grouptag+i+1);
-		local nodesp = game.AddSpriteChild(spSP, {toplayer, layertag, grouptag});
+		local nodesp = game.AddSpriteChild(spSP, {toplayer, grouptag});
 		game.SetColor(nodesp, global.ARGB(0, 0xffffff));
 		
 	end
@@ -205,12 +216,9 @@ function _PlayScene_AddMainItems(toplayer, toptag)
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
@@ -223,7 +231,7 @@ function _PlayScene_AddMainItems(toplayer, toptag)
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
-	
+	_PlayScene_ToggleMenuEnable(toplayer, toptag, false);
 end
 
 function _PlayScene_SetHPAPSP(toplayer, toptag)

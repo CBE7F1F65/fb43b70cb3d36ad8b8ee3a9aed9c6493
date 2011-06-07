@@ -129,15 +129,18 @@ end
 
 function _TitleScene_UpdateBGMSE(toplayer, toptag)
 	
-	bgmvol, sevol = game.GetBGMSEVol();
+	local bgmvol, sevol = game.GetBGMSEVol();
+	local texx, texy, texw, texh = game.GetSIData(SI_TUI_BGMSE_Bar);
 	
 	layertag = toptag + CCTag_Layer_06;
 	local bgmbar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
-	game.SetScale(bgmbar, bgmvol/100.0, 1);
+	game.SetTexRect(bgmbar, texx, texy, texw*bgmvol/100.0, texh);
+--	game.SetScale(bgmbar, bgmvol/100.0, 1);
 	
 	local layertag = toptag + CCTag_Layer_07;
 	local sebar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
-	game.SetScale(sebar, sevol/100.0, 1);
+	game.SetTexRect(sebar, texx, texy, texw*sevol/100.0, texh);
+--	game.SetScale(sebar, sevol/100.0, 1);
 	
 end
 

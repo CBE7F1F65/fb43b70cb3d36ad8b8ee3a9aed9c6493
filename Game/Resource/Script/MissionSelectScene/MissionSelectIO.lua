@@ -99,12 +99,9 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, ycen, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
-		local blinktimepre = 0.5;
-		local blinktimepost = 0.9;
-		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
-		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, blinktimepre);
-		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, blinktimepost);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
 		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
 		menurepeataction = game.ActionRepeat(menurepeataction);
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
@@ -112,8 +109,8 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		local menuaction;
 		if missionenabled and missiontriedtime == 0 then
 			local menuscaleinaction = game.ActionScale(CCAF_To, 1.0, 1.0, fadetime);
-			local menurepeatscaleactionpre = game.ActionScale(CCAF_To, 1.2, 1.2, blinktimepre/3);
-			local menurepeatscaleactionpost = game.ActionScale(CCAF_To, 1.0, 1.0, blinktimepost/3);
+			local menurepeatscaleactionpre = game.ActionScale(CCAF_To, 1.2, 1.2, LConst_BlinkTimePre/3);
+			local menurepeatscaleactionpost = game.ActionScale(CCAF_To, 1.0, 1.0, LConst_BlinkTimePost/3);
 			local menurepeatscaleaction = game.ActionSequence({menurepeatscaleactionpre, menurepeatscaleactionpost});
 			menurepeatscaleaction = game.ActionRepeat(menurepeatscaleaction);
 			local menuscaleaction = game.ActionSequence({menuscaleinaction, menurepeatscaleaction});
