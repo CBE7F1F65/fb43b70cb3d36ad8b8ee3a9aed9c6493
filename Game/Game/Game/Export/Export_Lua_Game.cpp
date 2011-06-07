@@ -2339,11 +2339,10 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// {nodelist}, delaytime, dataindex
+	// {nodelist}, delaytime, dataindex, bDelete
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-
 		int scenetag = kCCNodeTagInvalid;
 		_LObjNode tcnode(ls, &(node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
@@ -2363,6 +2362,7 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 
 		float _delaytime = 0;
 		int _dataindex = -1;
+		bool _bDelete = true;
 		node.jNextGet();
 		if (node.bhavenext)
 		{
@@ -2371,6 +2371,11 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 			if (node.bhavenext)
 			{
 				_dataindex = node.iGet();
+				node.jNextGet();
+				if (node.bhavenext)
+				{
+					_bDelete = node.bGet();
+				}
 			}
 		}
 
@@ -2380,10 +2385,20 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 		{
 			CCFiniteTimeAction * delayaction = CCDelayTime::actionWithDuration(_delaytime);
 			CCFiniteTimeAction * delayedcallfuncaction = CCSequence::actionOneTwo(delayaction, (CCFiniteTimeAction*)callfuncaction);
+			if (_bDelete)
+			{
+				CCFiniteTimeAction * deleteaction = CCActionDelete::action();
+				delayedcallfuncaction = CCSequence::actionOneTwo(delayedcallfuncaction, deleteaction);
+			}
 			node.PDword((DWORD)delayedcallfuncaction);
 		}
 		else
 		{
+			if (_bDelete)
+			{
+				CCFiniteTimeAction * deleteaction = CCActionDelete::action();
+				callfuncaction = CCSequence::actionOneTwo((CCFiniteTimeAction*)callfuncaction, deleteaction);
+			}
 			node.PDword((DWORD)callfuncaction);
 		}
 	}

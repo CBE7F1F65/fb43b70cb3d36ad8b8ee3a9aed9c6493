@@ -527,7 +527,7 @@ function _PlayScene_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission
 	local dataindex = LGlobal_SaveData(STATE_AddEnemy);	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
 	local callnodegrouptag = layertag + CCTag_Menu_11;
-	local callnode = game.AddNullChild({toplayer, layertag, grouptag, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
 	game.RunAction(callnode, callfuncaction);
 	
 	return false;

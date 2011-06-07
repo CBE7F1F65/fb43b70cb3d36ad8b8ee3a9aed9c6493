@@ -241,8 +241,8 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 	local layertag = toptag + CCTag_Layer_07;
 	local grouptag = layertag + CCTag_Menu_01;
 	
-	local hpbar = game.GetNode({toplayer, layertag, grouptag, grouptag+1});
-	local apbar = game.GetNode({toplayer, layertag, grouptag, grouptag+2});
+	local hpbar = game.GetNode({toplayer, grouptag+1});
+	local apbar = game.GetNode({toplayer, grouptag+2});
 	
 	if LGlobal_PlayData.nowhp ~= hp then
 		LGlobal_PlayData.nowhp = hp;
@@ -270,13 +270,13 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 		
 		if nowsp > sp then
 			for i=sp, nowsp do
-				local spitem = game.GetNode({toplayer, layertag, grouptag, grouptag+i});
+				local spitem = game.GetNode({toplayer, grouptag+i});
 				local spfadeaction = game.ActionFade(CCAF_To, 0, LConst_SPChangeTime);
 				game.RunAction(spitem, spfadeaction);
 			end
 		else
 			for i=nowsp, sp do
-				local spitem = game.GetNode({toplayer, layertag, grouptag, grouptag+i});
+				local spitem = game.GetNode({toplayer, grouptag+i});
 				local spfadeaction = game.ActionFade(CCAF_To, 0xFF, LConst_SPChangeTime);
 				game.RunAction(spitem, spfadeaction);
 			end

@@ -68,9 +68,9 @@ end
 function PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_03;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetTouchEnabled(mainmenu, true);
 	
 end
@@ -78,27 +78,27 @@ end
 function PlayScene_CBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_04;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
 function PlayScene_CBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_05;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
 function PlayScene_CBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_06;
-	game.RemoveChild({toplayer, layertag, grouptag});
+	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
@@ -200,7 +200,7 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -211,7 +211,7 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 	
 	for i=0, 2 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(2-i)*0.05;
 		
@@ -270,7 +270,7 @@ function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, se
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -281,7 +281,7 @@ function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, se
 	
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -320,7 +320,7 @@ function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, se
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_12+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -340,7 +340,7 @@ function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, se
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -351,7 +351,7 @@ function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, se
 	
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -390,7 +390,7 @@ function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, se
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_10+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -411,7 +411,7 @@ function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, se
 	local grouptag = layertag+selgrouptag;
 	
 	if toquit then
-		local menu = game.GetNode({toplayer, layertag, grouptag});
+		local menu = game.GetNode({toplayer, grouptag});
 		game.SetTouchEnabled(menu, false);
 	end
 	
@@ -422,7 +422,7 @@ function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, se
 	
 	for i=0, 1 do
 	
-		menus[i+1] = game.GetNode({toplayer, layertag, grouptag, grouptag+i+1});
+		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
 		local fadetime = 0.3+(1-i)*0.05;
 		
@@ -461,7 +461,7 @@ function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, se
 		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_09+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 			
@@ -575,7 +575,7 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + selgrouptag;
 	
-	local item = game.GetNode({toplayer, layertag, grouptag, grouptag+selitemtag});
+	local item = game.GetNode({toplayer, grouptag+selitemtag});
 	local xbase, ybase = game.GetPosition(item);
 
 	-- command

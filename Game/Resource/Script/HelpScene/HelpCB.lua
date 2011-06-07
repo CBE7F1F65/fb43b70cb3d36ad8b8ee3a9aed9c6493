@@ -77,7 +77,7 @@ function HelpScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 	local menus = {};
 	local xmove = 400;
 	
-	local menu = game.GetNode({toplayer, layertag, grouptag});
+	local menu = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menu, false);
 	
 	for i=0, 3 do
