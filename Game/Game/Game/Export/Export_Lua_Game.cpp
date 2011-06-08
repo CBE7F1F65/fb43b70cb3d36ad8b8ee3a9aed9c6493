@@ -31,6 +31,8 @@ using namespace cocos2d;
 
 _LObjNode Export_Lua_Game::node;
 
+#define M_NODETYPE_RENDERTEXTURE	0x01
+
 bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 {
 	obj->SetInteger("STATE_ST_Null", GAMESTATE_ST_NULL);
@@ -85,6 +87,8 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("MISSIONTYPE_Target", M_MISSIONTYPE_TARGET);
 	obj->SetInteger("MISSIONTYPE_Defend", M_MISSIONTYPE_DEFEND);
 	obj->SetInteger("MISSIONTYPE_Suicide", M_MISSIONTYPE_SUICIDE);
+
+	obj->SetInteger("NODETYPE_RenderTexture", M_NODETYPE_RENDERTEXTURE);
 
 	return true;
 }
@@ -558,12 +562,26 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
+	// type
+
 	CCNode * retval = NULL;
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
 		_LObjNode cnode(ls, &(node._obj), &node);
 		retval = _GetNowNode(&cnode);
+		//
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			int _type = node.iGet();
+			switch (_type)
+			{
+			case M_NODETYPE_RENDERTEXTURE:
+				retval = ((CCRenderTexture *)retval)->getSprite();
+				break;
+			}
+		}
 	}
 	node.PDword((DWORD)retval);
 

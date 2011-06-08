@@ -103,11 +103,6 @@ function PlayScene_OnInit(toplayer, toptag)
 	-- Plan
 	layertag = toptag + CCTag_Layer_11;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
-	
-	-- Menu
-	layertag = toptag + CCTag_Layer_13;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
-	
 	-- feathers
 	grouptag = layertag + CCTag_Menu_04;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
@@ -122,6 +117,10 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_12;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_12, layertag});
 	
+	-- Menu
+	layertag = toptag + CCTag_Layer_13;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
+		
 	-- Overlay
 	local overlaylayer = game.AddOverlayLayerChild(toplayer, {0, 0, CCZ_Max});
 	-- Sniper Scope

@@ -619,8 +619,13 @@ function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
 	game.RunAction(layernode, moveupaction);
 	
 	layertag = toptag + CCTag_Layer_11;
-	local planlayernode = game.GetNode({toplayer, layertag});
-	game.SetIsVisible(planlayernode, false);
+	grouptag = layertag+CCTag_Menu_01;
+	local planrendertexturesprite = game.GetNode({toplayer, grouptag}, NODETYPE_RenderTexture);
+	local fadeaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+	local tintaction = game.ActionTint(CCAF_To, 0, LConst_ItemVanishTime);
+	local spaction = game.ActionSpawn({fadeaction, tintaction});
+	game.RunAction(planrendertexturesprite, spaction);
+--	game.SetIsVisible(planlayernode, false);
 	
 	return false;
 end
