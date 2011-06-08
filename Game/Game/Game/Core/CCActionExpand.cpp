@@ -14,7 +14,14 @@ namespace cocos2d {
 	void CCActionDelete::startWithTarget(CCNode *pTarget)
 	{
 		CCActionInstant::startWithTarget(pTarget);
-		pTarget->removeFromParentAndCleanup(true);
+		if (pTarget->getParent())
+		{
+			pTarget->removeFromParentAndCleanup(true);
+		}
+		else
+		{
+			pTarget->cleanup();
+		}
 	}
 
 	// CCActionDeleteChildren

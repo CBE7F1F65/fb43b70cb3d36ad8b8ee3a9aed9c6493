@@ -23,7 +23,7 @@ function StageSelectScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
-	local spStageSelect = game.CreateSprite(SI_StageSelectScene, {480, 320});
+	local spStageSelect = game.CreateSprite(SI_TitleScene, {480, 320});
 	game.AddSpriteChild(spStageSelect, {toplayer, layertag});
 	
 	-- menu layer

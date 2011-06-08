@@ -45,8 +45,8 @@ function _StoryScene_AddStoryItems(toplayer, toptag)
 --	for i=0, 2 do
 	local i = 0;
 		
-		spMenus[i+1] = game.CreateSprite(SI_TUI_Back);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Back_Down);
+		spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.01;

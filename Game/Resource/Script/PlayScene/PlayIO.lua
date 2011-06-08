@@ -100,13 +100,13 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_08;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_08, layertag});
 	
-	-- Menu
-	layertag = toptag + CCTag_Layer_10;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_10, layertag});
-	
 	-- Plan
 	layertag = toptag + CCTag_Layer_11;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
+	
+	-- Menu
+	layertag = toptag + CCTag_Layer_13;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
 	
 	-- feathers
 	grouptag = layertag + CCTag_Menu_04;
@@ -139,7 +139,7 @@ end
 
 function _PlayScene_ToggleMenuEnable(toplayer, toptag, bEnable)
 	
-	local layertag = toptag + CCTag_Layer_10;
+	local layertag = toptag + CCTag_Layer_13;
 	local grouptag = layertag + CCTag_Menu_01;
 	
 	local menunode = game.GetNode({toplayer, grouptag});
@@ -200,7 +200,7 @@ function _PlayScene_AddMainItems(toplayer, toptag)
 	local spSelectedMenus = {};
 	local spDisabledMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_10;
+	local layertag = toptag + CCTag_Layer_13;
 	local grouptag = layertag + CCTag_Menu_01;
 	
 	for i=0, 3 do

@@ -44,12 +44,14 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("STATE_ShowHelp", GAMESTATE_SHOWHELP);
 	obj->SetInteger("STATE_ShowTarget", GAMESTATE_SHOWTARGET);
 	obj->SetInteger("STATE_EnemyEnter", GAMESTATE_ENEMYENTER);
+	obj->SetInteger("STATE_SpecialEnemyAction", GAMESTATE_SPECIALENEMYACTION);
 
 	obj->SetInteger("STATE_AddEnemy", GAMESTATE_ADDENEMY);
-	obj->SetInteger("STATE_HPAPRegain", GAMESTATE_HPAPREGAIN);
+	obj->SetInteger("STATE_HPRegain", GAMESTATE_HPREGAIN);
 	obj->SetInteger("STATE_ShowTurnStart", GAMESTATE_SHOWTURNSTART);
 	obj->SetInteger("STATE_Planning", GAMESTATE_PLANNING);
 	obj->SetInteger("STATE_SelfAction", GAMESTATE_SELFACTION);
+	obj->SetInteger("STATE_APRegain", GAMESTATE_APREGAIN);
 	obj->SetInteger("STATE_EnemyAction", GAMESTATE_ENEMYACTION);
 	obj->SetInteger("STATE_Over", GAMESTATE_OVER);
 
@@ -635,7 +637,14 @@ int Export_Lua_Game::LuaFn_Game_RemoveChild(LuaState * ls)
 	{
 		_bcleanup = node.bGet();
 	}
-	nownode->removeFromParentAndCleanup(_bcleanup);
+	if (nownode->getParent())
+	{
+		nownode->removeFromParentAndCleanup(_bcleanup);
+	}
+	else
+	{
+		nownode->cleanup();
+	}
 
 	_LEAVEFUNC_LUA;
 }

@@ -565,13 +565,13 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyATK(LuaState * ls)
 	switch (item->attackflag)
 	{
 	case ENEMYATK_HP:
-		node.PInt(0);
 		node.PInt(item->atk[_atkindex]);
+		node.PInt(0);
 		node.PInt(0);
 		break;
 	case ENEMYATK_AP:
-		node.PInt(item->atk[_atkindex]);
 		node.PInt(0);
+		node.PInt(item->atk[_atkindex]);
 		node.PInt(0);
 		break;
 	case ENEMYATK_HPREGAIN:

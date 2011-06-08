@@ -609,12 +609,24 @@ void GameMain::Update()
 			break;
 
 		case GAMESTATE_ENEMYENTER:
-			stateAction = GAMESTATE_ADDENEMY;
+			stateAction = GAMESTATE_SPECIALENEMYACTION;
 			break;
+
+		case GAMESTATE_SPECIALENEMYACTION:
+			if (CheckMissionOver())
+			{
+				stateAction = GAMESTATE_OVER;
+			}
+			else
+			{
+				stateAction = GAMESTATE_ADDENEMY;
+			}
+			break;
+
 		case GAMESTATE_ADDENEMY:
-			stateAction = GAMESTATE_HPAPREGAIN;
+			stateAction = GAMESTATE_HPREGAIN;
 			break;
-		case GAMESTATE_HPAPREGAIN:
+		case GAMESTATE_HPREGAIN:
 			stateAction = GAMESTATE_SHOWTURNSTART;
 			break;
 		case GAMESTATE_SHOWTURNSTART:
@@ -631,8 +643,11 @@ void GameMain::Update()
 			}
 			else
 			{
-				stateAction = GAMESTATE_ENEMYACTION;
+				stateAction = GAMESTATE_APREGAIN;
 			}
+			break;
+		case GAMESTATE_APREGAIN:
+			stateAction = GAMESTATE_ENEMYACTION;
 			break;
 		case GAMESTATE_ENEMYACTION:
 			if (CheckMissionOver())

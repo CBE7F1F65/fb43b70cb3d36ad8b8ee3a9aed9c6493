@@ -10,7 +10,7 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 		end
 	
 	-- Main menu
-	elseif sublayertag == CCTag_Layer_10 then
+	elseif sublayertag == CCTag_Layer_13 then
 		-- Main menu
 		if selgrouptag == CCTag_Menu_01 then
 			return PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);

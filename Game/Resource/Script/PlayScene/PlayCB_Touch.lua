@@ -50,7 +50,7 @@ function _PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, 
 	
 	local sprite = game.CreateSprite(SI_Game_PlanBrush_Feather_N, {x, y}, grouptag);
 	spnode = game.AddSpriteChild(sprite, {toplayer, layertag});
-	game.SetAnchor(spnode, 0.5, 0);
+	game.SetAnchor(spnode, 0.25, 0);
 	local scaleval = 1.05;
 	local scaleactionpre = game.ActionScale(CCAF_By, scaleval, scaleval, 0.1);
 	local scaleactionpost = game.ActionScale(CCAF_By, 1/scaleval, 1/scaleval, 0.1);

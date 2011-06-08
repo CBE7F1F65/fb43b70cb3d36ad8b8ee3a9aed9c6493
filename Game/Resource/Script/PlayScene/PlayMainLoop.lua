@@ -45,6 +45,15 @@ function _PlayScene_UpdateState(toplayer, toptag)
 				stateST = STATE_ST_Finished;
 			end
 		end
+	elseif stateAction == STATE_SpecialEnemyAction then
+		if stateST == STATE_ST_Null then
+			stateST  = STATE_ST_Standby;
+		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Progressing;
+			if _PlayScene_SpecialEnemyAction(toplayer, toptag, stateStep) then
+				stateST = STATE_ST_Finished;
+			end
+		end
 	elseif stateAction == STATE_AddEnemy then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
@@ -54,11 +63,11 @@ function _PlayScene_UpdateState(toplayer, toptag)
 				stateST = STATE_ST_Finished;
 			end
 		end
-	elseif stateAction == STATE_HPAPRegain then
+	elseif stateAction == STATE_HPRegain then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_HPAPRegain(toplayer, toptag) then
+			if _PlayScene_HPRegain(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			end
 		elseif stateST == STATE_ST_StepForward then
@@ -93,6 +102,16 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			if _PlayScene_SelfAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
+		end
+	elseif stateAction == STATE_APRegain then
+		if stateST == STATE_ST_Null then
+			stateST  = STATE_ST_Standby;
+		elseif stateST == STATE_ST_Standby then
+			if _PlayScene_APRegain(toplayer, toptag) then
+				stateST = STATE_ST_Finished;
+			end
+		elseif stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Finished;
 		end
 	elseif stateAction == STATE_EnemyAction then
 		if stateST == STATE_ST_Null then
@@ -142,7 +161,7 @@ function _PlayScene_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy,
 	if time == 0 then
 		local spfeather = game.CreateSprite(SI_Game_PlanBrush_Feather, {brushx, brushy}, grouptag+index);
 		feathernode = game.AddSpriteChild(spfeather, {toplayer, grouptag});
-		game.SetAnchor(feathernode, 0.5, 0);
+		game.SetAnchor(feathernode, 0.25, 0);
 	else
 		feathernode = game.GetNode({toplayer, grouptag+index});
 		game.SetPosition(feathernode, brushx, brushy);
@@ -544,11 +563,19 @@ function _PlayScene_AddEnemy(toplayer, toptag, index)
 	return false;
 end
 
-function _PlayScene_HPAPRegain(toplayer, toptag)
-	-- Add HPAP
+function _PlayScene_HPRegain(toplayer, toptag)
+	-- Add AP
 	
 	local hp, ap, sp = game.GetHPAPSP();
 	hp = hp + HPMax*LConst_HPRegainRate;
+	game.SetHPAPSP(hp, ap, sp);
+	return true;
+end
+
+function _PlayScene_APRegain(toplayer, toptag)
+	-- Add AP
+	
+	local hp, ap, sp = game.GetHPAPSP();
 	ap = ap + APMax*LConst_APRegainRate;
 	game.SetHPAPSP(hp, ap, sp);
 	return true;
@@ -625,7 +652,7 @@ function _PlayScene_SelfAction(toplayer, toptag, index)
 	return false;
 end
 
-function _PlayScene_EnemyAttack(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer)
+function _PlayScene_EnemyAttack(toplayer, toptag, index, etype, elayer)
 	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, elayer/CCZ_eLayer_01);
 	local hp, ap, sp = game.GetHPAPSP();
 	hp = hp - atk;
@@ -636,7 +663,7 @@ function _PlayScene_EnemyAttack(toplayer, toptag, index, nowstage, nowmission, n
 	end
 end
 
-function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer)
+function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	local elayeradvance = game.GetEnemyELayerAdvance(etype);
 	if elayer == CCZ_eLayer_03 or elayeradvance == 0 then
 		return;
@@ -664,29 +691,51 @@ function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, nowstage, nowmis
 	
 end
 
-function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
-	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
-	if index >= enemyinscenecount+enemyonsidecount then
+function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, bZeroLayerOnly)
+	local enemyinscenecount = game.GetActiveEnemyData();
+	if index >= enemyinscenecount then
 		return true;
 	end
-	local layertag;
-	local itemtag, x, y, etype, life, elayer;
-	if index < enemyinscenecount then
-		layertag = toptag + CCTag_Layer_02;
-		itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
-		_PlayScene_EnemyAttack(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer);
-		_PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, nowstage, nowmission, nowturn, etype, elayer);
+	
+	local doaction = true;
+	local doadvance = true;
+	
+	local layertag = toptag + CCTag_Layer_02;
+	local itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
+		
+	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, 0);
+	if bZeroLayerOnly ~= nil and bZeroLayerOnly then
+		doadvance = false;
+		if atk == 0 and apatk == 0 and hpregainatk == 0 then
+			doaction = false;
+		end
 	else
-		local eindex = index-enemyinscenecount;
-		layertag = toptag + CCTag_Layer_08;
-		itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(eindex, ENEMY_OnSide);
-		_PlayScene_EnemyAttack(toplayer, toptag, eindex, nowstage, nowmission, nowturn, etype, 0);
+		if atk ~= 0 or apatk ~= 0 or hpregainatk ~= 0 then
+			doaction = false;
+		end
+	end
+	
+	if doaction then
+		_PlayScene_EnemyAttack(toplayer, toptag, index, etype, elayer);
+	end
+	if doadvance then
+		_PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer);
 	end
 
 	local enemynode = game.GetNode({toplayer, itemtag});
+	
+	local delaytime = LConst_EnemyEnterDelayTime;
+	local state = STATE_EnemyAction;
+	if not doaction then
+		delaytime = 0;
+	end
+	if bZeroLayerOnly then
+		state = STATE_SpecialEnemyAction;
+	end
+	
 
-	local dataindex = LGlobal_SaveData(STATE_EnemyAction);
-	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);
+	local dataindex = LGlobal_SaveData(state);
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime, dataindex);
 	local callnodegrouptag = layertag + CCTag_Menu_11;
 	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodegrouptag+index+1});
 	game.RunAction(callnode, callfuncaction);
@@ -697,6 +746,16 @@ function _PlayScene_EnemyAction(toplayer, toptag, index)
 	-- Check all enemy action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
 	if _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn) then
+		return true;
+	end
+	
+	return false;
+end
+
+function _PlayScene_SpecialEnemyAction(toplayer, toptag, index)
+	-- Check all enemy action done
+	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
+	if _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, true) then
 		return true;
 	end
 	
