@@ -13,6 +13,8 @@
 
 #include "../Header/GameMain.h"
 
+#include "../Header/CCBaseNode.h"
+#include "../Header/CCRenderTextureExpand.h"
 #include "../Header/CCActionExpand.h"
 #include "../Header/SceneConst.h"
 
@@ -31,6 +33,7 @@ using namespace cocos2d;
 
 _LObjNode Export_Lua_Game::node;
 
+#define M_NODETYPE_BASENODE			0x00
 #define M_NODETYPE_RENDERTEXTURE	0x01
 
 bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
@@ -89,6 +92,7 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("MISSIONTYPE_Suicide", M_MISSIONTYPE_SUICIDE);
 
 	obj->SetInteger("NODETYPE_RenderTexture", M_NODETYPE_RENDERTEXTURE);
+	obj->SetInteger("NODETYPE_BaseNode", M_NODETYPE_BASENODE);
 
 	return true;
 }
@@ -562,7 +566,7 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// type
+	// node
 
 	CCNode * retval = NULL;
 	node.jNextGet();
@@ -571,6 +575,7 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 		_LObjNode cnode(ls, &(node._obj), &node);
 		retval = _GetNowNode(&cnode);
 		//
+		/*
 		node.jNextGet();
 		if (node.bhavenext)
 		{
@@ -578,10 +583,11 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 			switch (_type)
 			{
 			case M_NODETYPE_RENDERTEXTURE:
-				retval = ((CCRenderTexture *)retval)->getSprite();
+				retval = ((CCRenderTextureExpand *)retval)->getSprite();
 				break;
 			}
 		}
+		*/
 	}
 	node.PDword((DWORD)retval);
 
@@ -614,7 +620,7 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 			_LObjNode tcnode(ls, &(node._obj), &node);
 			_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
 
-			CCLayer * addednode = CCLayer::node();
+			CCBaseNode * addednode = CCBaseNode::node();
 			addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
 			nownode->addChild(addednode, _zOrder, _tag);
 
@@ -733,7 +739,7 @@ int Export_Lua_Game::LuaFn_Game_AddRenderTextureChild(LuaState * ls)
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 		}
 
-		CCRenderTexture * item = CCRenderTexture::renderTextureWithWidthAndHeight(_width, _height);
+		CCRenderTextureExpand * item = CCRenderTextureExpand::renderTextureWithWidthAndHeight(_width, _height);
 		nownode->addChild(item, _zOrder, _tag);
 		item->setPosition(BGlobal::TranslatePosition(_x, _y));
 
@@ -748,7 +754,7 @@ int Export_Lua_Game::LuaFn_Game_RenderTextureBegin(LuaState * ls)
 	_ENTERFUNC_LUA(1);
 
 	// item bclean
-	CCRenderTexture * _item = (CCRenderTexture *)node.dNextGet();
+	CCRenderTextureExpand * _item = (CCRenderTextureExpand *)node.dNextGet();
 	if (!_item)
 	{
 		break;
@@ -776,7 +782,7 @@ int Export_Lua_Game::LuaFn_Game_RenderTextureEnd(LuaState * ls)
 	_ENTERFUNC_LUA(1);
 
 	// item
-	CCRenderTexture * _item = (CCRenderTexture *)node.dNextGet();
+	CCRenderTextureExpand * _item = (CCRenderTextureExpand *)node.dNextGet();
 	if (!_item)
 	{
 		break;
@@ -1874,6 +1880,10 @@ int Export_Lua_Game::LuaFn_Game_SetColor(LuaState * ls)
 	if (_item)
 	{
 		CCRGBAProtocol * pRGBAProtocol = _item->convertToRGBAProtocol();
+		if (!pRGBAProtocol)
+		{
+			break;
+		}
 		node.jNextGet();
 		if (node.bhavenext)
 		{

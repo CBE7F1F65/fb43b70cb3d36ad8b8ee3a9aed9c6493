@@ -666,13 +666,11 @@ function PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgro
 	_PlayScene_StateFinish(STATE_ShowTarget);
 	
 	layertag = toptag + CCTag_Layer_11;
-	grouptag = layertag+CCTag_Menu_01;
-	local planrendertexturesprite = game.GetNode({toplayer, grouptag}, NODETYPE_RenderTexture);
+	local layernode = game.GetNode({toplayer, layertag});
 	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
 	local tintaction = game.ActionTint(CCAF_To, 0xffffff, LConst_ItemVanishTime);
 	local spaction = game.ActionSpawn({fadeaction, tintaction});
-	game.RunAction(planrendertexturesprite, spaction);
---	game.SetIsVisible(planlayernode, true);
+	game.RunAction(layernode, spaction);
 	
 end
 

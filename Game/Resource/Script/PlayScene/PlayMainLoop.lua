@@ -211,8 +211,6 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	local circlesgrouptag = layertag+CCTag_Menu_05;
 	local dotsgrouptag = layertag+CCTag_Menu_06;
 	
-	local rendertextureitem = game.GetNode({toplayer, grouptag});
-	game.RenderTextureBegin(rendertextureitem);
 	
 	local nLines = table.getn(LGlobal_PlayData.planlines);
 	
@@ -225,6 +223,9 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					_PlayScene_AddPlanGroupNumber(toplayer, toptag, linesgrouptag, i, item.xb, item.yb);
 				end
 				
+				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
+				game.RenderTextureBegin(rendertextureitem);
+	
 				local stepstogonow = item.stepstogo[item.time+1].now;
 				local stepstogoacc = item.stepstogo[item.time+1].acc;
 				
@@ -248,6 +249,8 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.NodeVisit(LGlobal_PlayData.planbrush.laser, brushx, brushy);
 				end
 				
+				game.RenderTextureEnd(rendertextureitem);
+				
 				_PlayScene_Plan_DrawFeather(toplayer, toptag, linesgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.planlines[i].time = item.time+1;
@@ -265,6 +268,9 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				if item.time == 0 then
 					_PlayScene_AddPlanGroupNumber(toplayer, toptag, circlesgrouptag, i, item.x, item.y);
 				end
+				
+				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
+				game.RenderTextureBegin(rendertextureitem);
 				
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
@@ -293,6 +299,8 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.NodeVisit(LGlobal_PlayData.planbrush.bomb, x, y);
 				end
 				
+				game.RenderTextureEnd(rendertextureitem);
+				
 				_PlayScene_Plan_DrawFeather(toplayer, toptag, circlesgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.plancircles[i].time = item.time+1;
@@ -312,6 +320,9 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				if item.time == 0 then
 					_PlayScene_AddPlanGroupNumber(toplayer, toptag, dotsgrouptag, i, item.x, item.y);
 				end
+				
+				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
+				game.RenderTextureBegin(rendertextureitem);
 				
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
@@ -343,14 +354,14 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 					game.NodeVisit(LGlobal_PlayData.planbrush.sniper, x, y);
 				end
 				
+				game.RenderTextureEnd(rendertextureitem);
+				
 				_PlayScene_Plan_DrawFeather(toplayer, toptag, dotsgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.plandots[i].time = item.time+1;
 			end
 		end
 	end
-	
-	game.RenderTextureEnd(rendertextureitem);
 	
 	return false;
 end
@@ -657,14 +668,12 @@ function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
 	
 	game.RunAction(layernode, moveupaction);
 	
-	layertag = toptag + CCTag_Layer_11;
-	grouptag = layertag+CCTag_Menu_01;
-	local planrendertexturesprite = game.GetNode({toplayer, grouptag}, NODETYPE_RenderTexture);
+	layertag = toptag + CCTag_Layer_11;	
+	local layernode = game.GetNode({toplayer, layertag});
 	local fadeaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
 	local tintaction = game.ActionTint(CCAF_To, 0, LConst_ItemVanishTime);
 	local spaction = game.ActionSpawn({fadeaction, tintaction});
-	game.RunAction(planrendertexturesprite, spaction);
---	game.SetIsVisible(planlayernode, false);
+	game.RunAction(layernode, spaction);
 	
 	return false;
 end
@@ -696,9 +705,11 @@ function _PlayScene_SelfAction(toplayer, toptag, index)
 	end
 	if true then
 		grouptag = layertag+CCTag_Menu_01;
-		local rendertextureitem = game.GetNode({toplayer, grouptag});
-		game.RenderTextureBegin(rendertextureitem, true);
-		game.RenderTextureEnd(rendertextureitem);
+		for i=1, LConst_PlanGroupMax do
+			local rendertextureitem = game.GetNode({toplayer, grouptag+i});
+			game.RenderTextureBegin(rendertextureitem, true);
+			game.RenderTextureEnd(rendertextureitem);
+		end
 		LGlobal_PlayData.planlines = {};
 		LGlobal_PlayData.plandots = {};
 		LGlobal_PlayData.plancircles = {};

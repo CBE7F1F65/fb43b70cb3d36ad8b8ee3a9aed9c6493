@@ -49,7 +49,9 @@ function _PlayScene_AddPlanningRenderTexture(toplayer, toptag)
 	local layertag = toptag+CCTag_Layer_11;
 	local grouptag = layertag+CCTag_Menu_01;
 	
-	local rendertextureitem = game.AddRenderTextureChild(960, 640, {toplayer, layertag}, {480, 320, CCTag_Menu_01, grouptag});
+	for i=1, LConst_PlanGroupMax do
+		game.AddRenderTextureChild(960, 640, {toplayer, grouptag}, {480, 320, CCTag_Menu_01, grouptag+i});
+	end
 end
 
 function PlayScene_OnInit(toplayer, toptag)
@@ -103,6 +105,9 @@ function PlayScene_OnInit(toplayer, toptag)
 	-- Plan
 	layertag = toptag + CCTag_Layer_11;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
+	-- RenderTexture
+	grouptag = layertag + CCTag_Menu_01;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 	-- feathers
 	grouptag = layertag + CCTag_Menu_04;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});

@@ -37,3 +37,5 @@ LConst_BlinkTimePost = 0.9;
 
 LConst_BoardMoveTime = 0.2;
 LConst_BoardShowTime = 0.6;
+
+LConst_PlanGroupMax = 8;

@@ -244,6 +244,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\CCBaseNode.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\CCRenderTextureExpand.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\DataTable.cpp"
 				>
 			</File>
@@ -362,6 +370,14 @@
 			</File>
 			<File
 				RelativePath=".\Header\CCActionExpand.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\CCBaseNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\CCRenderTextureExpand.h"
 				>
 			</File>
 			<File
