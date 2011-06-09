@@ -9,7 +9,8 @@
 #define DATASTRUCT_SPRITEMAX		0x400
 #define DATASTRUCT_WEAPONMAX		0x10
 #define DATASTRUCT_ITEMMAX			0x20
-#define DATASTRUCT_ENEMYMAX			0x40
+#define DATASTRUCT_ENEMYBASEMAX		M_ENEMYTYPEMAX
+#define DATASTRUCT_ENEMYMAX			0x100
 #define DATASTRUCT_MISSIONMAX		0xA0
 
 struct customconstData{
@@ -67,17 +68,42 @@ struct itemData
 	int siid;
 };
 
-struct enemyData
+struct enemyCollisionData
 {
+	float x;
+	float y;
+	float rh;
+	float rv;
+};
+
+struct enemyBaseData
+{
+	enemyCollisionData headcollision;
+	enemyCollisionData bodycollision;
+	float headshotscale;
+
 	int siid;
 	int sidesiid;
 	int sidearrowsiid;
-	int life;
 	int elayer;
 	int elayeradvance;
+
+	BYTE attackflag;
+
+	BYTE normalframe;
+	BYTE idleframe;
+	BYTE attackframe;
+	BYTE woundframe;
+	BYTE deadframe;
+	BYTE specialframe;
+};
+
+struct enemyData
+{
 	int atk[M_ENEMY_ELAYERMAX];
 	int def[M_WEAPONTYPEMAX];
-	BYTE attackflag;
+	int life;
+	BYTE type;
 };
 
 #define M_MISSIONTARGETMAX	3
@@ -105,14 +131,14 @@ struct missionHelpData{
 };
 
 struct missionData{
+	missionHelpData helps[M_MISSIONHELPMAX];
+	missionTargetData targets[M_MISSIONTARGETMAX];
+	missionRankData ranks[M_MISSIONRANKMAX];
+	missionDefendData defend;
 	int bgsiid;
 	BYTE missiontype;
 	BYTE weatherflag;
 	BYTE sp;
-	missionDefendData defend;
-	missionTargetData targets[M_MISSIONTARGETMAX];
-	missionRankData ranks[M_MISSIONRANKMAX];
-	missionHelpData helps[M_MISSIONHELPMAX];
 };
 
 #define RSIZE_CUSTOMCONST	(sizeof(customconstData) * DATASTRUCT_CUSTOMCONSTMAX)
@@ -123,6 +149,7 @@ struct missionData{
 #define RSIZE_SPRITE		(sizeof(spriteData) * DATASTRUCT_SPRITEMAX)
 #define RSIZE_WEAPON		(sizeof(weaponData) * DATASTRUCT_WEAPONMAX)
 #define RSIZE_ITEM			(sizeof(itemData) * DATASTRUCT_ITEMMAX)
+#define RSIZE_ENEMYBASE		(sizeof(enemyData) * DATASTRUCT_ENEMYBASEMAX)
 #define RSIZE_ENEMY			(sizeof(enemyData) * DATASTRUCT_ENEMYMAX)
 #define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
 

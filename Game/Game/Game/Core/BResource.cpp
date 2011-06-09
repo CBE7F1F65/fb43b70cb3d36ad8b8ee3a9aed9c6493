@@ -151,6 +151,10 @@ void BResource::ClearItemData()
 {
 	ZeroMemory(itemdata, RSIZE_ITEM);
 }
+void BResource::ClearEnemyBaseData()
+{
+	ZeroMemory(enemybasedata, RSIZE_ENEMYBASE);
+}
 void BResource::ClearEnemyData()
 {
 	ZeroMemory(enemydata, RSIZE_ENEMY);
@@ -228,6 +232,7 @@ bool BResource::PackData()
 		RSIZE_EFFECT + 
 		RSIZE_WEAPON + 
 		RSIZE_ITEM + 
+		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
 		RSIZE_MISSION;
 	BYTE * content = (BYTE *)malloc(size);
@@ -250,6 +255,8 @@ bool BResource::PackData()
 	offset += RSIZE_WEAPON;
 	memcpy(content+offset, itemdata, RSIZE_ITEM);
 	offset += RSIZE_ITEM;
+	memcpy(content+offset, enemybasedata, RSIZE_ENEMYBASE);
+	offset += RSIZE_ENEMYBASE;
 	memcpy(content+offset, enemydata, RSIZE_ENEMY);
 	offset += RSIZE_ENEMY;
 	memcpy(content+offset, missiondata, RSIZE_MISSION);
@@ -270,6 +277,7 @@ bool BResource::PackData()
 	ClearEffectData();
 	ClearWeaponData();
 	ClearItemData();
+	ClearEnemyBaseData();
 	ClearEnemyData();
 	ClearMissionData();
 
@@ -310,6 +318,7 @@ bool BResource::GainData()
 		RSIZE_EFFECT + 
 		RSIZE_WEAPON + 
 		RSIZE_ITEM + 
+		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
 		RSIZE_MISSION)
 	{
@@ -332,6 +341,8 @@ bool BResource::GainData()
 	offset += RSIZE_WEAPON;
 	memcpy(itemdata, content+offset, RSIZE_ITEM);
 	offset += RSIZE_ITEM;
+	memcpy(enemybasedata, content+offset, RSIZE_ENEMYBASE);
+	offset += RSIZE_ENEMYBASE;
 	memcpy(enemydata, content+offset, RSIZE_ENEMY);
 	offset += RSIZE_ENEMY;
 	memcpy(missiondata, content+offset, RSIZE_MISSION);

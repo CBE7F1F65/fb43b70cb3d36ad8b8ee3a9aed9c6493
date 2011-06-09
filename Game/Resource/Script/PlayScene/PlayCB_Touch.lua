@@ -21,7 +21,7 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 			-- OneMoved
 			if LGlobal_PlayData.bZoomed then
 				local xl, yl = game.GetTouchInfo(touchlayer, index, CCTI_LastMoved);
-				_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, xe-xl, ye-yl);
+				_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, xl-xe, yl-ye);
 --			else
 --				local nowhp, nowap = game.GetHPAPSP();
 --				local atk, apperdist, leastap = game.GetWeaponData(WEAPON_Laser);
@@ -256,6 +256,7 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			
 			nDots = nDots+1;
 			LGlobal_PlayData.plandots[nDots] = {};
+			LGlobal_PlayData.plandots[nDots].plangroup = LGlobal_PlayData.plangroup;
 			LGlobal_PlayData.plandots[nDots].x = x;
 			LGlobal_PlayData.plandots[nDots].y = y;
 			
@@ -317,6 +318,7 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			local nLines = table.getn(LGlobal_PlayData.planlines);
 			nLines = nLines+1;
 			LGlobal_PlayData.planlines[nLines] = {};
+			LGlobal_PlayData.planlines[nLines].plangroup = LGlobal_PlayData.plangroup;
 			LGlobal_PlayData.planlines[nLines].xb = xb;
 			LGlobal_PlayData.planlines[nLines].yb = yb;
 			LGlobal_PlayData.planlines[nLines].xe = xe;
@@ -362,6 +364,7 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 		local nCircles = table.getn(LGlobal_PlayData.plancircles);
 		nCircles = nCircles + 1;
 		LGlobal_PlayData.plancircles[nCircles] = {};
+		LGlobal_PlayData.plancircles[nCircles].plangroup = LGlobal_PlayData.plangroup;
 		LGlobal_PlayData.plancircles[nCircles].x = xb;
 		LGlobal_PlayData.plancircles[nCircles].y = yb;
 		LGlobal_PlayData.plancircles[nCircles].startangle = RANDT();

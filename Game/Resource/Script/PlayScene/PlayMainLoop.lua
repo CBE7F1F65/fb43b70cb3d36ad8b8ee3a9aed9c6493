@@ -140,10 +140,28 @@ function _PlayScene_UpdateState(toplayer, toptag)
 --	LOGSTATE("Post:", stateST, stateAction, stateStep, toplayer, toptag);
 end
 
+
+function _PlayScene_UpdatePlanGroup(toplayer, toptag)
+	
+	local plangroup = LGlobal_PlayData.plangroup;
+	local layergroup = toptag + CCTag_Layer_13;
+	local grouptag = layergroup + CCTag_Menu_02;
+	
+	game.RemoveChild({toplayer, grouptag+1});
+	local spNumber = game.CreateSprite(SI_GUIDigit_0 + plangroup+1, {624, 48}, grouptag+1);
+	local numbernode = game.AddSpriteChild(spNumber, {toplayer, grouptag}, CCTag_Menu_02);
+	game.SetColor(numbernode, global.ARGB(0, 0xffffff));
+	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
+	game.RunAction(numbernode, fadeaction);
+	
+end
+
 function _PlayScene_PreparePlanning(toplayer, toptag)
 	LGlobal_PlayData.planlines = {};
 	LGlobal_PlayData.plancircles = {};
 	LGlobal_PlayData.plandots = {};
+	LGlobal_PlayData.plangroup = 0;
+	_PlayScene_UpdatePlanGroup(toplayer, toptag);
 	_PlayScene_ToggleMenuEnable(toplayer, toptag, true);
 end
 
@@ -175,6 +193,15 @@ function _PlayScene_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy,
 	end
 end
 
+function _PlayScene_AddPlanGroupNumber(toplayer, toptag, grouptag, index, x, y)
+	local spNumber = game.CreateSprite(SI_GUIDigit_Small_0+LGlobal_PlayData.plangroup+1, {x, y});
+	local numbernode = game.AddSpriteChild(spNumber, {toplayer, grouptag}, CCZ_Max);
+	game.SetColor(numbernode, global.ARGB(0, 0xffffff));
+	game.SetAnchor(numbernode, 0.5, 0);
+	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
+	game.RunAction(numbernode, fadeaction);
+end
+
 function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	
 	local layertag = toptag + CCTag_Layer_11;
@@ -191,8 +218,12 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	
 	if nLines > 0 then
 		for i=1, nLines do
-			if LGlobal_PlayData.planlines[i].time < LConst_PlanBrushFrame then
+			if LGlobal_PlayData.planlines[i].time < LConst_PlanBrushFrame then				
 				local item = LGlobal_PlayData.planlines[i];
+				
+				if item.time == 0 then
+					_PlayScene_AddPlanGroupNumber(toplayer, toptag, linesgrouptag, i, item.xb, item.yb);
+				end
 				
 				local stepstogonow = item.stepstogo[item.time+1].now;
 				local stepstogoacc = item.stepstogo[item.time+1].acc;
@@ -230,6 +261,10 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 		for i=1, nCircles do
 			if LGlobal_PlayData.plancircles[i].time < LConst_PlanBrushFrame then
 				local item = LGlobal_PlayData.plancircles[i];
+				
+				if item.time == 0 then
+					_PlayScene_AddPlanGroupNumber(toplayer, toptag, circlesgrouptag, i, item.x, item.y);
+				end
 				
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
@@ -273,6 +308,10 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				LGlobal_PlayData.plandots[i].time = LGlobal_PlayData.plandots[i].time+1;
 			elseif LGlobal_PlayData.plandots[i].time < LConst_PlanBrushFrame then
 				local item = LGlobal_PlayData.plandots[i];
+				
+				if item.time == 0 then
+					_PlayScene_AddPlanGroupNumber(toplayer, toptag, dotsgrouptag, i, item.x, item.y);
+				end
 				
 				local stepstogonow = item.stepstogo;
 				local totalsteps = item.stepstogo * LConst_PlanBrushFrame;
@@ -369,7 +408,7 @@ function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowt
 	
 	local selitemtag = index+1;
 	
-	local siid, sidesiid, sidearrowsiid, life, defelayer = game.GetEnemyTypeData(etype);
+	local siid, sidesiid, sidearrowsiid, defelayer = game.GetEnemyTypeData(etype);
 	if elayer == nil then
 		elayer = defelayer;
 	end
@@ -381,7 +420,7 @@ function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowt
 		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
 
-	game.AddEnemy(grouptag+selitemtag, x, y, etype, life, elayer, ENEMY_InScene);	
+	game.AddEnemy(grouptag+selitemtag, x, y, etype, elayer, ENEMY_InScene);	
 	
 	local spEnemy = game.CreateSprite(siid, {x, y, 0, scale, scale}, grouptag+selitemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag}, elayer);
@@ -495,7 +534,7 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	
 	local selitemtag = index+1;
 
-	local siid, sidesiid, sidearrowsiid, life, elayer = game.GetEnemyTypeData(etype);
+	local siid, sidesiid, sidearrowsiid, elayer = game.GetEnemyTypeData(etype);
 	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
@@ -516,7 +555,7 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 
 	local tx, ty = _PlayScene_SidePosToScenePos(x, y, angle)
 
-	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, life, elayer, ENEMY_OnSide, angle);
+	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
 	
 	return enemynode, layertag, grouptag, selitemtag;
 end
@@ -642,9 +681,21 @@ end
 function _PlayScene_SelfAction(toplayer, toptag, index)
 	-- Check all self action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
+	local layertag = toptag+CCTag_Layer_11;
+	local grouptag = layertag+CCTag_Menu_01;
+	if index == 0 then
+		grouptag = layertag+CCTag_Menu_04;
+		local groupnode = game.GetNode({toplayer, grouptag});
+		game.RemoveAllChildren(groupnode);
+		grouptag = layertag+CCTag_Menu_05;
+		local groupnode = game.GetNode({toplayer, grouptag});
+		game.RemoveAllChildren(groupnode);
+		grouptag = layertag+CCTag_Menu_06;
+		local groupnode = game.GetNode({toplayer, grouptag});
+		game.RemoveAllChildren(groupnode);
+	end
 	if true then
-		local layertag = toptag+CCTag_Layer_11;
-		local grouptag = layertag+CCTag_Menu_01;
+		grouptag = layertag+CCTag_Menu_01;
 		local rendertextureitem = game.GetNode({toplayer, grouptag});
 		game.RenderTextureBegin(rendertextureitem, true);
 		game.RenderTextureEnd(rendertextureitem);

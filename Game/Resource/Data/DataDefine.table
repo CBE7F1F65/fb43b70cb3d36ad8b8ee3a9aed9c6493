@@ -8,5 +8,6 @@ Comment	ID	Table
 -	56	EffectDefine.table
 -	57	WeaponDefine.table
 -	58	ItemDefine.table
--	59	EnemyDefine.table
--	5A	MissionDefine.table
+-	59	EnemyBaseDefine.table
+-	5A	EnemyDefine.table
+-	5B	MissionDefine.table

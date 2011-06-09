@@ -534,16 +534,16 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyTypeData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// type -> siid, sidesiid, sidearrowsiid, life, elayer
+	// type -> siid, sidesiid, sidearrowsiid, elayer
 
 	int _etype = node.iNextGet();
 
-	enemyData * item = &(BResource::getInstance()->enemydata[_etype]);
+	enemyData * enemyitem = &(BResource::getInstance()->enemydata[_etype]);
+	enemyBaseData * item = &(BResource::getInstance()->enemybasedata[enemyitem->type]);
 	
 	node.PInt(item->siid);
 	node.PInt(item->sidesiid);
 	node.PInt(item->sidearrowsiid);
-	node.PInt(item->life);
 	node.PInt(item->elayer);
 
 	_LEAVEFUNC_LUA;
@@ -562,7 +562,8 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyATK(LuaState * ls)
 		_atkindex = node.iGet();
 	}
 	enemyData * item = &(BResource::getInstance()->enemydata[_etype]);
-	switch (item->attackflag)
+	enemyBaseData * baseitem = &(BResource::getInstance()->enemybasedata[item->type]);
+	switch (baseitem->attackflag)
 	{
 	case ENEMYATK_HP:
 		node.PInt(item->atk[_atkindex]);
@@ -603,7 +604,8 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls)
 
 	// etype -> elayeradvance
 	BYTE _etype = node.iNextGet();
-	enemyData * item = &(BResource::getInstance()->enemydata[_etype]);
+	enemyData * enemyitem = &(BResource::getInstance()->enemydata[_etype]);
+	enemyBaseData * item = &(BResource::getInstance()->enemybasedata[enemyitem->type]);
 	node.PInt(item->elayeradvance);
 
 	_LEAVEFUNC_LUA;
@@ -611,15 +613,14 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls)
 
 int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 {
-	_ENTERFUNC_LUA(6);
+	_ENTERFUNC_LUA(5);
 
-	// itemtag, etype, life, elayer, enemiesindex -> count
+	// itemtag, etype, elayer, enemiesindex -> count
 
 	int _itemtag = node.iNextGet();
 	float _x = node.fNextGet();
 	float _y = node.fNextGet();
 	BYTE _etype = node.iNextGet();
-	int _life = node.iNextGet();
 	int _elayer = node.iNextGet();
 	BYTE _enemiesindex = ENEMY_ONSIDE;
 	int _angle = 0;
@@ -634,7 +635,7 @@ int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 		}
 	}
 
-	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _life, _elayer, _enemiesindex, _angle);
+	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _elayer, _enemiesindex, _angle);
 	node.PInt(enemycount);
 
 	_LEAVEFUNC_LUA;

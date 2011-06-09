@@ -38,6 +38,7 @@ public:
 	void ClearEffectData();
 	void ClearWeaponData();
 	void ClearItemData();
+	void ClearEnemyBaseData();
 	void ClearEnemyData();
 	void ClearMissionData();
 
@@ -61,6 +62,7 @@ public:
 	effectData effdata[DATASTRUCT_EFFECTMAX];
 	weaponData weapondata[DATASTRUCT_WEAPONMAX];
 	itemData itemdata[DATASTRUCT_ITEMMAX];
+	enemyBaseData enemybasedata[DATASTRUCT_ENEMYBASEMAX];
 	enemyData enemydata[DATASTRUCT_ENEMYMAX];
 	missionData missiondata[DATASTRUCT_MISSIONMAX];
 

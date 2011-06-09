@@ -49,7 +49,7 @@ function _PlayScene_AddPlanningRenderTexture(toplayer, toptag)
 	local layertag = toptag+CCTag_Layer_11;
 	local grouptag = layertag+CCTag_Menu_01;
 	
-	local rendertextureitem = game.AddRenderTextureChild(960, 640, {toplayer, layertag}, {480, 320, CCTag_Layer_11, grouptag});
+	local rendertextureitem = game.AddRenderTextureChild(960, 640, {toplayer, layertag}, {480, 320, CCTag_Menu_01, grouptag});
 end
 
 function PlayScene_OnInit(toplayer, toptag)
@@ -120,6 +120,9 @@ function PlayScene_OnInit(toplayer, toptag)
 	-- Menu
 	layertag = toptag + CCTag_Layer_13;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
+	-- Menu Indicators
+	grouptag = layertag + CCTag_Menu_02;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_02, grouptag});
 		
 	-- Overlay
 	local overlaylayer = game.AddOverlayLayerChild(toplayer, {0, 0, CCZ_Max});

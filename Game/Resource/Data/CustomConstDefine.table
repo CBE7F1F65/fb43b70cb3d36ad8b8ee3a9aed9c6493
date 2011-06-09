@@ -49,9 +49,10 @@ Comment	CustomConst	Name	Value
 -	85	CCTag_MenuSub_13	0x00000e00
 -	86	CCTag_MenuSub_14	0x00000f00
 #		eLayer	
--	90	CCZ_eLayer_01	0x01000000
--	91	CCZ_eLayer_02	0x02000000
--	92	CCZ_eLayer_03	0x03000000
+-	90	CCZ_eLayer_00	0x00000000
+-	91	CCZ_eLayer_01	0x01000000
+-	92	CCZ_eLayer_02	0x02000000
+-	93	CCZ_eLayer_03	0x03000000
 -	99	CCZ_Max	0x00ffffff
 #		eType	
 -	100	CC_eType_Soldier	0

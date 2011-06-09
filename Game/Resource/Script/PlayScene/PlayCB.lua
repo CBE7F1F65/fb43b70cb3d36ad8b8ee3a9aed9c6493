@@ -585,6 +585,39 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 		_PlayScene_CB_Action(toplayer, toptag);
 	-- wait
 	elseif selitemtag == 3 then
+		local plangroup = LGlobal_PlayData.plangroup;
+		local bFound = false;
+		if not bFound then
+			local nLines = table.getn(LGlobal_PlayData.planlines);
+			for i=1, nLines do
+				if LGlobal_PlayData.planlines[i].plangroup == plangroup then
+					bFound = true;
+					break;
+				end
+			end
+		end
+		if not bFound then
+			local nCircles = table.getn(LGlobal_PlayData.plancircles);
+			for i=1, nCircles do
+				if LGlobal_PlayData.plancircles[i].plangroup == plangroup then
+					bFound = true;
+					break;
+				end
+			end
+		end
+		if not bFound then
+			local nDots = table.getn(LGlobal_PlayData.plandots);
+			for i=1, nDots do
+				if LGlobal_PlayData.plandots[i].plangroup == plangroup then
+					bFound = true;
+					break;
+				end
+			end
+		end
+		if bFound then
+			LGlobal_PlayData.plangroup = plangroup+1;
+			_PlayScene_UpdatePlanGroup(toplayer, toptag);
+		end
 	-- menu
 	elseif selitemtag == 4 then
 		_PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});

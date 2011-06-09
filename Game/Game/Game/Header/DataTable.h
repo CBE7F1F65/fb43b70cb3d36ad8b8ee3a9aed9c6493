@@ -29,6 +29,7 @@ public:
 	bool ReadEffectDefineTable();
 	bool ReadWeaponDefineTable();
 	bool ReadItemDefineTable();
+	bool ReadEnemyBaseDefineTable();
 	bool ReadEnemyDefineTable();
 	bool ReadMissionDefineTable();
 

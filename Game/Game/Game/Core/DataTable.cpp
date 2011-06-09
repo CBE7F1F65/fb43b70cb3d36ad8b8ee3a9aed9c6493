@@ -23,8 +23,9 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATATYPE_EFFECTDEFINE			0x56
 #define DATATYPE_WEAPONDEFINE			0x57
 #define DATATYPE_ITEMDEFINE				0x58
-#define DATATYPE_ENEMYDEFINE			0x59
-#define DATATYPE_MISSIONDEFINE			0x5A
+#define DATATYPE_ENEMYBASEDEFINE		0x59
+#define DATATYPE_ENEMYDEFINE			0x5A
+#define DATATYPE_MISSIONDEFINE			0x5B
 
 #define DATAINDEX_DATADEFINE			(DATATYPE_DATADEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_CUSTOMCONSTDEFINE		(DATATYPE_CUSTOMCONSTDEFINE-DATATYPE_DATATABLEBEGIN)
@@ -35,6 +36,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATAINDEX_EFFECTDEFINE			(DATATYPE_EFFECTDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_WEAPONDEFINE			(DATATYPE_WEAPONDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ITEMDEFINE			(DATATYPE_ITEMDEFINE-DATATYPE_DATATABLEBEGIN)
+#define DATAINDEX_ENEMYBASEDEFINE		(DATATYPE_ENEMYBASEDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ENEMYDEFINE			(DATATYPE_ENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_MISSIONDEFINE			(DATATYPE_MISSIONDEFINE-DATATYPE_DATATABLEBEGIN)
 
@@ -183,6 +185,11 @@ bool DataTable::ReadAllTable()
 	if (!ReadItemDefineTable())
 	{
 		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_ITEMDEFINE));
+		return false;
+	}
+	if (!ReadEnemyBaseDefineTable())
+	{
+		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_ENEMYBASEDEFINE));
 		return false;
 	}
 	if (!ReadEnemyDefineTable())
@@ -522,6 +529,70 @@ bool DataTable::ReadItemDefineTable()
 	return true;
 }
 
+bool DataTable::ReadEnemyBaseDefineTable()
+{
+	if (!CheckHeader(DATATYPE_ENEMYBASEDEFINE))
+	{
+		return false;
+	}
+
+	BResource * pbres = BResource::getInstance();
+
+	pbres->ClearEnemyBaseData();
+
+
+	_READSTRINGBUFFERLINE(23);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		enemyBaseData * item = &(pbres->enemybasedata[tindex]);
+		_CHECKEOF_DATATABLE;
+
+		fscanf(file, "%s%d%d%d%d%d%d%s%s%s%s%d%f%f%f%f%f%f%f%f%f", 
+			strbuffer[0], 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			strbuffer[1], 
+			strbuffer[2], 
+			strbuffer[3], 
+			strbuffer[4], 
+			_SAVETINT, 
+			&(item->headcollision.x), 
+			&(item->headcollision.y), 
+			&(item->headcollision.rh), 
+			&(item->headcollision.rv), 
+			&(item->bodycollision.x),  
+			&(item->bodycollision.y),  
+			&(item->bodycollision.rh),  
+			&(item->bodycollision.rv),  
+			&(item->headshotscale));
+
+		_DOSWAPTINT;
+		_INITTINT;
+
+		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
+		item->normalframe = _LOADTINT;
+		item->idleframe = _LOADTINT;
+		item->attackframe = _LOADTINT;
+		item->woundframe = _LOADTINT;
+		item->deadframe = _LOADTINT;
+		item->specialframe = _LOADTINT;
+		item->sidesiid = SpriteItemManager::GetIndexByName(strbuffer[1]);
+		item->sidearrowsiid = SpriteItemManager::GetIndexByName(strbuffer[2]);
+		BResource::getInstance()->GetCustomConstDataByName(strbuffer[3], &item->elayer);
+		BResource::getInstance()->GetCustomConstDataByName(strbuffer[4], &item->elayeradvance);
+		item->attackflag = _LOADTINT;
+	}
+
+	return true;
+}
+
 bool DataTable::ReadEnemyDefineTable()
 {
 	if (!CheckHeader(DATATYPE_ENEMYDEFINE))
@@ -534,7 +605,7 @@ bool DataTable::ReadEnemyDefineTable()
 	pbres->ClearEnemyData();
 
 
-	_READSTRINGBUFFERLINE(16);
+	_READSTRINGBUFFERLINE(11);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -543,14 +614,9 @@ bool DataTable::ReadEnemyDefineTable()
 		enemyData * item = &(pbres->enemydata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s%s%s%d%s%s%x%d%d%d%d%d%d%d", 
-			strbuffer[0], 
-			strbuffer[1], 
-			strbuffer[2], 
-			&(item->life), 
-			strbuffer[3], 
-			strbuffer[4], 
+		fscanf(file, "%d%d%d%d%d%d%d%d%d",  
 			_SAVETINT, 
+			&(item->life),
 			&(item->atk[0]), 
 			&(item->atk[1]), 
 			&(item->atk[2]), 
@@ -562,12 +628,7 @@ bool DataTable::ReadEnemyDefineTable()
 		_DOSWAPTINT;
 		_INITTINT;
 
-		item->siid = SpriteItemManager::GetIndexByName(strbuffer[0]);
-		item->sidesiid = SpriteItemManager::GetIndexByName(strbuffer[1]);
-		item->sidearrowsiid = SpriteItemManager::GetIndexByName(strbuffer[2]);
-		BResource::getInstance()->GetCustomConstDataByName(strbuffer[3], &item->elayer);
-		BResource::getInstance()->GetCustomConstDataByName(strbuffer[4], &item->elayeradvance);
-		item->attackflag = _LOADTINT;
+		item->type = _LOADTINT;
 	}
 
 	return true;

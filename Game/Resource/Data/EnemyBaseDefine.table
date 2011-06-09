@@ -1,0 +1,12 @@
+130	h5nc	59																				
+Comment	Index	SIID	NormalFrame	IdleFrame	AttackFrame	WoundFrame	DeadFrame	SpecialFrame	SideSIID	SideArrowSIID	eLayer	eLayerAdvance	AttackFlag	HeadX	HeadY	HeadRH	HeadRV	BodyX	BodyY	BodyRH	BodyRV	HeadShotScale
+-	0	SI_Enemy_Soldier	0	0	0	0	0	0	SI_EnemySide_Soldier	SI_EnemySide_Soldier_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	65.57	71	20.2336	25.0016	66.5	121.9	32	38.096	1.5
+-	1	SI_Enemy_Warrior	0	0	0	0	0	0	SI_EnemySide_Warrior	SI_EnemySide_Warrior_Arrow	CCZ_eLayer_02	CCZ_eLayer_01	0	133	76.5	19.8848	24	131.38	120	35.3792	36	1.5
+-	2	SI_Enemy_Magician	0	0	0	0	0	0	SI_EnemySide_Magician	SI_EnemySide_Magician_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	1	55	68	19.0016	32	57.75	120.99	33.2512	42.9888	1.5
+-	3	SI_Enemy_Rifle	0	0	0	0	0	0	SI_EnemySide_Rifle	SI_EnemySide_Rifle_Arrow	CCZ_eLayer_01	CCZ_eLayer_02	0	61.07	74.5	24.4288	33.5008	63.65	131	35.9712	39.0016	1.5
+-	4	SI_Enemy_Angel	0	0	0	0	0	0	SI_EnemySide_Angel	SI_EnemySide_Angel_Arrow	CCZ_eLayer_01	CCZ_eLayer_00	2	68	78.5	20.2496	25.5008	64	128	31.5008	34.7488	1.5
+-	5	SI_Enemy_Shield	0	0	0	0	0	0	SI_EnemySide_Shield	SI_EnemySide_Shield_Arrow	CCZ_eLayer_03	CCZ_eLayer_00	0	65	71.75	22	25.7504	67.5	123.5	35.5008	36.4992	1.5
+-	6	SI_Enemy_Ghost	0	0	0	0	0	0	SI_EnemySide_Ghost	SI_EnemySide_Ghost_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	62.75	68.87	17.2512	20.8736	63	107	33.5008	34	1.5
+-	7	SI_Enemy_Ninja	0	0	0	0	0	0	SI_EnemySide_Ninja	SI_EnemySide_Ninja_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	58.38	83.5	21.6256	27.5008	61.5	132	29.5008	34	1.5
+-	8	SI_Enemy_Archer	0	0	0	0	0	0	SI_EnemySide_Archer	SI_EnemySide_Archer_Arrow	CCZ_eLayer_01	CCZ_eLayer_00	0	64.84	75.11	21.5008	32	78	127.25	34	32.7488	1.5
+-	9	SI_Enemy_King	0	0	0	0	0	0	SI_EnemySide_King	SI_EnemySide_King_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	115	95.5	27.0016	37.5008	120	197.11	67.0016	78.8928	1.5

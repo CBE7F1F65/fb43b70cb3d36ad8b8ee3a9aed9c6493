@@ -524,15 +524,19 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
-int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int life, int elayer,BYTE enemiesindex/*=ENEMY_ONSIDE*/, int angle/*=0*/)
+int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex/*=ENEMY_ONSIDE*/, int angle/*=0*/)
 {
 	EnemyInGameData _edata;
+
+	BResource * pbres = BResource::getInstance();
+	enemyData * item = &(pbres->enemydata[etype]);
+	enemyBaseData * baseitem = &(pbres->enemybasedata[item->type]);
 
 	_edata.itemtag = itemtag;
 	_edata.x = x;
 	_edata.y = y;
 	_edata.etype = etype;
-	_edata.life = life;
+	_edata.life = item->life;
 	_edata.elayer = elayer;
 	_edata.angle = angle;
 
