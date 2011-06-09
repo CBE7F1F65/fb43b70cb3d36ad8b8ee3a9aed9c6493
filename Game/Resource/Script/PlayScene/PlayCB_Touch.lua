@@ -1,11 +1,11 @@
-function _PlayScene_CB_Touch_Began(toplayer, toptag, touchlayer, index, gesture)
+function _PSCB_Touch_Began(toplayer, toptag, touchlayer, index, gesture)
 	local stateST, stateAction, stateStep = game.GetState();
 	if stateAction ~= STATE_Planning or stateST ~= STATE_ST_Progressing then
 		game.TerminateTouch(touchlayer);
 	end
 end
 
-function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
+function _PSCB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 	
 	if gesture == GESTURE_OneMoved or gesture == GESTURE_TwoMoved then
 		
@@ -14,23 +14,23 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 		
 		if gesture == GESTURE_TwoMoved then
 			local oxb, oyb = game.GetTouchInfo(touchlayer, 1-index, CCTI_Began);
-			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, (xb+oxb)/2, (yb+oyb)/2);
+			_PSCB_Touch_DoToggleZoom(toplayer, toptag, (xb+oxb)/2, (yb+oyb)/2);
 			game.TerminateTouch(touchlayer);
 			
 		else
 			-- OneMoved
 			if LGlobal_PlayData.bZoomed then
 				local xl, yl = game.GetTouchInfo(touchlayer, index, CCTI_LastMoved);
-				_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, xl-xe, yl-ye);
+				_PSCB_Touch_MoveInZoom(toplayer, toptag, xl-xe, yl-ye);
 --			else
 --				local nowhp, nowap = game.GetHPAPSP();
 --				local atk, apperdist, leastap = game.GetWeaponData(WEAPON_Laser);
 --				if nowap < leastap then
---					_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
+--					_PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
 --				else
---					local nowxb, nowyb, nowxem, nowye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
+--					local nowxb, nowyb, nowxem, nowye, dist = _PSCB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
 --					if nowap < dist*apperdist then
---						_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
+--						_PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
 --					end
 --				end
 			end
@@ -39,7 +39,7 @@ function _PlayScene_CB_Touch_Moved(toplayer, toptag, touchlayer, index, gesture)
 	end
 end
 
-function _PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, weaponindex, delaytime)
+function _PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, weaponindex, delaytime)
 	-- TODO
 	local layertag = toptag + CCTag_Layer_11;
 	local grouptag = layertag + CCTag_Menu_10;
@@ -66,7 +66,7 @@ function _PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, 
 	
 end
 
-function _PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, x, y, bAction)
+function _PSCB_Touch_MoveInZoom(toplayer, toptag, x, y, bAction)
 	if LGlobal_PlayData.bZoomed == false then
 		return;
 	end
@@ -92,7 +92,7 @@ function _PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, x, y, bAction)
 end
 
 
-function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
+function _PSCB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 
 	local overlaylayer = game.GetOverlayLayer(toplayer);
 	local layertag = ktag_OverlayLayer+CCTag_Layer_01;
@@ -105,7 +105,7 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
 		local scaleaction = game.ActionScale(CCAF_By, 2, 2, LConst_ZoomActionTime);
 		game.RunAction(toplayer, scaleaction);
-		_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, 2*(480-x), 2*(320-y), true);
+		_PSCB_Touch_MoveInZoom(toplayer, toptag, 2*(480-x), 2*(320-y), true);
 		
 		local spScope = game.CreateSprite(SI_Game_Sniper_Scope, {480, 320, 0, LConst_SniperScopeScale, LConst_SniperScopeScale}, grouptag+1);
 		local spFrontSight = game.CreateSprite(SI_Game_Sniper_FrontSight, {480, 320}, grouptag+2);
@@ -148,7 +148,7 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		local scaleaction = game.ActionScale(CCAF_By, 0.5, 0.5, LConst_ZoomActionTime);
 		game.RunAction(toplayer, scaleaction);
 		local nowx, nowy = game.GetPosition(toplayer);
-		_PlayScene_CB_Touch_MoveInZoom(toplayer, toptag, -nowx, -nowy, true);
+		_PSCB_Touch_MoveInZoom(toplayer, toptag, -nowx, -nowy, true);
 		LGlobal_PlayData.bZoomed = false;
 		_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
 		
@@ -183,7 +183,7 @@ function _PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 	
 end
 
-function _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap)
+function _PSCB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap)
 	local dist = math.floor(global.DIST(xb, yb, xe, ye));
 	local nowxb, nowyb, nowxe, nowye = xb, yb, xe, ye;
 	
@@ -217,7 +217,7 @@ function _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb
 	return nowxb, nowyb, nowxe, nowye, dist;
 end
 
-function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
+function _PSCB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 
 	if gesture == GESTURE_TwoNoMove then
 		return
@@ -230,7 +230,7 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 	
 	--WIN
 	if gesture == GESTURE_OneNoMove and touchtype == TOUCH_Hold then
-		_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, xb, yb);
+		_PSCB_Touch_DoToggleZoom(toplayer, toptag, xb, yb);
 		return;
 	end
 	--
@@ -243,10 +243,10 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 			x = 480 - nowx/2;
 			y = 320 - nowy/2;
 			
-			_PlayScene_CB_Touch_DoToggleZoom(toplayer, toptag, -nowx, -nowy);
+			_PSCB_Touch_DoToggleZoom(toplayer, toptag, -nowx, -nowy);
 			
 			if nowap < ap then
-				_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, WEAPON_Sniper, LConst_ZoomActionTime);
+				_PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, WEAPON_Sniper, LConst_ZoomActionTime);
 				return;
 			end
 			local nDots = table.getn(LGlobal_PlayData.plandots);
@@ -305,11 +305,11 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 		-- Plan lines
 		local atk, apperdist, leastap = game.GetWeaponData(WEAPON_Laser);
 		if nowap < leastap then
-			_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
+			_PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xe, ye, WEAPON_Laser);
 			return;
 		end
 		local dist;
-		xb, yb, xe, ye, dist = _PlayScene_CB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
+		xb, yb, xe, ye, dist = _PSCB_LinesRestrictToRectAndAP(toplayer, toptag, touchlayer, xb, yb, xe, ye, apperdist, nowap);
 		local apcost = apperdist*dist;
 		if apcost < leastap then
 			apcost = leastap;
@@ -357,7 +357,7 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 		-- Plan Circles
 		local atk, ap, r = game.GetWeaponData(WEAPON_Bomb);
 		if nowap < ap then
-			_PlayScene_CB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xb, yb, WEAPON_Bomb);
+			_PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, xb, yb, WEAPON_Bomb);
 			return;
 		end
 		game.SetHPAPSP(-1, nowap-ap);
@@ -379,5 +379,5 @@ function _PlayScene_CB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 
 end
 
-function _PlayScene_CB_Touch_Canceled(toplayer, toptag, touchlayer, index, gesture)
+function _PSCB_Touch_Canceled(toplayer, toptag, touchlayer, index, gesture)
 end

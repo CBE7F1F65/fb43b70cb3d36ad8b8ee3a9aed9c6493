@@ -22,7 +22,7 @@ LGlobal_PlayData =
 }
 
 
-function LGlobal_PlayScene_InitGlobal(toplayer, toptag)
+function LGlobalPS_InitGlobal(toplayer, toptag)
 	LGlobal_PlayData.nowhp = 0;
 	LGlobal_PlayData.nowap = 0;
 	LGlobal_PlayData.nowsp = 0;

@@ -21,7 +21,7 @@ function PlayScene_IO(eventtype, toplayer, toptag)
 	end
 end
 
-function _PlayScene_AddBGItems(toplayer, toptag)
+function PS_AddBGItems(toplayer, toptag)
 	
 	local layertag = toptag+CCTag_Layer_00;
 	
@@ -32,7 +32,7 @@ function _PlayScene_AddBGItems(toplayer, toptag)
 		
 end
 
-function _PlayScene_AddFrameItems(toplayer, toptag)
+function PS_AddFrameItems(toplayer, toptag)
 	local layertag = toptag+CCTag_Layer_05;
 	
 	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608});
@@ -45,7 +45,7 @@ function _PlayScene_AddFrameItems(toplayer, toptag)
 	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
 end
 
-function _PlayScene_AddPlanningRenderTexture(toplayer, toptag)
+function PS_AddPlanningRenderTexture(toplayer, toptag)
 	local layertag = toptag+CCTag_Layer_11;
 	local grouptag = layertag+CCTag_Menu_01;
 	
@@ -63,7 +63,7 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_00;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
 	
-	_PlayScene_AddBGItems(toplayer, toptag);
+	PS_AddBGItems(toplayer, toptag);
 	
 	-- ObjBG
 	layertag = toptag + CCTag_Layer_01;
@@ -88,7 +88,7 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCTag_Layer_05;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_05, layertag});
 	
-	_PlayScene_AddFrameItems(toplayer, toptag);
+	PS_AddFrameItems(toplayer, toptag);
 	
 	-- Touch
 	layertag = toptag + CCTag_Layer_06;
@@ -116,7 +116,7 @@ function PlayScene_OnInit(toplayer, toptag)
 	grouptag = layertag + CCTag_Menu_06;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_06, grouptag});
 	
-	_PlayScene_AddPlanningRenderTexture(toplayer, toptag);
+	PS_AddPlanningRenderTexture(toplayer, toptag);
 	
 	-- Clear GameOver ??
 	layertag = toptag + CCTag_Layer_12;
@@ -140,11 +140,11 @@ function PlayScene_OnInit(toplayer, toptag)
 end
 
 function PlayScene_OnEnter(toplayer, toptag)
-	LGlobal_PlayScene_InitGlobal(toplayer, toptag);
+	LGlobalPS_InitGlobal(toplayer, toptag);
 	game.EnterMission();
 end
 
-function _PlayScene_ToggleMenuEnable(toplayer, toptag, bEnable)
+function PS_ToggleMenuEnable(toplayer, toptag, bEnable)
 	
 	local layertag = toptag + CCTag_Layer_13;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -154,7 +154,7 @@ function _PlayScene_ToggleMenuEnable(toplayer, toptag, bEnable)
 	
 end
 
-function _PlayScene_AddHPAPSPItems(toplayer, toptag)
+function PS_AddHPAPSPItems(toplayer, toptag)
 	
 	local layertag = toptag + CCTag_Layer_07;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -196,7 +196,7 @@ function _PlayScene_AddHPAPSPItems(toplayer, toptag)
 		
 end
 
-function _PlayScene_AddMainItems(toplayer, toptag)
+function PS_AddMainItems(toplayer, toptag)
 	
 	local xbegin = 168;
 	local xoffset = 208;
@@ -238,10 +238,10 @@ function _PlayScene_AddMainItems(toplayer, toptag)
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
-	_PlayScene_ToggleMenuEnable(toplayer, toptag, false);
+	PS_ToggleMenuEnable(toplayer, toptag, false);
 end
 
-function _PlayScene_SetHPAPSP(toplayer, toptag)
+function PS_SetHPAPSP(toplayer, toptag)
 	
 	local hp, ap, sp = game.GetHPAPSP();
 	
@@ -276,13 +276,13 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 		LGlobal_PlayData.nowsp = sp;
 		
 		if nowsp > sp then
-			for i=sp, nowsp do
+			for i=sp+1, nowsp do
 				local spitem = game.GetNode({toplayer, grouptag+i});
 				local spfadeaction = game.ActionFade(CCAF_To, 0, LConst_SPChangeTime);
 				game.RunAction(spitem, spfadeaction);
 			end
 		else
-			for i=nowsp, sp do
+			for i=nowsp+1, sp do
 				local spitem = game.GetNode({toplayer, grouptag+i});
 				local spfadeaction = game.ActionFade(CCAF_To, 0xFF, LConst_SPChangeTime);
 				game.RunAction(spitem, spfadeaction);
@@ -293,7 +293,7 @@ function _PlayScene_SetHPAPSP(toplayer, toptag)
 	
 end
 
-function _PlayScene_AddTouchLayer(toplayer, toptag)
+function PS_AddTouchLayer(toplayer, toptag)
 		
 	local layertag = toptag + CCTag_Layer_06;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -303,11 +303,11 @@ function _PlayScene_AddTouchLayer(toplayer, toptag)
 			{toplayer, layertag},
 			{0, 0, CCTag_Layer_06, grouptag}
 		);
-	_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
+	PS_ChangeTouchLayerRect(toplayer, toptag);
 	
 end
 
-function _PlayScene_ChangeTouchLayerRect(toplayer, toptag)
+function PS_ChangeTouchLayerRect(toplayer, toptag)
 	
 	local layertag = toptag + CCTag_Layer_06;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -340,11 +340,11 @@ function PlayScene_OnEnterA(toplayer, toptag)
 end
 
 function PlayScene_OnEnterTDF(toplayer, toptag)
-	_PlayScene_AddMainItems(toplayer, toptag);
-	_PlayScene_AddHPAPSPItems(toplayer, toptag);
-	_PlayScene_SetHPAPSP(toplayer, toptag);
+	PS_AddMainItems(toplayer, toptag);
+	PS_AddHPAPSPItems(toplayer, toptag);
+	PS_SetHPAPSP(toplayer, toptag);
 	
-	_PlayScene_AddTouchLayer(toplayer, toptag);
+	PS_AddTouchLayer(toplayer, toptag);
 end
 
 function PlayScene_OnEnterTDFA(toplayer, toptag)
@@ -352,7 +352,7 @@ function PlayScene_OnEnterTDFA(toplayer, toptag)
 		LGlobal_PlayData.btrasitioning = false;
 	end
 	
-	_PlayScene_StepForward(STATE_ShowHelp);
+	PS_StepForward(STATE_ShowHelp);
 
 end
 
@@ -365,9 +365,9 @@ function PlayScene_OnUpdate(toplayer, toptag)
 	
 	game.Update();
 	
-	_PlayScene_UpdateState(toplayer, toptag);
+	PS_UpdateState(toplayer, toptag);
 		
-	_PlayScene_SetHPAPSP(toplayer, toptag);
+	PS_SetHPAPSP(toplayer, toptag);
 	
 end
 

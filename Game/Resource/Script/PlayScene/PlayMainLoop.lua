@@ -1,4 +1,4 @@
-function _PlayScene_UpdateState(toplayer, toptag)
+function PS_UpdateState(toplayer, toptag)
 	
 	local stateST, stateAction, stateStep = game.GetState();
 	
@@ -14,7 +14,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			if stateStep < 3 then
 				stateST = STATE_ST_Progressing;
-				if _PlayScene_ShowHelp(toplayer, toptag) then
+				if PS_ShowHelp(toplayer, toptag) then
 					stateST = STATE_ST_Finished;
 				end
 			else
@@ -26,7 +26,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_ShowTarget(toplayer, toptag) then
+			if PS_ShowTarget(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			else
 				stateST = STATE_ST_Progressing;
@@ -40,7 +40,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
-			if _PlayScene_EnemyEnter(toplayer, toptag, stateStep) then
+			if PS_EnemyEnter(toplayer, toptag, stateStep) then
 				game.DoRemoveEnemy(ENEMY_OnSide);
 				stateST = STATE_ST_Finished;
 			end
@@ -50,7 +50,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
-			if _PlayScene_SpecialEnemyAction(toplayer, toptag, stateStep) then
+			if PS_SpecialEnemyAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
 		end
@@ -59,7 +59,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
-			if _PlayScene_AddEnemy(toplayer, toptag, stateStep) then
+			if PS_AddEnemy(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
 		end
@@ -67,7 +67,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_HPRegain(toplayer, toptag) then
+			if PS_HPRegain(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			end
 		elseif stateST == STATE_ST_StepForward then
@@ -78,7 +78,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 			game.AddTurn();
 		elseif stateST == STATE_ST_Standby then
-			_PlayScene_ShowTurnStart(toplayer, toptag)
+			PS_ShowTurnStart(toplayer, toptag)
 			stateST = STATE_ST_Progressing;
 		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Finished;
@@ -87,19 +87,19 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			_PlayScene_PreparePlanning(toplayer, toptag);
+			PS_PreparePlanning(toplayer, toptag);
 			stateST = STATE_ST_Progressing;
 		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
 		elseif stateST == STATE_ST_Progressing then
-			_PlayScene_UpdatePlanning(toplayer, toptag, stateStep);
+			PS_UpdatePlanning(toplayer, toptag, stateStep);
 		end
 	elseif stateAction == STATE_SelfAction then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
-			if _PlayScene_SelfAction(toplayer, toptag, stateStep) then
+			if PS_SelfAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
 		end
@@ -107,7 +107,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_APRegain(toplayer, toptag) then
+			if PS_APRegain(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			end
 		elseif stateST == STATE_ST_StepForward then
@@ -118,7 +118,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
-			if _PlayScene_EnemyAction(toplayer, toptag, stateStep) then
+			if PS_EnemyAction(toplayer, toptag, stateStep) then
 				stateST = STATE_ST_Finished;
 			end
 		end
@@ -126,7 +126,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
-			if _PlayScene_ShowOver(toplayer, toptag) then
+			if PS_ShowOver(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			end
 		elseif stateST == STATE_ST_StepForward then
@@ -141,7 +141,7 @@ function _PlayScene_UpdateState(toplayer, toptag)
 end
 
 
-function _PlayScene_UpdatePlanGroup(toplayer, toptag)
+function PS_UpdatePlanGroup(toplayer, toptag)
 	
 	local plangroup = LGlobal_PlayData.plangroup;
 	local layergroup = toptag + CCTag_Layer_13;
@@ -156,20 +156,20 @@ function _PlayScene_UpdatePlanGroup(toplayer, toptag)
 	
 end
 
-function _PlayScene_PreparePlanning(toplayer, toptag)
+function PS_PreparePlanning(toplayer, toptag)
 	LGlobal_PlayData.planlines = {};
 	LGlobal_PlayData.plancircles = {};
 	LGlobal_PlayData.plandots = {};
 	LGlobal_PlayData.plangroup = 0;
-	_PlayScene_UpdatePlanGroup(toplayer, toptag);
-	_PlayScene_ToggleMenuEnable(toplayer, toptag, true);
+	PS_UpdatePlanGroup(toplayer, toptag);
+	PS_ToggleMenuEnable(toplayer, toptag, true);
 end
 
-function _PlayScene_ExitPlanning(toplayer, toptag)
-	_PlayScene_ToggleMenuEnable(toplayer, toptag, false);
+function PS_ExitPlanning(toplayer, toptag)
+	PS_ToggleMenuEnable(toplayer, toptag, false);
 end
 
-function _PlayScene_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy, time, index)
+function PS_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy, time, index)
 	
 	if brushx == nil or brushy == nil then
 		return;
@@ -193,7 +193,7 @@ function _PlayScene_Plan_DrawFeather(toplayer, toptag, grouptag, brushx, brushy,
 	end
 end
 
-function _PlayScene_AddPlanGroupNumber(toplayer, toptag, grouptag, index, x, y)
+function PS_AddPlanGroupNumber(toplayer, toptag, grouptag, index, x, y)
 	local spNumber = game.CreateSprite(SI_GUIDigit_Small_0+LGlobal_PlayData.plangroup+1, {x, y});
 	local numbernode = game.AddSpriteChild(spNumber, {toplayer, grouptag}, CCZ_Max);
 	game.SetColor(numbernode, global.ARGB(0, 0xffffff));
@@ -202,7 +202,7 @@ function _PlayScene_AddPlanGroupNumber(toplayer, toptag, grouptag, index, x, y)
 	game.RunAction(numbernode, fadeaction);
 end
 
-function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
+function PS_UpdatePlanning(toplayer, toptag, stateStep)
 	
 	local layertag = toptag + CCTag_Layer_11;
 	local grouptag = layertag + CCTag_Menu_01;
@@ -220,7 +220,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local item = LGlobal_PlayData.planlines[i];
 				
 				if item.time == 0 then
-					_PlayScene_AddPlanGroupNumber(toplayer, toptag, linesgrouptag, i, item.xb, item.yb);
+					PS_AddPlanGroupNumber(toplayer, toptag, linesgrouptag, i, item.xb, item.yb);
 				end
 				
 				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
@@ -251,7 +251,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				
 				game.RenderTextureEnd(rendertextureitem);
 				
-				_PlayScene_Plan_DrawFeather(toplayer, toptag, linesgrouptag, brushx, brushy, item.time, i);
+				PS_Plan_DrawFeather(toplayer, toptag, linesgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.planlines[i].time = item.time+1;
 			end
@@ -266,7 +266,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local item = LGlobal_PlayData.plancircles[i];
 				
 				if item.time == 0 then
-					_PlayScene_AddPlanGroupNumber(toplayer, toptag, circlesgrouptag, i, item.x, item.y);
+					PS_AddPlanGroupNumber(toplayer, toptag, circlesgrouptag, i, item.x, item.y);
 				end
 				
 				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
@@ -301,7 +301,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				
 				game.RenderTextureEnd(rendertextureitem);
 				
-				_PlayScene_Plan_DrawFeather(toplayer, toptag, circlesgrouptag, brushx, brushy, item.time, i);
+				PS_Plan_DrawFeather(toplayer, toptag, circlesgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.plancircles[i].time = item.time+1;
 			end
@@ -318,7 +318,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				local item = LGlobal_PlayData.plandots[i];
 				
 				if item.time == 0 then
-					_PlayScene_AddPlanGroupNumber(toplayer, toptag, dotsgrouptag, i, item.x, item.y);
+					PS_AddPlanGroupNumber(toplayer, toptag, dotsgrouptag, i, item.x, item.y);
 				end
 				
 				local rendertextureitem = game.GetNode({toplayer, grouptag+item.plangroup+1});
@@ -356,7 +356,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 				
 				game.RenderTextureEnd(rendertextureitem);
 				
-				_PlayScene_Plan_DrawFeather(toplayer, toptag, dotsgrouptag, brushx, brushy, item.time, i);
+				PS_Plan_DrawFeather(toplayer, toptag, dotsgrouptag, brushx, brushy, item.time, i);
 				
 				LGlobal_PlayData.plandots[i].time = item.time+1;
 			end
@@ -366,7 +366,7 @@ function _PlayScene_UpdatePlanning(toplayer, toptag, stateStep)
 	return false;
 end
 
-function _PlayScene_ShowHelp(toplayer, toptag)
+function PS_ShowHelp(toplayer, toptag)
 		
 	local helptype1, helpindex1, helptype2, helpindex2, helptype3, helpindex3 = game.GetMissionHelpData();
 
@@ -402,16 +402,16 @@ function _PlayScene_ShowHelp(toplayer, toptag)
 		
 end
 
-function _PlayScene_ShowTarget(toplayer, toptag)
+function PS_ShowTarget(toplayer, toptag)
 	--Add Menu and Callback
-	if _PlayScene_DoShowTurnStart(toplayer, toptag, true) then
+	if PS_DoShowTurnStart(toplayer, toptag, true) then
 		return true;
 	end
---	_PlayScene_StepForward(STATE_ShowTarget);
+--	PS_StepForward(STATE_ShowTarget);
 	return false;
 end
 
-function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer)
+function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer)
 
 	local layertag = toptag + CCTag_Layer_02;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
@@ -439,7 +439,7 @@ function _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowt
 	return enemynode, layertag, grouptag, selitemtag;
 end
 
-function _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
+function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	
 	--skip event mission
 	local eposturnitem = LGlobal_EnemyPosTable[nowstage+1][nowmission][1];
@@ -450,7 +450,7 @@ function _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmi
 	local epositem = eposturnitem[index+1];
 	local x, y, etype, elayer = epositem[1], epositem[2], epositem[3], epositem[4];
 	
-	local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
+	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
 	
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));	
 	local enemyaction = game.ActionFade(CCAF_To, 0xFF, LConst_EnemySpriteFadeTime);
@@ -466,7 +466,7 @@ function _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmi
 	return false;
 end
 
-function _PlayScene_SidePosToScenePos(x, y, angle)
+function PS_SidePosToScenePos(x, y, angle)
 	local r;
 	if x <= LGlobal_EnemySideLEdge then
 		r = x*(480-LGlobal_EnemySideEdge)/LGlobal_EnemySideEdge+(LGlobal_EnemySideLEdge-x);
@@ -483,7 +483,7 @@ function _PlayScene_SidePosToScenePos(x, y, angle)
 	return x, y;
 end
 
-function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
+function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
 	local layertag = toptag + CCTag_Layer_08;
 	local grouptag = layertag + CCTag_MenuSub_01*(nowturn+1);
 	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
@@ -506,7 +506,7 @@ function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowm
 		
 	game.RemoveEnemy(index, ENEMY_OnSide);
 
-	local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
+	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
 	game.RunAction(enemynode, enemyaction);
@@ -521,16 +521,16 @@ function _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowm
 	
 end
 
-function _PlayScene_EnemyEnter(toplayer, toptag, index)
+function PS_EnemyEnter(toplayer, toptag, index)
 
 	-- Check all enemy in
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
 	if nowturn == 0 then
-		if _PlayScene_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission) then
+		if PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission) then
 			return true;
 		end
 	else
-		if _PlayScene_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn) then
+		if PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn) then
 			return true;
 		end
 	end
@@ -538,7 +538,7 @@ function _PlayScene_EnemyEnter(toplayer, toptag, index)
 	return false;
 end
 
-function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn)
+function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn)
 	local layertag = toptag + CCTag_Layer_08;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
 	local grouptag = layertag + menugroup;
@@ -564,14 +564,14 @@ function _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, 
 	arrowfadeaction = game.ActionRepeat(arrowfadeaction);
 	game.RunAction(enemysidearrownode, arrowfadeaction);
 
-	local tx, ty = _PlayScene_SidePosToScenePos(x, y, angle)
+	local tx, ty = PS_SidePosToScenePos(x, y, angle)
 
 	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
 	
 	return enemynode, layertag, grouptag, selitemtag;
 end
 
-function _PlayScene_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn)
+function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn)
 	
 	local eposmissionitem = LGlobal_EnemyPosTable[nowstage+1][nowmission];
 	if nowturn+1 >= table.getn(eposmissionitem) then
@@ -586,7 +586,7 @@ function _PlayScene_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission
 	local epositem = eposturnitem[index+1];
 	local x, y, etype, angle = epositem[1], epositem[2], epositem[3], epositem[4];
 	
-	local enemynode, layertag, grouptag, selitemtag = _PlayScene_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
+	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
 	
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	
@@ -602,18 +602,18 @@ function _PlayScene_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission
 	return false;
 end
 
-function _PlayScene_AddEnemy(toplayer, toptag, index)
+function PS_AddEnemy(toplayer, toptag, index)
 	
 	-- Check all enemy added
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
-	if _PlayScene_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn) then
+	if PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn) then
 		return true;
 	end
 	
 	return false;
 end
 
-function _PlayScene_HPRegain(toplayer, toptag)
+function PS_HPRegain(toplayer, toptag)
 	-- Add AP
 	
 	local hp, ap, sp = game.GetHPAPSP();
@@ -622,7 +622,7 @@ function _PlayScene_HPRegain(toplayer, toptag)
 	return true;
 end
 
-function _PlayScene_APRegain(toplayer, toptag)
+function PS_APRegain(toplayer, toptag)
 	-- Add AP
 	
 	local hp, ap, sp = game.GetHPAPSP();
@@ -631,7 +631,7 @@ function _PlayScene_APRegain(toplayer, toptag)
 	return true;
 end
 
-function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
+function PS_DoShowTurnStart(toplayer, toptag, bRequireClose)
 	
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
 	local missiontype = game.GetMissionTargetData();
@@ -659,7 +659,7 @@ function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
 	game.SetPosition(layernode, 0, -480);
 	
 	if bRequireClose == nil or not bRequireClose then
-		PlayScene_CB_Target(nil, toplayer, toptag, CCTag_Layer_04, nil, 1, LConst_BoardMoveTime+LConst_BoardShowTime);
+		PSCB_Target(nil, toplayer, toptag, CCTag_Layer_04, nil, 1, LConst_BoardMoveTime+LConst_BoardShowTime);
 	else
 		grouptag = layertag + CCTag_Menu_04;
 		local menuitem = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+1);
@@ -678,16 +678,16 @@ function _PlayScene_DoShowTurnStart(toplayer, toptag, bRequireClose)
 	return false;
 end
 
-function _PlayScene_ShowTurnStart(toplayer, toptag)
+function PS_ShowTurnStart(toplayer, toptag)
 	--Add Menu and Callback
-	if _PlayScene_DoShowTurnStart(toplayer, toptag) then
+	if PS_DoShowTurnStart(toplayer, toptag) then
 		return true;
 	end
---	_PlayScene_StepForward(STATE_ShowTurnStart);
+--	PS_StepForward(STATE_ShowTurnStart);
 	return false;
 end
 
-function _PlayScene_SelfAction(toplayer, toptag, index)
+function PS_SelfAction(toplayer, toptag, index)
 	-- Check all self action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
 	local layertag = toptag+CCTag_Layer_11;
@@ -719,7 +719,7 @@ function _PlayScene_SelfAction(toplayer, toptag, index)
 	return false;
 end
 
-function _PlayScene_EnemyAttack(toplayer, toptag, index, etype, elayer)
+function PS_EnemyAttack(toplayer, toptag, index, etype, elayer)
 	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, elayer/CCZ_eLayer_01);
 	local hp, ap, sp = game.GetHPAPSP();
 	hp = hp - atk;
@@ -730,7 +730,7 @@ function _PlayScene_EnemyAttack(toplayer, toptag, index, etype, elayer)
 	end
 end
 
-function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
+function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	local elayeradvance = game.GetEnemyELayerAdvance(etype);
 	if elayer == CCZ_eLayer_03 or elayeradvance == 0 then
 		return;
@@ -758,7 +758,7 @@ function _PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	
 end
 
-function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, bZeroLayerOnly)
+function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, bZeroLayerOnly)
 	local enemyinscenecount = game.GetActiveEnemyData();
 	if index >= enemyinscenecount then
 		return true;
@@ -783,10 +783,10 @@ function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission,
 	end
 	
 	if doaction then
-		_PlayScene_EnemyAttack(toplayer, toptag, index, etype, elayer);
+		PS_EnemyAttack(toplayer, toptag, index, etype, elayer);
 	end
 	if doadvance then
-		_PlayScene_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer);
+		PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer);
 	end
 
 	local enemynode = game.GetNode({toplayer, itemtag});
@@ -809,36 +809,36 @@ function _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission,
 	return false;
 end
 
-function _PlayScene_EnemyAction(toplayer, toptag, index)
+function PS_EnemyAction(toplayer, toptag, index)
 	-- Check all enemy action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
-	if _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn) then
+	if PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn) then
 		return true;
 	end
 	
 	return false;
 end
 
-function _PlayScene_SpecialEnemyAction(toplayer, toptag, index)
+function PS_SpecialEnemyAction(toplayer, toptag, index)
 	-- Check all enemy action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
-	if _PlayScene_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, true) then
+	if PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, true) then
 		return true;
 	end
 	
 	return false;
 end
 
-function _PlayScene_ShowOver(toplayer, toptag)
+function PS_ShowOver(toplayer, toptag)
 	--Add Menu and Callback
 	if true then
 		return true;
 	end
---	_PlayScene_StepForward(STATE_ShowOver);
+--	PS_StepForward(STATE_ShowOver);
 	return false;
 end
 
-function _PlayScene_StepForward(_stateAction)
+function PS_StepForward(_stateAction)
 	local stateST, stateAction, stateStep = game.GetState();
 	if stateAction == _stateAction then
 		if stateST == STATE_ST_Progressing then
@@ -848,7 +848,7 @@ function _PlayScene_StepForward(_stateAction)
 	end
 end
 
-function _PlayScene_StateFinish(_stateAction)
+function PS_StateFinish(_stateAction)
 	local stateST, stateAction, stateStep = game.GetState();
 	if stateAction == _stateAction then
 		stateST = STATE_ST_Finished;

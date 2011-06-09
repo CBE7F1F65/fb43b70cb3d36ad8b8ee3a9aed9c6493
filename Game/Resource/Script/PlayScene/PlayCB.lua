@@ -6,66 +6,66 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 	elseif sublayertag == CCTag_Layer_02 or sublayertag == CCTag_Layer_08 then
 		-- EnemyStateEvent
 		if selgrouptag == CCTag_Menu_11 then
-			return PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
+			return PSCB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
 		end
 	
 	-- Main menu
 	elseif sublayertag == CCTag_Layer_13 then
 		-- Main menu
 		if selgrouptag == CCTag_Menu_01 then
-			return PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 01 item apup atkup defup
 		elseif selgrouptag == CCTag_Menu_03 then
-			return PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- QuitRestart
 		elseif selgrouptag == CCTag_Menu_04 then
-			return PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 02 modify ...
 		elseif selgrouptag == CCTag_Menu_05 then
-			return PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 03 use get
 		elseif selgrouptag == CCTag_Menu_06 then
-			return PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 03 Delay
 		elseif selgrouptag == CCTag_Menu_09 then
-			return PlayScene_CBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 02 Delay
 		elseif selgrouptag == CCTag_Menu_10 then
-			return PlayScene_CBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- QuitRestart
 		elseif selgrouptag == CCTag_Menu_11 then
-			return PlayScene_CBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 01 Delay
 		elseif selgrouptag == CCTag_Menu_12 then
-			return PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	
 	-- Target/Turn/Mission Over
 	elseif sublayertag == CCTag_Layer_04 then
 		-- Target menu
 		if selgrouptag == CCTag_Menu_04 then
-			return PlayScene_CB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_06 then
-			return PlayScene_CB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_09 then
-			return PlayScene_CBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_11 then
-			return PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
 	
 end
 
-function PlayScene_CB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
+function PSCB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + selgrouptag;
 	
 	game.RemoveChild({toplayer, grouptag+selitemtag});
 	local stateAction = LGlobal_GetData(dataindex);	
-	_PlayScene_StepForward(stateAction);
+	PS_StepForward(stateAction);
 end
 
-function PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_03;
 	game.RemoveChild({toplayer, grouptag});
@@ -75,7 +75,7 @@ function PlayScene_CBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayerta
 	
 end
 
-function PlayScene_CBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_04;
 	game.RemoveChild({toplayer, grouptag});
@@ -84,7 +84,7 @@ function PlayScene_CBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, subla
 	game.SetTouchEnabled(mainmenu, true);
 end
 
-function PlayScene_CBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_05;
 	game.RemoveChild({toplayer, grouptag});
@@ -93,7 +93,7 @@ function PlayScene_CBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayerta
 	game.SetTouchEnabled(mainmenu, true);
 end
 
-function PlayScene_CBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_06;
 	game.RemoveChild({toplayer, grouptag});
@@ -132,7 +132,7 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 	if callitemtag == grouptag+4 then
 		-- TODO: Target
 		if selitemtag == 1 then
-			_PlayScene_DoShowTurnStart(toplayer, toptag, true);
+			PS_DoShowTurnStart(toplayer, toptag, true);
 		--Quit
 		elseif selitemtag == 2 then
 			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
@@ -185,7 +185,7 @@ function PlayScene_CBDispatch_MainMenu_Sub_03(callitemtag, toplayer, toptag, sub
 		
 end
 
-function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local callitemtag, posdata = LGobal_PopPlaySceneMenuData();
 
 	local toquit = true;
@@ -255,7 +255,7 @@ function PlayScene_CB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayerta
 	end
 end
 
-function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local callitemtag, posdata = LGobal_PopPlaySceneMenuData();
 	
 	local toquit = true;
@@ -325,7 +325,7 @@ function PlayScene_CB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, se
 	end
 end
 
-function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local callitemtag, posdata = LGobal_PopPlaySceneMenuData();
 	
 	local toquit = true;
@@ -395,7 +395,7 @@ function PlayScene_CB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, se
 	end
 end
 
-function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	local callitemtag, posdata = LGobal_PopPlaySceneMenuData();
 	
@@ -467,7 +467,7 @@ function PlayScene_CB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, se
 			
 end
 
-function _PlayScene_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
+function PS_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 		
 	local spMenus = {};
 	local spSelectedMenus = {};
@@ -516,7 +516,7 @@ function _PlayScene_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 	
 end
 
-function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
+function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
@@ -565,12 +565,12 @@ function _PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posda
 	
 end
 
-function _PlayScene_CB_Action(toplayer, toptag)
-	_PlayScene_ExitPlanning(toplayer, toptag);
-	_PlayScene_StateFinish(STATE_Planning);
+function PS_CB_Action(toplayer, toptag)
+	PS_ExitPlanning(toplayer, toptag);
+	PS_StateFinish(STATE_Planning);
 end
 
-function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + selgrouptag;
@@ -582,7 +582,7 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 	if selitemtag == 1 then
 	-- action
 	elseif selitemtag == 2 then
-		_PlayScene_CB_Action(toplayer, toptag);
+		PS_CB_Action(toplayer, toptag);
 	-- wait
 	elseif selitemtag == 3 then
 		local plangroup = LGlobal_PlayData.plangroup;
@@ -616,16 +616,16 @@ function PlayScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 		end
 		if bFound then
 			LGlobal_PlayData.plangroup = plangroup+1;
-			_PlayScene_UpdatePlanGroup(toplayer, toptag);
+			PS_UpdatePlanGroup(toplayer, toptag);
 		end
 	-- menu
 	elseif selitemtag == 4 then
-		_PlayScene_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});
+		PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});
 	end
 	
 end
 
-function PlayScene_CB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, delaytime)
+function PSCB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, delaytime)
 	
 	local layertag = toptag + sublayertag;
 	
@@ -652,7 +652,7 @@ function PlayScene_CB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag
 	
 end
 
-function PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_01;
 	
@@ -662,8 +662,8 @@ function PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgro
 	
 	local layernode = game.GetNode({toplayer, layertag});
 	game.SetPosition(layernode, 0, 0);
-	_PlayScene_StateFinish(STATE_ShowTurnStart);
-	_PlayScene_StateFinish(STATE_ShowTarget);
+	PS_StateFinish(STATE_ShowTurnStart);
+	PS_StateFinish(STATE_ShowTarget);
 	
 	layertag = toptag + CCTag_Layer_11;
 	local layernode = game.GetNode({toplayer, layertag});
@@ -674,8 +674,8 @@ function PlayScene_CBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgro
 	
 end
 
-function PlayScene_CB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 end
 
-function PlayScene_CBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 end
