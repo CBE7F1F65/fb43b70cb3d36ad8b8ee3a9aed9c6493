@@ -60,3 +60,13 @@ function LGobal_PopPlaySceneMenuData(itemtag, posdata)
 	end
 	
 end
+
+function LGlobal_PlayScene_RunShakeAction(node, orix, oriy)
+	game.SetPosition(node, orix, oriy);
+	local offset = 15;
+	local time = 0.1;
+	local bezieractionpre = game.ActionBezier(CCAF_To, time, orix+offset, oriy, orix, oriy+offset, orix, oriy);
+	local bezieractionpost = game.ActionBezier(CCAF_To, time, orix-offset, oriy, orix, oriy-offset, orix, oriy);
+	local bezieraction = game.ActionSequence({bezieractionpre, bezieractionpost});
+	game.RunAction(node, bezieraction);
+end

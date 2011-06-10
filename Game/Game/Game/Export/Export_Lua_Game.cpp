@@ -186,6 +186,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("ActionMove", LuaFn_Game_ActionMove);
 	_gameobj.Register("ActionRotate", LuaFn_Game_ActionRotate);
 	_gameobj.Register("ActionScale", LuaFn_Game_ActionScale);
+	_gameobj.Register("ActionBezier", LuaFn_Game_ActionBezier);
 	_gameobj.Register("ActionEase", LuaFn_Game_ActionEase);
 	_gameobj.Register("ActionFade", LuaFn_Game_ActionFade);
 	_gameobj.Register("ActionTint", LuaFn_Game_ActionTint);
@@ -2080,6 +2081,62 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 		break;
 	case M_CCACTIONFLAG_BY:
 		retval = CCScaleBy::actionWithDuration(_time, _scalex, _scaley);
+		break;
+	}
+	node.PDword((DWORD)retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionBezier(LuaState * ls)
+{
+	_ENTERFUNC_LUA(4);
+
+	// flag, time, x1, y1, x2, y2, xe, ye
+
+	int _flag = node.iNextGet();
+	float _time = node.fNextGet();
+	float _x1 = node.fNextGet();
+	float _y1 = node.fNextGet();
+	float _x2 = 0;
+	float _y2 = 0;
+	float _xe = 0;
+	float _ye = 0;
+
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_x2 = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_y2 = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_xe = node.fGet();
+				node.jNextGet();
+				if (node.bhavenext)
+				{
+					_ye = node.fGet();
+				}
+			}
+		}
+	}
+
+	ccBezierConfig c;
+	c.controlPoint_1 = BGlobal::TranslatePosition(_x1, _y1);
+	c.controlPoint_2 = BGlobal::TranslatePosition(_x2, _y2);
+	c.endPosition = BGlobal::TranslatePosition(_xe, _ye);
+
+	CCAction * retval = NULL;
+	switch (_flag)
+	{
+	case M_CCACTIONFLAG_TO:
+		retval = CCBezierTo::actionWithDuration(_time, c);
+		break;
+	case M_CCACTIONFLAG_BY:
+		retval = CCBezierBy::actionWithDuration(_time, c);
 		break;
 	}
 	node.PDword((DWORD)retval);

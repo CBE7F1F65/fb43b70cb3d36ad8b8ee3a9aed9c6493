@@ -7,6 +7,12 @@ function PS_EnemyAttack(toplayer, toptag, index, etype, elayer)
 	if hpregainatk > 0 then
 		-- Add Enemy HP
 	end
+	
+	-- Animation
+	if atk > 0 then
+		LGlobal_PlayScene_RunShakeAction(toplayer, 0, 0);
+	end
+	
 end
 
 function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)

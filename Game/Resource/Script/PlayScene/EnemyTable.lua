@@ -30,7 +30,7 @@ LGlobal_EnemyPosTable	=
 			--Turn1
 			-- xorig, yorig, type, angle
 			{
-				{34, 300, 8, 4600},
+				{4, 300, 8, 4600},
 				{650, 600, 8, 20700},
 			},
 			--Turn2

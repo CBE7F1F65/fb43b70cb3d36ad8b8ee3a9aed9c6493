@@ -1,5 +1,3 @@
-
-
 function TitleScene_CB_Online(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	local toquit = true;

@@ -96,6 +96,7 @@ CCPSTL_Plan = CCTag_Layer_11;
 	CCPSTM_Plan_CirclesFeather = CCTag_Menu_05;
 	CCPSTM_Plan_DotsFeather = CCTag_Menu_06;
 	CCPSTM_Plan_XFeather = CCTag_Menu_10;
+	CCPSTM_Plan_CallNode = CCTag_Menu_11;
 CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_Main = CCTag_Menu_01;
 	CCPSTM_Menu_PlanGroup = CCTag_Menu_02;

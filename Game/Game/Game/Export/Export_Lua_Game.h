@@ -100,6 +100,7 @@ public:
 	static int LuaFn_Game_ActionMove(LuaState * ls);
 	static int LuaFn_Game_ActionRotate(LuaState * ls);
 	static int LuaFn_Game_ActionScale(LuaState * ls);
+	static int LuaFn_Game_ActionBezier(LuaState * ls);
 	static int LuaFn_Game_ActionEase(LuaState * ls);
 	static int LuaFn_Game_ActionFade(LuaState * ls);
 	static int LuaFn_Game_ActionTint(LuaState * ls);

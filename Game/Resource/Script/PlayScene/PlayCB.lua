@@ -8,6 +8,13 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 		if selgrouptag == CCPSTM_Enemy_CallNode then
 			return PSCB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
 		end
+		
+	-- Plan
+	elseif sublayertag == CCPSTL_Plan then
+		-- PlanStateEvent
+		if selgrouptag == CCPSTM_Plan_CallNode then
+			return PSCB_PlanStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
+		end
 	
 	-- Main menu
 	elseif sublayertag == CCPSTL_Menu then
@@ -57,6 +64,15 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 end
 
 function PSCB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
+	local layertag = toptag + sublayertag;
+	local grouptag = layertag + selgrouptag;
+	
+	game.RemoveChild({toplayer, grouptag+selitemtag});
+	local stateAction = LGlobal_GetData(dataindex);	
+	PS_StepForward(stateAction);
+end
+
+function PSCB_PlanStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + selgrouptag;
 	
