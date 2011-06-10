@@ -1,41 +1,41 @@
 function TitleScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
-	if sublayertag == CCTag_Layer_14 then
+	if sublayertag == CCSTL_Debug then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 	
 	-- Main menu
-	elseif sublayertag == CCTag_Layer_01 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCTSTL_Menu then
+		if selgrouptag == CCTSTM_Menu_Main then
 			return TitleScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCTSTM_Menu_MainDelay then
 			return TitleScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	-- HiScore
-	elseif sublayertag == CCTag_Layer_03 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCTSTL_HiScore then
+		if selgrouptag == CCTSTM_HiScore_Menu then
 			return TitleScene_CB_HiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_04 then
+		elseif selgrouptag == CCTSTM_HiScore_OKCancel then
 			return TitleScene_CB_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_11 then
+		elseif selgrouptag == CCTSTM_HiScore_OKCancelDelay then
 			return TitleScene_CBDelay_OKCancelHiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCTSTM_HiScore_MenuDelay then
 			return TitleScene_CBDelay_HiScore(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	--Option
-	elseif sublayertag == CCTag_Layer_05 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCTSTL_Option then
+		if selgrouptag == CCTSTM_Option_Menu then
 			return TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_04 then
+		elseif selgrouptag == CCTSTM_Option_OKCancel then
 			return TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_11 then
+		elseif selgrouptag == CCTSTM_Option_OKCancelDelay then
 			return TitleScene_CBDelay_OKCancelOption(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCTSTM_Option_MenuDelay then
 			return TitleScene_CBDelay_Option(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	-- Online
-	elseif sublayertag == CCTag_Layer_09 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCTSTL_Online then
+		if selgrouptag == CCTSTM_Online_Menu then
 			return TitleScene_CB_Online(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCTSTM_Online_MenuDelay then
 			return TitleScene_CBDelay_Online(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
@@ -85,7 +85,7 @@ function TitleScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroup
 			game.RunAction(menus[i+1], selectedaction);
 			
 			local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTSTM_Menu_MainDelay+i+1});
 			game.RunAction(callnode, callfuncaction);
 			
 		end

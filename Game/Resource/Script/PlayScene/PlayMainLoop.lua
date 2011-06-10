@@ -133,8 +133,10 @@ function PS_StepForward(_stateAction)
 		if stateST == STATE_ST_Progressing then
 			stateST = STATE_ST_StepForward;
 			game.SetState(stateST, stateAction, stateStep);
+			return true;
 		end
 	end
+	return false;
 end
 
 function PS_StateFinish(_stateAction)
@@ -142,5 +144,7 @@ function PS_StateFinish(_stateAction)
 	if stateAction == _stateAction then
 		stateST = STATE_ST_Finished;
 		game.SetState(stateST, stateAction, stateStep);
+		return true;
 	end
+	return false;
 end

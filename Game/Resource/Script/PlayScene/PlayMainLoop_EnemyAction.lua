@@ -46,7 +46,7 @@ function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn
 	local doaction = true;
 	local doadvance = true;
 	
-	local layertag = toptag + CCTag_Layer_02;
+	local layertag = toptag + CCPSTL_Enemy;
 	local itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
 		
 	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, 0);
@@ -82,7 +82,7 @@ function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn
 
 	local dataindex = LGlobal_SaveData(state);
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime, dataindex);
-	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
 	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodegrouptag+index+1});
 	game.RunAction(callnode, callfuncaction);
 	return false;

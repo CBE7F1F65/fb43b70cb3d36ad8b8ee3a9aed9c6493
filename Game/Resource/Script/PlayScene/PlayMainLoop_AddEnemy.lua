@@ -1,6 +1,6 @@
 function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer)
 
-	local layertag = toptag + CCTag_Layer_02;
+	local layertag = toptag + CCPSTL_Enemy;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
 	local grouptag = layertag + menugroup;
 	
@@ -46,7 +46,7 @@ function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
 	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);
-	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
 	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
 	game.RunAction(callnode, callfuncaction);
 	

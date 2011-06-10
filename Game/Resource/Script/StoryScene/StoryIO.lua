@@ -20,12 +20,12 @@ function StoryScene_OnInit(toplayer, toptag)
 	local layertag = toptag;
 	
 	-- bg layer
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 		
 	-- menu layer
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCSSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSSTL_Menu, layertag});
 			
 end
 
@@ -37,8 +37,8 @@ function _StoryScene_AddStoryItems(toplayer, toptag)
 	local xcen = 800;
 	local y = 120
 	
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCSSTL_Menu;
+	local grouptag = layertag + CCSSTM_Menu_Main;
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
@@ -47,7 +47,7 @@ function _StoryScene_AddStoryItems(toplayer, toptag)
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCSSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.01;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -65,7 +65,7 @@ function _StoryScene_AddStoryItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 --	end
-	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCSSTM_Menu_Main, grouptag});
 end
 
 function StoryScene_OnEnterTDF(toplayer, toptag)

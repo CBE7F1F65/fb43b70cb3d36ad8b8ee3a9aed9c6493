@@ -1,7 +1,7 @@
 function PS_SetMenuEnable(toplayer, toptag, bEnable)
 	
-	local layertag = toptag + CCTag_Layer_13;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_Menu;
+	local grouptag = layertag + CCPSTM_Menu_Main;
 	
 	local menunode = game.GetNode({toplayer, grouptag});
 	game.SetMenuEnabled(menunode, bEnable);
@@ -12,8 +12,8 @@ function PS_SetHPAPSP(toplayer, toptag)
 	
 	local hp, ap, sp = game.GetHPAPSP();
 	
-	local layertag = toptag + CCTag_Layer_07;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_HPAPSP;
+	local grouptag = layertag + CCPSTM_HPAPSP_HPAP;
 	
 	local hpbar = game.GetNode({toplayer, grouptag+1});
 	local apbar = game.GetNode({toplayer, grouptag+2});
@@ -36,7 +36,7 @@ function PS_SetHPAPSP(toplayer, toptag)
 		game.RunAction(apbar, apscaleaction);
 	end
 	
-	local grouptag = layertag + CCTag_Menu_02;
+	local grouptag = layertag + CCPSTM_HPAPSP_SP;
 	
 	if LGlobal_PlayData.nowsp ~= sp then
 		local nowsp = LGlobal_PlayData.nowsp;
@@ -62,8 +62,8 @@ end
 
 function PS_SetTouchLayerRect(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_06;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_Touch;
+	local grouptag = layertag + CCPSTM_Touch_Layer;
 	
 	local touchlayer = game.GetNode({toplayer, grouptag});
 	

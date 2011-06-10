@@ -1,55 +1,55 @@
 function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
-	if sublayertag == CCTag_Layer_14 then
+	if sublayertag == CCSTL_Debug then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 	
 	-- Enemy
-	elseif sublayertag == CCTag_Layer_02 or sublayertag == CCTag_Layer_08 then
+	elseif sublayertag == CCPSTL_Enemy or sublayertag == CCPSTL_EnemyOnSide then
 		-- EnemyStateEvent
-		if selgrouptag == CCTag_Menu_11 then
+		if selgrouptag == CCPSTM_Enemy_CallNode then
 			return PSCB_EnemyStateEvent(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex);
 		end
 	
 	-- Main menu
-	elseif sublayertag == CCTag_Layer_13 then
+	elseif sublayertag == CCPSTL_Menu then
 		-- Main menu
-		if selgrouptag == CCTag_Menu_01 then
+		if selgrouptag == CCPSTM_Menu_Main then
 			return PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 01 item apup atkup defup
-		elseif selgrouptag == CCTag_Menu_03 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel01 then
 			return PSCB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- QuitRestart
-		elseif selgrouptag == CCTag_Menu_04 then
+		elseif selgrouptag == CCPSTM_Menu_QuitRestart then
 			return PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 02 modify ...
-		elseif selgrouptag == CCTag_Menu_05 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel02 then
 			return PSCB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 03 use get
-		elseif selgrouptag == CCTag_Menu_06 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel03 then
 			return PSCB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 03 Delay
-		elseif selgrouptag == CCTag_Menu_09 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel03Delay then
 			return PSCBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 02 Delay
-		elseif selgrouptag == CCTag_Menu_10 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel02Delay then
 			return PSCBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- QuitRestart
-		elseif selgrouptag == CCTag_Menu_11 then
+		elseif selgrouptag == CCPSTM_Menu_QuitRestartDelay then
 			return PSCBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		-- Sub 01 Delay
-		elseif selgrouptag == CCTag_Menu_12 then
+		elseif selgrouptag == CCPSTM_Menu_SubLevel01Delay then
 			return PSCBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	
 	-- Target/Turn/Mission Over
-	elseif sublayertag == CCTag_Layer_04 then
+	elseif sublayertag == CCPSTL_Message then
 		-- Target menu
-		if selgrouptag == CCTag_Menu_04 then
+		if selgrouptag == CCPSTM_Message_TargetMenu then
 			return PSCB_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_06 then
+		elseif selgrouptag == CCPSTM_Message_OverMenu then
 			return PSCB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_09 then
+		elseif selgrouptag == CCPSTM_Message_OverMenuDelay then
 			return PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_11 then
+		elseif selgrouptag == CCPSTM_Message_TargetMenuDelay then
 			return PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
@@ -67,45 +67,45 @@ end
 
 function PSCBDelay_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_03;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel01;
 	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 	game.SetTouchEnabled(mainmenu, true);
 	
 end
 
 function PSCBDelay_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_04;
+	local grouptag = layertag + CCPSTM_Menu_QuitRestart;
 	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
 function PSCBDelay_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_05;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel02;
 	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
 function PSCBDelay_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_06;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel03;
 	game.RemoveChild({toplayer, grouptag});
 	
-	local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 	game.SetTouchEnabled(mainmenu, true);
 end
 
 function PlayScene_CBDispatch_MainMenu_Sub_01(callitemtag, toplayer, toptag, sublayertag, selitemtag)
 	
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCPSTM_Menu_Main;
 	
 	-- Command
 	if callitemtag == grouptag+1 then
@@ -127,12 +127,13 @@ end
 function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag, sublayertag, selitemtag)
 	
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCPSTM_Menu_Main;
 	-- Menu
 	if callitemtag == grouptag+4 then
 		-- TODO: Target
 		if selitemtag == 1 then
 			PS_ShowTurnStartAndTarget(toplayer, toptag, true);
+			PS_SetMenuEnable(toplayer, toptag, false);
 		--Quit
 		elseif selitemtag == 2 then
 			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
@@ -150,7 +151,7 @@ function PlayScene_CBDispatch_MainMenu_Sub_02(callitemtag, toplayer, toptag, sub
 	
 	local layertag = toptag + sublayertag;
 	-- Item
-	local grouptag = layertag + CCTag_Menu_03;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel01;
 	
 	if callitemtag == grouptag+1 then
 		-- GetFromGame;(Item List)
@@ -170,7 +171,7 @@ function PlayScene_CBDispatch_MainMenu_Sub_03(callitemtag, toplayer, toptag, sub
 	
 	local layertag = toptag + sublayertag;
 	-- Item->...
-	local grouptag = layertag + CCTag_Menu_05;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel02;
 	
 	local itemindex = callitemtag-(grouptag+1);
 		-- use
@@ -247,10 +248,10 @@ function PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgr
 	
 	if toquit then
 		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+selitemtag+1});
+		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Menu_QuitRestartDelay+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -317,10 +318,10 @@ function PSCB_MainMenu_Sub_01(itemtag, toplayer, toptag, sublayertag, selgroupta
 	
 	if toquit then
 		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_12+selitemtag+1});
+		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Menu_SubLevel01Delay+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -387,10 +388,10 @@ function PSCB_MainMenu_Sub_02(itemtag, toplayer, toptag, sublayertag, selgroupta
 	
 	if toquit then
 		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_10+selitemtag+1});
+		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Menu_SubLevel02Delay+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 end
@@ -458,10 +459,10 @@ function PSCB_MainMenu_Sub_03(itemtag, toplayer, toptag, sublayertag, selgroupta
 	
 	if toquit then
 		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_09+selitemtag+1});
+		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Menu_SubLevel03Delay+selitemtag+1});
 		game.RunAction(callnode, callfuncaction);
 		
-		local mainmenu = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+		local mainmenu = game.GetNode({toplayer, layertag+CCPSTM_Menu_Main});
 		game.SetTouchEnabled(mainmenu, false);
 	end
 			
@@ -472,7 +473,7 @@ function PS_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_06;
+	local grouptag = layertag + CCPSTM_Menu_SubLevel03;
 
 	local xorig = posdata[1];
 	local yorigcen = posdata[2];
@@ -488,7 +489,7 @@ function PS_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 		spMenus[i+1] = game.CreateSprite(SI_GUISub_Use+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Use_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCTag_Menu_06, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCPSTM_Menu_SubLevel03, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
@@ -507,9 +508,9 @@ function PS_CB_AddUseGet(toplayer, toptag, layertag, itemtag, posdata)
 		
 	end
 	
-	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_06, grouptag+3);
+	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCPSTM_Menu_SubLevel03, grouptag+3);
 	
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_06, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCPSTM_Menu_SubLevel03, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 	LGobal_PushPlaySceneMenuData(itemtag, posdata);
@@ -521,7 +522,7 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_04;
+	local grouptag = layertag + CCPSTM_Menu_QuitRestart;
 
 	local xorig = posdata[1];
 	local yorigcen = posdata[2];
@@ -537,7 +538,7 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 		spMenus[i+1] = game.CreateSprite(SI_GUISub_Target+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_GUISub_Target_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCTag_Menu_04, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCPSTM_Menu_QuitRestart, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
@@ -556,9 +557,9 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 		
 	end
 	
-	menus[4] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+4);
+	menus[4] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCPSTM_Menu_QuitRestart, grouptag+4);
 	
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCPSTM_Menu_QuitRestart, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 	LGobal_PushPlaySceneMenuData(itemtag, posdata);
@@ -650,7 +651,7 @@ function PSCB_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrou
 	end
 	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime);
-	local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+selitemtag+1});
+	local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Message_TargetMenuDelay+selitemtag+1});
 
 	game.RunAction(callnode, callfuncaction);
 	
@@ -658,23 +659,27 @@ end
 
 function PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCPSTM_Message_TargetBoard;
 	
 	game.RemoveAllChildren({toplayer, grouptag});
-	grouptag = layertag + CCTag_Menu_04;
+	grouptag = layertag + CCPSTM_Message_TargetMenu;
 	game.RemoveChild({toplayer, grouptag});
 	
 	local layernode = game.GetNode({toplayer, layertag});
 	game.SetPosition(layernode, 0, 0);
-	PS_StateFinish(STATE_ShowTurnStart);
-	PS_StateFinish(STATE_ShowTarget);
 	
-	layertag = toptag + CCTag_Layer_11;
+	local bInShowTurnStart = PS_StateFinish(STATE_ShowTurnStart);
+	
+	layertag = toptag + CCPSTL_Plan;
 	local layernode = game.GetNode({toplayer, layertag});
 	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
 	local tintaction = game.ActionTint(CCAF_To, 0xffffff, LConst_ItemVanishTime);
 	local spaction = game.ActionSpawn({fadeaction, tintaction});
 	game.RunAction(layernode, spaction);
+	
+	if not bInShowTurnStart then
+		PS_SetMenuEnable(toplayer, toptag, true);
+	end
 	
 end
 

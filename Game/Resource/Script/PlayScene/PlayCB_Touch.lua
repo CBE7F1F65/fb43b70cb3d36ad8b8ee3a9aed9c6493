@@ -41,8 +41,8 @@ end
 
 function _PSCB_NotEnoughAPAnimation(toplayer, toptag, touchlayer, x, y, weaponindex, delaytime)
 	-- TODO
-	local layertag = toptag + CCTag_Layer_11;
-	local grouptag = layertag + CCTag_Menu_10;
+	local layertag = toptag + CCPSTL_Plan;
+	local grouptag = layertag + CCPSTM_Plan_XFeather;
 	local spnode = game.GetNode({toplayer, grouptag});
 	if DtoI(spnode) ~= NULL then
 		return;
@@ -95,8 +95,8 @@ end
 function _PSCB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 
 	local overlaylayer = game.GetOverlayLayer(toplayer);
-	local layertag = ktag_OverlayLayer+CCTag_Layer_01;
-	local grouptag = layertag+CCTag_Menu_01;
+	local layertag = ktag_OverlayLayer+CCSTL_BG;
+	local grouptag = layertag;
 	
 	if LGlobal_PlayData.bZoomed == false then
 		

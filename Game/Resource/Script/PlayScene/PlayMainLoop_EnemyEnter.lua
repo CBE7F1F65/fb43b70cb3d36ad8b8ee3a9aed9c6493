@@ -16,7 +16,7 @@ function PS_SidePosToScenePos(x, y, angle)
 end
 
 function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
-	local layertag = toptag + CCTag_Layer_08;
+	local layertag = toptag + CCPSTL_EnemyOnSide;
 	local grouptag = layertag + CCTag_MenuSub_01*(nowturn+1);
 	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
 	if index >= enemyonsidecount then
@@ -45,7 +45,7 @@ function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, 
 		
 	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
 	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
 	game.RunAction(callnode, callfuncaction);
 	
@@ -71,7 +71,7 @@ function PS_EnemyEnter(toplayer, toptag, index)
 end
 
 function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn)
-	local layertag = toptag + CCTag_Layer_08;
+	local layertag = toptag + CCPSTL_EnemyOnSide;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
 	local grouptag = layertag + menugroup;
 	
@@ -127,7 +127,7 @@ function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowtur
 	
 	local dataindex = LGlobal_SaveData(STATE_AddEnemy);	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-	local callnodegrouptag = layertag + CCTag_Menu_11;
+	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
 	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
 	game.RunAction(callnode, callfuncaction);
 	

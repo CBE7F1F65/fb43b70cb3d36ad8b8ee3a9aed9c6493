@@ -1,17 +1,17 @@
 function HelpScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
-	if sublayertag == CCTag_Layer_14 then
+	if sublayertag == CCSTL_Debug then
 		if selgrouptag == CCTag_Debug_ReloadMenu then
 			return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 		end
 		
-	elseif sublayertag == CCTag_Layer_01 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCHSTL_Menu then
+		if selgrouptag == CCHSTM_Menu_Main then
 			return HelpScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_02 then
+		elseif selgrouptag == CCHSTM_Menu_Category then
 			return HelpScene_CB_CatagoryMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_13 then
+		elseif selgrouptag == CCHSTM_Menu_CategoryDelay then
 			return HelpScene_CBDelay_CatagoryMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCHSTM_Menu_MainDelay then
 			return HelpScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
@@ -56,7 +56,7 @@ function HelpScene_CB_CatagoryMenu(itemtag, toplayer, toptag, sublayertag, selgr
 			game.RunAction(menus[i+1], selectedaction);
 			
 			local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_13+i+1});
+			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCHSTM_Menu_CategoryDelay+i+1});
 			game.RunAction(callnode, callfuncaction);
 			
 		end
@@ -109,7 +109,7 @@ function HelpScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroupt
 			game.RunAction(menus[i+1], selectedaction);
 			
 			local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCHSTM_Menu_MainDelay+i+1});
 			game.RunAction(callnode, callfuncaction);
 			
 		end

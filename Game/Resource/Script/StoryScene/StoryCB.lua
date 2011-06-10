@@ -1,13 +1,13 @@
 function StoryScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
-	if sublayertag == CCTag_Layer_14 then
+	if sublayertag == CCSTL_Debug then
 		if selgrouptag == CCTag_Debug_ReloadMenu then
 			return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 		end
 		
-	elseif sublayertag == CCTag_Layer_01 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCSSTL_Menu then
+		if selgrouptag == CCSSTM_Menu_Main then
 			return StoryScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCSSTM_Menu_MainDelay then
 			return StoryScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
@@ -53,7 +53,7 @@ function StoryScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroup
 			game.RunAction(menus[i+1], selectedaction);
 			
 			local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+			local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCSSTM_Menu_MainDelay+i+1});
 			game.RunAction(callnode, callfuncaction);
 			
 		end

@@ -1,7 +1,7 @@
 
 function _TitleScene_AddOnlineItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_09;
+	local layertag = toptag + CCTSTL_Online;
 	
 	local spOnlineTitle = game.CreateSprite(SI_TUI_Online_Title, {340, 460});
 	game.AddSpriteChild(spOnlineTitle, {toplayer, layertag});
@@ -14,7 +14,7 @@ function _TitleScene_AddOnlineItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCTSTM_Online_Menu;
 	for i=0, 2 do
 		local y = ybegin - i*yoffset;
 		local normalsiid = SI_TUI_LeaderBoard + i*2;
@@ -27,7 +27,7 @@ function _TitleScene_AddOnlineItems(toplayer, toptag)
 		spMenus[i+1] = game.CreateSprite(normalsiid);
 		spSelectedMenus[i+1] = game.CreateSprite(selectedsiid);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_Online_Menu, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -45,7 +45,7 @@ function _TitleScene_AddOnlineItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_Online_Menu, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 		
 end
@@ -55,6 +55,6 @@ function _TitleScene_EnterOnlineLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveOnlineLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_09;
+	local layertag = toptag + CCTSTL_Online;
 	game.RemoveAllChildren({toplayer, layertag});
 end

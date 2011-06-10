@@ -20,19 +20,19 @@ function HelpScene_OnInit(toplayer, toptag)
 	local layertag = toptag;
 	
 	-- bg layer
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 	
 	local spHelp = game.CreateSprite(SI_HelpScene, {480, 320});
 	game.AddSpriteChild(spHelp, {toplayer, layertag});
 		
 	-- menu layer
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCHSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCHSTL_Menu, layertag});
 	
 	-- sub layer
-	layertag = toptag + CCTag_Layer_04;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_04, layertag});
+	layertag = toptag + CCHSTL_Sub;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCHSTL_Sub, layertag});
 end
 
 function HelpScene_OnEnter(toplayer, toptag)
@@ -50,8 +50,8 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCHSTL_Menu;
+	local grouptag = layertag + CCHSTM_Menu_Main;
 	for i=0, 3 do
 		local y = ybegin - i*yoffset;
 		if i == 3 then
@@ -60,7 +60,7 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 		
 		spMenus[i+1] = game.CreateSprite(SI_HUI_Back+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_HUI_Back_Down+i*2);
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCHSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 		
 		local fadetime = 0.3+i*0.01;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -83,7 +83,7 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 		end
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCHSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
@@ -98,8 +98,8 @@ function _HelpScene_AddHelpCatagoryItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_02;
+	local layertag = toptag + CCHSTL_Menu;
+	local grouptag = layertag + CCHSTM_Menu_Category;
 	for i=0, 4 do
 		
 		local enabled = true;
@@ -116,7 +116,7 @@ function _HelpScene_AddHelpCatagoryItems(toplayer, toptag)
 			spMenus[i+1] = game.CreateSprite(SI_HUI_Locked);
 			spSelectedMenus[i+1] = game.CreateSprite(SI_HUI_Locked_Down);
 		end
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_02, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCHSTM_Menu_Category, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 		
 		if not enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);
@@ -138,7 +138,7 @@ function _HelpScene_AddHelpCatagoryItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_02, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCHSTM_Menu_Category, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 end
 
@@ -147,14 +147,14 @@ function _HelpScene_EnterCatagoryMenu(toplayer, toptag)
 end
 
 function _HelpScene_LeaveCatagoryMenu(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_02;
+	local layertag = toptag + CCHSTL_Menu;
+	local grouptag = layertag + CCHSTM_Menu_Category;
 	game.RemoveChild({toplayer, grouptag});
 end
 
 function _HelpScene_EnterSubLayer(toplayer, toptag, helptype, helpindex)
-	layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	layertag = toptag + CCHSTL_Menu;
+	local grouptag = layertag + CCHSTM_Menu_Main;
 	for i=0, 2 do
 		local menuitem = game.GetNode({toplayer, grouptag+i+1});
 		game.SetTouchEnabled(menuitem, true);
@@ -165,11 +165,11 @@ end
 
 function _HelpScene_LeaveSubLayer(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_04;
+	local layertag = toptag + CCHSTL_Sub;
 	game.RemoveAllChildren({toplayer, layertag});
 	
-	layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	layertag = toptag + CCHSTL_Menu;
+	local grouptag = layertag + CCHSTM_Menu_Main;
 	for i=0, 2 do
 		local menuitem = game.GetNode({toplayer, grouptag+i+1});
 		game.SetTouchEnabled(menuitem, false);
@@ -209,7 +209,7 @@ function _HelpScene_ChangeSubLayerItems(toplayer, toptag, helptype, helpindex)
 		helptype, helpindex = game.GetHelpAccessInfo();
 	end
 	
-	local layertag = toptag + CCTag_Layer_04;
+	local layertag = toptag + CCHSTL_Sub;
 	game.RemoveAllChildren({toplayer, layertag});
 	
 end

@@ -1,21 +1,21 @@
 function PS_SelfAction(toplayer, toptag, index)
 	-- Check all self action done
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
-	local layertag = toptag+CCTag_Layer_11;
-	local grouptag = layertag+CCTag_Menu_01;
+	local layertag = toptag+CCPSTL_Plan;
+	local grouptag = layertag+CCPSTM_Plan_RenderTexture;
 	if index == 0 then
-		grouptag = layertag+CCTag_Menu_04;
+		grouptag = layertag+CCPSTM_Plan_LinesFeather;
 		local groupnode = game.GetNode({toplayer, grouptag});
 		game.RemoveAllChildren(groupnode);
-		grouptag = layertag+CCTag_Menu_05;
+		grouptag = layertag+CCPSTM_Plan_CirclesFeather;
 		local groupnode = game.GetNode({toplayer, grouptag});
 		game.RemoveAllChildren(groupnode);
-		grouptag = layertag+CCTag_Menu_06;
+		grouptag = layertag+CCPSTM_Plan_DotsFeather;
 		local groupnode = game.GetNode({toplayer, grouptag});
 		game.RemoveAllChildren(groupnode);
 	end
 	if true then
-		grouptag = layertag+CCTag_Menu_01;
+		grouptag = layertag+CCPSTM_Plan_RenderTexture;
 		for i=1, LConst_PlanGroupMax do
 			local rendertextureitem = game.GetNode({toplayer, grouptag+i});
 			game.RenderTextureBegin(rendertextureitem, true);

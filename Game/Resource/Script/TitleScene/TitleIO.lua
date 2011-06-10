@@ -20,37 +20,37 @@ function TitleScene_OnInit(toplayer, toptag)
 	local layertag = toptag;
 	
 	-- bg layer
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 	
 	local spTitle = game.CreateSprite(SI_TitleScene, {480, 320});
 	game.AddSpriteChild(spTitle, {toplayer, layertag});
 	
 	-- menu layer
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCTSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_Menu, layertag});
 	
 	-- hiscore layer
-	layertag = toptag + CCTag_Layer_03;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_03, layertag});
+	layertag = toptag + CCTSTL_HiScore;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_HiScore, layertag});
 	
 	-- Option layer
-	layertag = toptag + CCTag_Layer_05;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_05, layertag});
+	layertag = toptag + CCTSTL_Option;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_Option, layertag});
 	-- BGMVol touch layer
-	layertag = toptag + CCTag_Layer_06;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_06, layertag});
+	layertag = toptag + CCTSTL_BGMTouch;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_BGMTouch, layertag});
 	-- SEVol touch layer
-	layertag = toptag + CCTag_Layer_07;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_07, layertag});
+	layertag = toptag + CCTSTL_SETouch;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_SETouch, layertag});
 	
 	-- Online layer
-	layertag = toptag + CCTag_Layer_09;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_07, layertag});
+	layertag = toptag + CCTSTL_Online;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_Online, layertag});
 	
 	-- input layer
-	layertag = toptag + CCTag_Layer_13;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
+	layertag = toptag + CCTSTL_Input;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCTSTL_Input, layertag});
 	
 	
 end
@@ -68,15 +68,15 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCTSTL_Menu;
+	local grouptag = layertag + CCTSTM_Menu_Main;
 	for i=0, 4 do
 		local y = ybegin - i*yoffset;
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -94,13 +94,13 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
 
 function _TitleScene_RunInputHintAction(toplayer, layertag)
-	local spritehint = game.GetNode({toplayer, layertag+CCTag_Menu_13});
+	local spritehint = game.GetNode({toplayer, layertag+CCTSTM_Input_Hint});
 	local inputhintactionpre = game.ActionTint(CCAF_To, 0xff7f7f, 0.3);
 	local inputhintactionpost = game.ActionTint(CCAF_To, 0xffffff, 0.5);
 	local inputhintaction = game.ActionSequence({inputhintactionpre, inputhintactionpost});
@@ -108,7 +108,7 @@ function _TitleScene_RunInputHintAction(toplayer, layertag)
 end
 
 function _TitleScene_StopInputHintAction(toplayer, layertag)
-	local spritehint = game.GetNode({toplayer, layertag+CCTag_Menu_13});
+	local spritehint = game.GetNode({toplayer, layertag+CCTSTM_Input_Hint});
 	game.StopAction(spritehint);
 	game.SetColor(spritehint, global.ARGB(0xff, 0xffffff));
 end
@@ -121,7 +121,7 @@ function _TitleScene_AddInputLayer(toplayer, toptag)
 	local height = 50;
 	local x = xcen - width / 2;
 	local y = ycen - height / 2;
-	local layertag = toptag + CCTag_Layer_13;
+	local layertag = toptag + CCTSTL_Input;
 	
 	local text, inputmax = game.GetUsername();
 	local defaulttext = "Your Name";
@@ -133,10 +133,10 @@ function _TitleScene_AddInputLayer(toplayer, toptag)
 	local inputlayer = game.AddInputLayerChild(
 			{toplayer, {x, y, width, height}, text, "",  LConst_FontSize, inputmax, defaulttext},
 			{toplayer, layertag},
-			{0, 0, CCTag_Layer_13, layertag+CCTag_Menu_01}
+			{0, 0, CCTSTL_Input, layertag+CCTSTM_Input_Layer}
 		);
 		
-	local spritehint = game.CreateSprite(SI_TUI_InputHint, {480, 450}, layertag+CCTag_Menu_13);
+	local spritehint = game.CreateSprite(SI_TUI_InputHint, {480, 450}, layertag+CCTSTM_Input_Hint);
 	game.AddSpriteChild(spritehint, {toplayer, layertag});
 	if text == "" then
 		_TitleScene_RunInputHintAction(toplayer, layertag);
@@ -145,15 +145,15 @@ function _TitleScene_AddInputLayer(toplayer, toptag)
 end
 
 function _TitleScene_PauseMenuLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCTSTL_Menu;
+	local grouptag = layertag + CCTSTM_Menu_Main;
 	local menulayer = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menulayer, false);
 end
 
 function _TitleScene_ResumeMenuLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCTSTL_Menu;
+	local grouptag = layertag + CCTSTM_Menu_Main;
 	local menulayer = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menulayer, true);
 end
@@ -166,9 +166,9 @@ function _TitleScene_EnterMainLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveMainLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
+	local layertag = toptag + CCTSTL_Menu;
 	game.RemoveAllChildren({toplayer, layertag});
-	local layertag = toptag + CCTag_Layer_13;
+	local layertag = toptag + CCTSTL_Input;
 	game.RemoveAllChildren({toplayer, layertag});
 end
 

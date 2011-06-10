@@ -114,8 +114,10 @@ bool BGlobal::PointInRect(CCPoint point, CCRect rect)
 
 bool BGlobal::PointInRect(float x1, float y1, float x2, float y2, float rh2, float rv2)
 {
-	if (x1 >= x2-rh2 && x1 <= x2+rh2 &&
-		y1 >= y2-rv2 && y2 <= y2+rv2)
+	if (x1 >= x2-rh2 && 
+		x1 <= x2+rh2 &&
+		y1 >= y2-rv2 && 
+		y1 <= y2+rv2)
 	{
 		return true;
 	}
@@ -125,21 +127,37 @@ bool BGlobal::PointInRect(float x1, float y1, float x2, float y2, float rh2, flo
 bool BGlobal::CollisionRectangleRectangle(float x1, float y1, float rh1, float rv1, float x2, float y2, float rh2, float rv2)
 {
 	// A not in B
-	if (PointInRect(x1-rh1, y1-rh1, x2, y2, rh2, rv2))
+	if (PointInRect(
+		x1-rh1, 
+		y1-rh1, 
+		x2, y2, 
+		rh2, rv2))
 	{
 		return true;
 	}
-	if (PointInRect(x1-rh1, y1+rh1, x2, y2, rh2, rv2))
+	if (PointInRect(
+		x1-rh1, 
+		y1+rh1, 
+		x2, y2, 
+		rh2, rv2))
 	{
 		return true;
 	}
-	if (PointInRect(x1+rh1, y1-rh1, x2, y2, rh2, rv2))
+	if (PointInRect(
+		x1+rh1, 
+		y1-rh1, 
+		x2, y2, 
+		rh2, rv2))
 	{
 		return true;
 	}
 
 	// A in B
-	if (PointInRect(x2+rh2, y2+rh2, x1, y1, rh1, rv1))
+	if (PointInRect(
+		x2+rh2, 
+		y2+rh2, 
+		x1, y1, 
+		rh1, rv1))
 	{
 		return true;
 	}
@@ -149,7 +167,8 @@ bool BGlobal::CollisionRectangleRectangle(float x1, float y1, float rh1, float r
 
 bool BGlobal::CollisionCircleCircle(float x1, float y1, float r1, float x2, float y2, float r2)
 {
-	if (fabsf(x2-x1)>r1+r2 || fabsf(y2-y1)>r1+r2)
+	if (fabsf(x2-x1)>r1+r2 || 
+		fabsf(y2-y1)>r1+r2)
 	{
 		return false;
 	}
@@ -162,12 +181,15 @@ bool BGlobal::CollisionCircleCircle(float x1, float y1, float r1, float x2, floa
 
 bool BGlobal::CollisionEllipseCircle(float x1, float y1, float rh1, float rv1, float x2, float y2, float r2)
 {
-	if (fabsf(x2-x1)>rh1+r2 || fabsf(y2-y1)>rv1+r2)
+	if (fabsf(x2-x1)>rh1+r2 || 
+		fabsf(y2-y1)>rv1+r2)
 	{
 		return false;
 	}
 
-	if ((x2-x1)*(x2-x1)*(rv1+r2)*(rv1+r2) + (y2-y1)*(y2-y1)*(rh1+r2)*(rh1+r2) <= (rh1+r2)*(rh1+r2)*(rv1+r2)*rv1+r2)
+	if ((x2-x1)*(x2-x1)*(rv1+r2)*(rv1+r2) + 
+		(y2-y1)*(y2-y1)*(rh1+r2)*(rh1+r2) <= 
+		(rh1+r2)*(rh1+r2)*(rv1+r2)*rv1+r2)
 	{
 		return true;
 	}
@@ -200,13 +222,23 @@ bool BGlobal::CollisionCircleLine(float r1, float x21, float y21, float x22, flo
 
 bool BGlobal::CollisionCircleLine(float x1, float y1, float r1, float x21, float y21, float x22, float y22)
 {
-	return CollisionCircleLine(r1, x21-x1, y21-y1, x22-x1, x22-y1);
+	return CollisionCircleLine(
+		r1, 
+		x21-x1, 
+		y21-y1, 
+		x22-x1, 
+		x22-y1);
 }
 
 bool BGlobal::CollisionEllipseLine(float x1, float y1, float rh1, float rv1, float x21, float y21, float x22, float y22)
 {
 	float proportion = rh1/rv1;
-	return CollisionCircleLine(rh1, x21-x1, (y21-y1)*proportion, x22-x1, (y22-y1)*proportion);
+	return CollisionCircleLine(
+		rh1, 
+		x21-x1, 
+		(y21-y1)*proportion, 
+		x22-x1, 
+		(y22-y1)*proportion);
 }
 
 BYTE BGlobal::GetGesture(CCPoint beginpos0, CCPoint endpos0, LONGLONG begintime0, LONGLONG endtime0, CCPoint beginpos1, CCPoint endpos1, LONGLONG begintime1, LONGLONG endtime1, bool bTwoFingers /*=false*/, bool bFinal /*=false*/)

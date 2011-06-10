@@ -10,10 +10,10 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	
 	local x = xcen - width / 2;
 	local y = ycen - height / 2;
-	local layertag = toptag + CCTag_Layer_06;
+	local layertag = toptag + CCTSTL_BGMTouch;
 	
 	--BGM
-	local spritebgBGM = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTag_Menu_01);
+	local spritebgBGM = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTSTM_BGMTouch_Bar);
 	game.AddSpriteChild(spritebgBGM, {toplayer, layertag});
 	game.SetAnchor(spritebgBGM, 0, 0);
 	
@@ -27,14 +27,14 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local touchlayerBGM = game.AddTouchLayerChild(
 			{toplayer, {x, y, width, height}},
 			{toplayer, layertag},
-			{0, 0, CCTag_Layer_06, layertag+CCTag_Menu_01}
+			{0, 0, CCTSTL_BGMTouch, layertag+CCTSTM_BGMTouch_Bar}
 		);
 	
 	--SE
-	layertag = toptag + CCTag_Layer_07;
+	layertag = toptag + CCTSTL_SETouch;
 	ycen = ycen - 80;
 	y = ycen - height / 2;
-	local spritebgSE = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTag_Menu_01);
+	local spritebgSE = game.CreateSprite(SI_TUI_BGMSE_Bar, {x, y}, layertag+CCTSTM_SETouch_Bar);
 	game.AddSpriteChild(spritebgSE, {toplayer, layertag});
 	game.SetAnchor(spritebgSE, 0, 0);
 	
@@ -48,14 +48,14 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local touchlayerSE = game.AddTouchLayerChild(
 			{toplayer, {x, y, width, height}},
 			{toplayer, layertag},
-			{0, 0, CCTag_Layer_07, layertag+CCTag_Menu_01}
+			{0, 0, CCTSTL_SETouch, layertag+CCTSTM_SETouch_Bar}
 		);
 	_TitleScene_UpdateBGMSE(toplayer, toptag)
 end
 
 function _TitleScene_AddOptionItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_05;
+	local layertag = toptag + CCTSTL_Option;
 	
 	local spOptionTitle = game.CreateSprite(SI_TUI_Option_Title, {340, 460});
 	game.AddSpriteChild(spOptionTitle, {toplayer, layertag});
@@ -68,14 +68,14 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCTSTM_Option_Menu;
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_Reset+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Reset_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_Option_Menu, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -93,14 +93,14 @@ function _TitleScene_AddOptionItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_Option_Menu, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 		
 end
 
 function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_05;
+	local layertag = toptag + CCTSTL_Option;
 		
 	local xorig = 824;
 	local xcen = 664;
@@ -110,7 +110,7 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_04;
+	local grouptag = layertag + CCTSTM_Option_OKCancel;
 	
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
@@ -118,7 +118,7 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 		spMenus[i+1] = game.CreateSprite(SI_TUI_OK+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_OK_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_04, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_Option_OKCancel, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -137,9 +137,9 @@ function _TitleScene_AddOptionOKCancelItems(toplayer, toptag)
 		
 	end
 	
-	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+3);
+	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTSTM_Option_OKCancel, grouptag+3);
 	
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_Option_OKCancel, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 end
 
@@ -148,8 +148,8 @@ function _TitleScene_EnterOKCancelOptionLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveOKCancelOptionLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_05;
-	local grouptag = layertag + CCTag_Menu_04;
+	local layertag = toptag + CCTSTL_Option;
+	local grouptag = layertag + CCTSTM_Option_OKCancel;
 	game.RemoveChild({toplayer, grouptag});
 end
 
@@ -161,11 +161,11 @@ function _TitleScene_EnterOptionLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveOptionLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_05;
+	local layertag = toptag + CCTSTL_Option;
 	game.RemoveAllChildren({toplayer, layertag});
-	layertag = toptag + CCTag_Layer_06;
+	layertag = toptag + CCTSTL_BGMTouch;
 	game.RemoveAllChildren({toplayer, layertag});
-	layertag = toptag + CCTag_Layer_07;
+	layertag = toptag + CCTSTL_SETouch;
 	game.RemoveAllChildren({toplayer, layertag});
 	game.SaveIni()
 end

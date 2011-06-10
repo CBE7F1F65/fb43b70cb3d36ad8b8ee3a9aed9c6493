@@ -1,12 +1,12 @@
 function MissionSelectScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, dataindex)
-	if sublayertag == CCTag_Layer_14 then
+	if sublayertag == CCSTL_Debug then
 		return Debug_AddReloadMenu_Callback(selitemtag, toplayer, toptag);
 	
 	-- Main menu
-	elseif sublayertag == CCTag_Layer_01 then
-		if selgrouptag == CCTag_Menu_01 then
+	elseif sublayertag == CCMSSTL_Menu then
+		if selgrouptag == CCMSSTM_Menu_Main then
 			return MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
-		elseif selgrouptag == CCTag_Menu_14 then
+		elseif selgrouptag == CCMSSTM_Menu_MainDelay then
 			return MissionSelectScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
@@ -64,7 +64,7 @@ function MissionSelectScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, 
 			
 			if toquit then
 				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCMSSTM_Menu_MainDelay+i+1});
 				game.RunAction(callnode, callfuncaction);
 			end
 			

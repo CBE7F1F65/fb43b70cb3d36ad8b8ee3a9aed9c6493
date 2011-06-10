@@ -18,16 +18,16 @@ end
 function MissionSelectScene_OnInit(toplayer, toptag)
 	
 	-- bg layer
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 	
 	local nowstage = game.GetNowStageMissionTurn();
 	local spMissionSelect = game.CreateSprite(SI_World01_Scene+nowstage, {480, 320});
 	game.AddSpriteChild(spMissionSelect, {toplayer, layertag});
 	
 	-- menu layer
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCMSSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCMSSTL_Menu, layertag});
 	
 end
 
@@ -41,8 +41,8 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	local spSelectedMenus = {};
 	local spDisabledMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCMSSTL_Menu;
+	local grouptag = layertag + CCMSSTM_Menu_Main;
 	
 	local xcen=0;
 	local ycen=0;
@@ -89,7 +89,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 			ycen = 120;
 		end
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen+40, ycen-40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen+40, ycen-40, CCMSSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
 		
 		if not enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);
@@ -123,7 +123,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCMSSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
@@ -133,7 +133,7 @@ function _MissionSelectScene_EnterMainLayer(toplayer, toptag)
 end
 
 function _MissionSelectScene_LeaveMainLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
+	local layertag = toptag + CCMSSTL_Menu;
 	game.RemoveAllChildren({toplayer, layertag});
 end
 

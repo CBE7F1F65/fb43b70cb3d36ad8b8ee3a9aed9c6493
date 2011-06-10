@@ -1,6 +1,6 @@
 function _TitleScene_AddHiScoreItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_03;
+	local layertag = toptag + CCTSTL_HiScore;
 	
 	local spHiScoreTitle = game.CreateSprite(SI_TUI_HiScore_Title, {340, 460});
 	game.AddSpriteChild(spHiScoreTitle, {toplayer, layertag});
@@ -13,14 +13,14 @@ function _TitleScene_AddHiScoreItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_01;
+	local grouptag = layertag + CCTSTM_HiScore_Menu;
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_Reset+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Reset_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_HiScore_Menu, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -38,17 +38,17 @@ function _TitleScene_AddHiScoreItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_HiScore_Menu, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 			
 end
 
 function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 
-	local layertag = toptag + CCTag_Layer_03;
-	local grouptag = layertag + CCTag_Menu_03;
+	local layertag = toptag + CCTSTL_HiScore;
+	local grouptag = layertag + CCTSTM_HiScore_Display;
 	
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_03, grouptag});
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCTSTM_HiScore_Display, grouptag});
 	
 	local spriteBG = game.CreateSprite(SI_White, {340, 230, 0, 600, 380});
 	game.AddSpriteChild(spriteBG, {toplayer, grouptag});
@@ -84,22 +84,22 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..hiscoretext;
 		
-		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTag_Menu_03, grouptag+i+1}, text, LConst_FontSize*0.8);
+		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, LConst_FontSize*0.8);
 		game.SetAnchor(texts[i+1], 0, 0);
 	end
 	
 end
 
 function _TitleScene_UpdateHiScore(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_03;
-	local grouptag = layertag + CCTag_Menu_03;
+	local layertag = toptag + CCTSTL_HiScore;
+	local grouptag = layertag + CCTSTM_HiScore_Display;
 	game.RemoveChild({toplayer, grouptag});
 	_TitleScene_AddHiScoreDisplay(toplayer, toptag);
 end
 
 function _TitleScene_AddHiScoreOKCancelItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_03;
+	local layertag = toptag + CCTSTL_HiScore;
 		
 	local xorig = 824;
 	local xcen = 664;
@@ -109,14 +109,14 @@ function _TitleScene_AddHiScoreOKCancelItems(toplayer, toptag)
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
-	local grouptag = layertag + CCTag_Menu_04;
+	local grouptag = layertag + CCTSTM_HiScore_OKCancel;
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_OK+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_OK_Down+i*2);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTag_Menu_04, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_HiScore_OKCancel, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 		local fadetime = 0.3+i*0.05;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
@@ -135,9 +135,9 @@ function _TitleScene_AddHiScoreOKCancelItems(toplayer, toptag)
 		
 	end
 	
-	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTag_Menu_04, grouptag+3);
+	menus[3] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCTSTM_HiScore_OKCancel, grouptag+3);
 	
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTSTM_HiScore_OKCancel, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
@@ -147,8 +147,8 @@ function _TitleScene_EnterOKCancelHiScoreLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveOKCancelHiScoreLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_03;
-	local grouptag = layertag + CCTag_Menu_04;
+	local layertag = toptag + CCTSTL_HiScore;
+	local grouptag = layertag + CCTSTM_HiScore_OKCancel;
 	game.RemoveChild({toplayer, grouptag});
 end
 
@@ -158,6 +158,6 @@ function _TitleScene_EnterHiScoreLayer(toplayer, toptag)
 end
 
 function _TitleScene_LeaveHiScoreLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_03;
+	local layertag = toptag + CCTSTL_HiScore;
 	game.RemoveAllChildren({toplayer, layertag});
 end

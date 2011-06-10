@@ -1,12 +1,12 @@
 function PS_UpdatePlanGroup(toplayer, toptag)
 	
 	local plangroup = LGlobal_PlayData.plangroup;
-	local layergroup = toptag + CCTag_Layer_13;
-	local grouptag = layergroup + CCTag_Menu_02;
+	local layergroup = toptag + CCPSTL_Menu;
+	local grouptag = layergroup + CCPSTM_Menu_PlanGroup;
 	
 	game.RemoveChild({toplayer, grouptag+1});
 	local spNumber = game.CreateSprite(SI_GUIDigit_0 + plangroup+1, {624, 48}, grouptag+1);
-	local numbernode = game.AddSpriteChild(spNumber, {toplayer, grouptag}, CCTag_Menu_02);
+	local numbernode = game.AddSpriteChild(spNumber, {toplayer, grouptag}, CCPSTM_Menu_PlanGroup);
 	game.SetColor(numbernode, global.ARGB(0, 0xffffff));
 	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
 	game.RunAction(numbernode, fadeaction);
@@ -61,12 +61,12 @@ end
 
 function PS_UpdatePlanning(toplayer, toptag, stateStep)
 	
-	local layertag = toptag + CCTag_Layer_11;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_Plan;
+	local grouptag = layertag + CCPSTM_Plan_RenderTexture;
 	
-	local linesgrouptag = layertag+CCTag_Menu_04;
-	local circlesgrouptag = layertag+CCTag_Menu_05;
-	local dotsgrouptag = layertag+CCTag_Menu_06;
+	local linesgrouptag = layertag+CCPSTM_Plan_LinesFeather;
+	local circlesgrouptag = layertag+CCPSTM_Plan_CirclesFeather;
+	local dotsgrouptag = layertag+CCPSTM_Plan_DotsFeather;
 	
 	
 	local nLines = table.getn(LGlobal_PlayData.planlines);

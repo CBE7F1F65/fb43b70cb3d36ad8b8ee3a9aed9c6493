@@ -51,7 +51,7 @@ function TitleScene_CB_Online(itemtag, toplayer, toptag, sublayertag, selgroupta
 			
 			if toquit then
 				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTSTM_Online_MenuDelay+i+1});
 				game.RunAction(callnode, callfuncaction);
 			end
 			

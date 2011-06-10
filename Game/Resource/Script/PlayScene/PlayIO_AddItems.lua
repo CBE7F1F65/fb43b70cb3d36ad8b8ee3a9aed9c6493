@@ -1,6 +1,6 @@
 function PS_AddBGItems(toplayer, toptag)
 	
-	local layertag = toptag+CCTag_Layer_00;
+	local layertag = toptag+CCSTL_BG;
 	
 	local bgsiid = game.GetMissionBGData();
 	local spBG = game.CreateSprite(bgsiid, {480, 336});
@@ -10,7 +10,7 @@ function PS_AddBGItems(toplayer, toptag)
 end
 
 function PS_AddFrameItems(toplayer, toptag)
-	local layertag = toptag+CCTag_Layer_05;
+	local layertag = toptag+CCPSTL_Frame;
 	
 	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608});
 	game.AddSpriteChild(spTopPanel, {toplayer, layertag});
@@ -23,20 +23,20 @@ function PS_AddFrameItems(toplayer, toptag)
 end
 
 function PS_AddPlanningRenderTexture(toplayer, toptag)
-	local layertag = toptag+CCTag_Layer_11;
-	local grouptag = layertag+CCTag_Menu_01;
+	local layertag = toptag+CCPSTL_Plan;
+	local grouptag = layertag+CCPSTM_Plan_RenderTexture;
 	
 	for i=1, LConst_PlanGroupMax do
-		game.AddRenderTextureChild(960, 640, {toplayer, grouptag}, {480, 320, CCTag_Menu_01, grouptag+i});
+		game.AddRenderTextureChild(960, 640, {toplayer, grouptag}, {480, 320, CCPSTM_Plan_RenderTexture, grouptag+i});
 	end
 end
 
 function PS_AddHPAPSPItems(toplayer, toptag)
 	
-	local layertag = toptag + CCTag_Layer_07;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_HPAPSP;
+	local grouptag = layertag + CCPSTM_HPAPSP_HPAP;
 	
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_HPAPSP_HPAP, grouptag});
 	
 	local x = 232.5;
 	local y = 112;
@@ -59,8 +59,8 @@ function PS_AddHPAPSPItems(toplayer, toptag)
 		game.AddSpriteChild(spTitle, {toplayer, grouptag});
 	end
 	
-	grouptag = layertag + CCTag_Menu_02;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	grouptag = layertag + CCPSTM_HPAPSP_SP;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_HPAPSP_SP, grouptag});
 	local xorig = 432;
 	for i=0, 3 do
 		x = xorig + i*32;
@@ -84,8 +84,8 @@ function PS_AddMainItems(toplayer, toptag)
 	local spSelectedMenus = {};
 	local spDisabledMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_13;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_Menu;
+	local grouptag = layertag + CCPSTM_Menu_Main;
 	
 	for i=0, 3 do
 		local x = xbegin + i*xoffset;
@@ -94,7 +94,7 @@ function PS_AddMainItems(toplayer, toptag)
 		spSelectedMenus[i+1] = game.CreateSprite(SI_GUIMenu_Command_Down+i*3);
 		spDisabledMenus[i+1] = game.CreateSprite(SI_GUIMenu_Command_Disabled+i*3);
 
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, yorig, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, yorig, CCPSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
 
 		local fadetime = 0.3+i*0.03;
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
@@ -112,7 +112,7 @@ function PS_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCPSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 	PS_SetMenuEnable(toplayer, toptag, false);
@@ -120,13 +120,13 @@ end
 
 function PS_AddTouchLayer(toplayer, toptag)
 		
-	local layertag = toptag + CCTag_Layer_06;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCPSTL_Touch;
+	local grouptag = layertag + CCPSTM_Touch_Layer;
 	
 	local touchlayer = game.AddTouchLayerChild(
 			{toplayer, {0, 0, 0, 0}},
 			{toplayer, layertag},
-			{0, 0, CCTag_Layer_06, grouptag}
+			{0, 0, CCPSTL_Touch, grouptag}
 		);
 	PS_SetTouchLayerRect(toplayer, toptag);
 	

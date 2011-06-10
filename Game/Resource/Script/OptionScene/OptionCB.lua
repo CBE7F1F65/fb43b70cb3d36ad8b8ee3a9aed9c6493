@@ -49,7 +49,7 @@ function TitleScene_CB_Option(itemtag, toplayer, toptag, sublayertag, selgroupta
 			
 			if toquit then
 				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_14+i+1});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTSTM_Option_MenuDelay+i+1});
 				game.RunAction(callnode, callfuncaction);
 			end
 			
@@ -110,7 +110,7 @@ function TitleScene_CB_OKCancelOption(itemtag, toplayer, toptag, sublayertag, se
 			
 			if toquit then
 				local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTag_Menu_11+i+1});
+				local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCTSTM_Option_OKCancelDelay+i+1});
 				game.RunAction(callnode, callfuncaction);
 			end
 			
@@ -132,13 +132,13 @@ function _TitleScene_UpdateBGMSE(toplayer, toptag)
 	local bgmvol, sevol = game.GetBGMSEVol();
 	local texx, texy, texw, texh = game.GetSIData(SI_TUI_BGMSE_Bar);
 	
-	layertag = toptag + CCTag_Layer_06;
-	local bgmbar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	layertag = toptag + CCTSTL_BGMTouch;
+	local bgmbar = game.GetNode({toplayer, layertag+CCTSTM_BGMTouch_Bar});
 	game.SetTexRect(bgmbar, texx, texy, texw*bgmvol/100.0, texh);
 --	game.SetScale(bgmbar, bgmvol/100.0, 1);
 	
-	local layertag = toptag + CCTag_Layer_07;
-	local sebar = game.GetNode({toplayer, layertag+CCTag_Menu_01});
+	local layertag = toptag + CCTSTL_SETouch;
+	local sebar = game.GetNode({toplayer, layertag+CCTSTM_SETouch_Bar});
 	game.SetTexRect(sebar, texx, texy, texw*sevol/100.0, texh);
 --	game.SetScale(sebar, sevol/100.0, 1);
 	
@@ -148,7 +148,7 @@ function _TitleScene_CB_BGMTouch_SetValue(toplayer, toptag, touchlayer, index, f
 	
 	local x, y, time, touchtype, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
 	
-	local layertag = toptag + CCTag_Layer_06;
+	local layertag = toptag + CCTSTL_BGMTouch;
 	
 	if x < rectx then
 		x = rectx;
@@ -166,8 +166,8 @@ end
 function _TitleScene_CB_SETouch_SetValue(toplayer, toptag, touchlayer, index, flag)
 	
 	local x, y, time, touchtype, rectx, recty, rectw, recth = game.GetTouchInfo(touchlayer, index, flag);
-	
-	local layertag = toptag + CCTag_Layer_07;
+
+	local layertag = toptag + CCTSTL_SETouch;
 	
 	if x < rectx then
 		x = rectx;

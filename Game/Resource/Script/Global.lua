@@ -54,7 +54,7 @@ end
 function Debug_Log(str, toplayer, toptag)
 	global.SystemLog(str);
 	if toplayer ~= nil and toptag ~= nil then
-		local layertag = toptag + CCTag_Layer_14;
+		local layertag = toptag + CCSTL_Debug;
 		
 		Debug_LogMoveup(toplayer, layertag);
 		local item = game.AddTextChild({toplayer, layertag}, {0, LGlobal_LogLineHeight, 0, LGlobal_LogLineCount}, str, LConst_FontSize*0.5);
@@ -124,8 +124,8 @@ RANDT	=	game.Random_Int;
 RANDTF	=	game.Random_Float;
 
 function Debug_AddReloadMenu(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_14;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_14, layertag});
+	local layertag = toptag + CCSTL_Debug;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_Debug, layertag});
 	
 	local menu = game.CreateMenuItem({toplayer, layertag}, {100, 380, CCTag_Debug_ReloadMenu, layertag+CCTag_Debug_ReloadMenu+1}, "Reload", LConst_FontSize);
 	game.AddMenuChild({menu}, {toplayer, layertag}, {0, 0, CCTag_Debug_ReloadMenu, layertag+CCTag_Debug_ReloadMenu});

@@ -1,6 +1,6 @@
 function InputLayer_CB(itemtag, toplayer, eventtag, toptag, sublayertag, text)
 	if toptag == ktag_TitleSceneLayer then
-		if sublayertag == CCTag_Layer_13 then
+		if sublayertag == CCTSTL_Input then
 			local layertag = toptag + sublayertag;
 			if eventtag == CCET_Enter then
 				_TitleScene_PauseMenuLayer(toplayer, toptag);

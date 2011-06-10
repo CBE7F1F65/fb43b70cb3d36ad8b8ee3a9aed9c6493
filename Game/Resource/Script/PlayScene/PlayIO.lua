@@ -27,82 +27,76 @@ function PlayScene_OnInit(toplayer, toptag)
 	local grouptag = layertag;
 	
 	-- BG
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 	
 	PS_AddBGItems(toplayer, toptag);
 	
 	-- ObjBG
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCPSTL_ObjBG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_ObjBG, layertag});
 	
 	-- Enemies
-	layertag = toptag + CCTag_Layer_02;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_02, layertag});
+	layertag = toptag + CCPSTL_Enemy;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Enemy, layertag});
 	
 	-- ObjFG
-	layertag = toptag + CCTag_Layer_03;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_03, layertag});
+	layertag = toptag + CCPSTL_ObjFG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_ObjFG, layertag});
 	
 	-- Message
-	layertag = toptag + CCTag_Layer_04;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_04, layertag});
+	layertag = toptag + CCPSTL_Message;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Message, layertag});
 	-- Target/Turn/Mission Over
-	grouptag = layertag + CCTag_Menu_01;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	grouptag = layertag + CCPSTM_Message_TargetBoard;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Message_TargetBoard, grouptag});
 	
 	-- Frame
-	layertag = toptag + CCTag_Layer_05;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_05, layertag});
+	layertag = toptag + CCPSTL_Frame;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Frame, layertag});
 	
 	PS_AddFrameItems(toplayer, toptag);
 	
 	-- Touch
-	layertag = toptag + CCTag_Layer_06;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_06, layertag});
+	layertag = toptag + CCPSTL_Touch;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Touch, layertag});
 	
 	-- HPAPSP
-	layertag = toptag + CCTag_Layer_07;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_07, layertag});
+	layertag = toptag + CCPSTL_HPAPSP;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_HPAPSP, layertag});
 	
 	-- Enemies On Side
-	layertag = toptag + CCTag_Layer_08;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_08, layertag});
+	layertag = toptag + CCPSTL_EnemyOnSide;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_EnemyOnSide, layertag});
 	
 	-- Plan
-	layertag = toptag + CCTag_Layer_11;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_11, layertag});
+	layertag = toptag + CCPSTL_Plan;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Plan, layertag});
 	-- RenderTexture
-	grouptag = layertag + CCTag_Menu_01;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	grouptag = layertag + CCPSTM_Plan_RenderTexture;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Plan_RenderTexture, grouptag});
 	-- feathers
-	grouptag = layertag + CCTag_Menu_04;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_04, grouptag});
-	grouptag = layertag + CCTag_Menu_05;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_05, grouptag});
-	grouptag = layertag + CCTag_Menu_06;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_06, grouptag});
+	grouptag = layertag + CCPSTM_Plan_LinesFeather;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Plan_LinesFeather, grouptag});
+	grouptag = layertag + CCPSTM_Plan_CirclesFeather;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Plan_CirclesFeather, grouptag});
+	grouptag = layertag + CCPSTM_Plan_DotsFeather;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Plan_DotsFeather, grouptag});
 	
 	PS_AddPlanningRenderTexture(toplayer, toptag);
 	
-	-- Clear GameOver ??
-	layertag = toptag + CCTag_Layer_12;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_12, layertag});
-	
 	-- Menu
-	layertag = toptag + CCTag_Layer_13;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_13, layertag});
+	layertag = toptag + CCPSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Menu, layertag});
 	-- Menu Indicators
-	grouptag = layertag + CCTag_Menu_02;
-	game.AddNullChild({toplayer, layertag}, {0, 0, CCTag_Menu_02, grouptag});
+	grouptag = layertag + CCHSTM_Menu_Category;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCHSTM_Menu_Category, grouptag});
 		
 	-- Overlay
 	local overlaylayer = game.AddOverlayLayerChild(toplayer, {0, 0, CCZ_Max});
 	-- Sniper Scope
-	layertag = ktag_OverlayLayer + CCTag_Layer_01;
-	game.AddNullChild({overlaylayer, ktag_OverlayLayer}, {0, 0, CCTag_Layer_01, layertag});
-	grouptag = layertag + CCTag_Menu_01;
-	game.AddNullChild({overlaylayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	layertag = ktag_OverlayLayer + CCSTL_BG;
+	game.AddNullChild({overlaylayer, ktag_OverlayLayer}, {0, 0, CCSTL_BG, layertag});
 			
 end
 

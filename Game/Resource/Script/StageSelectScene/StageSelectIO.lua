@@ -20,15 +20,15 @@ function StageSelectScene_OnInit(toplayer, toptag)
 	local layertag = toptag;
 	
 	-- bg layer
-	layertag = toptag + CCTag_Layer_00;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_00, layertag});
+	layertag = toptag + CCSTL_BG;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSTL_BG, layertag});
 	
 	local spStageSelect = game.CreateSprite(SI_TitleScene, {480, 320});
 	game.AddSpriteChild(spStageSelect, {toplayer, layertag});
 	
 	-- menu layer
-	layertag = toptag + CCTag_Layer_01;
-	game.AddNullChild({toplayer, toptag}, {0, 0, CCTag_Layer_01, layertag});
+	layertag = toptag + CCSSSTL_Menu;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCSSSTL_Menu, layertag});
 end
 
 function StageSelectScene_OnEnter(toplayer, toptag)
@@ -60,8 +60,8 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 	local spSelectedMenus = {};
 	local spDisabledMenus = {};
 	local menus = {};
-	local layertag = toptag + CCTag_Layer_01;
-	local grouptag = layertag + CCTag_Menu_01;
+	local layertag = toptag + CCSSSTL_Menu;
+	local grouptag = layertag + CCSSSTM_Menu_Main;
 	
 	for i=0, 8 do
 		
@@ -81,7 +81,7 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 			spDisabledMenus[i+1] = nil;
 		end
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen[i+1]+40, ycen[i+1]+40, CCTag_Menu_01, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen[i+1]+40, ycen[i+1]+40, CCSSSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
 		
 		if not enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);
@@ -103,7 +103,7 @@ function _StageSelectScene_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
-	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCTag_Menu_01, grouptag});
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCSSSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
@@ -113,7 +113,7 @@ function _StageSelectScene_EnterMainLayer(toplayer, toptag)
 end
 
 function _StageSelectScene_LeaveMainLayer(toplayer, toptag)
-	local layertag = toptag + CCTag_Layer_01;
+	local layertag = toptag + CCSSSTL_Menu;
 	game.RemoveAllChildren({toplayer, layertag});
 end
 
