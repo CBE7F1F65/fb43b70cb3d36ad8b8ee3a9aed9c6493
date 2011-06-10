@@ -44,13 +44,13 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 	elseif sublayertag == CCTag_Layer_04 then
 		-- Target menu
 		if selgrouptag == CCTag_Menu_04 then
-			return PSCB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCB_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_06 then
 			return PSCB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_09 then
 			return PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		elseif selgrouptag == CCTag_Menu_11 then
-			return PSCBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+			return PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
 	end
 	
@@ -132,7 +132,7 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 	if callitemtag == grouptag+4 then
 		-- TODO: Target
 		if selitemtag == 1 then
-			PS_DoShowTurnStart(toplayer, toptag, true);
+			PS_ShowTurnStartAndTarget(toplayer, toptag, true);
 		--Quit
 		elseif selitemtag == 2 then
 			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
@@ -565,9 +565,45 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 	
 end
 
-function PS_CB_Action(toplayer, toptag)
+function PS_CB_OnClickAction(toplayer, toptag)
 	PS_ExitPlanning(toplayer, toptag);
 	PS_StateFinish(STATE_Planning);
+end
+
+function PS_CB_OnClickWait(toplayer, toptag)
+	local plangroup = LGlobal_PlayData.plangroup;
+	local bFound = false;
+	if not bFound then
+		local nLines = table.getn(LGlobal_PlayData.planlines);
+		for i=1, nLines do
+			if LGlobal_PlayData.planlines[i].plangroup == plangroup then
+				bFound = true;
+				break;
+			end
+		end
+	end
+	if not bFound then
+		local nCircles = table.getn(LGlobal_PlayData.plancircles);
+		for i=1, nCircles do
+			if LGlobal_PlayData.plancircles[i].plangroup == plangroup then
+				bFound = true;
+				break;
+			end
+		end
+	end
+	if not bFound then
+		local nDots = table.getn(LGlobal_PlayData.plandots);
+		for i=1, nDots do
+			if LGlobal_PlayData.plandots[i].plangroup == plangroup then
+				bFound = true;
+				break;
+			end
+		end
+	end
+	if bFound then
+		LGlobal_PlayData.plangroup = plangroup+1;
+		PS_UpdatePlanGroup(toplayer, toptag);
+	end
 end
 
 function PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
@@ -582,42 +618,10 @@ function PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 	if selitemtag == 1 then
 	-- action
 	elseif selitemtag == 2 then
-		PS_CB_Action(toplayer, toptag);
+		PS_CB_OnClickAction(toplayer, toptag);
 	-- wait
 	elseif selitemtag == 3 then
-		local plangroup = LGlobal_PlayData.plangroup;
-		local bFound = false;
-		if not bFound then
-			local nLines = table.getn(LGlobal_PlayData.planlines);
-			for i=1, nLines do
-				if LGlobal_PlayData.planlines[i].plangroup == plangroup then
-					bFound = true;
-					break;
-				end
-			end
-		end
-		if not bFound then
-			local nCircles = table.getn(LGlobal_PlayData.plancircles);
-			for i=1, nCircles do
-				if LGlobal_PlayData.plancircles[i].plangroup == plangroup then
-					bFound = true;
-					break;
-				end
-			end
-		end
-		if not bFound then
-			local nDots = table.getn(LGlobal_PlayData.plandots);
-			for i=1, nDots do
-				if LGlobal_PlayData.plandots[i].plangroup == plangroup then
-					bFound = true;
-					break;
-				end
-			end
-		end
-		if bFound then
-			LGlobal_PlayData.plangroup = plangroup+1;
-			PS_UpdatePlanGroup(toplayer, toptag);
-		end
+		PS_CB_OnClickWait(toplayer, toptag);
 	-- menu
 	elseif selitemtag == 4 then
 		PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});
@@ -625,7 +629,7 @@ function PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 	
 end
 
-function PSCB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, delaytime)
+function PSCB_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag, delaytime)
 	
 	local layertag = toptag + sublayertag;
 	
@@ -652,7 +656,7 @@ function PSCB_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selite
 	
 end
 
-function PSCBDelay_Target(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+function PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	local layertag = toptag + sublayertag;
 	local grouptag = layertag + CCTag_Menu_01;
 	

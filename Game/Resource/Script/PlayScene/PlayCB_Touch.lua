@@ -101,8 +101,8 @@ function _PSCB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 	if LGlobal_PlayData.bZoomed == false then
 		
 		LGlobal_PlayData.bZoomed = true;
-		_PlayScene_ToggleMenuEnable(toplayer, toptag, false);
-		_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
+		PS_SetMenuEnable(toplayer, toptag, false);
+		PS_SetTouchLayerRect(toplayer, toptag);
 		local scaleaction = game.ActionScale(CCAF_By, 2, 2, LConst_ZoomActionTime);
 		game.RunAction(toplayer, scaleaction);
 		_PSCB_Touch_MoveInZoom(toplayer, toptag, 2*(480-x), 2*(320-y), true);
@@ -144,13 +144,13 @@ function _PSCB_Touch_DoToggleZoom(toplayer, toptag, x, y)
 		
 	else
 		
-		_PlayScene_ToggleMenuEnable(toplayer, toptag, true);
+		PS_SetMenuEnable(toplayer, toptag, true);
 		local scaleaction = game.ActionScale(CCAF_By, 0.5, 0.5, LConst_ZoomActionTime);
 		game.RunAction(toplayer, scaleaction);
 		local nowx, nowy = game.GetPosition(toplayer);
 		_PSCB_Touch_MoveInZoom(toplayer, toptag, -nowx, -nowy, true);
 		LGlobal_PlayData.bZoomed = false;
-		_PlayScene_ChangeTouchLayerRect(toplayer, toptag);
+		PS_SetTouchLayerRect(toplayer, toptag);
 		
 		local menunode = game.GetNode({overlaylayer, grouptag});
 		

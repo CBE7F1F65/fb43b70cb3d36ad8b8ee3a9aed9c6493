@@ -47,7 +47,6 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 
 	obj->SetInteger("STATE_Waiting", GAMESTATE_WAITING);
 	obj->SetInteger("STATE_ShowHelp", GAMESTATE_SHOWHELP);
-	obj->SetInteger("STATE_ShowTarget", GAMESTATE_SHOWTARGET);
 	obj->SetInteger("STATE_EnemyEnter", GAMESTATE_ENEMYENTER);
 	obj->SetInteger("STATE_SpecialEnemyAction", GAMESTATE_SPECIALENEMYACTION);
 

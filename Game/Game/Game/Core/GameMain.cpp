@@ -606,9 +606,6 @@ void GameMain::Update()
 			stateAction = GAMESTATE_SHOWHELP;
 			break;
 		case GAMESTATE_SHOWHELP:
-			stateAction = GAMESTATE_SHOWTARGET;
-			break;
-		case GAMESTATE_SHOWTARGET:
 			stateAction = GAMESTATE_ENEMYENTER;
 			break;
 
