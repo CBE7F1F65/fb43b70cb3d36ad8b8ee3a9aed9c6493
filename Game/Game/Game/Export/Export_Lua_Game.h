@@ -29,8 +29,12 @@ public:
 	static bool _LuaRegistFunction(LuaObject * obj);
 	static bool _LuaRegistFunction_Mission(LuaObject * obj);
 
+	static bool _LuaHelper_AddChild(CCNode * nownode, CCNode * nodetoadd, int zOrder, int tag=kCCNodeTagInvalid);
+
 	static int LuaFn_Game_Random_Int(LuaState * ls);
 	static int LuaFn_Game_Random_Float(LuaState * ls);
+
+	static int LuaFn_Game_Transform3DPoint(LuaState * ls);
 
 	static int LuaFn_Game_LoadTexture(LuaState * ls);
 	static int LuaFn_Game_FreeTexture(LuaState * ls);
@@ -40,6 +44,7 @@ public:
 	static int LuaFn_Game_ReplaceScene(LuaState * ls);
 
 	static int LuaFn_Game_GetNode(LuaState * ls);
+
 
 	static int LuaFn_Game_AddNullChild(LuaState * ls);
 	static int LuaFn_Game_RemoveChild(LuaState * ls);
@@ -134,8 +139,6 @@ public:
 
 	// In Game
 
-	static int LuaFn_Game_Transform3DPoint(LuaState * ls);
-
 	static int LuaFn_Game_Update(LuaState * ls);
 
 	static int LuaFn_Game_AddTurn(LuaState * ls);
@@ -159,6 +162,9 @@ public:
 	static int LuaFn_Game_GetEnemyATK(LuaState * ls);
 	static int LuaFn_Game_GetEnemyDEF(LuaState * ls);
 	static int LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls);
+	static int LuaFn_Game_GetEnemyXYScale(LuaState * ls);
+
+	static int LuaFn_Game_AttackEnemy(LuaState * ls);
 
 	static int LuaFn_Game_AddEnemy(LuaState * ls);
 	static int LuaFn_Game_RemoveEnemy(LuaState * ls);

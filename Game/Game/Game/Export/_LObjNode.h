@@ -26,7 +26,7 @@ public:
 	DWORD dGet();
 	DWORD dNextGet();
 
-	LuaObject jNextGet();
+	LuaObject * jNextGet();
 
 	void PInt(int ival);
 	void PFloat(float fval);
@@ -47,7 +47,8 @@ public:
 	int argscount;
 	int retcount;
 
-	LuaObject _obj;
+	LuaObject * _obj;
+	LuaObject _objtemp;
 	LuaState * ls;
 	LuaObject * objbase;
 	LuaStack * argsbase;

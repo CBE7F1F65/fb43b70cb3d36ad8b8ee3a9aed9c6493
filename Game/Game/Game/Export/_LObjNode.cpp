@@ -36,16 +36,32 @@ void _LObjNode::_init(LuaState * _ls, LuaObject * obj, LuaStack * args, _LObjNod
 	{
 		argscount = argsbase->Count();
 	}
+	else
+	{
+		if (objbase)
+		{
+			argscount = objbase->GetCount();
+		}
+	}
+	_obj = NULL;
 }
 
 bool _LObjNode::ObjIsTable()
 {
-	return _obj.IsTable();
+	if (!_obj)
+	{
+		return false;
+	}
+	return _obj->IsTable();
 }
 
 bool _LObjNode::ObjIsString()
 {
-	return _obj.IsString();
+	if (!_obj)
+	{
+		return false;
+	}
+	return _obj->IsString();
 }
 
 bool _LObjNode::_isStack()
@@ -59,19 +75,32 @@ bool _LObjNode::_isStack()
 
 bool _LObjNode::NilCheck()
 {
-	return _obj.IsNil();
+	if (!_obj)
+	{
+		return true;
+	}
+	return _obj->IsNil();
 }
 
-LuaObject _LObjNode::jNextGet()
+LuaObject * _LObjNode::jNextGet()
 {
 	++ii;
-	if (_isStack())
+	if (ii > argscount)
 	{
-		_obj = (*argsbase)[ii];
+		_obj = NULL;
 	}
-	if (objbase)
+	else
 	{
-		_obj = (*objbase).GetByIndex(ii);
+		if (_isStack())
+		{
+			_objtemp = (*argsbase)[ii];
+			_obj = &_objtemp;
+		}
+		else if (objbase)
+		{
+			_objtemp = (*objbase).GetByIndex(ii);
+			_obj = &_objtemp;
+		}
 	}
 	bhavenext = !NilCheck();
 	return _obj;
@@ -84,7 +113,7 @@ int _LObjNode::iGet()
 		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
 		return 0;
 	}
-	return _obj.GetInteger();
+	return _obj->GetInteger();
 }
 
 int _LObjNode::iNextGet()
@@ -100,7 +129,7 @@ float _LObjNode::fGet()
 		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
 		return 0.0f;
 	}
-	return _obj.GetFloat();
+	return _obj->GetFloat();
 }
 
 float _LObjNode::fNextGet()
@@ -116,7 +145,7 @@ bool _LObjNode::bGet()
 		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
 		return false;
 	}
-	return _obj.GetBoolean();
+	return _obj->GetBoolean();
 }
 
 bool _LObjNode::bNextGet()
@@ -132,7 +161,7 @@ const char * _LObjNode::sGet()
 		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
 		return NULL;
 	}
-	return _obj.GetString();
+	return _obj->GetString();
 }
 
 const char * _LObjNode::sNextGet()
@@ -143,7 +172,7 @@ const char * _LObjNode::sNextGet()
 
 DWORD _LObjNode::cGet()
 {
-	return Export_Lua::_LuaHelper_GetColor(&_obj);
+	return Export_Lua::_LuaHelper_GetColor(_obj);
 }
 
 DWORD _LObjNode::cNextGet()
@@ -154,7 +183,7 @@ DWORD _LObjNode::cNextGet()
 
 DWORD _LObjNode::dGet()
 {
-	return Export_Lua::_LuaHelper_GetDWORD(&_obj);
+	return Export_Lua::_LuaHelper_GetDWORD(_obj);
 }
 
 DWORD _LObjNode::dNextGet()

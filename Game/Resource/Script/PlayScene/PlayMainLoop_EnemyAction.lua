@@ -27,7 +27,12 @@ function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	end
 	local itemtag, x, y, etype, life = game.GetActiveEnemyData(index, ENEMY_InScene);
 
-	local tx, ty, scale = game.Transform3DPoint(x, y, 3-elayer/CCZ_eLayer_01);
+	local ttoptag, tsublayertag, tmenugrouptag, tmenuitemtag = game.GetSubTags(itemtag);
+	local menugroup = itemtag-tmenuitemtag;
+	game.SetZ(enemynode, menugroup+elayer);
+	game.SetActiveEnemyData(index, ENEMY_InScene, life, elayer);
+	
+	local tx, ty, scale = game.GetEnemyXYScale(index);
 	
 	local aemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime);
 	local aescaleaction = game.ActionScale(CCAF_To, scale, scale, LConst_EnemySpriteFadeTime, true);
@@ -35,11 +40,6 @@ function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	local enemynode = game.GetNode({toplayer, itemtag});
 
 	game.RunAction(enemynode, aeaction);
-	
-	local ttoptag, tsublayertag, tmenugrouptag, tmenuitemtag = game.GetSubTags(itemtag);
-	local menugroup = itemtag-tmenuitemtag;
-	game.SetZ(enemynode, menugroup+elayer);
-	game.SetActiveEnemyData(index, ENEMY_InScene, life, elayer);
 	
 end
 

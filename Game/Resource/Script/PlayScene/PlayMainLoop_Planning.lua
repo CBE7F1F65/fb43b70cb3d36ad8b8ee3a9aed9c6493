@@ -138,7 +138,7 @@ function PS_UpdatePlanning(toplayer, toptag, stateStep)
 					local nowangle = item.startangle+nowstepindex*item.anglestep;
 					
 					local r = item.r;
-					r = r * (nowstepindex/totalsteps * 0.6 + 0.4);
+					r = r * (nowstepindex/totalsteps * 0.2 + 0.8);
 					local x = item.x + global.SINT(nowangle)*r;
 					local y = item.y + global.COST(nowangle)*r;
 					

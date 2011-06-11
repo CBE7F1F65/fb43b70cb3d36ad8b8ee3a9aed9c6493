@@ -100,10 +100,11 @@ public:
 	void Update();
 	bool CheckMissionOver();
 
-	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex=ENEMY_ONSIDE, int angle=0);
-	int DoRemoveEnemy(BYTE enemiesindex=ENEMY_ONSIDE);
-	void RemoveEnemy(int index, BYTE enemiesindex=ENEMY_ONSIDE);
-	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex=ENEMY_ONSIDE);
+	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle=0);
+	int DoRemoveEnemy(BYTE enemiesindex);
+	void RemoveEnemy(int index, BYTE enemiesindex);
+	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex);
+	void GetEnemyXYScale(EnemyInGameData * item, float * x, float * y, float * scale);
 
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
@@ -139,6 +140,9 @@ public:
 	BYTE itemtypecount;
 
 	int stateflag;
+
+	//
+	int enemyelayerbase;
 
 	bio3DPoint ptfar;
 

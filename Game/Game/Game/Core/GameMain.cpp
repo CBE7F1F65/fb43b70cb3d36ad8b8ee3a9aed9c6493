@@ -12,6 +12,8 @@ static GameMain * g_GameMainSingleton = NULL;
 #define ININAME_USERNAME	"Username"
 #define INIDEFAULT_USERNAME	""
 
+#define M_CCZ_ELAYER_01		"CCZ_eLayer_01"
+
 GameMain::GameMain()
 {
 	BIOInterface::getInstance()->System_Assert(g_GameMainSingleton == NULL, ASSERTSTR_SECONDSINGLETON);
@@ -46,6 +48,8 @@ GameMain::GameMain()
 		list<EnemyInGameData> _enemiesgroup;
 		enemies.push_back(_enemiesgroup);
 	}
+
+	enemyelayerbase = 0;
 }
 
 GameMain::~GameMain()
@@ -78,6 +82,7 @@ void GameMain::Init()
 	{
 		EnableMission(0, 0);
 	}
+
 	/*
 	if (!HelpIsEnabled(1, 0))
 	{
@@ -524,7 +529,7 @@ bool GameMain::CheckMissionOver()
 	return false;
 }
 
-int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex/*=ENEMY_ONSIDE*/, int angle/*=0*/)
+int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle/*=0*/)
 {
 	EnemyInGameData _edata;
 
@@ -545,7 +550,7 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	return enemies[enemiesindex].size();
 }
 
-int GameMain::DoRemoveEnemy(BYTE enemiesindex/* =ENEMY_ONSIDE */)
+int GameMain::DoRemoveEnemy(BYTE enemiesindex)
 {
 	for (list<EnemyInGameData>::iterator it=enemies[enemiesindex].begin(); it!=enemies[enemiesindex].end();)
 	{
@@ -561,12 +566,12 @@ int GameMain::DoRemoveEnemy(BYTE enemiesindex/* =ENEMY_ONSIDE */)
 	return enemies[enemiesindex].size();
 }
 
-void GameMain::RemoveEnemy(int index, BYTE enemiesindex/*=ENEMY_ONSIDE*/)
+void GameMain::RemoveEnemy(int index, BYTE enemiesindex)
 {
 	GetEnemyByIndex(index, enemiesindex)->life = -1;
 }
 
-EnemyInGameData * GameMain::GetEnemyByIndex(int index, BYTE enemiesindex/* =ENEMY_ONSIDE */)
+EnemyInGameData * GameMain::GetEnemyByIndex(int index, BYTE enemiesindex)
 {
 	int i=0;
 	for (list<EnemyInGameData>::iterator it=enemies[enemiesindex].begin(); it!=enemies[enemiesindex].end(); it++)
@@ -578,6 +583,41 @@ EnemyInGameData * GameMain::GetEnemyByIndex(int index, BYTE enemiesindex/* =ENEM
 		i++;
 	}
 	return NULL;
+}
+
+void GameMain::GetEnemyXYScale(EnemyInGameData * item, float * x, float * y, float * scale)
+{
+	if (!item)
+	{
+		return;
+	}
+
+	if (!enemyelayerbase)
+	{
+		if (!BResource::getInstance()->GetCustomConstDataByName(M_CCZ_ELAYER_01, &enemyelayerbase))
+		{
+			return;
+		}
+	}
+
+	float _x = item->x;
+	float _y = item->y;
+	float _z = (M_SCREEN_Z/M_ENEMY_ELAYERMAX/2.0f)*(M_ENEMY_ELAYERMAX-1-item->elayer/enemyelayerbase);
+	float _scale;
+	
+	_scale = BIOInterface::getInstance()->Math_Transform3DPoint(_x, _y, _z, &(GameMain::getInstance()->ptfar));
+	if (x)
+	{
+		*x = _x;
+	}
+	if (y)
+	{
+		*y = _y;
+	}
+	if (scale)
+	{
+		*scale = _scale;
+	}
 }
 
 void GameMain::Update()

@@ -24,7 +24,19 @@ function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, 
 	end
 	local selitemtag = index + 1;
 	local itemtag, x, y, etype, life, elayer, angle = game.GetActiveEnemyData(index, ENEMY_OnSide);
-	local tx, ty, scale = game.Transform3DPoint(x, y, 1);
+	
+	local enemynode, layertag, grouptag, selitemtag, eindex = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
+	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
+	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
+	game.RunAction(enemynode, enemyaction);
+	
+	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
+	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
+	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	game.RunAction(callnode, callfuncaction);
+	
+	local tx, ty, scale = game.GetEnemyXYScale(eindex);
 	
 	local enemyonsidenode = game.GetNode({toplayer, itemtag});
 	local onsidemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime*2);
@@ -37,17 +49,6 @@ function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, 
 	game.RunAction(enemyonsidenode, onsideaction);
 		
 	game.RemoveEnemy(index, ENEMY_OnSide);
-
-	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
-	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
-	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
-	game.RunAction(enemynode, enemyaction);
-		
-	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
-	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
-	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
-	game.RunAction(callnode, callfuncaction);
 	
 	return false;
 	

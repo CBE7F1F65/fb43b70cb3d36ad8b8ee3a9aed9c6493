@@ -3,6 +3,7 @@
 #include "../Header/DataStruct.h"
 #include "../Header/BResource.h"
 #include "../Header/BIOInterface.h"
+#include "../Header/BGlobal.h"
 
 bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 {
@@ -25,8 +26,6 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("UseItem", LuaFn_Game_UseItem);
 	obj->Register("BuyItem", LuaFn_Game_BuyItem);
 
-
-	obj->Register("Transform3DPoint", LuaFn_Game_Transform3DPoint);
 
 	obj->Register("Update", LuaFn_Game_Update);
 
@@ -51,6 +50,9 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("GetEnemyATK", LuaFn_Game_GetEnemyATK);
 	obj->Register("GetEnemyDEF", LuaFn_Game_GetEnemyDEF);
 	obj->Register("GetEnemyELayerAdvance", LuaFn_Game_GetEnemyELayerAdvance);
+	obj->Register("GetEnemyXYScale", LuaFn_Game_GetEnemyXYScale);
+
+	obj->Register("AttackEnemy", LuaFn_Game_AttackEnemy);
 
 	obj->Register("AddEnemy", LuaFn_Game_AddEnemy);
 	obj->Register("RemoveEnemy", LuaFn_Game_RemoveEnemy);
@@ -306,28 +308,6 @@ int Export_Lua_Game::LuaFn_Game_BuyItem(LuaState * ls)
 	int iret = GameMain::getInstance()->BuyItem(_index);
 
 	node.PInt(iret);
-
-	_LEAVEFUNC_LUA;
-}
-
-int Export_Lua_Game::LuaFn_Game_Transform3DPoint(LuaState * ls)
-{
-	_ENTERFUNC_LUA(2);
-
-	float _x = node.fNextGet();
-	float _y = node.fNextGet();
-	int _zindex = 0;
-	node.jNextGet();
-	if (node.bhavenext)
-	{
-		_zindex = node.iGet();
-	}
-	float _z = (M_SCREEN_Z/M_ENEMY_ELAYERMAX/2.0f)*_zindex;
-	float scale = BIOInterface::getInstance()->Math_Transform3DPoint(_x, _y, _z, &(GameMain::getInstance()->ptfar));
-	
-	node.PFloat(_x);
-	node.PFloat(_y);
-	node.PFloat(scale);
 
 	_LEAVEFUNC_LUA;
 }
@@ -611,6 +591,142 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_GetEnemyXYScale(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// index -> x, y, scale
+	int _index = node.iNextGet();
+	GameMain * pgm = GameMain::getInstance();
+	EnemyInGameData * item = pgm->GetEnemyByIndex(_index, ENEMY_INSCENE);
+	if (!item)
+	{
+		break;
+	}
+	float x, y, scale;
+	pgm->GetEnemyXYScale(item, &x, &y, &scale);
+
+	node.PFloat(x);
+	node.PFloat(y);
+	node.PFloat(scale);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
+{
+	_ENTERFUNC_LUA(4);
+
+	// enemyindex, weapontype, x, y, r/ xe, ye -> hitRate
+	BYTE _index = node.iNextGet();
+	EnemyInGameData * item = GameMain::getInstance()->GetEnemyByIndex(_index, ENEMY_INSCENE);
+	if (!item)
+	{
+		break;
+	}
+	BResource * pbres = BResource::getInstance();
+	enemyBaseData * baseitem = &(pbres->enemybasedata[pbres->enemydata[item->etype].type]);
+	if (!baseitem)
+	{
+		break;
+	}
+	BYTE _weapontype = node.iNextGet();
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	float _r = 0;
+	float _xe = _x;
+	float _ye = _y;
+	switch (_weapontype)
+	{
+	case M_WEAPON_LASER:
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_xe = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_ye = node.fGet();
+			}
+		}
+		break;
+	case M_WEAPON_BOMB:
+	case M_WEAPON_SNIPER:
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_r = node.fGet();
+		}
+		break;
+	}
+
+	float hitRate = 0;
+	float enemyx, enemyy, enemyscale;
+	GameMain::getInstance()->GetEnemyXYScale(item, &enemyx, &enemyy, &enemyscale);
+
+	switch (_weapontype)
+	{
+	case M_WEAPON_LASER:
+		if (BGlobal::CollisionEllipseLine(
+			enemyx+baseitem->headcollision.x*enemyscale, 
+			enemyy+baseitem->headcollision.y*enemyscale, 
+			baseitem->headcollision.rh*enemyscale, 
+			baseitem->headcollision.rv*enemyscale, 
+			_x, _y,
+			_xe, _ye))
+		{
+			hitRate = baseitem->headshotscale;
+		}
+		else if (BGlobal::CollisionEllipseLine(
+			enemyx+baseitem->bodycollision.x*enemyscale, 
+			enemyy+baseitem->bodycollision.y*enemyscale, 
+			baseitem->bodycollision.rh*enemyscale, 
+			baseitem->bodycollision.rv*enemyscale, 
+			_x, _y,
+			_xe, _ye))
+		{
+			hitRate = 1.0f;
+		}
+		break;
+	case M_WEAPON_BOMB:
+	case M_WEAPON_SNIPER:
+		if (BGlobal::CollisionEllipseCircle(
+			enemyx+baseitem->headcollision.x*enemyscale, 
+			enemyy+baseitem->headcollision.y*enemyscale, 
+			baseitem->headcollision.rh*enemyscale, 
+			baseitem->headcollision.rv*enemyscale, 
+			_x, _y,
+			_r))
+		{
+			hitRate = baseitem->headshotscale;
+		}
+		else if (BGlobal::CollisionEllipseCircle(
+			enemyx+baseitem->bodycollision.x*enemyscale, 
+			enemyy+baseitem->bodycollision.y*enemyscale, 
+			baseitem->bodycollision.rh*enemyscale, 
+			baseitem->bodycollision.rv*enemyscale, 
+			_x, _y,
+			_r))
+		{
+			hitRate = 1.0f;
+		}
+		break;
+	}
+
+	//
+	if (hitRate > 0)
+	{
+		if (_weapontype != M_WEAPON_SNIPER)
+		{
+			hitRate = 1.0f;
+		}
+	}
+
+	node.PFloat(hitRate);
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 {
 	_ENTERFUNC_LUA(5);
@@ -636,7 +752,7 @@ int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 	}
 
 	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _elayer, _enemiesindex, _angle);
-	node.PInt(enemycount);
+	node.PInt(enemycount-1);
 
 	_LEAVEFUNC_LUA;
 }

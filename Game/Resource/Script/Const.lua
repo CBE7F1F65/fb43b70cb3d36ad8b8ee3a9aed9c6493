@@ -19,6 +19,9 @@ LConst_ItemVanishTime = 0.3;
 LConst_EnemySpriteFadeTime = 0.3;
 LConst_EnemyEnterDelayTime = 0.1;
 
+LConst_SelfActionDelayTime = 0.5;
+LConst_SelfActionEnemyWoundDelayTime = 0.25;
+
 LConst_SniperScopeScale = 3.75;
 
 
@@ -29,8 +32,6 @@ LConst_PlanBrushFrame = 12;
 LConst_PlanBrushSpace = 5;
 LConst_PlanBrushCrossLength = 100;
 LConst_PlanBrushFadeInStep = 9;
-
-LConst_APCostMin = APMax/8;
 
 LConst_BlinkTimePre = 0.5;
 LConst_BlinkTimePost = 0.9;

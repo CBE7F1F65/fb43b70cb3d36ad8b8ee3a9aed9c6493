@@ -189,7 +189,7 @@ bool BGlobal::CollisionEllipseCircle(float x1, float y1, float rh1, float rv1, f
 
 	if ((x2-x1)*(x2-x1)*(rv1+r2)*(rv1+r2) + 
 		(y2-y1)*(y2-y1)*(rh1+r2)*(rh1+r2) <= 
-		(rh1+r2)*(rh1+r2)*(rv1+r2)*rv1+r2)
+		(rh1+r2)*(rh1+r2)*(rv1+r2)*(rv1+r2))
 	{
 		return true;
 	}

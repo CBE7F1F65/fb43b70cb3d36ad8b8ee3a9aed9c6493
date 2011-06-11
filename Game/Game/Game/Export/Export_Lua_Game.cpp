@@ -106,6 +106,8 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("Random_Int", LuaFn_Game_Random_Int);
 	_gameobj.Register("Random_Float", LuaFn_Game_Random_Float);
 
+	_gameobj.Register("Transform3DPoint", LuaFn_Game_Transform3DPoint);
+
 	_gameobj.Register("FreeTexture", LuaFn_Game_LoadTexture);
 	_gameobj.Register("FreeTexture", LuaFn_Game_FreeTexture);
 
@@ -201,6 +203,40 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	return true;
 }
 
+bool Export_Lua_Game::_LuaHelper_AddChild(CCNode * nownode, CCNode * nodetoadd, int zOrder, int tag/* =kCCNodeTagInvalid */)
+{
+	if (!nownode)
+	{
+		return false;
+	}
+	if (!nodetoadd)
+	{
+		return false;
+	}
+	bool bRet = false;
+
+	if (tag == kCCNodeTagInvalid)
+	{
+		tag = nodetoadd->getTag();
+	}
+
+	if (tag != kCCNodeTagInvalid)
+	{
+		CCNode * child = nownode->getChildByTag(tag);
+		if (child)
+		{
+			bRet = true;
+			nownode->removeChild(child, true);
+		}
+	}
+	nownode->addChild(nodetoadd, zOrder, tag);
+	return bRet;
+}
+
+/************************************************************************/
+/*                                                                      */
+/************************************************************************/
+
 int Export_Lua_Game::LuaFn_Game_Random_Int(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
@@ -269,6 +305,29 @@ int Export_Lua_Game::LuaFn_Game_Random_Float(LuaState * ls)
 	{
 		node.PInt(_seed);
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_Transform3DPoint(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// x, y, z -> x, y, scale
+
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	float _z = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_z = node.fGet();
+	}
+	float scale = BIOInterface::getInstance()->Math_Transform3DPoint(_x, _y, _z, &(GameMain::getInstance()->ptfar));
+
+	node.PFloat(_x);
+	node.PFloat(_y);
+	node.PFloat(scale);
 
 	_LEAVEFUNC_LUA;
 }
@@ -572,7 +631,7 @@ int Export_Lua_Game::LuaFn_Game_GetNode(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		retval = _GetNowNode(&cnode);
 		//
 		/*
@@ -603,7 +662,7 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&cnode);
 		if (!nownode)
 		{
@@ -617,12 +676,13 @@ int Export_Lua_Game::LuaFn_Game_AddNullChild(LuaState * ls)
 			float _y = 0.0f;
 			int _zOrder = 0;
 			int _tag = kCCNodeTagInvalid;
-			_LObjNode tcnode(ls, &(node._obj), &node);
+			_LObjNode tcnode(ls, (node._obj), &node);
 			_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
 
 			CCBaseNode * addednode = CCBaseNode::node();
 			addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
-			nownode->addChild(addednode, _zOrder, _tag);
+//			nownode->addChild(addednode, _zOrder, _tag);
+			_LuaHelper_AddChild(nownode, addednode, _zOrder, _tag);
 
 			node.PDword((DWORD)addednode);
 		}
@@ -642,7 +702,7 @@ int Export_Lua_Game::LuaFn_Game_RemoveChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		nownode = _GetNowNode(&cnode);
 	}
 	else
@@ -683,7 +743,7 @@ int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		nownode = _GetNowNode(&cnode);
 	}
 	else
@@ -721,7 +781,7 @@ int Export_Lua_Game::LuaFn_Game_AddRenderTextureChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode);
 		if (!nownode)
 		{
@@ -735,12 +795,13 @@ int Export_Lua_Game::LuaFn_Game_AddRenderTextureChild(LuaState * ls)
 		node.jNextGet();
 		if (node.bhavenext)
 		{
-			_LObjNode cnode(ls, &(node._obj), &node);
+			_LObjNode cnode(ls, (node._obj), &node);
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 		}
 
 		CCRenderTextureExpand * item = CCRenderTextureExpand::renderTextureWithWidthAndHeight(_width, _height);
-		nownode->addChild(item, _zOrder, _tag);
+//		nownode->addChild(item, _zOrder, _tag);
+		_LuaHelper_AddChild(nownode, item, _zOrder, _tag);
 		item->setPosition(BGlobal::TranslatePosition(_x, _y));
 
 		node.PDword((DWORD)item);
@@ -867,7 +928,7 @@ int Export_Lua_Game::LuaFn_Game_CreateSprite(LuaState * ls)
 	node.jNextGet();
 	if (node.bhavenext && node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 
 		cnode.jNextGet();
 		if (cnode.bhavenext)
@@ -928,7 +989,7 @@ int Export_Lua_Game::LuaFn_Game_AddSpriteChild(LuaState * ls)
 
 	if (node.bhavenext && node.ObjIsTable())
 	{
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode);
 
 		if (nownode)
@@ -940,7 +1001,8 @@ int Export_Lua_Game::LuaFn_Game_AddSpriteChild(LuaState * ls)
 			{
 				_zOrder = node.iGet();
 			}
-			nownode->addChild(sprite, _zOrder);
+//			nownode->addChild(sprite, _zOrder);
+			_LuaHelper_AddChild(nownode, sprite, _zOrder);
 
 		}
 	}
@@ -968,7 +1030,7 @@ int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode);
 		if (!nownode)
 		{
@@ -978,7 +1040,7 @@ int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
 		node.jNextGet();
 		if (node.ObjIsTable())
 		{
-			_LObjNode cnode(ls, &(node._obj), &node);
+			_LObjNode cnode(ls, (node._obj), &node);
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 		}
 
@@ -993,7 +1055,8 @@ int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
 		item = CCLabelTTF::labelWithString(_labelstr, _fontname?(strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME):M_DEFAULT_FONTNAME, _fontsize);
 		if (item)
 		{
-			nownode->addChild(item, _zOrder, _tag);
+//			nownode->addChild(item, _zOrder, _tag);
+			_LuaHelper_AddChild(nownode, item, _zOrder, _tag);
 			item->setPosition(BGlobal::TranslatePosition(_x, _y));
 			node.PDword((DWORD)item);
 		}
@@ -1016,7 +1079,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 	if (node.bhavenext && node.ObjIsTable())
 	{
 		int scenetag = kCCNodeTagInvalid;
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
 		SelectorProtocol * proto = NULL;
 		SEL_MenuHandler cbfunc = NULL;
@@ -1044,7 +1107,7 @@ int Export_Lua_Game::LuaFn_Game_CreateMenuItem(LuaState * ls)
 		node.jNextGet();
 		if (node.bhavenext && node.ObjIsTable())
 		{
-			_LObjNode cnode(ls, &(node._obj), &node);
+			_LObjNode cnode(ls, (node._obj), &node);
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 
 			node.jNextGet();
@@ -1186,7 +1249,7 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 	node.jNextGet();
 	if (node.bhavenext && node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		CCMenuItem * _item = (CCMenuItem *)cnode.dNextGet();
 		CCMenu * menu = CCMenu::menuWithItems(_item, NULL);
 
@@ -1209,7 +1272,7 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 		node.jNextGet();
 		if (node.bhavenext)
 		{
-			_LObjNode _ttcnode(ls, &(node._obj), &node);
+			_LObjNode _ttcnode(ls, (node._obj), &node);
 			CCNode * nownode = _GetNowNode(&_ttcnode);
 
 			if (!nownode)
@@ -1226,10 +1289,11 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 			node.jNextGet();
 			if (node.bhavenext && node.ObjIsTable())
 			{
-				_LObjNode tcnode(ls, &(node._obj), &node);
+				_LObjNode tcnode(ls, (node._obj), &node);
 				_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_tag);
 			}
-			nownode->addChild(menu, _zOrder, _tag);
+//			nownode->addChild(menu, _zOrder, _tag);
+			_LuaHelper_AddChild(nownode, menu, _zOrder, _tag);
 			menu->setPosition(BGlobal::TranslatePosition(_x, _y));
 
 		}
@@ -1256,12 +1320,18 @@ int Export_Lua_Game::LuaFn_Game_AddOverlayChild(LuaState * ls)
 	if (node.bhavenext && node.ObjIsTable())
 	{
 		int _ttag;
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		_GetXYZT(&tcnode, &_x, &_y, &_zOrder, &_ttag);
 	}
 	CCLayer * addednode = CCLayer::node();
 	addednode->setPosition(BGlobal::TranslatePosition(_x, _y));
-	_toplayer->getParent()->addChild(addednode, _zOrder, _tag);
+//	_toplayer->getParent()->addChild(addednode, _zOrder, _tag);
+	CCNode * nownode = _toplayer->getParent();
+	if (!nownode)
+	{
+		break;
+	}
+	_LuaHelper_AddChild(nownode, addednode, _zOrder, _tag);
 	node.PDword((DWORD)addednode);
 
 	_LEAVEFUNC_LUA;
@@ -1290,7 +1360,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		CCLayer * _toplayer = (CCLayer *)cnode.dNextGet();
 		if (!_toplayer)
 		{
@@ -1299,7 +1369,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 		cnode.jNextGet();
 		if (cnode.bhavenext && cnode.ObjIsTable())
 		{
-			_LObjNode ccnode(ls, &(cnode._obj), &node);
+			_LObjNode ccnode(ls, (cnode._obj), &node);
 			CCRect _rect = _GetRect(&ccnode);
 			const char * _text = cnode.sNextGet();
 			const char * _fontname = cnode.sNextGet();
@@ -1308,7 +1378,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 			const char * _defaulttext = cnode.sNextGet();
 
 			node.jNextGet();
-			_LObjNode tcnode(ls, &(node._obj), &node);
+			_LObjNode tcnode(ls, (node._obj), &node);
 			CCNode * nownode = _GetNowNode(&tcnode);
 
 			InputLayer * pInputLayer = NULL;
@@ -1322,7 +1392,7 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 				node.jNextGet();
 				if (node.bhavenext)
 				{
-					_LObjNode ttcnode(ls, &(node._obj), &node);
+					_LObjNode ttcnode(ls, (node._obj), &node);
 					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
 				}
 
@@ -1330,7 +1400,8 @@ int Export_Lua_Game::LuaFn_Game_AddInputLayerChild(LuaState * ls)
 				if (pInputLayer)
 				{
 					pInputLayer->initWithInputData(_toplayer, _rect, _text, strlen(_fontname)?_fontname:M_DEFAULT_FONTNAME, _fontsize, _inputmax, _defaulttext);
-					nownode->addChild(pInputLayer, _zOrder, _tag);
+//					nownode->addChild(pInputLayer, _zOrder, _tag);
+					_LuaHelper_AddChild(nownode, pInputLayer, _zOrder, _tag);
 					pInputLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
 				}
 			}
@@ -1350,7 +1421,7 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		CCLayer * _toplayer = (CCLayer *)cnode.dNextGet();
 		if (!_toplayer)
 		{
@@ -1359,11 +1430,11 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 		cnode.jNextGet();
 		if (cnode.bhavenext && cnode.ObjIsTable())
 		{
-			_LObjNode ccnode(ls, &(cnode._obj), &node);
+			_LObjNode ccnode(ls, (cnode._obj), &node);
 			CCRect _rect = _GetRect(&ccnode);
 
 			node.jNextGet();
-			_LObjNode tcnode(ls, &(node._obj), &node);
+			_LObjNode tcnode(ls, (node._obj), &node);
 			CCNode * nownode = _GetNowNode(&tcnode);
 
 			TouchLayer * pTouchLayer = NULL;
@@ -1377,7 +1448,7 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 				node.jNextGet();
 				if (node.bhavenext)
 				{
-					_LObjNode ttcnode(ls, &(node._obj), &node);
+					_LObjNode ttcnode(ls, (node._obj), &node);
 					_GetXYZT(&ttcnode, &_x, &_y, &_zOrder, &_tag);
 				}
 
@@ -1385,7 +1456,8 @@ int Export_Lua_Game::LuaFn_Game_AddTouchLayerChild(LuaState * ls)
 				if (pTouchLayer)
 				{
 					pTouchLayer->initWithRect(_toplayer, _rect);
-					nownode->addChild(pTouchLayer, _zOrder, _tag);
+//					nownode->addChild(pTouchLayer, _zOrder, _tag);
+					_LuaHelper_AddChild(nownode, pTouchLayer, _zOrder, _tag);
 					pTouchLayer->setPosition(BGlobal::TranslatePosition(_x, _y));
 				}
 				node.PDword((DWORD)pTouchLayer);
@@ -1430,7 +1502,7 @@ int Export_Lua_Game::LuaFn_Game_SetTouchLayerRect(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		CCRect _rect = _GetRect(&cnode);
 		_touchlayer->setTouchRect(_rect);
 	}
@@ -1887,7 +1959,7 @@ int Export_Lua_Game::LuaFn_Game_SetColor(LuaState * ls)
 		node.jNextGet();
 		if (node.bhavenext)
 		{
-			_col = _LuaHelper_GetColor(&(node._obj));
+			_col = _LuaHelper_GetColor((node._obj));
 		}
 		pRGBAProtocol->setOpacity(GETA(_col));
 		pRGBAProtocol->setColor(ccc3(GETR(_col), GETG(_col), GETB(_col)));
@@ -2263,7 +2335,7 @@ int Export_Lua_Game::LuaFn_Game_ActionSequence(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		cnode.jNextGet();
 		if (!cnode.bhavenext)
 		{
@@ -2301,7 +2373,7 @@ int Export_Lua_Game::LuaFn_Game_ActionSpawn(LuaState * ls)
 	node.jNextGet();
 	if (node.ObjIsTable())
 	{
-		_LObjNode cnode(ls, &(node._obj), &node);
+		_LObjNode cnode(ls, (node._obj), &node);
 		cnode.jNextGet();
 		if (!cnode.bhavenext)
 		{
@@ -2437,7 +2509,7 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 	if (node.ObjIsTable())
 	{
 		int scenetag = kCCNodeTagInvalid;
-		_LObjNode tcnode(ls, &(node._obj), &node);
+		_LObjNode tcnode(ls, (node._obj), &node);
 		CCNode * nownode = _GetNowNode(&tcnode, true, &scenetag);
 		if (!nownode)
 		{

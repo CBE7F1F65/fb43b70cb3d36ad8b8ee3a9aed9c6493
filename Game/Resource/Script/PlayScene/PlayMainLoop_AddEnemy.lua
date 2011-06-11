@@ -11,19 +11,19 @@ function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, ela
 		elayer = defelayer;
 	end
 	
-	x, y, scale = game.Transform3DPoint(x, y, 3-elayer/CCZ_eLayer_01);
-	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
 		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
 
-	game.AddEnemy(grouptag+selitemtag, x, y, etype, elayer, ENEMY_InScene);	
+	local eindex = game.AddEnemy(grouptag+selitemtag, x, y, etype, elayer, ENEMY_InScene);
+
+	local tx, ty, scale = game.GetEnemyXYScale(eindex);
 	
-	local spEnemy = game.CreateSprite(siid, {x, y, 0, scale, scale}, grouptag+selitemtag);
+	local spEnemy = game.CreateSprite(siid, {tx, ty, 0, scale, scale}, grouptag+selitemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag}, elayer);
 	
-	return enemynode, layertag, grouptag, selitemtag;
+	return enemynode, layertag, grouptag, selitemtag, eindex;
 end
 
 function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
