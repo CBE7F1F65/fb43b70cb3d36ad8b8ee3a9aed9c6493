@@ -16,14 +16,15 @@ function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, ela
 		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
 
-	local eindex = game.AddEnemy(grouptag+selitemtag, x, y, etype, elayer, ENEMY_InScene);
+	local itemtag = grouptag+selitemtag;
+	local eindex = game.AddEnemy(itemtag, x, y, etype, elayer, ENEMY_InScene);
 
 	local tx, ty, scale = game.GetEnemyXYScale(eindex);
 	
-	local spEnemy = game.CreateSprite(siid, {tx, ty, 0, scale, scale}, grouptag+selitemtag);
+	local spEnemy = game.CreateSprite(siid, {tx, ty, 0, scale, scale}, itemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag}, elayer);
 	
-	return enemynode, layertag, grouptag, selitemtag, eindex;
+	return enemynode, layertag, grouptag, itemtag, eindex;
 end
 
 function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
@@ -37,8 +38,8 @@ function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	local epositem = eposturnitem[index+1];
 	local x, y, etype, elayer = epositem[1], epositem[2], epositem[3], epositem[4];
 	
-	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
-	
+	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
+
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));	
 	local enemyaction = game.ActionFade(CCAF_To, 0xFF, LConst_EnemySpriteFadeTime);
 	game.RunAction(enemynode, enemyaction);
@@ -46,8 +47,8 @@ function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
 	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);
-	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
-	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	local callnodeitemtag = LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag);
+	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodeitemtag});
 	game.RunAction(callnode, callfuncaction);
 	
 	return false;

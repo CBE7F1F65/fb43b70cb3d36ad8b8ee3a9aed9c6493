@@ -87,6 +87,7 @@ function PS_UpdateState(toplayer, toptag)
 		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Progressing;
 			if PS_SelfAction(toplayer, toptag, stateStep) then
+				game.DoRemoveEnemy(ENEMY_InScene);
 				stateST = STATE_ST_Finished;
 			end
 		end

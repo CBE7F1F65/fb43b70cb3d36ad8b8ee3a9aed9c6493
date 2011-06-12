@@ -70,3 +70,8 @@ function LGlobal_PlayScene_RunShakeAction(node, orix, oriy)
 	local bezieraction = game.ActionSequence({bezieractionpre, bezieractionpost});
 	game.RunAction(node, bezieraction);
 end
+
+function LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag)
+	local toptag, sublayertag, menugrouptag, menuitemtag = game.GetSubTags(itemtag);
+	return toptag+sublayertag+CCPSTM_Enemy_CallNode+menuitemtag;
+end

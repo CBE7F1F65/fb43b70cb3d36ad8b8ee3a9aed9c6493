@@ -27,6 +27,8 @@ function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	end
 	local itemtag, x, y, etype, life = game.GetActiveEnemyData(index, ENEMY_InScene);
 
+	local enemynode = game.GetNode({toplayer, itemtag});
+	
 	local ttoptag, tsublayertag, tmenugrouptag, tmenuitemtag = game.GetSubTags(itemtag);
 	local menugroup = itemtag-tmenuitemtag;
 	game.SetZ(enemynode, menugroup+elayer);
@@ -37,14 +39,14 @@ function PS_EnemyAdvanceELayer(toplayer, toptag, index, etype, elayer)
 	local aemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime);
 	local aescaleaction = game.ActionScale(CCAF_To, scale, scale, LConst_EnemySpriteFadeTime, true);
 	local aeaction = game.ActionSpawn({aemoveaction, aescaleaction});
-	local enemynode = game.GetNode({toplayer, itemtag});
 
 	game.RunAction(enemynode, aeaction);
-	
+
 end
 
 function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn, bZeroLayerOnly)
 	local enemyinscenecount = game.GetActiveEnemyData();
+
 	if index >= enemyinscenecount then
 		return true;
 	end
@@ -75,7 +77,7 @@ function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn
 	end
 
 	local enemynode = game.GetNode({toplayer, itemtag});
-	
+
 	local delaytime = LConst_EnemyEnterDelayTime;
 	local state = STATE_EnemyAction;
 	if not doaction then
@@ -88,9 +90,11 @@ function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn
 
 	local dataindex = LGlobal_SaveData(state);
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime, dataindex);
-	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
-	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodegrouptag+index+1});
+	local callnodeitemtag = LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag);
+	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodeitemtag});
+
 	game.RunAction(callnode, callfuncaction);
+
 	return false;
 end
 

@@ -16,6 +16,7 @@ function PS_SidePosToScenePos(x, y, angle)
 end
 
 function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, nowturn)
+
 	local layertag = toptag + CCPSTL_EnemyOnSide;
 	local grouptag = layertag + CCTag_MenuSub_01*(nowturn+1);
 	local enemyinscenecount, enemyonsidecount = game.GetActiveEnemyData();
@@ -23,22 +24,23 @@ function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, 
 		return true;
 	end
 	local selitemtag = index + 1;
-	local itemtag, x, y, etype, life, elayer, angle = game.GetActiveEnemyData(index, ENEMY_OnSide);
+	local onsideitemtag, x, y, etype, life, elayer, angle = game.GetActiveEnemyData(index, ENEMY_OnSide);
 	
-	local enemynode, layertag, grouptag, selitemtag, eindex = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
+	local enemynode, layertag, grouptag, itemtag, eindex = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
 	game.RunAction(enemynode, enemyaction);
 	
 	local dataindex = LGlobal_SaveData(STATE_EnemyEnter);	
-	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
-	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);
+	local callnodeitemtag = LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag);
+	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodeitemtag});
+
 	game.RunAction(callnode, callfuncaction);
 	
 	local tx, ty, scale = game.GetEnemyXYScale(eindex);
 	
-	local enemyonsidenode = game.GetNode({toplayer, itemtag});
+	local enemyonsidenode = game.GetNode({toplayer, onsideitemtag});
 	local onsidemoveaction = game.ActionMove(CCAF_To, tx, ty, LConst_EnemySpriteFadeTime*2);
 	local onsidealphaaction = game.ActionFade(CCAF_To, 0, LConst_EnemySpriteFadeTime*2);
 	local onsidedeleteaction = game.ActionDelete();
@@ -85,10 +87,11 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
 	end
 
-	local spEnemy = game.CreateSprite(sidesiid, {x, y}, grouptag+selitemtag);
+	local itemtag = grouptag+selitemtag;
+	local spEnemy = game.CreateSprite(sidesiid, {x, y}, itemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag});
-	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {64, 64, angle, 2, 2}, grouptag+selitemtag);
-	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, grouptag+selitemtag});
+	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {64, 64, angle, 2, 2}, itemtag);
+	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, itemtag});
 	
 	game.SetColor(enemysidearrownode, global.ARGB(0, 0xffffff));
 	local arrowfadeactionpre = game.ActionFade(CCAF_To, 0xCF, LConst_BlinkTimePre);
@@ -99,9 +102,9 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 
 	local tx, ty = PS_SidePosToScenePos(x, y, angle)
 
-	game.AddEnemy(grouptag+selitemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
+	game.AddEnemy(itemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
 	
-	return enemynode, layertag, grouptag, selitemtag;
+	return enemynode, layertag, grouptag, itemtag;
 end
 
 function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn)
@@ -119,7 +122,7 @@ function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowtur
 	local epositem = eposturnitem[index+1];
 	local x, y, etype, angle = epositem[1], epositem[2], epositem[3], epositem[4];
 	
-	local enemynode, layertag, grouptag, selitemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
+	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
 	
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	
@@ -128,8 +131,8 @@ function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowtur
 	
 	local dataindex = LGlobal_SaveData(STATE_AddEnemy);	
 	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
-	local callnodegrouptag = layertag + CCPSTM_Enemy_CallNode;
-	local callnode = game.AddNullChild({toplayer, grouptag+selitemtag}, {0, 0, 0, callnodegrouptag+selitemtag});
+	local callnodeitemtag = LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag);
+	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodeitemtag});
 	game.RunAction(callnode, callfuncaction);
 	
 	return false;
