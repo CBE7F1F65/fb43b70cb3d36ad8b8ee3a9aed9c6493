@@ -692,11 +692,11 @@ bool DataTable::ReadMissionDefineTable()
 		item->missiontype = _LOADTINT;
 		item->bgsiid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->sp = _LOADTINT;
-		item->targets[0].enemytype = _LOADTINT;
+		item->targets[0].enemybasetype = _LOADTINT;
 		item->targets[0].num = _LOADTINT;
-		item->targets[1].enemytype = _LOADTINT;
+		item->targets[1].enemybasetype = _LOADTINT;
 		item->targets[1].num = _LOADTINT;
-		item->targets[2].enemytype = _LOADTINT;
+		item->targets[2].enemybasetype = _LOADTINT;
 		item->targets[2].num = _LOADTINT;
 		item->defend.defendturn = _LOADTINT;
 

@@ -17,6 +17,10 @@ LGlobal_EnemyPosTable	=
 {
 	--World1
 	{
+		{
+			{
+			}
+		},
 		--Mission1 (skip event mission)
 		{
 			--Init

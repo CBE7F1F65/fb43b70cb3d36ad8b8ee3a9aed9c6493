@@ -3,6 +3,7 @@
 
 #include "Const.h"
 #include "MainDependency.h"
+#include "GameAchievement.h"
 
 // TODO Update GameData from order version
 
@@ -43,6 +44,7 @@ struct GameData
 	StageScoreData stages[M_STAGEMAX];
 	HelpAccessData helps[M_HELPTYPEMAX];
 	ItemOwnedData items[M_ITEMTYPEMAX];
+	AchievementData achieves;
 };
 
 #endif

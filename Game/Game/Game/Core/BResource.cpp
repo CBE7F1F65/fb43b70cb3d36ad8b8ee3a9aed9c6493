@@ -164,6 +164,16 @@ void BResource::ClearMissionData()
 	ZeroMemory(missiondata, RSIZE_MISSION);
 }
 
+int BResource::GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex)
+{
+	return stageindex*M_STAGEMISSIONMAX+missionindex;
+}
+
+BYTE BResource::GetEnemyBaseType(BYTE etype)
+{
+	return enemydata[etype].type;
+}
+
 BResource * BResource::getInstance()
 {
 	if (!g_BResourceSingleton)

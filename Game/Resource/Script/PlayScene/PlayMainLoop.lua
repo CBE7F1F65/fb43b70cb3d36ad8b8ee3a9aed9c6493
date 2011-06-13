@@ -114,6 +114,7 @@ function PS_UpdateState(toplayer, toptag)
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
 		elseif stateST == STATE_ST_Standby then
+			stateST = STATE_ST_Progressing;
 			if PS_ShowOver(toplayer, toptag) then
 				stateST = STATE_ST_Finished;
 			end

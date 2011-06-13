@@ -42,6 +42,9 @@ public:
 	void ClearEnemyData();
 	void ClearMissionData();
 
+	int GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex);
+	BYTE GetEnemyBaseType(BYTE etype);
+
 	int Texture_GetWidth(HTEXTURE tex);
 	int Texture_GetHeight(HTEXTURE tex);
 	DWORD Texture_GetTexture(HTEXTURE tex);

@@ -172,6 +172,8 @@ public:
 	static int LuaFn_Game_SetActiveEnemyData(LuaState * ls);
 	static int LuaFn_Game_GetActiveEnemyData(LuaState * ls);
 
+	static int LuaFn_Game_DoMissionOver(LuaState * ls);
+
 	static int LuaFn_Game_GetState(LuaState * ls);
 	static int LuaFn_Game_SetState(LuaState * ls);
 

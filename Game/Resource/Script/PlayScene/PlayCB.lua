@@ -700,7 +700,29 @@ function PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, se
 end
 
 function PSCB_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	
+	local layertag = toptag + sublayertag;
+	
+	local movedownaction = game.ActionMove(CCAF_To, 0, -480, LConst_BoardMoveTime);
+	local layernode = game.GetNode({toplayer, layertag});
+		
+	game.RunAction(layernode, movedownaction);
+		
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
+	local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_Message_OverMenuDelay+selitemtag});
+
+	game.RunAction(callnode, callfuncaction);
+	
 end
 
 function PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	
+	if selitemtag == 1 then
+		-- TODO
+	elseif selitemtag == 2 then
+		game.PushScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+	elseif selitemtag == 3 then
+		game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
+	end
+	
 end

@@ -78,6 +78,7 @@ CCPSTL_Enemy = CCTag_Layer_02;
 CCPSTL_ObjFG = CCTag_Layer_03;
 CCPSTL_Message = CCTag_Layer_04;
 	CCPSTM_Message_TargetBoard = CCTag_Menu_01;
+	CCPSTM_Message_OverBoard = CCTag_Menu_02;
 	CCPSTM_Message_TargetMenu = CCTag_Menu_04;
 	CCPSTM_Message_OverMenu = CCTag_Menu_06;
 	--

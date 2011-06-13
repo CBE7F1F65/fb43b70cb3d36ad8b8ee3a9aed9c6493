@@ -113,7 +113,7 @@ struct enemyData
 // mission
 
 struct missionTargetData{
-	BYTE enemytype;
+	BYTE enemybasetype;
 	BYTE num;
 };
 

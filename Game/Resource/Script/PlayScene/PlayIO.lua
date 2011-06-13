@@ -47,9 +47,12 @@ function PlayScene_OnInit(toplayer, toptag)
 	-- Message
 	layertag = toptag + CCPSTL_Message;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Message, layertag});
-	-- Target/Turn/Mission Over
+	-- Target/Turn
 	grouptag = layertag + CCPSTM_Message_TargetBoard;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Message_TargetBoard, grouptag});
+	-- Mission Over
+	grouptag = layertag + CCPSTM_Message_OverBoard;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Message_OverBoard, grouptag});
 	
 	-- Frame
 	layertag = toptag + CCPSTL_Frame;

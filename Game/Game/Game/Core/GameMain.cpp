@@ -2,6 +2,8 @@
 #include "../Header/BIOInterface.h"
 #include "../Header/BResource.h"
 
+#include "../Header/GameAchievement.h"
+
 static GameMain * g_GameMainSingleton = NULL;
 
 #define INISECTION_CUSTOM	"Custom"
@@ -50,6 +52,8 @@ GameMain::GameMain()
 	}
 
 	enemyelayerbase = 0;
+
+	GameAchievement::Init(&(gamedata.achieves));
 }
 
 GameMain::~GameMain()
@@ -89,6 +93,12 @@ void GameMain::Init()
 		EnableHelp(1, 0);
 	}
 	*/
+}
+
+void GameMain::OnlineLinkedCallback()
+{
+	ReportHiScore();
+	GameAchievement::SubmitAchievement();
 }
 
 void GameMain::ReadIni()
@@ -170,6 +180,7 @@ bool GameMain::InsertScore(int score)
 	if (btopscore)
 	{
 		ReportHiScore();
+		GameAchievement::HiScoreSet(score);
 	}
 	SaveData();
 	return btopscore;
@@ -236,6 +247,34 @@ bool GameMain::EnableMission(int missionindex, int stageindex/* =-1 */)
 	return true;
 }
 
+int GameMain::GetMissionHiScore(int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		missionindex = nowmission;
+	}
+
+	return gamedata.stages[stageindex].missions[missionindex].hiscore;
+}
+
+BYTE GameMain::GetMissionRank(int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		missionindex = nowmission;
+	}
+
+	return gamedata.stages[stageindex].missions[missionindex].rank;
+}
+
 bool GameMain::TryStage(int index)
 {
 	if (index < 0 || index >= M_STAGEMAX)
@@ -265,6 +304,8 @@ bool GameMain::TryMission(int missionindex, int stageindex/* =-1 */)
 		TryStage(stageindex);
 	}
 	nowmission = missionindex;
+
+	GameAchievement::SingleMissionTryCountSet(gamedata.stages[stageindex].missions[missionindex].trycount);
 
 	SaveData();
 
@@ -347,14 +388,12 @@ bool GameMain::UseItem(BYTE type)
 
 int GameMain::GetMissionBGSIID()
 {
-	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
-	return BResource::getInstance()->missiondata[index].bgsiid;
+	return GetMissionData()->bgsiid;
 }
 
 void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 {
-	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
-	missionData * item = &(BResource::getInstance()->missiondata[index]);
+	missionData * item = GetMissionData();
 	if (helpindexs)
 	{
 		for (int i=0; i<M_MISSIONHELPMAX; i++)
@@ -367,16 +406,16 @@ void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 
 missionData * GameMain::GetMissionData()
 {
-	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
-	return &(BResource::getInstance()->missiondata[index]);
+	BResource * pbres = BResource::getInstance();
+	int index = pbres->GetMissionDataIndexByStageMission(nowstage, nowmission);
+	return &(pbres->missiondata[index]);
 }
 
 void GameMain::EnterMission()
 {
 	nowhp = M_GAMEHPMAX;
 	nowap = M_GAMEAPMAX;
-	int index = nowstage*M_STAGEMISSIONMAX+nowmission;
-	nowsp = BResource::getInstance()->missiondata[index].sp;
+	nowsp = GetMissionData()->sp;
 	stateflag = GAMESTATE_ST_NULL;
 
 	missionscore = 0;
@@ -386,11 +425,33 @@ void GameMain::EnterMission()
 	{
 		enemies[i].clear();
 	}
+
+	ZeroMemory(&targetcount, sizeof(missionTargetData)*M_MISSIONTARGETMAX);
+
+	missionData * item = GetMissionData();
+	if (item->missiontype == M_MISSIONTYPE_TARGET)
+	{
+		for (int i=0; i<M_MISSIONTARGETMAX; i++)
+		{
+			targetcount[i].enemybasetype = item->targets[i].enemybasetype;
+		}
+	}
 }
 
 bool GameMain::ClearMission()
 {
 	MissionScoreData * item = &gamedata.stages[nowstage].missions[nowmission];
+
+	missionData * mitem = GetMissionData();
+
+	GameAchievement::BestTurnSet(nowturn);
+	if (!item->clearcount)
+	{
+		// TODO: bStory
+		bool bStory = false;
+		GameAchievement::MissionClearAdd(nowstage, bStory);
+	}
+
 	item->clearcount++;
 
 	if (nowturn < item->bestturn)
@@ -400,9 +461,22 @@ bool GameMain::ClearMission()
 
 	if (missionscore > item->hiscore)
 	{
+		totalscore += missionscore - item->hiscore;
 		item->hiscore = missionscore;
-	}
 
+		int orank = item->rank;
+		for (int i=item->rank; i<M_MISSIONRANKMAX; i++)
+		{
+			if (missionscore >= mitem->ranks[i].hiscore)
+			{
+				item->rank = i+1;
+			}
+		}
+		if (item->rank == M_MISSIONRANKMAX && item->rank > orank)
+		{
+			GameAchievement::Rank3Add();
+		}
+	}
 	return InsertScore(totalscore);
 }
 
@@ -523,10 +597,61 @@ const char * GameMain::GetHiScoreUsername(int index)
 }
 
 
-bool GameMain::CheckMissionOver()
+BYTE GameMain::CheckMissionOver()
 {
-	// TODO
-	return false;
+	missionData * item = GetMissionData();
+	switch (item->missiontype)
+	{
+	case M_MISSIONTYPE_NORMAL:
+		if (true)
+		{
+			int totalenemycount = 0;
+			for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
+			{
+				totalenemycount += enemies[i].size();
+			}
+			if (!totalenemycount)
+			{
+				return M_MISSIONSTATE_CLEAR;
+			}
+		}
+		break;
+	case M_MISSIONTYPE_DEFEND:
+		if (nowturn > item->defend.defendturn)
+		{
+			return M_MISSIONSTATE_CLEAR;
+		}
+		break;
+	case M_MISSIONTYPE_TARGET:
+		if (true)
+		{
+			int targetclearedcount = 0;
+			missionData * mitem = GetMissionData();
+			for (int i=0; i<M_MISSIONTARGETMAX; i++)
+			{
+				if (targetcount[i].num >= mitem->targets[i].num || targetcount[i].enemybasetype >= M_ENEMYTYPEMAX)
+				{
+					targetclearedcount++;
+				}
+			}
+			if (targetclearedcount == M_MISSIONTARGETMAX)
+			{
+				return M_MISSIONSTATE_CLEAR;
+			}
+		}
+		break;
+	case M_MISSIONTYPE_SUICIDE:
+		if (nowhp <= 0)
+		{
+			return M_MISSIONSTATE_CLEAR;
+		}
+		break;
+	}
+	if (nowhp <= 0)
+	{
+		return M_MISSIONSTATE_FAILED;
+	}
+	return M_MISSIONSTATE_PROGRESSING;
 }
 
 int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle/*=0*/)
@@ -552,23 +677,54 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 
 int GameMain::DoRemoveEnemy(BYTE enemiesindex)
 {
+	int beatcountinoneturn = 0;
 	for (list<EnemyInGameData>::iterator it=enemies[enemiesindex].begin(); it!=enemies[enemiesindex].end();)
 	{
 		if (it->life < 0)
 		{
 			it = enemies[enemiesindex].erase(it);
+			beatcountinoneturn++;
 		}
 		else
 		{
 			++it;
 		}
 	}
+	if (beatcountinoneturn && enemiesindex == ENEMY_INSCENE)
+	{
+		GameAchievement::BeatInOneTurnSet(beatcountinoneturn);
+	}
 	return enemies[enemiesindex].size();
 }
 
 void GameMain::RemoveEnemy(int index, BYTE enemiesindex)
 {
-	GetEnemyByIndex(index, enemiesindex)->life = -1;
+	EnemyInGameData * item = GetEnemyByIndex(index, enemiesindex);
+	if (!item || item->life < 0)
+	{
+		return;
+	}
+	item->life = -1;
+	if (enemiesindex == ENEMY_INSCENE)
+	{
+		BYTE basetype = BResource::getInstance()->GetEnemyBaseType(item->etype);
+		GameAchievement::BeatCountAdd(basetype);
+		missionData * mitem = GetMissionData();
+		if (mitem->missiontype == M_MISSIONTYPE_TARGET)
+		{
+			for (int i=0; i<M_MISSIONTARGETMAX; i++)
+			{
+				if (targetcount[i].enemybasetype == basetype)
+				{
+					if (targetcount[i].num < mitem->targets[i].num)
+					{
+						targetcount[i].num++;
+					}
+					break;
+				}
+			}
+		}
+	}
 }
 
 EnemyInGameData * GameMain::GetEnemyByIndex(int index, BYTE enemiesindex)
@@ -671,7 +827,14 @@ void GameMain::Update()
 			stateAction = GAMESTATE_SHOWTURNSTART;
 			break;
 		case GAMESTATE_SHOWTURNSTART:
-			stateAction = GAMESTATE_PLANNING;
+			if (CheckMissionOver())
+			{
+				stateAction = GAMESTATE_OVER;
+			}
+			else
+			{
+				stateAction = GAMESTATE_PLANNING;
+			}
 			break;
 		case GAMESTATE_PLANNING:
 			stateAction = GAMESTATE_SELFACTION;

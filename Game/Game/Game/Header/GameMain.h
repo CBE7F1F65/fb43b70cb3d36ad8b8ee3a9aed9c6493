@@ -59,6 +59,9 @@ public:
 	GameMain();
 	~GameMain();
 
+	// TODO:
+	void OnlineLinkedCallback();
+
 	void Init();
 
 	bool ReadData();
@@ -72,6 +75,9 @@ public:
 	bool MissionIsEnabled(int missionindex, int stageindex=-1);
 	int GetMissionTryCount(int missionindex, int stageindex=-1);
 	bool EnableMission(int missionindex, int stageindex=-1);
+
+	int GetMissionHiScore(int missionindex=-1, int stageindex=-1);
+	BYTE GetMissionRank(int missionindex=-1, int stageindex=-1);
 
 	bool TryStage(int index);
 	bool TryMission(int missionindex, int stageindex=-1);
@@ -98,7 +104,7 @@ public:
 	int SetState(int stateST, int stateAction=-1, int stateStep=-1);
 
 	void Update();
-	bool CheckMissionOver();
+	BYTE CheckMissionOver();
 
 	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle=0);
 	int DoRemoveEnemy(BYTE enemiesindex);
@@ -134,8 +140,10 @@ public:
 	BYTE helpindex;
 
 	int missionscore;
-	int totalscore;	// TODO(calculate on re enter mission)
+	int totalscore;
 	int nowturn;
+
+	missionTargetData targetcount[M_MISSIONTARGETMAX];
 
 	BYTE itemtypecount;
 

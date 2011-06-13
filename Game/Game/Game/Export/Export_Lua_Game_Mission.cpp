@@ -60,6 +60,8 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("SetActiveEnemyData", LuaFn_Game_SetActiveEnemyData);
 	obj->Register("GetActiveEnemyData", LuaFn_Game_GetActiveEnemyData);
 
+	obj->Register("DoMissionOver", LuaFn_Game_DoMissionOver);
+
 	obj->Register("GetState", LuaFn_Game_GetState);
 	obj->Register("SetState", LuaFn_Game_SetState);
 
@@ -376,7 +378,7 @@ int Export_Lua_Game::LuaFn_Game_GetMissionTargetData(LuaState * ls)
 		case M_MISSIONTYPE_TARGET:
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)
 			{
-				node.PInt(item->targets[i].enemytype);
+				node.PInt(item->targets[i].enemybasetype);
 				node.PInt(item->targets[i].num);
 			}
 			break;
@@ -625,7 +627,8 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 		break;
 	}
 	BResource * pbres = BResource::getInstance();
-	enemyBaseData * baseitem = &(pbres->enemybasedata[pbres->enemydata[item->etype].type]);
+	BYTE basetype = pbres->GetEnemyBaseType(item->etype);
+	enemyBaseData * baseitem = &(pbres->enemybasedata[basetype]);
 	if (!baseitem)
 	{
 		break;
@@ -851,6 +854,38 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		node.PInt(elayer);
 		node.PInt(angle);
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// -> missionstate, hiscore, rank, btop
+
+	GameMain * pgm = GameMain::getInstance();
+
+	bool btop = false;
+	BYTE missionstate = pgm->CheckMissionOver();
+	switch (missionstate)
+	{
+	case M_MISSIONSTATE_PROGRESSING:
+		break;
+	case M_MISSIONSTATE_CLEAR:
+		btop = pgm->ClearMission();
+		break;
+	case M_MISSIONSTATE_FAILED:
+		break;
+	}
+
+	int hiscore = pgm->GetMissionHiScore();
+	BYTE rank = pgm->GetMissionRank();
+
+	node.PInt(missionstate);
+	node.PInt(hiscore);
+	node.PInt(rank);
+	node.PBoolean(btop);
 
 	_LEAVEFUNC_LUA;
 }

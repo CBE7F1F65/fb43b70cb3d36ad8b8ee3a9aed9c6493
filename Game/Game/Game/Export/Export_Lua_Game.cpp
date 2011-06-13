@@ -93,6 +93,10 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("NODETYPE_RenderTexture", M_NODETYPE_RENDERTEXTURE);
 	obj->SetInteger("NODETYPE_BaseNode", M_NODETYPE_BASENODE);
 
+	obj->SetInteger("MISSIONSTATE_Progressing", M_MISSIONSTATE_PROGRESSING);
+	obj->SetInteger("MISSIONSTATE_Clear", M_MISSIONSTATE_CLEAR);
+	obj->SetInteger("MISSIONSTATE_Failed", M_MISSIONSTATE_FAILED);
+
 	return true;
 }
 
