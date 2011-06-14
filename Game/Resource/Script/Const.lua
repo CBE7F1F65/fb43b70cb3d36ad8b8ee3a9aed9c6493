@@ -40,3 +40,15 @@ LConst_BoardMoveTime = 0.2;
 LConst_BoardShowTime = 0.6;
 
 LConst_PlanGroupMax = 8;
+
+LConst_MissionIndex_Start = 0;
+LConst_MissionIndex_StoryStart = LConst_MissionIndex_Start;
+LConst_MissionIndex_Story = 17;
+LConst_MissionIndex_FreeStart = LConst_MissionIndex_StoryStart+LConst_MissionIndex_Story;
+LConst_MissionIndex_Free = 16;
+LConst_MissionIndex_GoldenEggStart = LConst_MissionIndex_FreeStart+LConst_MissionIndex_Free;
+LConst_MissionIndex_GoldenEgg = 16;
+LConst_MissionIndex_End = LConst_MissionIndex_GoldenEggStart+LConst_MissionIndex_GoldenEgg;
+
+LConst_MissionIndex_ExtraStage = 8;
+LConst_ExtraStageIndex = 7;

@@ -654,9 +654,9 @@ bool DataTable::ReadMissionDefineTable()
 		_CHECKEOF_DATATABLE;
 		missionData * item = &(pbres->missiondata[tindex]);
 
-		fscanf(file, "%x%s%x%d%d%d%d%d%d%d%d%d%d%d%x%x%x", 
+		fscanf(file, "%x%d%s%x%d%d%d%d%d%d%d%d%d%d%d%x%x%x", 
 			_SAVETINT,
-//			&(item->missiontype), 
+			_SAVETINT, 
 			strbuffer[0],
 			&(item->weatherflag), 
 			_SAVETINT,
@@ -667,22 +667,12 @@ bool DataTable::ReadMissionDefineTable()
 			_SAVETINT,
 			_SAVETINT,
 			_SAVETINT,
-/*			&(item->targets[0].enemytype), 
-			&(item->targets[0].num), 
-			&(item->targets[1].enemytype), 
-			&(item->targets[1].num), 
-			&(item->targets[2].enemytype), 
-			&(item->targets[2].num), 
-			&(item->defend.defendturn), 
-*/			&(item->ranks[0].hiscore), 
+			&(item->ranks[0].hiscore), 
 			&(item->ranks[1].hiscore), 
 			&(item->ranks[2].hiscore), 
 			_SAVETINT,
 			_SAVETINT,
 			_SAVETINT
-//			&(item->helps[0].helpindex), 
-//			&(item->helps[1].helpindex), 
-//			&(item->helps[2].helpindex)
 			);
 
 
@@ -690,6 +680,7 @@ bool DataTable::ReadMissionDefineTable()
 		_INITTINT;
 
 		item->missiontype = _LOADTINT;
+		item->placement = _LOADTINT;
 		item->bgsiid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->sp = _LOADTINT;
 		item->targets[0].enemybasetype = _LOADTINT;

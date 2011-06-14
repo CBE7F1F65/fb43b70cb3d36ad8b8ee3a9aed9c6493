@@ -31,72 +31,135 @@ function MissionSelectScene_OnInit(toplayer, toptag)
 	
 end
 
+
 function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	
 	local nowstage = game.GetNowStageMissionTurn();
-	local postable = LGlobal_MissionSelect_NodePos[nowstage+1];
-	local nodecount = table.getn(postable);
+	
+	local missioninfos = {};
+	local placemax = {};
+	for i=1, 3 do
+		placemax[i] = 0;
+	end
+	local missioncount = LConst_MissionIndex_End;
+	if nowstage == LConst_ExtraStageIndex then
+		missioncount = LConst_MissionIndex_ExtraStage;
+	end
 		
-	local spMenus = {};
-	local spSelectedMenus = {};
-	local spDisabledMenus = {};
+	for i=0, missioncount-1 do
+		missioninfos[i+1] = {};
+		local hiscore, rank, missiontype, place = game.GetMissionInfo(i);
+		
+		if i > 0 and missioninfos[i].place == place then
+			local ycountindex = 0;
+			local j = i;
+			while j > 0 and missioninfos[j].place == place do
+
+				missioninfos[j].ycount = missioninfos[j].ycount+1;
+				j = j-1;
+				ycountindex = ycountindex + 1;
+			end
+			missioninfos[i+1].ycount = ycountindex+1;
+			missioninfos[i+1].ycountindex = ycountindex;
+		else
+			missioninfos[i+1].ycount = 1;
+			missioninfos[i+1].ycountindex = 0;
+		end
+		
+		local missionenabled, missiontriedtime, missionclearedtime = game.MissionIsEnabled(i);
+		missioninfos[i+1].hiscore, missioninfos[i+1].rank, missioninfos[i+1].missiontype, missioninfos[i+1].place = hiscore, rank, missiontype, place;
+		missioninfos[i+1].enabled, missioninfos[i+1].triedtime = missionenabled, missiontriedtime;
+		
+		local placeindex;
+		if i < LConst_MissionIndex_FreeStart then
+			placeindex = 1;
+		elseif i < LConst_MissionIndex_GoldenEggStart then
+			placeindex = 2;
+		else
+			placeindex = 3;
+		end
+		if place > placemax[placeindex] then
+			placemax[placeindex] = place;
+		end
+		
+		if missiontype == MISSIONTYPE_Movie then
+			missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Event);
+			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_Event_Down);
+		elseif missiontype == MISSIONTYPE_Boss then
+			if missionclearedtime > 0 then
+				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_BossMission_Cleared);
+			else
+				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_BossMission);
+			end
+			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_BossMission_Down);
+			missioninfos[i+1].spDisabledMenu = game.CreateSprite(SI_MSUI_BossMission_Disabled);
+		else
+			if missionclearedtime > 0 then
+				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Mission_Cleared);
+			else
+				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Mission);
+			end
+			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_Mission_Down);
+			missioninfos[i+1].spDisabledMenu = game.CreateSprite(SI_MSUI_Mission_Disabled);
+		end
+		
+	end
+		
+	local xlen = {};
+	local xstart = {};
+	local yspace = 120;
+	local placespace = {};
+	
+	for i=1, 3 do
+		if i == 1 then
+			xlen[i] = 800;
+		else
+			xlen[i] = 600;
+		end
+		xstart[i] = (960-xlen[i])/2;
+		if placemax[i] ~= nil then
+			placespace[i] = xlen[i]/(placemax[i]-1);
+		end
+	end
+	
+	local layertag = toptag + CCSTL_BG;
+	local spriteBG = game.CreateSprite(SI_White, {480, 400, 0, xlen[1]+120, yspace*3+80});
+	game.AddSpriteChild(spriteBG, {toplayer, layertag});
+	game.SetColor(spriteBG, global.ARGB(0x3f, 0x808080));
+	
 	local menus = {};
-	local layertag = toptag + CCMSSTL_Menu;
+	layertag = toptag + CCMSSTL_Menu;
 	local grouptag = layertag + CCMSSTM_Menu_Main;
 	
-	local xcen=0;
-	local ycen=0;
-	
-	for i=0, nodecount do
+	for i=0, missioncount-1 do
 		
-		local enabled = true;
-		local missionenabled = false;
-		local missiontriedtime = 0;
-		
-		if i < nodecount then
-			
-			missionenabled, missiontriedtime = game.MissionIsEnabled(i);
-			--event
-			if i == 0 and nowstage < 7 then
-				spMenus[i+1] = game.CreateSprite(SI_MSUI_Event);
-				spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Event_Down);
-			--pace
-			else
-			
-				if not missionenabled then
-					enabled = false;
-				end
-			
-				if missiontriedtime > 0 then
-					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Tried);
-				else
-					spMenus[i+1] = game.CreateSprite(SI_MSUI_Mission);
-				end
-				spDisabledMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Disabled);
-				spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Mission_Down);
-			end
-		--back
+		local placeindex, xpageoffset;
+		if i < LConst_MissionIndex_FreeStart then
+			placeindex = 1;
+			xpageoffset = 0;
+		elseif i < LConst_MissionIndex_GoldenEggStart then
+			placeindex = 2;
+			xpageoffset = 960;
 		else
-			spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
-			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
+			placeindex = 3;
+			xpageoffset = 1920;
 		end
 		
-		if i < nodecount then
-			xcen = postable[i+1][1];
-			ycen = postable[i+1][2];
-		else
-			xcen = 800;
-			ycen = 120;
+		local x = placespace[placeindex]*(missioninfos[i+1].place-1) + xstart[placeindex] + xpageoffset;
+		local y = -(missioninfos[i+1].ycountindex - (missioninfos[i+1].ycount-1)/2) * yspace + 400;
+		
+		if i==0 and nowstage ~= LConst_ExtraStageIndex then
+			x = x+placespace[placeindex];
+			y = y+yspace;
 		end
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xcen+40, ycen-40, CCMSSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1], spDisabledMenus[i+1]);
-		
-		if not enabled then
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x-40, y+40, CCMSSTM_Menu_Main, grouptag+i+1}, missioninfos[i+1].spMenu, missioninfos[i+1].spSelectedMenu, missioninfos[i+1].spDisabledMenu);
+		if not missioninfos[i+1].enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);
 		end
 
-		local fadetime = 0.3+i*0.01;
-		local menumoveaction = game.ActionMove(CCAF_To, xcen, ycen, fadetime);
+		local fadetime = 0.3;
+		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
 		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
@@ -107,7 +170,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
 		
 		local menuaction;
-		if missionenabled and missiontriedtime == 0 then
+		if missioninfos[i+1].enabled and missioninfos[i+1].triedtime == 0 then
 			local menuscaleinaction = game.ActionScale(CCAF_To, 1.0, 1.0, fadetime);
 			local menurepeatscaleactionpre = game.ActionScale(CCAF_To, 1.2, 1.2, LConst_BlinkTimePre/3);
 			local menurepeatscaleactionpost = game.ActionScale(CCAF_To, 1.0, 1.0, LConst_BlinkTimePost/3);
@@ -123,13 +186,70 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 	end
+	
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCMSSTM_Menu_Main, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 	
 end
 
+function _MissionSelectScene_AddPageItems(toplayer, toptag)
+	local nowstage = game.GetNowStageMissionTurn();
+	if nowstage == LConst_ExtraStageIndex then
+		return;
+	end
+	
+	local layertag = toptag + CCMSSTL_Menu;
+	local grouptag = layertag + CCMSSTM_Menu_Page;
+	
+	local xbegin = 280;
+	local xoffset = 300;
+	local yorig = -48;
+	local y = 96;
+		
+	local spMenus = {};
+	local spSelectedMenus = {};
+	local menus = {};
+	
+	for i=0, 2 do
+		local x = xbegin + i*xoffset;
+		if i == 2 then
+			x = 800;
+		end
+		
+		if i ~= 2 then
+			spMenus[i+1] = game.CreateSprite(SI_MSUI_Back+i*2);
+			spSelectedMenus[i+1] = game.CreateSprite(SI_MSUI_Back_Down+i*2);
+		else
+			spMenus[i+1] = game.CreateSprite(SI_TUI_Exit);
+			spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Exit_Down);
+		end
+
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x, yorig, CCMSSTM_Menu_Page, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+
+		local fadetime = 0.3+i*0.03;
+		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
+		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
+		
+		local menufadeinaction = game.ActionFade(CCAF_In, 0xff, fadetime);
+		local menurepeatactionpre = game.ActionFade(CCAF_To, LConst_ButtonFadeTo, LConst_BlinkTimePre);
+		local menurepeatactionpost = game.ActionFade(CCAF_To, 0xFF, LConst_BlinkTimePost);
+		local menurepeataction = game.ActionSequence({menurepeatactionpre, menurepeatactionpost});
+		menurepeataction = game.ActionRepeat(menurepeataction);
+		local menualphaaction = game.ActionSequence({menufadeinaction, menurepeataction});
+		
+		local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
+
+		game.RunAction(menus[i+1], menuaction);
+		
+	end
+	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCMSSTM_Menu_Page, grouptag});
+	game.SetColor(menu, global.ARGB(0, 0xffffff));
+end
+
 function _MissionSelectScene_EnterMainLayer(toplayer, toptag)
+	LGlobal_MSS_NowPage = 0;
 	_MissionSelectScene_AddMainItems(toplayer, toptag);
+	_MissionSelectScene_AddPageItems(toplayer, toptag);
 end
 
 function _MissionSelectScene_LeaveMainLayer(toplayer, toptag)

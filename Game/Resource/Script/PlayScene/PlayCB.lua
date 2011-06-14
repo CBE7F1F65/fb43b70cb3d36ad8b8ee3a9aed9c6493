@@ -718,11 +718,15 @@ end
 function PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
 	if selitemtag == 1 then
-		-- TODO
+		local missionindex, stageindex = game.GetNextAvailableMission();
+		if missionindex ~= nil then
+			game.TryMission(missionindex, stageindex);
+			game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+		end
 	elseif selitemtag == 2 then
-		game.PushScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+		game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
 	elseif selitemtag == 3 then
-		game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
+		game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 	end
 	
 end

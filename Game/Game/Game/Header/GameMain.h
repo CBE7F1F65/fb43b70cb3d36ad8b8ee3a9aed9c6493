@@ -74,10 +74,14 @@ public:
 	bool StageIsEnabled(int index);
 	bool MissionIsEnabled(int missionindex, int stageindex=-1);
 	int GetMissionTryCount(int missionindex, int stageindex=-1);
+	int GetMissionClearCount(int missionindex, int stageindex=-1);
 	bool EnableMission(int missionindex, int stageindex=-1);
 
 	int GetMissionHiScore(int missionindex=-1, int stageindex=-1);
 	BYTE GetMissionRank(int missionindex=-1, int stageindex=-1);
+	missionData * GetMissionData(int missionindex=-1, int stageindex=-1);
+
+	bool GetNextAvailableMission(int * missionindex, int * stageindex);
 
 	bool TryStage(int index);
 	bool TryMission(int missionindex, int stageindex=-1);
@@ -93,7 +97,6 @@ public:
 	// In Game
 	int GetMissionBGSIID();
 	void GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs);
-	missionData * GetMissionData();
 
 	void EnterMission();
 	bool ClearMission();

@@ -11,7 +11,7 @@
 #define DATASTRUCT_ITEMMAX			0x20
 #define DATASTRUCT_ENEMYBASEMAX		M_ENEMYTYPEMAX
 #define DATASTRUCT_ENEMYMAX			0x100
-#define DATASTRUCT_MISSIONMAX		0xA0
+#define DATASTRUCT_MISSIONMAX		(M_STAGEMAX*M_STAGEMISSIONMAX)
 
 struct customconstData{
 	char name[M_STRMAX];
@@ -137,6 +137,7 @@ struct missionData{
 	missionDefendData defend;
 	int bgsiid;
 	BYTE missiontype;
+	BYTE placement;
 	BYTE weatherflag;
 	BYTE sp;
 };

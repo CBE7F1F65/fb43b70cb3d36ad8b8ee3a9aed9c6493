@@ -31,9 +31,12 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 
 	obj->Register("AddTurn", LuaFn_Game_AddTurn);
 
+	obj->Register("GetMissionInfo", LuaFn_Game_GetMissionInfo);
 	obj->Register("GetMissionBGData", LuaFn_Game_GetMissionBGData);
 	obj->Register("GetMissionHelpData", LuaFn_Game_GetMissionHelpData);
-	obj->Register("GetMissionTargetData", LuaFn_Game_GetMissionTargetData);
+	obj->Register("GetMissionAimData", LuaFn_Game_GetMissionAimData);
+
+	obj->Register("GetNextAvailableMission", LuaFn_Game_GetNextAvailableMission);
 
 	obj->Register("EnterMission", LuaFn_Game_EnterMission);
 	obj->Register("ClearMission", LuaFn_Game_ClearMission);
@@ -162,6 +165,8 @@ int Export_Lua_Game::LuaFn_Game_MissionIsEnabled(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
+	// missionindex, stageindex -> benabled, trycount, clearcount
+
 	int _missionindex = node.iNextGet();
 	int _stageindex = -1;
 
@@ -172,9 +177,11 @@ int Export_Lua_Game::LuaFn_Game_MissionIsEnabled(LuaState * ls)
 	}
 	bool benabled = GameMain::getInstance()->MissionIsEnabled(_missionindex, _stageindex);
 	int trycount = GameMain::getInstance()->GetMissionTryCount(_missionindex, _stageindex);
+	int clearcount = GameMain::getInstance()->GetMissionClearCount(_missionindex, _stageindex);
 
 	node.PBoolean(benabled);
 	node.PInt(trycount);
+	node.PInt(clearcount);
 
 	_LEAVEFUNC_LUA;
 }
@@ -225,6 +232,20 @@ int Export_Lua_Game::LuaFn_Game_TryMission(LuaState * ls)
 	bool bret = GameMain::getInstance()->TryMission(_missionindex, _stageindex);
 
 	node.PBoolean(bret);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetNextAvailableMission(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	int missionindex, stageindex;
+	if (GameMain::getInstance()->GetNextAvailableMission(&missionindex, &stageindex))
+	{
+		node.PInt(missionindex);
+		node.PInt(stageindex);
+	}
 
 	_LEAVEFUNC_LUA;
 }
@@ -332,6 +353,33 @@ int Export_Lua_Game::LuaFn_Game_AddTurn(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_GetMissionInfo(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// missionindex -> hiscore, rank, missiontype, place
+
+	int _missionindex = -1;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_missionindex = node.iGet();
+	}
+	GameMain * pgm = GameMain::getInstance();
+	int hiscore = pgm->GetMissionHiScore(_missionindex);
+	BYTE rank = pgm->GetMissionRank(_missionindex);
+	missionData * mitem = pgm->GetMissionData(_missionindex);
+	BYTE missiontype = (mitem->missiontype)&M_MISSIONTYPE_TYPEMASK;
+	BYTE place = mitem->placement;
+
+	node.PInt(hiscore);
+	node.PInt(rank);
+	node.PInt(missiontype);
+	node.PInt(place);
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_GetMissionBGData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
@@ -360,20 +408,23 @@ int Export_Lua_Game::LuaFn_Game_GetMissionHelpData(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
-int Export_Lua_Game::LuaFn_Game_GetMissionTargetData(LuaState * ls)
+int Export_Lua_Game::LuaFn_Game_GetMissionAimData(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
+
+	// -> missiontype
+	// missiontype -> target data
 
 	missionData * item = GameMain::getInstance()->GetMissionData();
 	if (!node.argscount)
 	{
 		BYTE missiontype = item->missiontype;
-		node.PInt(missiontype);
+		node.PInt(missiontype&M_MISSIONTYPE_AIMMASK);
 	}
 	else
 	{
 		BYTE _missiontype = node.iNextGet();
-		switch (_missiontype)
+		switch (_missiontype&M_MISSIONTYPE_AIMMASK)
 		{
 		case M_MISSIONTYPE_TARGET:
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)

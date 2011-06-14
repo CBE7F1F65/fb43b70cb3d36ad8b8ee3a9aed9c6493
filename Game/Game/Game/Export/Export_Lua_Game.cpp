@@ -90,6 +90,12 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("MISSIONTYPE_Defend", M_MISSIONTYPE_DEFEND);
 	obj->SetInteger("MISSIONTYPE_Suicide", M_MISSIONTYPE_SUICIDE);
 
+	obj->SetInteger("MISSIONTYPE_Movie", M_MISSIONTYPE_MOVIE);
+	obj->SetInteger("MISSIONTYPE_Story", M_MISSIONTYPE_STORY);
+	obj->SetInteger("MISSIONTYPE_Boss", M_MISSIONTYPE_BOSS);
+	obj->SetInteger("MISSIONTYPE_Free", M_MISSIONTYPE_FREE);
+	obj->SetInteger("MISSIONTYPE_GoldenEgg", M_MISSIONTYPE_GOLDENEGG);
+
 	obj->SetInteger("NODETYPE_RenderTexture", M_NODETYPE_RENDERTEXTURE);
 	obj->SetInteger("NODETYPE_BaseNode", M_NODETYPE_BASENODE);
 

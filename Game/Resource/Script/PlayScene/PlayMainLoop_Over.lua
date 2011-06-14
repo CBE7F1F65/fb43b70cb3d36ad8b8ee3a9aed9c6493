@@ -31,13 +31,18 @@ function PS_DoShowOver(toplayer, toptag)
 	local spSelectedMenus = {};
 	local menus = {};
 	
+	local missionindex, stageindex = game.GetNextAvailableMission();
+	
 	for i=0, 2 do
+		if i==0 and missionindex == nil then
+			i = 1;
+		end
 		
 		local y = ybegin - i*yoffset;
 		
 		spMenus[i+1] = game.CreateSprite(SI_MOUI_Next+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_MOUI_Next_Down+i*2);
-
+		
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCPSTM_Message_OverMenu, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
 	end

@@ -226,6 +226,19 @@ int GameMain::GetMissionTryCount(int missionindex, int stageindex/* =-1 */)
 	return gamedata.stages[stageindex].missions[missionindex].trycount;
 }
 
+int GameMain::GetMissionClearCount(int missionindex, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		return false;
+	}
+	return gamedata.stages[stageindex].missions[missionindex].clearcount;
+}
+
 bool GameMain::EnableMission(int missionindex, int stageindex/* =-1 */)
 {
 	if (stageindex < 0 || stageindex >= M_STAGEMAX)
@@ -273,6 +286,68 @@ BYTE GameMain::GetMissionRank(int missionindex/* =-1 */, int stageindex/* =-1 */
 	}
 
 	return gamedata.stages[stageindex].missions[missionindex].rank;
+}
+
+missionData * GameMain::GetMissionData(int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		missionindex = nowmission;
+	}
+
+	BResource * pbres = BResource::getInstance();
+	int index = pbres->GetMissionDataIndexByStageMission(stageindex, missionindex);
+	return &(pbres->missiondata[index]);
+}
+
+bool GameMain::GetNextAvailableMission(int * missionindex, int * stageindex)
+{
+	for (int j=nowmission+1; j<M_STAGEMISSIONMAX; j++)
+	{
+		if (gamedata.stages[nowstage].missions[j].enabled)
+		{
+			if (missionindex)
+			{
+				*missionindex = j;
+			}
+			if (stageindex)
+			{
+				*stageindex = nowstage;
+			}
+			return true;
+		}
+	}
+	for (int i=nowstage+1; i<M_STAGEMAX; i++)
+	{
+		for (int j=0; j<M_STAGEMISSIONMAX; j++)
+		{
+			if (j == 0)
+			{
+				if (gamedata.stages[i].missions[j].trycount)
+				{
+					continue;
+				}
+			}
+			if (gamedata.stages[i].missions[j].enabled)
+			{
+				if (missionindex)
+				{
+					*missionindex = j;
+				}
+				if (stageindex)
+				{
+					*stageindex = i;
+				}
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 bool GameMain::TryStage(int index)
@@ -404,13 +479,6 @@ void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 	}
 }
 
-missionData * GameMain::GetMissionData()
-{
-	BResource * pbres = BResource::getInstance();
-	int index = pbres->GetMissionDataIndexByStageMission(nowstage, nowmission);
-	return &(pbres->missiondata[index]);
-}
-
 void GameMain::EnterMission()
 {
 	nowhp = M_GAMEHPMAX;
@@ -429,7 +497,7 @@ void GameMain::EnterMission()
 	ZeroMemory(&targetcount, sizeof(missionTargetData)*M_MISSIONTARGETMAX);
 
 	missionData * item = GetMissionData();
-	if (item->missiontype == M_MISSIONTYPE_TARGET)
+	if (((item->missiontype) & M_MISSIONTYPE_AIMMASK) == M_MISSIONTYPE_TARGET)
 	{
 		for (int i=0; i<M_MISSIONTARGETMAX; i++)
 		{
@@ -444,15 +512,56 @@ bool GameMain::ClearMission()
 
 	missionData * mitem = GetMissionData();
 
+	BYTE missiontype =(mitem->missiontype)&M_MISSIONTYPE_TYPEMASK;
+	bool bStory = missiontype==M_MISSIONTYPE_STORY || missiontype==M_MISSIONTYPE_BOSS;
+
 	GameAchievement::BestTurnSet(nowturn);
 	if (!item->clearcount)
 	{
-		// TODO: bStory
-		bool bStory = false;
 		GameAchievement::MissionClearAdd(nowstage, bStory);
 	}
 
 	item->clearcount++;
+
+	int placement = mitem->placement;
+	int tmissionindex = nowmission;
+
+	while (true) 
+	{
+		tmissionindex++;
+		if (tmissionindex >= M_STAGEMISSIONMAX)
+		{
+			break;
+		}
+		missionData * tmitem = GetMissionData(tmissionindex);
+		BYTE tmissiontype = (tmitem->missiontype)&M_MISSIONTYPE_TYPEMASK;
+		if (bStory)
+		{
+			if (tmissiontype!=M_MISSIONTYPE_STORY && tmissiontype != M_MISSIONTYPE_BOSS)
+			{
+				break;
+			}
+		}
+		else
+		{
+			if (tmissiontype != missiontype)
+			{
+				break;
+			}
+		}
+		if (tmitem->placement == placement+1 || tmitem->placement == placement)
+		{
+			EnableMission(tmissionindex);
+		}
+	}
+
+	if (missiontype == M_MISSIONTYPE_BOSS)
+	{
+		if (nowstage < M_STAGEMAX-1)
+		{
+			EnableMission(0, nowstage+1);
+		}
+	}
 
 	if (nowturn < item->bestturn)
 	{
@@ -600,7 +709,7 @@ const char * GameMain::GetHiScoreUsername(int index)
 BYTE GameMain::CheckMissionOver()
 {
 	missionData * item = GetMissionData();
-	switch (item->missiontype)
+	switch ((item->missiontype) & M_MISSIONTYPE_AIMMASK)
 	{
 	case M_MISSIONTYPE_NORMAL:
 		if (true)
@@ -710,7 +819,7 @@ void GameMain::RemoveEnemy(int index, BYTE enemiesindex)
 		BYTE basetype = BResource::getInstance()->GetEnemyBaseType(item->etype);
 		GameAchievement::BeatCountAdd(basetype);
 		missionData * mitem = GetMissionData();
-		if (mitem->missiontype == M_MISSIONTYPE_TARGET)
+		if (((mitem->missiontype)&M_MISSIONTYPE_AIMMASK) == M_MISSIONTYPE_TARGET)
 		{
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)
 			{

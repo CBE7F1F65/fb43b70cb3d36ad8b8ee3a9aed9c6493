@@ -143,9 +143,12 @@ public:
 
 	static int LuaFn_Game_AddTurn(LuaState * ls);
 
+	static int LuaFn_Game_GetMissionInfo(LuaState * ls);
 	static int LuaFn_Game_GetMissionBGData(LuaState * ls);
 	static int LuaFn_Game_GetMissionHelpData(LuaState * ls);
-	static int LuaFn_Game_GetMissionTargetData(LuaState * ls);
+	static int LuaFn_Game_GetMissionAimData(LuaState * ls);
+
+	static int LuaFn_Game_GetNextAvailableMission(LuaState * ls);
 
 	static int LuaFn_Game_EnterMission(LuaState * ls);
 	static int LuaFn_Game_ClearMission(LuaState * ls);

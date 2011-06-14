@@ -52,7 +52,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 	
 	local spriteBG = game.CreateSprite(SI_White, {340, 230, 0, 600, 380});
 	game.AddSpriteChild(spriteBG, {toplayer, grouptag});
-	game.SetColor(spriteBG, global.ARGB(0x1f, 0xffffff));
+	game.SetColor(spriteBG, global.ARGB(0x1f, 0x808080));
 	
 	local texts = {};
 	local count = game.GetHiScoreData();

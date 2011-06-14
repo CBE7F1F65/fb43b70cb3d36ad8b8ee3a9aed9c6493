@@ -1,7 +1,7 @@
 function PS_ShowTurnStartAndTarget(toplayer, toptag, bRequireClose)
 	
 	local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
-	local missiontype = game.GetMissionTargetData();
+	local missiontype = game.GetMissionAimData();
 	
 	if nowturn == 0 and missiontype == MISSIONTYPE_Normal then
 		return true;
