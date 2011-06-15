@@ -434,6 +434,7 @@ int Export_Lua_Game::LuaFn_Game_GetMissionAimData(LuaState * ls)
 	// missiontype -> target data
 
 	missionData * item = GameMain::getInstance()->GetMissionData();
+	missionAimHelpData * mthitem = GameMain::getInstance()->GetMissionAimHelpData();
 	if (!node.argscount)
 	{
 		BYTE missiontype = item->missiontype;
@@ -447,12 +448,12 @@ int Export_Lua_Game::LuaFn_Game_GetMissionAimData(LuaState * ls)
 		case M_MISSIONTYPE_TARGET:
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)
 			{
-				node.PInt(item->targets[i].enemybasetype);
-				node.PInt(item->targets[i].num);
+				node.PInt(mthitem->targets[i].enemybasetype);
+				node.PInt(mthitem->targets[i].num);
 			}
 			break;
 		case M_MISSIONTYPE_DEFEND:
-			node.PInt(item->defend.defendturn);
+			node.PInt(mthitem->defend.defendturn);
 			break;
 		}
 	}

@@ -41,6 +41,7 @@ public:
 	void ClearEnemyBaseData();
 	void ClearEnemyData();
 	void ClearMissionData();
+	void ClearMissionAimHelpData();
 	void ClearMissionEnemyData();
 
 	int GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex);
@@ -69,6 +70,7 @@ public:
 	enemyBaseData enemybasedata[DATASTRUCT_ENEMYBASEMAX];
 	enemyData enemydata[DATASTRUCT_ENEMYMAX];
 	missionData missiondata[DATASTRUCT_MISSIONMAX];
+	missionAimHelpData missionaimhelpdata[DATASTRUCT_MISSIONAIMHELPMAX];
 	missionEnemyData missionenemydata[DATASTRUCT_MISSIONENEMYMAX];
 	int missionenemymax;
 

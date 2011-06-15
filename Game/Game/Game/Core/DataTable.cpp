@@ -26,7 +26,8 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATATYPE_ENEMYBASEDEFINE		0x59
 #define DATATYPE_ENEMYDEFINE			0x5A
 #define DATATYPE_MISSIONDEFINE			0x5B
-#define DATATYPE_MISSIONENEMYDEFINE		0x5C
+#define DATATYPE_MISSIONTARGETDEFINE	0x5C
+#define DATATYPE_MISSIONENEMYDEFINE		0x5D
 
 #define DATAINDEX_DATADEFINE			(DATATYPE_DATADEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_CUSTOMCONSTDEFINE		(DATATYPE_CUSTOMCONSTDEFINE-DATATYPE_DATATABLEBEGIN)
@@ -40,6 +41,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATAINDEX_ENEMYBASEDEFINE		(DATATYPE_ENEMYBASEDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ENEMYDEFINE			(DATATYPE_ENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_MISSIONDEFINE			(DATATYPE_MISSIONDEFINE-DATATYPE_DATATABLEBEGIN)
+#define DATAINDEX_MISSIONTARGETDEFINE	(DATATYPE_MISSIONTARGETDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_MISSIONENEMYDEFINE	(DATATYPE_MISSIONENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
 
 #define ERRORSTR_DATATABLE	"Error in Reading Data Table File!"
@@ -202,6 +204,11 @@ bool DataTable::ReadAllTable()
 	if (!ReadMissionDefineTable())
 	{
 		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_MISSIONDEFINE));
+		return false;
+	}
+	if (!ReadMissionTargetDefineTable())
+	{
+		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_MISSIONTARGETDEFINE));
 		return false;
 	}
 	if (!ReadMissionEnemyDefineTable())
@@ -654,7 +661,7 @@ bool DataTable::ReadMissionDefineTable()
 
 	pbres->ClearMissionData();
 
-	_READSTRINGBUFFERLINE(18);
+	_READSTRINGBUFFERLINE(11);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -663,24 +670,15 @@ bool DataTable::ReadMissionDefineTable()
 		_CHECKEOF_DATATABLE;
 		missionData * item = &(pbres->missiondata[tindex]);
 
-		fscanf(file, "%x%d%s%x%d%d%d%d%d%d%d%d%d%d%d%x%x%x", 
+		fscanf(file, "%x%d%s%x%d%d%d%d%d", 
 			_SAVETINT,
 			_SAVETINT, 
 			strbuffer[0],
 			&(item->weatherflag), 
 			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
-			_SAVETINT,
 			&(item->ranks[0].hiscore), 
 			&(item->ranks[1].hiscore), 
 			&(item->ranks[2].hiscore), 
-			_SAVETINT,
-			_SAVETINT,
 			_SAVETINT
 			);
 
@@ -692,6 +690,47 @@ bool DataTable::ReadMissionDefineTable()
 		item->placement = _LOADTINT;
 		item->bgsiid = SpriteItemManager::GetIndexByName(strbuffer[0]);
 		item->sp = _LOADTINT;
+		item->aimhelpid = _LOADTINT;
+	}
+	return true;
+}
+
+bool DataTable::ReadMissionTargetDefineTable()
+{
+	if (!CheckHeader(DATATYPE_MISSIONTARGETDEFINE))
+	{
+		return false;
+	}
+
+	BResource * pbres = BResource::getInstance();
+
+	pbres->ClearMissionAimHelpData();
+
+	_READSTRINGBUFFERLINE(12);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+		fscanf(file, "%d", &tindex);
+		_CHECKEOF_DATATABLE;
+		missionAimHelpData * item = &(pbres->missionaimhelpdata[tindex]);
+
+		fscanf(file, "%d%d%d%d%d%d%d%x%x%x", 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT, 
+			_SAVETINT);
+
+
+		_DOSWAPTINT;
+		_INITTINT;
+
 		item->targets[0].enemybasetype = _LOADTINT;
 		item->targets[0].num = _LOADTINT;
 		item->targets[1].enemybasetype = _LOADTINT;
@@ -709,7 +748,6 @@ bool DataTable::ReadMissionDefineTable()
 		_tindex = _LOADTINT;
 		item->helps[2].helptype = _tindex>>8;
 		item->helps[2].helpindex = _tindex&0xff;
-
 	}
 	return true;
 }

@@ -163,6 +163,10 @@ void BResource::ClearMissionData()
 {
 	ZeroMemory(missiondata, RSIZE_MISSION);
 }
+void BResource::ClearMissionAimHelpData()
+{
+	ZeroMemory(missionaimhelpdata, RSIZE_MISSIONAIMHELP);
+}
 void BResource::ClearMissionEnemyData()
 {
 	ZeroMemory(missionenemydata, RSIZE_MISSIONENEMY);
@@ -249,7 +253,8 @@ bool BResource::PackData()
 		RSIZE_ITEM + 
 		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
-		RSIZE_MISSION +
+		RSIZE_MISSION + 
+		RSIZE_MISSIONAIMHELP + 
 		RSIZE_MISSIONENEMY + 
 		RSIZE_MISSIONENEMYMAX;
 	BYTE * content = (BYTE *)malloc(size);
@@ -278,6 +283,8 @@ bool BResource::PackData()
 	offset += RSIZE_ENEMY;
 	memcpy(content+offset, missiondata, RSIZE_MISSION);
 	offset += RSIZE_MISSION;
+	memcpy(content+offset, missionaimhelpdata, RSIZE_MISSIONAIMHELP);
+	offset += RSIZE_MISSIONAIMHELP;
 	memcpy(content+offset, missionenemydata, RSIZE_MISSIONENEMY);
 	offset += RSIZE_MISSIONENEMY;
 	memcpy(content+offset, &missionenemymax, RSIZE_MISSIONENEMYMAX);
@@ -301,6 +308,7 @@ bool BResource::PackData()
 	ClearEnemyBaseData();
 	ClearEnemyData();
 	ClearMissionData();
+	ClearMissionAimHelpData();
 	ClearMissionEnemyData();
 
 	free(content);
@@ -343,6 +351,7 @@ bool BResource::GainData()
 		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
 		RSIZE_MISSION + 
+		RSIZE_MISSIONAIMHELP + 
 		RSIZE_MISSIONENEMY + 
 		RSIZE_MISSIONENEMYMAX)
 	{
@@ -371,6 +380,8 @@ bool BResource::GainData()
 	offset += RSIZE_ENEMY;
 	memcpy(missiondata, content+offset, RSIZE_MISSION);
 	offset += RSIZE_MISSION;
+	memcpy(missionaimhelpdata, content+offset, RSIZE_MISSIONAIMHELP);
+	offset += RSIZE_MISSIONAIMHELP;
 	memcpy(missionenemydata, content+offset, RSIZE_MISSIONENEMY);
 	offset += RSIZE_MISSIONENEMY;
 	memcpy(&missionenemymax, content+offset, RSIZE_MISSIONENEMYMAX);

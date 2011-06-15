@@ -304,6 +304,14 @@ missionData * GameMain::GetMissionData(int missionindex/* =-1 */, int stageindex
 	return &(pbres->missiondata[index]);
 }
 
+missionAimHelpData * GameMain::GetMissionAimHelpData(int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	missionData * item = GetMissionData(missionindex, stageindex);
+
+	BResource * pbres = BResource::getInstance();
+	return &(pbres->missionaimhelpdata[item->aimhelpid]);
+}
+
 bool GameMain::GetNextAvailableMission(int * missionindex, int * stageindex)
 {
 	for (int j=nowmission+1; j<M_STAGEMISSIONMAX; j++)
@@ -473,13 +481,13 @@ int GameMain::GetMissionBGSIID()
 
 void GameMain::GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs)
 {
-	missionData * item = GetMissionData();
+	missionAimHelpData * mthitem = GetMissionAimHelpData();
 	if (helpindexs)
 	{
 		for (int i=0; i<M_MISSIONHELPMAX; i++)
 		{
-			helptypes[i] = item->helps[i].helptype;
-			helpindexs[i] = item->helps[i].helpindex;
+			helptypes[i] = mthitem->helps[i].helptype;
+			helpindexs[i] = mthitem->helps[i].helpindex;
 		}
 	}
 }
@@ -502,11 +510,12 @@ void GameMain::EnterMission()
 	ZeroMemory(&targetcount, sizeof(missionTargetData)*M_MISSIONTARGETMAX);
 
 	missionData * item = GetMissionData();
+	missionAimHelpData * mthitem = GetMissionAimHelpData();
 	if (((item->missiontype) & M_MISSIONTYPE_AIMMASK) == M_MISSIONTYPE_TARGET)
 	{
 		for (int i=0; i<M_MISSIONTARGETMAX; i++)
 		{
-			targetcount[i].enemybasetype = item->targets[i].enemybasetype;
+			targetcount[i].enemybasetype = mthitem->targets[i].enemybasetype;
 		}
 	}
 
@@ -730,6 +739,7 @@ const char * GameMain::GetHiScoreUsername(int index)
 BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 {
 	missionData * item = GetMissionData();
+	missionAimHelpData * mthitem = GetMissionAimHelpData();
 	switch ((item->missiontype) & M_MISSIONTYPE_AIMMASK)
 	{
 	case M_MISSIONTYPE_NORMAL:
@@ -747,7 +757,7 @@ BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 		}
 		break;
 	case M_MISSIONTYPE_DEFEND:
-		if (nowturn > item->defend.defendturn)
+		if (nowturn > mthitem->defend.defendturn)
 		{
 			return M_MISSIONSTATE_CLEAR;
 		}
@@ -756,10 +766,10 @@ BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 		if (true)
 		{
 			int targetclearedcount = 0;
-			missionData * mitem = GetMissionData();
+			missionAimHelpData * mthitem = GetMissionAimHelpData();
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)
 			{
-				if (targetcount[i].num >= mitem->targets[i].num || targetcount[i].enemybasetype >= M_ENEMYTYPEMAX)
+				if (targetcount[i].num >= mthitem->targets[i].num || targetcount[i].enemybasetype >= M_ENEMYTYPEMAX)
 				{
 					targetclearedcount++;
 				}
@@ -910,13 +920,14 @@ void GameMain::RemoveEnemy(int index, BYTE enemiesindex)
 		BYTE basetype = BResource::getInstance()->GetEnemyBaseType(item->etype);
 		GameAchievement::BeatCountAdd(basetype);
 		missionData * mitem = GetMissionData();
+		missionAimHelpData * mthitem = GetMissionAimHelpData();
 		if (((mitem->missiontype)&M_MISSIONTYPE_AIMMASK) == M_MISSIONTYPE_TARGET)
 		{
 			for (int i=0; i<M_MISSIONTARGETMAX; i++)
 			{
 				if (targetcount[i].enemybasetype == basetype)
 				{
-					if (targetcount[i].num < mitem->targets[i].num)
+					if (targetcount[i].num < mthitem->targets[i].num)
 					{
 						targetcount[i].num++;
 					}

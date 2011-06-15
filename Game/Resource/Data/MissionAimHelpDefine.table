@@ -1,0 +1,11 @@
+130	h5nc	5C									
+Comment	Index	TagetType_01	TargetNum_01	TagetType_02	TargetNum_02	TagetType_03	TargetNum_03	DefendTurn	HelpIndex_01	HelpIndex_02	HelpIndex_03
+#		Default									
+-	0	255	0	255	0	255	0	0	0	0	0
+#		Story(1~40)									
+-	1	255	0	255	0	255	0	0	101	102	103
+-	2	255	0	255	0	255	0	0	0	0	0
+#		Free(41~80)									
+-	41	255	0	255	0	255	0	0	0	0	0
+#		GoldenEgg(81~127)									
+-	81	255	0	255	0	255	0	0	0	0	0

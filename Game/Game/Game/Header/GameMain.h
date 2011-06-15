@@ -86,6 +86,7 @@ public:
 	int GetMissionHiScore(int missionindex=-1, int stageindex=-1);
 	BYTE GetMissionRank(int missionindex=-1, int stageindex=-1);
 	missionData * GetMissionData(int missionindex=-1, int stageindex=-1);
+	missionAimHelpData * GetMissionAimHelpData(int missionindex=-1, int stageindex=-1);
 
 	bool GetNextAvailableMission(int * missionindex, int * stageindex);
 

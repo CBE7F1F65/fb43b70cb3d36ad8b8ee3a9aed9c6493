@@ -32,6 +32,7 @@ public:
 	bool ReadEnemyBaseDefineTable();
 	bool ReadEnemyDefineTable();
 	bool ReadMissionDefineTable();
+	bool ReadMissionTargetDefineTable();
 	bool ReadMissionEnemyDefineTable();
 
 public:

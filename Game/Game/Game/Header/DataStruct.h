@@ -12,6 +12,7 @@
 #define DATASTRUCT_ENEMYBASEMAX		M_ENEMYTYPEMAX
 #define DATASTRUCT_ENEMYMAX			0x100
 #define DATASTRUCT_MISSIONMAX		(M_STAGEMAX*M_STAGEMISSIONMAX)
+#define DATASTRUCT_MISSIONAIMHELPMAX	0x80
 #define DATASTRUCT_MISSIONENEMYMAX	0x1000
 
 struct customconstData{
@@ -134,15 +135,19 @@ struct missionHelpData{
 };
 
 struct missionData{
-	missionHelpData helps[M_MISSIONHELPMAX];
-	missionTargetData targets[M_MISSIONTARGETMAX];
 	missionRankData ranks[M_MISSIONRANKMAX];
-	missionDefendData defend;
 	int bgsiid;
+	BYTE aimhelpid;
 	BYTE missiontype;
 	BYTE placement;
 	BYTE weatherflag;
 	BYTE sp;
+};
+
+struct missionAimHelpData{
+	missionHelpData helps[M_MISSIONHELPMAX];
+	missionTargetData targets[M_MISSIONTARGETMAX];
+	missionDefendData defend;
 };
 
 struct missionEnemyData{
@@ -167,6 +172,7 @@ struct missionEnemyData{
 #define RSIZE_ENEMYBASE		(sizeof(enemyBaseData) * DATASTRUCT_ENEMYBASEMAX)
 #define RSIZE_ENEMY			(sizeof(enemyData) * DATASTRUCT_ENEMYMAX)
 #define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
+#define RSIZE_MISSIONAIMHELP	(sizeof(missionTargetData) * DATASTRUCT_MISSIONAIMHELPMAX)
 #define RSIZE_MISSIONENEMY	(sizeof(missionEnemyData) * DATASTRUCT_MISSIONENEMYMAX)
 #define RSIZE_MISSIONENEMYMAX	(sizeof(int))
 
