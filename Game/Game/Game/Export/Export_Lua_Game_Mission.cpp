@@ -688,7 +688,7 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 {
 	_ENTERFUNC_LUA(4);
 
-	// enemyindex, weapontype, x, y, r/ xe, ye -> hitRate, blowoffsetx, blowoffsety
+	// enemyindex, weapontype, x, y, r/ xe, ye, xoffset, yoffset -> hitRate, blowoffsetx, blowoffsety
 	BYTE _index = node.iNextGet();
 	EnemyInGameData * item = GameMain::getInstance()->GetEnemyByIndex(_index, ENEMY_INSCENE);
 	if (!item)
@@ -732,9 +732,24 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 		break;
 	}
 
+	float _xoffset = 0;
+	float _yoffset = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_xoffset = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_yoffset = node.fGet();
+		}
+	}
+
 	float hitRate = 0;
 	float enemyx, enemyy, enemyscale;
 	GameMain::getInstance()->GetEnemyXYScale(item, &enemyx, &enemyy, &enemyscale);
+	enemyx += _xoffset;
+	enemyy += _yoffset;
 
 	switch (_weapontype)
 	{

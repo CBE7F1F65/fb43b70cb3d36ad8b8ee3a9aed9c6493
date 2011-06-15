@@ -122,8 +122,8 @@ function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowtur
 	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
 	game.RunAction(enemynode, enemyaction);
 	
-	local dataindex = LGlobal_SaveData(STATE_AddEnemy);	
-	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);	
+	local dataindex = LGlobal_SaveData(STATE_AddEnemy);
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_EnemyEnterDelayTime, dataindex);
 	local callnodeitemtag = LGlobal_PlayScene_GetEnemyCallNodeItemtag(itemtag);
 	local callnode = game.AddNullChild({toplayer, itemtag}, {0, 0, 0, callnodeitemtag});
 	game.RunAction(callnode, callfuncaction);

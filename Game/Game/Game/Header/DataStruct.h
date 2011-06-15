@@ -164,7 +164,7 @@ struct missionEnemyData{
 #define RSIZE_SPRITE		(sizeof(spriteData) * DATASTRUCT_SPRITEMAX)
 #define RSIZE_WEAPON		(sizeof(weaponData) * DATASTRUCT_WEAPONMAX)
 #define RSIZE_ITEM			(sizeof(itemData) * DATASTRUCT_ITEMMAX)
-#define RSIZE_ENEMYBASE		(sizeof(enemyData) * DATASTRUCT_ENEMYBASEMAX)
+#define RSIZE_ENEMYBASE		(sizeof(enemyBaseData) * DATASTRUCT_ENEMYBASEMAX)
 #define RSIZE_ENEMY			(sizeof(enemyData) * DATASTRUCT_ENEMYMAX)
 #define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
 #define RSIZE_MISSIONENEMY	(sizeof(missionEnemyData) * DATASTRUCT_MISSIONENEMYMAX)
