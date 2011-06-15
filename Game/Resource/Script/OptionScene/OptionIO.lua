@@ -20,14 +20,14 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgBGMFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgBGMFrame, {toplayer, layertag});
 	
-	local spriteBGM = game.CreateSprite(SI_TUI_BGM, {xcen-160, ycen});
+	local spriteBGM = game.CreateSprite(SI_TUI_BGM, {xcen, ycen});
 	game.AddSpriteChild(spriteBGM, {toplayer, layertag});
 	game.SetColor(spriteBGM, global.ARGB(0x7f, 0xffffff));
 		
 	local touchlayerBGM = game.AddTouchLayerChild(
 			{toplayer, {x, y, width, height}},
 			{toplayer, layertag},
-			{0, 0, CCTSTL_BGMTouch, layertag+CCTSTM_BGMTouch_Bar}
+			{0, 0, CCTSTL_BGMTouch, layertag+CCTSTM_BGMTouch_BarTouch}
 		);
 	
 	--SE
@@ -41,14 +41,14 @@ function _TitleScene_AddOptionTouchLayer(toplayer, toptag)
 	local spritebgSEFrame = game.CreateSprite(SI_TUI_BGMSE_Frame, {xcen, ycen});
 	game.AddSpriteChild(spritebgSEFrame, {toplayer, layertag});
 	
-	local spriteSE = game.CreateSprite(SI_TUI_SE, {xcen-160, ycen});
+	local spriteSE = game.CreateSprite(SI_TUI_SE, {xcen, ycen});
 	game.AddSpriteChild(spriteSE, {toplayer, layertag});
 	game.SetColor(spriteSE, global.ARGB(0x7f, 0xffffff));
 		
 	local touchlayerSE = game.AddTouchLayerChild(
 			{toplayer, {x, y, width, height}},
 			{toplayer, layertag},
-			{0, 0, CCTSTL_SETouch, layertag+CCTSTM_SETouch_Bar}
+			{0, 0, CCTSTL_SETouch, layertag+CCTSTM_SETouch_BarTouch}
 		);
 	_TitleScene_UpdateBGMSE(toplayer, toptag)
 end

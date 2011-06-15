@@ -24,8 +24,10 @@ CCTSTL_Option = CCTag_Layer_05;
 	CCTSTM_Option_OKCancelDelay = CCTag_Menu_11;
 CCTSTL_BGMTouch = CCTag_Layer_06;
 	CCTSTM_BGMTouch_Bar = CCTag_Menu_01;
+	CCTSTM_BGMTouch_BarTouch = CCTag_Menu_02;
 CCTSTL_SETouch = CCTag_Layer_07;
 	CCTSTM_SETouch_Bar = CCTag_Menu_01;
+	CCTSTM_SETouch_BarTouch = CCTag_Menu_02;
 CCTSTL_Online = CCTag_Layer_09;
 	CCTSTM_Online_Menu = CCTag_Menu_01;
 	--
