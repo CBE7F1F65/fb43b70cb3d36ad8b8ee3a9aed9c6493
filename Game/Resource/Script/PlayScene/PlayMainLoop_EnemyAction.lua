@@ -3,6 +3,12 @@ function PS_EnemyAttack(toplayer, toptag, index, etype, elayer)
 	local hp, ap, sp = game.GetHPAPSP();
 	hp = hp - atk;
 	ap = ap - apatk;
+	if hp < 0 then
+		hp = 0;
+	end
+	if ap < 0 then
+		ap = 0;
+	end
 	game.SetHPAPSP(hp, ap, sp);
 	if hpregainatk > 0 then
 		-- Add Enemy HP
@@ -56,6 +62,7 @@ function PS_DoEnemyAction(toplayer, toptag, index, nowstage, nowmission, nowturn
 	
 	local layertag = toptag + CCPSTL_Enemy;
 	local itemtag, x, y, etype, life, elayer = game.GetActiveEnemyData(index, ENEMY_InScene);
+	game.SetActiveEnemyData(index, ENEMY_InScene, life, elayer, 0, 0, ENEMYSTATUS_Clear+ENEMYSTATUS_Blowed);
 		
 	local atk, apatk, hpregainatk = game.GetEnemyATK(etype, 0);
 	if bZeroLayerOnly ~= nil and bZeroLayerOnly then

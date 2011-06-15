@@ -81,6 +81,8 @@ struct enemyBaseData
 	enemyCollisionData headcollision;
 	enemyCollisionData bodycollision;
 	float headshotscale;
+	float blowdistance;
+	float boxr;
 
 	int siid;
 	int sidesiid;

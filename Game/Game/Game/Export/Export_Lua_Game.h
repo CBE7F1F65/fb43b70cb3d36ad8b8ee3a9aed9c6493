@@ -137,6 +137,8 @@ public:
 	static int LuaFn_Game_TryMission(LuaState * ls);
 	static int LuaFn_Game_GetNowStageMissionTurn(LuaState * ls);
 
+	static int LuaFn_Game_SetEnemyPositionRect(LuaState * ls);
+
 	// In Game
 
 	static int LuaFn_Game_Update(LuaState * ls);

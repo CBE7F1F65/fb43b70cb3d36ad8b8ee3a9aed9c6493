@@ -84,6 +84,7 @@ function PS_SetTouchLayerRect(toplayer, toptag)
 	local x = xcen-width/2;
 	local y = ycen-height/2;
 	
-	game.SetTouchLayerRect(touchlayer, {x, y, width, height})
+	game.SetTouchLayerRect(touchlayer, {x, y, width, height});
+	return x, y, width, height;
 	
 end

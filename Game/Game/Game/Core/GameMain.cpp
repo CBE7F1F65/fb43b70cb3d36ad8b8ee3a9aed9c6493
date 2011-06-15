@@ -461,6 +461,11 @@ bool GameMain::UseItem(BYTE type)
 	return false;
 }
 
+void GameMain::SetEnemyPositionRect(CCRect rect)
+{
+	enemypositionrect = rect;
+}
+
 int GameMain::GetMissionBGSIID()
 {
 	return GetMissionData()->bgsiid;
@@ -706,7 +711,7 @@ const char * GameMain::GetHiScoreUsername(int index)
 }
 
 
-BYTE GameMain::CheckMissionOver()
+BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 {
 	missionData * item = GetMissionData();
 	switch ((item->missiontype) & M_MISSIONTYPE_AIMMASK)
@@ -760,6 +765,10 @@ BYTE GameMain::CheckMissionOver()
 	{
 		return M_MISSIONSTATE_FAILED;
 	}
+	if (checkap && nowap <= 0)
+	{
+		return M_MISSIONSTATE_FAILED;
+	}
 	return M_MISSIONSTATE_PROGRESSING;
 }
 
@@ -772,8 +781,9 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	enemyBaseData * baseitem = &(pbres->enemybasedata[item->type]);
 
 	_edata.itemtag = itemtag;
-	_edata.x = x;
-	_edata.y = y;
+	SetEnemyPosition(&_edata, x, y);
+//	_edata.x = x;
+//	_edata.y = y;
 	_edata.etype = etype;
 	_edata.life = item->life;
 	_edata.elayer = elayer;
@@ -782,6 +792,36 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	int retval = 0;
 	enemies[enemiesindex].push_back(_edata);
 	return enemies[enemiesindex].size();
+}
+
+void GameMain::SetEnemyPosition(EnemyInGameData * edata, float x, float y)
+{
+	if (!edata)
+	{
+		return;
+	}
+	float minx = CCRect::CCRectGetMinX(enemypositionrect);
+	float maxx = CCRect::CCRectGetMaxX(enemypositionrect);
+	float miny = CCRect::CCRectGetMinY(enemypositionrect);
+	float maxy = CCRect::CCRectGetMaxY(enemypositionrect);
+	if (x < minx)
+	{
+		x = minx;
+	}
+	else if (x > maxx)
+	{
+		x = maxx;
+	}
+	if (y < miny)
+	{
+		y = miny;
+	}
+	else if (y > maxy)
+	{
+		y = maxy;
+	}
+	edata->x = x;
+	edata->y = y;
 }
 
 int GameMain::DoRemoveEnemy(BYTE enemiesindex)
@@ -919,7 +959,7 @@ void GameMain::Update()
 			break;
 
 		case GAMESTATE_SPECIALENEMYACTION:
-			if (CheckMissionOver())
+			if (CheckMissionOver(true))
 			{
 				stateAction = GAMESTATE_OVER;
 			}
@@ -936,7 +976,7 @@ void GameMain::Update()
 			stateAction = GAMESTATE_SHOWTURNSTART;
 			break;
 		case GAMESTATE_SHOWTURNSTART:
-			if (CheckMissionOver())
+			if (CheckMissionOver(true))
 			{
 				stateAction = GAMESTATE_OVER;
 			}
@@ -963,7 +1003,7 @@ void GameMain::Update()
 			stateAction = GAMESTATE_ENEMYACTION;
 			break;
 		case GAMESTATE_ENEMYACTION:
-			if (CheckMissionOver())
+			if (CheckMissionOver(true))
 			{
 				stateAction = GAMESTATE_OVER;
 			}

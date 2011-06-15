@@ -18,6 +18,7 @@ LConst_ItemVanishTime = 0.3;
 
 LConst_EnemySpriteFadeTime = 0.3;
 LConst_EnemyEnterDelayTime = 0.1;
+LConst_EnemyBlowTime = 0.25;
 
 LConst_SelfActionDelayTime = 0.5;
 LConst_SelfActionEnemyWoundDelayTime = 0.25;

@@ -22,6 +22,8 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("TryMission", LuaFn_Game_TryMission);
 	obj->Register("GetNowStageMissionTurn", LuaFn_Game_GetNowStageMissionTurn);
 
+	obj->Register("SetEnemyPositionRect", LuaFn_Game_SetEnemyPositionRect);
+
 	obj->Register("GetItemData", LuaFn_Game_GetItemData);
 	obj->Register("UseItem", LuaFn_Game_UseItem);
 	obj->Register("BuyItem", LuaFn_Game_BuyItem);
@@ -281,6 +283,21 @@ int Export_Lua_Game::LuaFn_Game_GetNowStageMissionTurn(LuaState * ls)
 	node.PInt(stageindex);
 	node.PInt(missionindex);
 	node.PInt(nowturn);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetEnemyPositionRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(4);
+
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	float _width = node.fNextGet();
+	float _height = node.fNextGet();
+
+	CCRect rect = CCRectMake(_x, _y, _width, _height);
+	GameMain::getInstance()->SetEnemyPositionRect(rect);
 
 	_LEAVEFUNC_LUA;
 }
@@ -670,7 +687,7 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 {
 	_ENTERFUNC_LUA(4);
 
-	// enemyindex, weapontype, x, y, r/ xe, ye -> hitRate
+	// enemyindex, weapontype, x, y, r/ xe, ye -> hitRate, blowoffsetx, blowoffsety
 	BYTE _index = node.iNextGet();
 	EnemyInGameData * item = GameMain::getInstance()->GetEnemyByIndex(_index, ENEMY_INSCENE);
 	if (!item)
@@ -778,6 +795,20 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 
 	node.PFloat(hitRate);
 
+	float blowdistancex = 0;
+	float blowdistancey = 0;
+	if (hitRate && _weapontype == M_WEAPON_BOMB)
+	{
+		float blowdistance = baseitem->blowdistance;
+		float dist = DIST(enemyx, enemyy, _x, _y);
+		blowdistance *= (1-dist/(_r+baseitem->boxr*enemyscale))*0.8f+0.2f;
+		int aimangle = aMainAngle(_x, M_SCREEN_HEIGHT-_y, enemyx, M_SCREEN_HEIGHT-enemyy);
+		blowdistancex = blowdistance*cost(aimangle);
+		blowdistancey = -blowdistance*sint(aimangle);
+	}
+	node.PFloat(blowdistancex);
+	node.PFloat(blowdistancey);
+
 	_LEAVEFUNC_LUA;
 }
 
@@ -856,10 +887,39 @@ int Export_Lua_Game::LuaFn_Game_SetActiveEnemyData(LuaState * ls)
 	BYTE _enemiesindex = node.iNextGet();
 	int _life = node.fNextGet();
 	int _elayer = node.iNextGet();
-
 	EnemyInGameData * item = GameMain::getInstance()->GetEnemyByIndex(_index, _enemiesindex);
+
+	float _xoffset = 0;
+	float _yoffset = 0;
+	BYTE _statusset = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_xoffset = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_yoffset = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_statusset = node.iGet();
+			}
+		}
+	}
+
 	item->life = _life;
 	item->elayer = _elayer;
+	GameMain::getInstance()->SetEnemyPosition(item, item->x + _xoffset, item->y + _yoffset);
+	if (_statusset&ENEMYSTATUS_SETMASK == ENEMYSTATUS_CLEAR)
+	{
+		BYTE statustoclear = _statusset&(~ENEMYSTATUS_SETMASK);
+		item->status &= ~statustoclear;
+	}
+	else
+	{
+		item->status |= _statusset;
+	}
 
 	_LEAVEFUNC_LUA;
 }
@@ -869,7 +929,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 	_ENTERFUNC_LUA(0);
 
 	// -> inscenecount, onsidecount
-	// index, enemiesindex -> itemtag, x, y, etype, life, elayer
+	// index, enemiesindex -> itemtag, x, y, etype, life, elayer, status
 
 	if (!node.argscount)
 	{
@@ -896,6 +956,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		int life = item->life;
 		int elayer = item->elayer;
 		int angle = item->angle;
+		BYTE status = item->status;
 
 		node.PInt(itemtag);
 		node.PFloat(x);
@@ -904,6 +965,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		node.PInt(life);
 		node.PInt(elayer);
 		node.PInt(angle);
+		node.PInt(status);
 	}
 
 	_LEAVEFUNC_LUA;
@@ -913,12 +975,19 @@ int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
-	// -> missionstate, hiscore, rank, btop
+	// bCheckAP -> missionstate, hiscore, rank, btop
+
+	bool _bCheckAP = false;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bCheckAP = node.bGet();
+	}
 
 	GameMain * pgm = GameMain::getInstance();
 
 	bool btop = false;
-	BYTE missionstate = pgm->CheckMissionOver();
+	BYTE missionstate = pgm->CheckMissionOver(_bCheckAP);
 	switch (missionstate)
 	{
 	case M_MISSIONSTATE_PROGRESSING:

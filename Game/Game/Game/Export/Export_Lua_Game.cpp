@@ -103,6 +103,10 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("MISSIONSTATE_Clear", M_MISSIONSTATE_CLEAR);
 	obj->SetInteger("MISSIONSTATE_Failed", M_MISSIONSTATE_FAILED);
 
+	obj->SetInteger("ENEMYSTATUS_Clear", ENEMYSTATUS_CLEAR);
+	obj->SetInteger("ENEMYSTATUS_Normal", ENEMYSTATUS_NORMAL);
+	obj->SetInteger("ENEMYSTATUS_Blowed", ENEMYSTATUS_BLOWED);
+
 	return true;
 }
 

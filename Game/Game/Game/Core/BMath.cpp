@@ -9116,7 +9116,7 @@ int aMainAngle(float orix, float oriy, float aimx, float aimy, int a/* =0 */)
 	//a>0 clockwise
 	//a<0 counterclockwise
 	float dx = aimx - orix;
-	float dy = aimx - oriy;
+	float dy = aimy - oriy;
 	float atanA;
 	if(dx == 0)
 	{
@@ -9137,7 +9137,7 @@ int rMainAngle(float orix, float oriy, float aimx, float aimy, float r/* =0 */)
 	//r>0 clockwise
 	//r<0 counterclockwise
 	float dx = aimx - orix;
-	float dy = aimx - oriy;
+	float dy = aimy - oriy;
 	float atanA, atanB;
 
 	if(dx == 0)

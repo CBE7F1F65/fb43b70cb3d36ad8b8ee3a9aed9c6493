@@ -146,16 +146,19 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 	local grouptag = layertag + CCPSTM_Menu_Main;
 	-- Menu
 	if callitemtag == grouptag+4 then
-		-- TODO: Target
+		-- Target
 		if selitemtag == 1 then
 			PS_ShowTurnStartAndTarget(toplayer, toptag, true);
 			PS_SetMenuEnable(toplayer, toptag, false);
-		--Quit
+		-- Help
 		elseif selitemtag == 2 then
-			game.PushScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
+			game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
+		--Quit
+		elseif selitemtag == 3 then
+			game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 		--Restart
 		else
-			game.PushScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+			game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
 		end
 	end
 	
@@ -207,7 +210,7 @@ function PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgr
 
 	local toquit = true;
 	
-	if selitemtag < 4 then
+	if selitemtag < 5 then
 		if PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag, sublayertag, selitemtag) then
 			return
 		end
@@ -226,15 +229,15 @@ function PSCB_MainMenu_QuitRestart(itemtag, toplayer, toptag, sublayertag, selgr
 	local xorig = posdata[1];
 	local yorigcen = posdata[2];
 	
-	for i=0, 2 do
+	for i=0, 3 do
 	
 		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
-		local fadetime = 0.3+(2-i)*0.05;
+		local fadetime = 0.3+(3-i)*0.02;
 		
 		if i+1 ~= selitemtag then
 			
-			local yorig = yorigcen - (i-1)*70
+			local yorig = yorigcen - (i-1.5)*70
 			
 			if toquit then
 				local menumoveaction = game.ActionMove(CCAF_To, xorig, yorig, fadetime);
@@ -545,9 +548,9 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 	local xmove = posdata[3];
 	local ymove = posdata[4];
 	
-	for i=0, 2 do
+	for i=0, 3 do
 		
-		local yorig = yorigcen - (i-1)*70;
+		local yorig = yorigcen - (i-1.5)*70;
 		local x = xorig + xmove;
 		local y = yorig + ymove;
 		
@@ -556,7 +559,7 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, yorig, CCPSTM_Menu_QuitRestart, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
-		local fadetime = 0.3+i*0.05;
+		local fadetime = 0.3+i*0.02;
 		local menumoveaction = game.ActionMove(CCAF_To, x, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		
@@ -573,7 +576,7 @@ function PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, posdata)
 		
 	end
 	
-	menus[4] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCPSTM_Menu_QuitRestart, grouptag+4);
+	menus[5] = GlobalScene_CreateCancelMenu({toplayer, layertag}, CCPSTM_Menu_QuitRestart, grouptag+5);
 	
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCPSTM_Menu_QuitRestart, grouptag});
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
@@ -641,7 +644,7 @@ function PSCB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, seli
 		PS_CB_OnClickWait(toplayer, toptag);
 	-- menu
 	elseif selitemtag == 4 then
-		PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 145});
+		PS_CB_AddQuitRestart(toplayer, toptag, layertag, itemtag, {xbase, ybase, 0, 180});
 	end
 	
 end

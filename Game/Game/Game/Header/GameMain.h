@@ -42,6 +42,11 @@ using namespace cocos2d;
 #define ENEMYATK_AP			0x01
 #define ENEMYATK_HPREGAIN	0x02
 
+#define ENEMYSTATUS_NORMAL	0x00
+#define ENEMYSTATUS_BLOWED	0x01
+#define ENEMYSTATUS_CLEAR	0xf0
+#define ENEMYSTATUS_SETMASK	0xf0
+
 struct EnemyInGameData 
 {
 	int itemtag;
@@ -51,6 +56,7 @@ struct EnemyInGameData
 	int elayer;
 	int angle;
 	BYTE etype;
+	BYTE status;
 };
 
 class GameMain
@@ -94,6 +100,8 @@ public:
 	int BuyItem(BYTE type);
 	bool UseItem(BYTE type);
 
+	void SetEnemyPositionRect(CCRect rect);
+
 	// In Game
 	int GetMissionBGSIID();
 	void GetMissionHelpData(BYTE * helptypes, BYTE * helpindexs);
@@ -107,9 +115,10 @@ public:
 	int SetState(int stateST, int stateAction=-1, int stateStep=-1);
 
 	void Update();
-	BYTE CheckMissionOver();
+	BYTE CheckMissionOver(bool checkap=false);
 
 	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle=0);
+	void SetEnemyPosition(EnemyInGameData * edata, float x, float y);
 	int DoRemoveEnemy(BYTE enemiesindex);
 	void RemoveEnemy(int index, BYTE enemiesindex);
 	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex);
@@ -138,6 +147,8 @@ public:
 	int nowhp;
 	int nowap;
 	int nowsp;
+
+	CCRect enemypositionrect;
 
 	BYTE helptype;
 	BYTE helpindex;

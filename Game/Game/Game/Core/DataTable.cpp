@@ -541,7 +541,7 @@ bool DataTable::ReadEnemyBaseDefineTable()
 	pbres->ClearEnemyBaseData();
 
 
-	_READSTRINGBUFFERLINE(23);
+	_READSTRINGBUFFERLINE(25);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -550,7 +550,7 @@ bool DataTable::ReadEnemyBaseDefineTable()
 		enemyBaseData * item = &(pbres->enemybasedata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s%d%d%d%d%d%d%s%s%s%s%d%f%f%f%f%f%f%f%f%f", 
+		fscanf(file, "%s%d%d%d%d%d%d%s%s%s%s%d%f%f%f%f%f%f%f%f%f%f%f", 
 			strbuffer[0], 
 			_SAVETINT, 
 			_SAVETINT, 
@@ -570,8 +570,10 @@ bool DataTable::ReadEnemyBaseDefineTable()
 			&(item->bodycollision.x),  
 			&(item->bodycollision.y),  
 			&(item->bodycollision.rh),  
-			&(item->bodycollision.rv),  
-			&(item->headshotscale));
+			&(item->bodycollision.rv), 
+			&(item->boxr), 
+			&(item->headshotscale), 
+			&(item->blowdistance));
 
 		_DOSWAPTINT;
 		_INITTINT;

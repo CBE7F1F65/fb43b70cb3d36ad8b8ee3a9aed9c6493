@@ -100,7 +100,7 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 	arrowfadeaction = game.ActionRepeat(arrowfadeaction);
 	game.RunAction(enemysidearrownode, arrowfadeaction);
 
-	local tx, ty = PS_SidePosToScenePos(x, y, angle)
+	local tx, ty = PS_SidePosToScenePos(x, y, angle);
 
 	game.AddEnemy(itemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
 	

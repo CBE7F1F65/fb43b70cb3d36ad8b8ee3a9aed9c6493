@@ -128,6 +128,7 @@ function PS_AddTouchLayer(toplayer, toptag)
 			{toplayer, layertag},
 			{0, 0, CCPSTL_Touch, grouptag}
 		);
-	PS_SetTouchLayerRect(toplayer, toptag);
+	local x, y, width, height = PS_SetTouchLayerRect(toplayer, toptag);
+	game.SetEnemyPositionRect(x, y, width, height);
 	
 end

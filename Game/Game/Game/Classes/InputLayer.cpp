@@ -128,7 +128,8 @@ void InputLayer::onEnter()
 		}
 		m_pTextField->setDelegate(this);
 		addChild(m_pTextField, this->getZOrder(), this->getTag());
-		m_pTextField->setPosition(ccp(touchrect.origin.x+touchrect.size.width/2, touchrect.origin.y+touchrect.size.height/2));
+//		m_pTextField->setPosition(ccp(touchrect.origin.x+touchrect.size.width/2, touchrect.origin.y+touchrect.size.height/2));
+		m_pTextField->setPosition(ccp(CCRect::CCRectGetMidX(touchrect), CCRect::CCRectGetMidY(touchrect)));
 		m_pTextField->setColorSpaceHolder(ccc3(0xff, 0xff, 0xff));
 	}
 }
