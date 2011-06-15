@@ -32,6 +32,7 @@ public:
 	bool ReadEnemyBaseDefineTable();
 	bool ReadEnemyDefineTable();
 	bool ReadMissionDefineTable();
+	bool ReadMissionEnemyDefineTable();
 
 public:
 	FILE * file;

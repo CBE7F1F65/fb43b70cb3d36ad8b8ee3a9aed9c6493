@@ -171,6 +171,7 @@ public:
 
 	static int LuaFn_Game_AttackEnemy(LuaState * ls);
 
+	static int LuaFn_Game_GetMissionEnemy(LuaState * ls);
 	static int LuaFn_Game_AddEnemy(LuaState * ls);
 	static int LuaFn_Game_RemoveEnemy(LuaState * ls);
 	static int LuaFn_Game_DoRemoveEnemy(LuaState * ls);

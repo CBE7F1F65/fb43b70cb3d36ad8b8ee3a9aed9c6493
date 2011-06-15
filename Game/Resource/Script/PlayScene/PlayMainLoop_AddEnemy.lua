@@ -29,14 +29,12 @@ end
 
 function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	
-	--skip event mission
-	local eposturnitem = LGlobal_EnemyPosTable[nowstage+1][nowmission][1];
-	if index >= table.getn(eposturnitem) then
+	local missionenemyindex, x, y, etype, elayerindex = game.GetMissionEnemy();
+	
+	if missionenemyindex == nil then
 		return true;
 	end
-		
-	local epositem = eposturnitem[index+1];
-	local x, y, etype, elayer = epositem[1], epositem[2], epositem[3], epositem[4];
+	local elayer = elayerindex*CCZ_eLayer_01;
 	
 	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
 

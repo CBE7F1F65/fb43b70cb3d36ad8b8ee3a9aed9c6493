@@ -117,6 +117,7 @@ public:
 	void Update();
 	BYTE CheckMissionOver(bool checkap=false);
 
+	int GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, int nowturnoffset=0);
 	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle=0);
 	void SetEnemyPosition(EnemyInGameData * edata, float x, float y);
 	int DoRemoveEnemy(BYTE enemiesindex);
@@ -143,6 +144,8 @@ public:
 
 	int nowstage;
 	int nowmission;
+
+	int missionenemyindex;
 
 	int nowhp;
 	int nowap;

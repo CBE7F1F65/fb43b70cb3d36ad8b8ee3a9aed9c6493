@@ -41,6 +41,7 @@ public:
 	void ClearEnemyBaseData();
 	void ClearEnemyData();
 	void ClearMissionData();
+	void ClearMissionEnemyData();
 
 	int GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex);
 	BYTE GetEnemyBaseType(BYTE etype);
@@ -68,6 +69,8 @@ public:
 	enemyBaseData enemybasedata[DATASTRUCT_ENEMYBASEMAX];
 	enemyData enemydata[DATASTRUCT_ENEMYMAX];
 	missionData missiondata[DATASTRUCT_MISSIONMAX];
+	missionEnemyData missionenemydata[DATASTRUCT_MISSIONENEMYMAX];
+	int missionenemymax;
 
 	HTEXTURE tex[DATASTRUCT_TEXMAX];
 	hTextureInfo texinfo[DATASTRUCT_TEXMAX];

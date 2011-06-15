@@ -53,3 +53,15 @@ LConst_MissionIndex_End = LConst_MissionIndex_GoldenEggStart+LConst_MissionIndex
 
 LConst_MissionIndex_ExtraStage = 8;
 LConst_ExtraStageIndex = 7;
+
+
+LConst_EnemySideEdge = 64;
+
+LConst_EnemySideLEdge = 64;
+LConst_EnemySideREdge = 896;
+LConst_EnemySideTEdge = 96;
+LConst_EnemySideBEdge = 576;
+
+LConst_EnemySideLEdgeCenter = 32;
+LConst_EnemySideREdgeCenter = 928;
+LConst_EnemySideBEdgeCenter = 608;

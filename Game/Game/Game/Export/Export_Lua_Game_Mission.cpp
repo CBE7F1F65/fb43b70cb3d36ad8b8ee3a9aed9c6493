@@ -59,6 +59,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 
 	obj->Register("AttackEnemy", LuaFn_Game_AttackEnemy);
 
+	obj->Register("GetMissionEnemy", LuaFn_Game_GetMissionEnemy);
 	obj->Register("AddEnemy", LuaFn_Game_AddEnemy);
 	obj->Register("RemoveEnemy", LuaFn_Game_RemoveEnemy);
 	obj->Register("DoRemoveEnemy", LuaFn_Game_DoRemoveEnemy);
@@ -808,6 +809,36 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 	}
 	node.PFloat(blowdistancex);
 	node.PFloat(blowdistancey);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetMissionEnemy(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	// nowmissionoffset -> missionenemyindex, x, y, etype, elayerindex/angle
+
+	int nowturnoffset = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		nowturnoffset = node.iGet();
+	}
+
+	float x;
+	float y;
+	int etype;
+	int elayerangle;
+	int missionenemyindex = GameMain::getInstance()->GetMissionEnemy(&x, &y, &etype, &elayerangle, nowturnoffset);
+	if (missionenemyindex >= 0)
+	{
+		node.PInt(missionenemyindex);
+		node.PFloat(x);
+		node.PFloat(y);
+		node.PInt(etype);
+		node.PInt(elayerangle);
+	}
 
 	_LEAVEFUNC_LUA;
 }

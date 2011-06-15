@@ -509,6 +509,22 @@ void GameMain::EnterMission()
 			targetcount[i].enemybasetype = item->targets[i].enemybasetype;
 		}
 	}
+
+	BResource * pbres = BResource::getInstance();
+	missionenemyindex = 0;
+	for (int i=0; i<pbres->missionenemymax; i++)
+	{
+		if (pbres->missionenemydata[i].stageindex != nowstage)
+		{
+			continue;
+		}
+		if (pbres->missionenemydata[i].missionindex != nowmission)
+		{
+			continue;
+		}
+		missionenemyindex = i-1;
+		break;
+	}
 }
 
 bool GameMain::ClearMission()
@@ -770,6 +786,41 @@ BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 		return M_MISSIONSTATE_FAILED;
 	}
 	return M_MISSIONSTATE_PROGRESSING;
+}
+
+int GameMain::GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, int nowturnoffset/* =0 */)
+{
+	BResource * pbres = BResource::getInstance();
+	if (missionenemyindex >= pbres->missionenemymax)
+	{
+		return -1;
+	}
+
+	missionEnemyData * item = &(pbres->missionenemydata[missionenemyindex+1]);
+	if (item->turn != nowturn+nowturnoffset || 
+		item->missionindex != nowmission || 
+		item->stageindex != nowstage)
+	{
+		return -1;
+	}
+	if (x)
+	{
+		*x = item->x;
+	}
+	if (y)
+	{
+		*y = item->y;
+	}
+	if (etype)
+	{
+		*etype = item->enemytype;
+	}
+	if (elayerangle)
+	{
+		*elayerangle = item->elayerangle;
+	}
+	missionenemyindex++;
+	return missionenemyindex;
 }
 
 int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle/*=0*/)

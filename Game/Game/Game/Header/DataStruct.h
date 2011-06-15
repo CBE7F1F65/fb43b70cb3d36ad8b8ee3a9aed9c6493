@@ -12,6 +12,7 @@
 #define DATASTRUCT_ENEMYBASEMAX		M_ENEMYTYPEMAX
 #define DATASTRUCT_ENEMYMAX			0x100
 #define DATASTRUCT_MISSIONMAX		(M_STAGEMAX*M_STAGEMISSIONMAX)
+#define DATASTRUCT_MISSIONENEMYMAX	0x1000
 
 struct customconstData{
 	char name[M_STRMAX];
@@ -144,6 +145,17 @@ struct missionData{
 	BYTE sp;
 };
 
+struct missionEnemyData{
+	int enemytype;
+	int elayerangle;
+	float x;
+	float y;
+	BYTE stageindex;
+	BYTE missionindex;
+	BYTE turn;
+	BYTE flag;
+};
+
 #define RSIZE_CUSTOMCONST	(sizeof(customconstData) * DATASTRUCT_CUSTOMCONSTMAX)
 #define RSIZE_TEXTURE		(sizeof(textureData) * DATASTRUCT_TEXMAX)
 #define RSIZE_MUSIC			(sizeof(musicData) * DATASTRUCT_MUSICMAX)
@@ -155,5 +167,7 @@ struct missionData{
 #define RSIZE_ENEMYBASE		(sizeof(enemyData) * DATASTRUCT_ENEMYBASEMAX)
 #define RSIZE_ENEMY			(sizeof(enemyData) * DATASTRUCT_ENEMYMAX)
 #define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
+#define RSIZE_MISSIONENEMY	(sizeof(missionEnemyData) * DATASTRUCT_MISSIONENEMYMAX)
+#define RSIZE_MISSIONENEMYMAX	(sizeof(int))
 
 #endif

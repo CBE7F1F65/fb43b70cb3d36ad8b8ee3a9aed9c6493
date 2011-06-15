@@ -1,11 +1,11 @@
 function PS_SidePosToScenePos(x, y, angle)
 	local r;
-	if x <= LGlobal_EnemySideLEdge then
-		r = x*(480-LGlobal_EnemySideEdge)/LGlobal_EnemySideEdge+(LGlobal_EnemySideLEdge-x);
-	elseif x>=LGlobal_EnemySideREdge then
-		r = (960-x)*(480-LGlobal_EnemySideEdge)/LGlobal_EnemySideEdge+(x-LGlobal_EnemySideREdge);
-	elseif y>=LGlobal_EnemySideBEdge then
-		r = (y-LGlobal_EnemySideBEdge)*(960-LGlobal_EnemySideTEdge-LGlobal_EnemySideEdge)/LGlobal_EnemySideEdge+(y-LGlobal_EnemySideBEdge);
+	if x <= LConst_EnemySideLEdge then
+		r = x*(480-LConst_EnemySideEdge)/LConst_EnemySideEdge+(LConst_EnemySideLEdge-x);
+	elseif x>=LConst_EnemySideREdge then
+		r = (960-x)*(480-LConst_EnemySideEdge)/LConst_EnemySideEdge+(x-LConst_EnemySideREdge);
+	elseif y>=LConst_EnemySideBEdge then
+		r = (y-LConst_EnemySideBEdge)*(960-LConst_EnemySideTEdge-LConst_EnemySideEdge)/LConst_EnemySideEdge+(y-LConst_EnemySideBEdge);
 	end
 	
 	if r ~= nil then
@@ -108,19 +108,12 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 end
 
 function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn)
+
+	local missionenemyindex, x, y, etype, angle = game.GetMissionEnemy(1);
 	
-	local eposmissionitem = LGlobal_EnemyPosTable[nowstage+1][nowmission];
-	if nowturn+1 >= table.getn(eposmissionitem) then
+	if missionenemyindex == nil then
 		return true;
 	end
-	
-	local eposturnitem = eposmissionitem[nowturn+2];
-	if index >= table.getn(eposturnitem) then
-		return true;
-	end	
-		
-	local epositem = eposturnitem[index+1];
-	local x, y, etype, angle = epositem[1], epositem[2], epositem[3], epositem[4];
 	
 	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
 	

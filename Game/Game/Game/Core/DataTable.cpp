@@ -26,6 +26,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATATYPE_ENEMYBASEDEFINE		0x59
 #define DATATYPE_ENEMYDEFINE			0x5A
 #define DATATYPE_MISSIONDEFINE			0x5B
+#define DATATYPE_MISSIONENEMYDEFINE		0x5C
 
 #define DATAINDEX_DATADEFINE			(DATATYPE_DATADEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_CUSTOMCONSTDEFINE		(DATATYPE_CUSTOMCONSTDEFINE-DATATYPE_DATATABLEBEGIN)
@@ -39,6 +40,7 @@ static DataTable * g_DataTableSingleton = NULL;
 #define DATAINDEX_ENEMYBASEDEFINE		(DATATYPE_ENEMYBASEDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_ENEMYDEFINE			(DATATYPE_ENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
 #define DATAINDEX_MISSIONDEFINE			(DATATYPE_MISSIONDEFINE-DATATYPE_DATATABLEBEGIN)
+#define DATAINDEX_MISSIONENEMYDEFINE	(DATATYPE_MISSIONENEMYDEFINE-DATATYPE_DATATABLEBEGIN)
 
 #define ERRORSTR_DATATABLE	"Error in Reading Data Table File!"
 
@@ -200,6 +202,11 @@ bool DataTable::ReadAllTable()
 	if (!ReadMissionDefineTable())
 	{
 		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_MISSIONDEFINE));
+		return false;
+	}
+	if (!ReadMissionEnemyDefineTable())
+	{
+		bio->System_MessageBox(ERRORSTR_DATATABLE, pbres->getTableFileName(DATAINDEX_MISSIONENEMYDEFINE));
 		return false;
 	}
 	return true;
@@ -704,5 +711,51 @@ bool DataTable::ReadMissionDefineTable()
 		item->helps[2].helpindex = _tindex&0xff;
 
 	}
+	return true;
+}
+
+bool DataTable::ReadMissionEnemyDefineTable()
+{
+	if (!CheckHeader(DATATYPE_MISSIONENEMYDEFINE))
+	{
+		return false;
+	}
+
+	BResource * pbres = BResource::getInstance();
+
+	pbres->ClearMissionEnemyData();
+
+	int tindex = 0;
+	_READSTRINGBUFFERLINE(9);
+	while (!feof(file))
+	{
+		_INITTINT;
+		_BREAKCOMMENTBUFFER;
+//		fscanf(file, "%d", &tindex);
+//		_CHECKEOF_DATATABLE;
+		missionEnemyData * item = &(pbres->missionenemydata[tindex]);
+
+		fscanf(file, "%d%d%d%d%f%f%d%d", 
+			_SAVETINT,
+			_SAVETINT, 
+			_SAVETINT,
+			_SAVETINT, 
+			&(item->x), 
+			&(item->y), 
+			&(item->elayerangle), 
+			_SAVETINT);
+
+		_DOSWAPTINT;
+		_INITTINT;
+
+		item->stageindex = _LOADTINT;
+		item->missionindex = _LOADTINT;
+		item->turn = _LOADTINT;
+		item->enemytype = _LOADTINT;
+		item->flag = _LOADTINT;
+
+		tindex++;
+	}
+	pbres->missionenemymax = tindex;
 	return true;
 }

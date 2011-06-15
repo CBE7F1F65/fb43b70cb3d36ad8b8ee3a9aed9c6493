@@ -163,6 +163,11 @@ void BResource::ClearMissionData()
 {
 	ZeroMemory(missiondata, RSIZE_MISSION);
 }
+void BResource::ClearMissionEnemyData()
+{
+	ZeroMemory(missionenemydata, RSIZE_MISSIONENEMY);
+	missionenemymax = 0;
+}
 
 int BResource::GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex)
 {
@@ -244,7 +249,9 @@ bool BResource::PackData()
 		RSIZE_ITEM + 
 		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
-		RSIZE_MISSION;
+		RSIZE_MISSION +
+		RSIZE_MISSIONENEMY + 
+		RSIZE_MISSIONENEMYMAX;
 	BYTE * content = (BYTE *)malloc(size);
 
 	DWORD offset = 0;
@@ -271,6 +278,10 @@ bool BResource::PackData()
 	offset += RSIZE_ENEMY;
 	memcpy(content+offset, missiondata, RSIZE_MISSION);
 	offset += RSIZE_MISSION;
+	memcpy(content+offset, missionenemydata, RSIZE_MISSIONENEMY);
+	offset += RSIZE_MISSIONENEMY;
+	memcpy(content+offset, &missionenemymax, RSIZE_MISSIONENEMYMAX);
+	offset += RSIZE_MISSIONENEMYMAX;
 
 	BIOMemoryFile memfile;
 	memfile.data = content;
@@ -290,6 +301,7 @@ bool BResource::PackData()
 	ClearEnemyBaseData();
 	ClearEnemyData();
 	ClearMissionData();
+	ClearMissionEnemyData();
 
 	free(content);
 	return bret;
@@ -330,7 +342,9 @@ bool BResource::GainData()
 		RSIZE_ITEM + 
 		RSIZE_ENEMYBASE + 
 		RSIZE_ENEMY + 
-		RSIZE_MISSION)
+		RSIZE_MISSION + 
+		RSIZE_MISSIONENEMY + 
+		RSIZE_MISSIONENEMYMAX)
 	{
 		return false;
 	}
@@ -357,6 +371,10 @@ bool BResource::GainData()
 	offset += RSIZE_ENEMY;
 	memcpy(missiondata, content+offset, RSIZE_MISSION);
 	offset += RSIZE_MISSION;
+	memcpy(missionenemydata, content+offset, RSIZE_MISSIONENEMY);
+	offset += RSIZE_MISSIONENEMY;
+	memcpy(&missionenemymax, content+offset, RSIZE_MISSIONENEMYMAX);
+	offset += RSIZE_MISSIONENEMYMAX;
 
 	pbres->Resource_Free(content);
 

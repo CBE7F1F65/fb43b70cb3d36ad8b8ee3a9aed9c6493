@@ -11,3 +11,4 @@ Comment	ID	Table
 -	59	EnemyBaseDefine.table
 -	5A	EnemyDefine.table
 -	5B	MissionDefine.table
+-	5C	MissionEnemyDefine.table
