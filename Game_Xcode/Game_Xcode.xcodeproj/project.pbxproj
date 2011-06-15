@@ -36,6 +36,9 @@
 		71AC31131385C9900029F185 /* PlayScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31071385C9900029F185 /* PlayScene.cpp */; };
 		71AC31141385C9900029F185 /* StageSelectScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31081385C9900029F185 /* StageSelectScene.cpp */; };
 		71AC31151385C9900029F185 /* TitleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71AC31091385C9900029F185 /* TitleScene.cpp */; };
+		71CE24ED13A87B92001D1752 /* CCRenderTextureExpand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71CE24EC13A87B92001D1752 /* CCRenderTextureExpand.cpp */; };
+		71CE24EF13A87B9A001D1752 /* CCBaseNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71CE24EE13A87B9A001D1752 /* CCBaseNode.cpp */; };
+		71CE24F313A87BC0001D1752 /* GameAchievement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71CE24F213A87BC0001D1752 /* GameAchievement.cpp */; };
 		71EF555A1383455400B242B4 /* BGlobal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55351383455400B242B4 /* BGlobal.cpp */; };
 		71EF555B1383455400B242B4 /* BIOInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55361383455400B242B4 /* BIOInterface.cpp */; };
 		71EF555C1383455400B242B4 /* BIOInterface_Ini.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 71EF55371383455400B242B4 /* BIOInterface_Ini.cpp */; };
@@ -307,6 +310,12 @@
 		71AC31071385C9900029F185 /* PlayScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlayScene.cpp; sourceTree = "<group>"; };
 		71AC31081385C9900029F185 /* StageSelectScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StageSelectScene.cpp; sourceTree = "<group>"; };
 		71AC31091385C9900029F185 /* TitleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleScene.cpp; sourceTree = "<group>"; };
+		71CE24EC13A87B92001D1752 /* CCRenderTextureExpand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCRenderTextureExpand.cpp; sourceTree = "<group>"; };
+		71CE24EE13A87B9A001D1752 /* CCBaseNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCBaseNode.cpp; sourceTree = "<group>"; };
+		71CE24F013A87BAB001D1752 /* CCBaseNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCBaseNode.h; sourceTree = "<group>"; };
+		71CE24F113A87BAB001D1752 /* CCRenderTextureExpand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCRenderTextureExpand.h; sourceTree = "<group>"; };
+		71CE24F213A87BC0001D1752 /* GameAchievement.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameAchievement.cpp; sourceTree = "<group>"; };
+		71CE24F413A87BD2001D1752 /* GameAchievement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameAchievement.h; sourceTree = "<group>"; };
 		71EF55351383455400B242B4 /* BGlobal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BGlobal.cpp; sourceTree = "<group>"; };
 		71EF55361383455400B242B4 /* BIOInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BIOInterface.cpp; sourceTree = "<group>"; };
 		71EF55371383455400B242B4 /* BIOInterface_Ini.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BIOInterface_Ini.cpp; sourceTree = "<group>"; };
@@ -846,7 +855,10 @@
 				71EF553A1383455400B242B4 /* BMath.cpp */,
 				71EF553B1383455400B242B4 /* BResource.cpp */,
 				719ABFA8138E14790093DA3B /* CCActionExpand.cpp */,
+				71CE24EE13A87B9A001D1752 /* CCBaseNode.cpp */,
+				71CE24EC13A87B92001D1752 /* CCRenderTextureExpand.cpp */,
 				71EF553C1383455400B242B4 /* DataTable.cpp */,
+				71CE24F213A87BC0001D1752 /* GameAchievement.cpp */,
 				71A9A29C13885B4C00BBA5B4 /* GameMain.cpp */,
 				71EF553D1383455400B242B4 /* SpriteItemManager.cpp */,
 			);
@@ -882,11 +894,14 @@
 				71EF554D1383455400B242B4 /* BMath.h */,
 				71EF554E1383455400B242B4 /* BResource.h */,
 				719ABFAA138E148A0093DA3B /* CCActionExpand.h */,
+				71CE24F013A87BAB001D1752 /* CCBaseNode.h */,
+				71CE24F113A87BAB001D1752 /* CCRenderTextureExpand.h */,
 				71EF554F1383455400B242B4 /* Const.h */,
 				71EF55501383455400B242B4 /* DataStruct.h */,
 				71EF55511383455400B242B4 /* DataTable.h */,
 				71EF55521383455400B242B4 /* HTexture.h */,
 				71EF55531383455400B242B4 /* MainDependency.h */,
+				71CE24F413A87BD2001D1752 /* GameAchievement.h */,
 				719ABFAB138E14990093DA3B /* GameData.h */,
 				71A9A29B13885B3B00BBA5B4 /* GameMain.h */,
 				71EF55541383455400B242B4 /* SceneConst.h */,
@@ -1794,6 +1809,9 @@
 				719ABFA3138E14330093DA3B /* Export_Lua_Game_Mission.cpp in Sources */,
 				719ABFA6138E14530093DA3B /* StoryScene.cpp in Sources */,
 				719ABFA9138E14790093DA3B /* CCActionExpand.cpp in Sources */,
+				71CE24ED13A87B92001D1752 /* CCRenderTextureExpand.cpp in Sources */,
+				71CE24EF13A87B9A001D1752 /* CCBaseNode.cpp in Sources */,
+				71CE24F313A87BC0001D1752 /* GameAchievement.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2042,6 +2060,7 @@
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "..//**";
 			};
 			name = Release;
 		};
