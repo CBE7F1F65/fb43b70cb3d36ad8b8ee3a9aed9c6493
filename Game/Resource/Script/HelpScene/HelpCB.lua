@@ -125,6 +125,6 @@ end
 function HelpScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	if selitemtag == 4 then
 		game.SetHelpIndex(0, 0, false);
-		game.PopScene();
+		game.PopScene(LConst_SceneTransTime);
 	end
 end

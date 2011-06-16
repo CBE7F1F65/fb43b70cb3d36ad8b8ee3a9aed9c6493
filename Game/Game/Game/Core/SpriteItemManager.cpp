@@ -2,6 +2,8 @@
 #include "../Header/BResource.h"
 #include "../Header/BGlobal.h"
 
+float SpriteItemManager::contentfactor = 1.0f;
+
 SpriteItemManager::SpriteItemManager()
 {
 
@@ -10,6 +12,11 @@ SpriteItemManager::SpriteItemManager()
 SpriteItemManager::~SpriteItemManager()
 {
 
+}
+
+void SpriteItemManager::SetContentFactor(float factor)
+{
+	contentfactor = factor;
 }
 
 HTEXTURE SpriteItemManager::GetTexture(int index)
@@ -186,11 +193,45 @@ bool SpriteItemManager::SetSpriteTextureRect(CCSprite * sprite, float texx, floa
 	{
 		texw = pbres->Texture_GetWidth(tex);
 	}
+	else
+	{
+		texw *= contentfactor;
+	}
 	if (texh < 0)
 	{
 		texh = pbres->Texture_GetHeight(tex);
 	}
-	sprite->setTextureRect(CCRectMake(texx, texy, texw, texh));
+	else
+	{
+		texh *= contentfactor;
+	}
+	sprite->setTextureRect(CCRectMake(texx*contentfactor, texy*contentfactor, texw, texh));
+	return true;
+}
+
+bool SpriteItemManager::GetSpriteTextureRect(CCSprite * sprite, float *texx, float *texy, float *texw, float *texh)
+{
+	if (!sprite)
+	{
+		return false;
+	}
+	CCRect texrect = sprite->getTextureRect();
+	if (texx)
+	{
+		*texx = texrect.origin.x/contentfactor;
+	}
+	if (texy)
+	{
+		*texy = texrect.origin.y/contentfactor;
+	}
+	if (texw)
+	{
+		*texw = texrect.size.width/contentfactor;
+	}
+	if (texh)
+	{
+		*texh = texrect.size.height/contentfactor;
+	}
 	return true;
 }
 
@@ -286,11 +327,10 @@ bool SpriteItemManager::SetRenderEx(CCSprite * sprite, float x, float y, int ang
 	{
 		vscale = hscale;
 	}
-	hscale = BGlobal::ScalerX(hscale);
-	vscale = BGlobal::ScalerY(vscale);
+//	hscale = BGlobal::ScalerX(hscale);
+//	vscale = BGlobal::ScalerY(vscale);
 	sprite->setScaleX(hscale);
 	sprite->setScaleY(vscale);
-//	sprite->setContentSize(CCSizeMake(sprite->getContentSize().width*hscale, sprite->getContentSize().height*vscale));
 	return true;
 }
 

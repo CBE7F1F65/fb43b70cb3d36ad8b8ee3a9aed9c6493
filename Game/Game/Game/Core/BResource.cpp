@@ -6,6 +6,8 @@
 #include "../Export/Export_Lua_Scene.h"
 
 #include "../Header/BIOInterface.h"
+#include "../Header/BGlobal.h"
+#include "../Header/SpriteItemManager.h"
 
 using namespace cocos2d;
 
@@ -57,6 +59,8 @@ bool BResource::Init()
 {
 	
 	CCFileUtils::setResourcePath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
+
+	SpriteItemManager::SetContentFactor(BGlobal::Scaler(1.0f));
 	
 	BIOInterface * bio = BIOInterface::getInstance();
 	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);

@@ -30,7 +30,7 @@ function MissionSelectScene_CB_PageMenu(itemtag, toplayer, toptag, sublayertag, 
 		game.RunAction(menuitem, selectedaction);
 			
 		local callfuncaction = game.ActionCallFunc({toplayer, toptag}, LConst_DelayActionTime);
-		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCMSSTM_Menu_PageDelay+selitemtag+1});
+		local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCMSSTM_Menu_PageDelay+selitemtag});
 		game.RunAction(callnode, callfuncaction);
 		MissionSelectScene_CB_MainMenu(-1, toplayer, toptag, sublayertag, CCMSSTM_Menu_Main, -1);
 		return;

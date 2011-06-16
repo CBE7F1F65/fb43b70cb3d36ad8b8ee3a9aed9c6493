@@ -455,7 +455,9 @@ protected:
 	void showFPS(void) {}
 #endif // CC_DIRECTOR_FAST_FPS
 
-/** calculates delta time since last time it was called */	void calculateDeltaTime();protected:
+/** calculates delta time since last time it was called */	void calculateDeltaTime();
+//protected:
+public:
 	/* The CCEGLView, where everything is rendered */
     CC_GLVIEW	*m_pobOpenGLView;
 

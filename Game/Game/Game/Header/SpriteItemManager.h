@@ -16,6 +16,8 @@ public:
 	SpriteItemManager();
 	~SpriteItemManager();
 
+	static void SetContentFactor(float factor);
+
 	static CCSprite * CreateSprite(int index);
 	static bool CreateSprite(int index, CCSprite ** sprite);
 	static bool ChangeSprite(int index, CCSprite * sprite);
@@ -28,6 +30,7 @@ public:
 	static CCSprite * CreateNullSprite();
 	static bool SetSpriteData(CCSprite * sprite, HTEXTURE tex, float texx, float texy, float texw, float texh, bool flipx=false, bool flipy=false);
 	static bool SetSpriteTextureRect(CCSprite * sprite, float texx, float texy, float texw, float texh);
+	static bool GetSpriteTextureRect(CCSprite * sprite, float *texx, float *texy, float *texw, float *texh);
 	static bool SetSpriteFlip(CCSprite * sprite, bool flipx=false, bool flipy=false);
 	static bool SetSpriteHotSpot(CCSprite * sprite, float hotx, float hoty);
 
@@ -42,6 +45,8 @@ public:
 	static float GetTexH(int index);
 
 	static bool LoadTextureWhenNeeded(HTEXTURE tex);
+
+	static float contentfactor;
 };
 
 #endif

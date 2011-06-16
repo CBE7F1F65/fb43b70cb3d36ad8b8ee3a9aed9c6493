@@ -90,7 +90,8 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 	local itemtag = grouptag+selitemtag;
 	local spEnemy = game.CreateSprite(sidesiid, {x, y}, itemtag);
 	local enemynode = game.AddSpriteChild(spEnemy, {toplayer, grouptag});
-	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {64, 64, angle, 2, 2}, itemtag);
+	local texx, texy, texw, texh = game.GetSIData(sidesiid);
+	local spEnemySideArrow = game.CreateSprite(sidearrowsiid, {texw/2, texh/2, angle}, itemtag);
 	local enemysidearrownode = game.AddSpriteChild(spEnemySideArrow, {toplayer, itemtag});
 	
 	game.SetColor(enemysidearrownode, global.ARGB(0, 0xffffff));

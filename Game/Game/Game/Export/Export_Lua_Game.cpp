@@ -598,10 +598,22 @@ int Export_Lua_Game::LuaFn_Game_PopScene(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
+	float _duration = 0.0f;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_duration = node.fGet();
+	}
+
 	if (BGlobal::pushedscenecount)
 	{
 		BGlobal::pushedscenecount--;
 		CCDirector::sharedDirector()->popScene();
+		if (_duration)
+		{
+			CCScene ** pNextScene = &(CCDirector::sharedDirector()->m_pNextScene);
+			*pNextScene = CCTransitionCrossFade::transitionWithDuration(_duration, *pNextScene);
+		}
 	}
 
 	_LEAVEFUNC_LUA;
@@ -1930,8 +1942,10 @@ int Export_Lua_Game::LuaFn_Game_SetScale(LuaState * ls)
 	{
 		_scaley = node.fGet();
 	}
-	_item->setScaleX(BGlobal::ScalerX(_scalex));
-	_item->setScaleY(BGlobal::ScalerY(_scaley));
+//	_item->setScaleX(BGlobal::ScalerX(_scalex));
+//	_item->setScaleY(BGlobal::ScalerY(_scaley));
+	_item->setScaleX(_scalex);
+	_item->setScaleY(_scaley);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1946,8 +1960,10 @@ int Export_Lua_Game::LuaFn_Game_GetScale(LuaState * ls)
 	{
 		break;
 	}
-	float scalex = BGlobal::RScalerX(_item->getScaleX());
-	float scaley = BGlobal::RScalerY(_item->getScaleY());
+//	float scalex = BGlobal::RScalerX(_item->getScaleX());
+//	float scaley = BGlobal::RScalerY(_item->getScaleY());
+	float scalex = _item->getScaleX();
+	float scaley = _item->getScaleY();
 
 	node.PFloat(scalex);
 	node.PFloat(scaley);
@@ -2031,29 +2047,34 @@ int Export_Lua_Game::LuaFn_Game_SetTexRect(LuaState * ls)
 	_ENTERFUNC_LUA(1);
 
 	CCSprite * _item = (CCSprite *)node.dNextGet();
-	CCRect rect = _item->getTextureRect();
+	if (!_item)
+	{
+		break;
+	}
+	float _texx, _texy, _texw, _texh;
+	SpriteItemManager::GetSpriteTextureRect(_item, &_texx, &_texy, &_texw, &_texh);
 
 	node.jNextGet();
 	if (node.bhavenext)
 	{
-		rect.origin.x = node.fGet();
+		_texx = node.fGet();
 		node.jNextGet();
 		if (node.bhavenext)
 		{
-			rect.origin.y = node.fGet();
+			_texy = node.fGet();
 			node.jNextGet();
 			if (node.bhavenext)
 			{
-				rect.size.width = node.fGet();
+				_texw = node.fGet();
 				node.jNextGet();
 				if (node.bhavenext)
 				{
-					rect.size.height = node.fGet();
+					_texh = node.fGet();
 				}
 			}
 		}
 	}
-	_item->setTextureRect(rect);
+	SpriteItemManager::SetSpriteTextureRect(_item, _texx, _texy, _texw, _texh);
 
 	_LEAVEFUNC_LUA;
 }
@@ -2129,7 +2150,7 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 {
 	_ENTERFUNC_LUA(2);
 
-	// flag sx sy time bglobal
+	// flag sx sy time
 
 	int _flag = node.iNextGet();
 	float _scalex = node.fNextGet();
@@ -2145,20 +2166,22 @@ int Export_Lua_Game::LuaFn_Game_ActionScale(LuaState * ls)
 		if (node.bhavenext)
 		{
 			_time = node.fGet();
+			/*
 			node.jNextGet();
 			if (node.bhavenext)
 			{
 				_bglobal = node.bGet();
 			}
+			*/
 		}
 	}
-
+/*
 	if (_bglobal)
 	{
 		_scalex = BGlobal::ScalerX(_scalex);
 		_scaley = BGlobal::ScalerX(_scaley);
 	}
-
+*/
 	CCAction * retval = NULL;
 	switch (_flag)
 	{
