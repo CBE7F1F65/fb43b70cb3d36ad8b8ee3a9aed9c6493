@@ -17,6 +17,7 @@ function PS_PreparePlanning(toplayer, toptag)
 	LGlobal_PlayData.planlines = {};
 	LGlobal_PlayData.plancircles = {};
 	LGlobal_PlayData.plandots = {};
+	LGlobal_PlayData.blowpos = {};
 	LGlobal_PlayData.plangroup = 0;
 	PS_UpdatePlanGroup(toplayer, toptag);
 	PS_SetMenuEnable(toplayer, toptag, true);
@@ -24,6 +25,26 @@ end
 
 function PS_ExitPlanning(toplayer, toptag)
 	PS_SetMenuEnable(toplayer, toptag, false);
+	
+	local layertag = toptag + CCPSTL_EnemyBlow;
+	local grouptag = layertag + CCPSTM_EnemyBlow_Arrow;
+	
+	local fadeaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+	local deleteaction = game.ActionDeleteChildren();
+	local fadebackaction = game.ActionFade(CCAF_To, 0xff);
+	local layeraction = game.ActionSequence({fadeaction, deleteaction, fadebackaction});
+	local layernode = game.GetNode({toplayer, grouptag});
+	game.RunAction(layernode, layeraction);
+	
+	for i=1, LConst_PlanGroupMax do
+		grouptag = layertag + CCPSTM_EnemyBlow_EyeStart * i;
+		local fadeaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+		local deleteaction = game.ActionDeleteChildren();
+		local fadebackaction = game.ActionFade(CCAF_To, 0xff);
+		local layeraction = game.ActionSequence({fadeaction, deleteaction, fadebackaction});
+		local layernode = game.GetNode({toplayer, grouptag});
+		game.RunAction(layernode, layeraction);
+	end
 end
 
 function PS_DrawPlanningFeather(toplayer, toptag, grouptag, brushx, brushy, time, index)
@@ -221,4 +242,75 @@ function PS_UpdatePlanning(toplayer, toptag, stateStep)
 	end
 	
 	return false;
+end
+
+function PS_AddBlowPosition(toplayer, toptag, plangroup, x, y, r)
+	
+	local enemyinscenecount = game.GetActiveEnemyData();
+	for i=0, enemyinscenecount-1 do
+		if LGlobal_PlayData.blowpos[i+1] == nil then
+			LGlobal_PlayData.blowpos[i+1] = {};
+		end
+		
+		local histblowedx = 0;
+		local histblowedy = 0;
+		local blowedx = 0;
+		local blowedy = 0;
+		
+		for j=plangroup, 1, -1 do
+			if LGlobal_PlayData.blowpos[i+1][j] ~= nil then
+				histblowedx = LGlobal_PlayData.blowpos[i+1][j].blowx;
+				histblowedy = LGlobal_PlayData.blowpos[i+1][j].blowy;
+				break;
+			end
+		end
+		
+		if LGlobal_PlayData.blowpos[i+1][plangroup+1] == nil then
+			LGlobal_PlayData.blowpos[i+1][plangroup+1] = {};
+			LGlobal_PlayData.blowpos[i+1][plangroup+1].blowx = histblowedx;
+			LGlobal_PlayData.blowpos[i+1][plangroup+1].blowy = histblowedy;
+		else
+			blowedx = LGlobal_PlayData.blowpos[i+1][plangroup+1].blowx;
+			blowedy = LGlobal_PlayData.blowpos[i+1][plangroup+1].blowy;
+		end
+		
+			
+		local costrate, blowx, blowy = game.AttackEnemy(i, WEAPON_Bomb, x, y, r, histblowedx, histblowedy);
+		if costrate > 0 then
+			blowx = blowx + blowedx;
+			blowy = blowy + blowedy;
+			LGlobal_PlayData.blowpos[i+1][plangroup+1].blowx = blowx;
+			LGlobal_PlayData.blowpos[i+1][plangroup+1].blowy = blowy;
+			-- Node
+			local itemtag, enx, eny, etype = game.GetActiveEnemyData(i, ENEMY_InScene);
+			local siid, sidesiid, sidearrowsiid, elayer = game.GetEnemyTypeData(etype, ENEMY_InScene);
+			local tx, ty, elayerscale = game.GetEnemyXYScale(i);
+			
+			local blowdistance = global.DIST(0, 0, blowx, blowy);
+			local blowangle = 9000-global.AMA(0, 0, blowx, blowy);
+			
+			local distscale = LConst_BlowArrowDisplayR / blowdistance;
+			tx = tx + blowx*distscale;
+			ty = ty + blowy*distscale;
+			
+			
+			local layertag = toptag + CCPSTL_EnemyBlow;
+			local grouptag = layertag + CCPSTM_EnemyBlow_Arrow;
+			local arrownode = game.GetNode({toplayer, grouptag+i+1});
+			if DtoI(arrownode) == NULL then
+				local spArrow = game.CreateSprite(sidearrowsiid, {tx, ty, blowangle, elayerscale, elayerscale}, grouptag+i+1);
+				arrownode = game.AddSpriteChild(spArrow, {toplayer, grouptag}, CCPSTM_EnemyBlow_Arrow);
+				game.SetColor(arrownode, global.ARGB(0, 0xffffff));
+				local arrowfadeactionpre = game.ActionFade(CCAF_To, 0xCF, LConst_BlinkTimePre);
+				local arrowfadeactionpost = game.ActionFade(CCAF_To, 0x1F, LConst_BlinkTimePost);
+				local arrowfadeaction = game.ActionSequence({arrowfadeactionpre, arrowfadeactionpost});
+				arrowfadeaction = game.ActionRepeat(arrowfadeaction);
+				game.RunAction(arrownode, arrowfadeaction);
+			else
+				game.SetPosition(arrownode, tx, ty);
+				game.SetAngle(arrownode, blowangle);
+			end
+		end
+	end
+	
 end

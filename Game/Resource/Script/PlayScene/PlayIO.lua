@@ -68,7 +68,7 @@ function PlayScene_OnInit(toplayer, toptag)
 	layertag = toptag + CCPSTL_HPAPSP;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_HPAPSP, layertag});
 	
-	-- Enemies On Side
+	-- Enemies OnSide
 	layertag = toptag + CCPSTL_EnemyOnSide;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_EnemyOnSide, layertag});
 	
@@ -87,6 +87,16 @@ function PlayScene_OnInit(toplayer, toptag)
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_Plan_DotsFeather, grouptag});
 	
 	PS_AddPlanningRenderTexture(toplayer, toptag);
+	
+	-- Enemies Blow
+	layertag = toptag + CCPSTL_EnemyBlow;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_EnemyBlow, layertag});
+	for i=1, LConst_PlanGroupMax do
+		grouptag = layertag + CCPSTM_EnemyBlow_EyeStart * i;
+		game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_EnemyBlow_EyeStart * i, grouptag});
+	end
+	grouptag = layertag + CCPSTM_EnemyBlow_Arrow;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_EnemyBlow_Arrow, grouptag});
 	
 	-- Menu
 	layertag = toptag + CCPSTL_Menu;

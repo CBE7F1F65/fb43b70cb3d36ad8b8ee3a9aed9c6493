@@ -375,6 +375,8 @@ function _PSCB_Touch_Ended(toplayer, toptag, touchlayer, index, gesture)
 		local totalsteps = math.ceil(2*M_PI*r/LConst_PlanBrushSpace);
 		LGlobal_PlayData.plancircles[nCircles].anglestep = math.ceil(36000/totalsteps);
 		LGlobal_PlayData.plancircles[nCircles].stepstogo = math.ceil(totalsteps/LConst_PlanBrushFrame)+1;
+		
+		PS_AddBlowPosition(toplayer, toptag, LGlobal_PlayData.plangroup, xb, yb, r);
 	end
 
 end

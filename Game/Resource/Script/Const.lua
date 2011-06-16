@@ -65,3 +65,5 @@ LConst_EnemySideBEdge = 576;
 LConst_EnemySideLEdgeCenter = 32;
 LConst_EnemySideREdgeCenter = 928;
 LConst_EnemySideBEdgeCenter = 608;
+
+LConst_BlowArrowDisplayR = 30;

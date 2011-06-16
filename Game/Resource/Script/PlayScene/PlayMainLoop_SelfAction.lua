@@ -100,23 +100,24 @@ function PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
 			
 			local enemynode = game.GetNode({toplayer, itemtag});
 			local tx, ty = game.GetEnemyXYScale(i);
+			
 			if costlife > 0 then
-				
 				life = life - costlife;
-				if life <= 0 then
-					life = 0;
-					PS_EnemyDead(toplayer, toptag, i, enemynode, status);
-				else
-					local statustoset = ENEMYSTATUS_Normal;
-					if bBlowed then
-						statustoset = ENEMYSTATUS_Blowed;
-					end
-					game.SetActiveEnemyData(i, ENEMY_InScene, life, elayer, blowx, blowy, statustoset);
-					tx, ty = game.GetEnemyXYScale(i);
-				end
 				if not bBlowed then
 					LGlobal_PlayScene_RunShakeAction(enemynode, tx, ty);
 				end
+			end
+			
+			if life <= 0 then
+				life = 0;
+				PS_EnemyDead(toplayer, toptag, i, enemynode, status);
+			else
+				local statustoset = ENEMYSTATUS_Normal;
+				if bBlowed then
+					statustoset = ENEMYSTATUS_Blowed;
+				end
+				game.SetActiveEnemyData(i, ENEMY_InScene, life, elayer, blowx, blowy, statustoset);
+				tx, ty = game.GetEnemyXYScale(i);
 			end
 			
 			if bBlowed then

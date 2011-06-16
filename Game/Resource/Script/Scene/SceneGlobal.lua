@@ -77,24 +77,31 @@ CCHSTL_Sub = CCTag_Layer_04;
 -- PlayScene
 --
 CCPSTL_ObjBG = CCTag_Layer_01;
+
 CCPSTL_Enemy = CCTag_Layer_02;
 	CCPSTM_Enemy_CallNode = CCTag_Menu_11;
+
 CCPSTL_ObjFG = CCTag_Layer_03;
+
 CCPSTL_Message = CCTag_Layer_04;
 	CCPSTM_Message_TargetBoard = CCTag_Menu_01;
 	CCPSTM_Message_OverBoard = CCTag_Menu_02;
 	CCPSTM_Message_TargetMenu = CCTag_Menu_04;
 	CCPSTM_Message_OverMenu = CCTag_Menu_06;
-	--
 	CCPSTM_Message_OverMenuDelay = CCTag_Menu_09;
 	CCPSTM_Message_TargetMenuDelay = CCTag_Menu_11;
+	
 CCPSTL_Frame = CCTag_Layer_05;
+
 CCPSTL_Touch = CCTag_Layer_06;
 	CCPSTM_Touch_Layer = CCTag_Menu_01;
+	
 CCPSTL_HPAPSP = CCTag_Layer_07;
 	CCPSTM_HPAPSP_HPAP = CCTag_Menu_01;
 	CCPSTM_HPAPSP_SP = CCTag_Menu_02;
+	
 CCPSTL_EnemyOnSide = CCTag_Layer_08;
+
 CCPSTL_Plan = CCTag_Layer_11;
 	CCPSTM_Plan_RenderTexture = CCTag_Menu_01;
 	CCPSTM_Plan_LinesFeather = CCTag_Menu_04;
@@ -102,6 +109,11 @@ CCPSTL_Plan = CCTag_Layer_11;
 	CCPSTM_Plan_DotsFeather = CCTag_Menu_06;
 	CCPSTM_Plan_XFeather = CCTag_Menu_10;
 	CCPSTM_Plan_CallNode = CCTag_Menu_11;
+	
+CCPSTL_EnemyBlow = CCTag_Layer_12;
+	CCPSTM_EnemyBlow_EyeStart = CCTag_Menu_01;
+	CCPSTM_EnemyBlow_Arrow = CCTag_Menu_10;
+	
 CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_Main = CCTag_Menu_01;
 	CCPSTM_Menu_PlanGroup = CCTag_Menu_02;
@@ -109,7 +121,6 @@ CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_QuitRestart = CCTag_Menu_04;
 	CCPSTM_Menu_SubLevel02 = CCTag_Menu_05;	--modify
 	CCPSTM_Menu_SubLevel03 = CCTag_Menu_06;	--use
-	--
 	CCPSTM_Menu_MainDelay = CCTag_Menu_14;
 	CCPSTM_Menu_SubLevel01Delay = CCTag_Menu_12;	--item
 	CCPSTM_Menu_QuitRestartDelay = CCTag_Menu_11;

@@ -689,7 +689,7 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 {
 	_ENTERFUNC_LUA(4);
 
-	// enemyindex, weapontype, x, y, r/ xe, ye, xoffset, yoffset -> hitRate, blowoffsetx, blowoffsety
+	// enemyindex, weapontype, x, y, r/ xe, ye, xoffset, yoffset -> hitRate, blowoffsetx, blowoffsety, blowdistance, blowangle
 	BYTE _index = node.iNextGet();
 	EnemyInGameData * item = GameMain::getInstance()->GetEnemyByIndex(_index, ENEMY_INSCENE);
 	if (!item)
@@ -814,17 +814,24 @@ int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 
 	float blowdistancex = 0;
 	float blowdistancey = 0;
+	float blowdistance = 0;
+	int blowangle = 0;
 	if (hitRate && _weapontype == M_WEAPON_BOMB)
 	{
-		float blowdistance = baseitem->blowdistance;
-		float dist = DIST(enemyx, enemyy, _x, _y);
-		blowdistance *= (1-dist/(_r+baseitem->boxr*enemyscale))*0.8f+0.2f;
-		int aimangle = aMainAngle(_x, M_SCREEN_HEIGHT-_y, enemyx, M_SCREEN_HEIGHT-enemyy);
-		blowdistancex = blowdistance*cost(aimangle);
-		blowdistancey = -blowdistance*sint(aimangle);
+		blowdistance = baseitem->blowdistance;
+		if (blowdistance)
+		{
+			float dist = DIST(enemyx, enemyy, _x, _y);
+			blowdistance *= (1-dist/(_r+baseitem->boxr*enemyscale))*0.8f+0.2f;
+			blowangle = 9000-aMainAngle(_x, _y, enemyx, enemyy);
+			blowdistancex = blowdistance*sint(blowangle);
+			blowdistancey = blowdistance*cost(blowangle);
+		}
 	}
 	node.PFloat(blowdistancex);
 	node.PFloat(blowdistancey);
+	node.PFloat(blowdistance);
+	node.PInt(blowangle);
 
 	_LEAVEFUNC_LUA;
 }
