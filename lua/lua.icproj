@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="liblua"
+	ProjectGUID="{902A2990-2A1E-4B98-8BDE-7AA34D89772D}"
+	VCNestedProjectGUID="{A9376AC9-4D65-498F-885D-EEC3B41DD6E8}"
+	VCNestedProjectFileName="lua.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>

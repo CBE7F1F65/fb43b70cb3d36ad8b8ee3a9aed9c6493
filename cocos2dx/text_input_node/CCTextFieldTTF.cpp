@@ -33,7 +33,7 @@ static int _calcCharCount(const char * pszText)
 {
     int n = 0;
     char ch = 0;
-    while (ch = *pszText)
+    while ((ch = *pszText))
     {
         CC_BREAK_IF(! ch);
         
@@ -174,7 +174,7 @@ void CCTextFieldTTF::insertText(const char * text, int len)
 
     // insert \n means input end
     int nPos = sInsert.find('\n');
-    if (sInsert.npos != nPos)
+    if ((int)sInsert.npos != nPos)
     {
         len = nPos;
         sInsert.erase(nPos);
@@ -194,7 +194,7 @@ void CCTextFieldTTF::insertText(const char * text, int len)
         setString(sText.c_str());
     }
 
-    if (sInsert.npos == nPos) {
+    if ((int)sInsert.npos == nPos) {
         return;
     }
     
@@ -204,7 +204,7 @@ void CCTextFieldTTF::insertText(const char * text, int len)
         return;
     }
     
-    // if lelegate hasn't process, detach with ime as default
+    // if delegate hasn't process, detach with ime as default
     detachWithIME();
 }
 
@@ -244,6 +244,11 @@ void CCTextFieldTTF::deleteBackward()
     // set new input text
     std::string sText(m_pInputText->c_str(), nStrLen - nDeleteLen);
     setString(sText.c_str());
+}
+
+const char * CCTextFieldTTF::getContentText()
+{
+    return m_pInputText->c_str();
 }
 
 void CCTextFieldTTF::draw()

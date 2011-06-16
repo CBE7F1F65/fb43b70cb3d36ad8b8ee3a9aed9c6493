@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="11.1"
+	Name="HelloLua"
+	ProjectGUID="{5B07966A-9323-465A-8C7E-A3163F3764BE}"
+	VCNestedProjectGUID="{13E55395-94A2-4CD9-BFC2-1A051F80C17D}"
+	VCNestedProjectFileName="HelloLua.win32.vcproj">
+	<Configurations/>
+	<Files/>
+</VisualStudioProject>
