@@ -7,7 +7,6 @@ function PS_SidePosToScenePos(x, y, angle)
 	elseif y>=LConst_EnemySideBEdge then
 		r = (y-LConst_EnemySideBEdge)*(960-LConst_EnemySideTEdge-LConst_EnemySideEdge)/LConst_EnemySideEdge+(y-LConst_EnemySideBEdge);
 	end
-	
 	if r ~= nil then
 		x = x+r*global.SINT(angle);
 		y = y+r*global.COST(angle);

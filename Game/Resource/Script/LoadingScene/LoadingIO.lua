@@ -70,7 +70,7 @@ function _PrintMissionEnemyTable()
 						angle = RANDT(4500, 13500);
 					elseif ltrindex == 1 then
 						x = RANDT(200, 760);
-						y = RANDT(4, 60);
+						y = RANDT(580, 636);
 						angle = RANDT(13500, 22500);
 					else
 						x = RANDT(900, 956);
