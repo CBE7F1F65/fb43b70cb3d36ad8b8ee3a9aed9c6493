@@ -1105,9 +1105,6 @@ void GameMain::Update()
 			break;
 
 		case GAMESTATE_ADDENEMY:
-			stateAction = GAMESTATE_HPREGAIN;
-			break;
-		case GAMESTATE_HPREGAIN:
 			stateAction = GAMESTATE_SHOWTURNSTART;
 			break;
 		case GAMESTATE_SHOWTURNSTART:
@@ -1117,8 +1114,11 @@ void GameMain::Update()
 			}
 			else
 			{
-				stateAction = GAMESTATE_PLANNING;
+				stateAction = GAMESTATE_HPREGAIN;
 			}
+			break;
+		case GAMESTATE_HPREGAIN:
+			stateAction = GAMESTATE_PLANNING;
 			break;
 		case GAMESTATE_PLANNING:
 			stateAction = GAMESTATE_SELFACTION;

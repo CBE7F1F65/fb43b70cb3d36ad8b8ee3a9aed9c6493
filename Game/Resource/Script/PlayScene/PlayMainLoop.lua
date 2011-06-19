@@ -50,16 +50,6 @@ function PS_UpdateState(toplayer, toptag)
 				stateST = STATE_ST_Finished;
 			end
 		end
-	elseif stateAction == STATE_HPRegain then
-		if stateST == STATE_ST_Null then
-			stateST  = STATE_ST_Standby;
-		elseif stateST == STATE_ST_Standby then
-			if PS_HPRegain(toplayer, toptag) then
-				stateST = STATE_ST_Finished;
-			end
-		elseif stateST == STATE_ST_StepForward then
-			stateST = STATE_ST_Finished;
-		end
 	elseif stateAction == STATE_ShowTurnStart then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
@@ -67,6 +57,16 @@ function PS_UpdateState(toplayer, toptag)
 		elseif stateST == STATE_ST_Standby then
 			PS_ShowTurnStart(toplayer, toptag)
 			stateST = STATE_ST_Progressing;
+		elseif stateST == STATE_ST_StepForward then
+			stateST = STATE_ST_Finished;
+		end
+	elseif stateAction == STATE_HPRegain then
+		if stateST == STATE_ST_Null then
+			stateST  = STATE_ST_Standby;
+		elseif stateST == STATE_ST_Standby then
+			if PS_HPRegain(toplayer, toptag) then
+				stateST = STATE_ST_Finished;
+			end
 		elseif stateST == STATE_ST_StepForward then
 			stateST = STATE_ST_Finished;
 		end

@@ -41,24 +41,30 @@ function PS_AddHPAPSPItems(toplayer, toptag)
 	
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_HPAPSP_HPAP, grouptag});
 	
-	local x = 232.5;
-	local y = 112;
+	local x = 232;
+	local y = 130;
 	
 	for i=0, 1 do
 		if i == 1 then
 			x = 960 - x;
 		end
-		local texx, texy, width, height = game.GetSIData(SI_GUI_HP_Bar+i*2);
+		local frametexx, frametexy, framewidth, frameheight = game.GetSIData(SI_GUI_HP_Frame+i*3);
+		local texx, texy, width, height = game.GetSIData(SI_GUI_HP_Bar+i*3);
 		
-		local spBar = game.CreateSprite(SI_GUI_HP_Bar+i*2, {x-width/2, y-height/2}, grouptag+i+1);
+		local barx = x-framewidth/2+(texx-frametexx);
+		local bary = y-24;
+		local spSlowBar = game.CreateSprite(SI_GUI_HP_Slow+i*3, {barx, bary}, grouptag+i*2+1);
+		local spBar = game.CreateSprite(SI_GUI_HP_Bar+i*3, {barx, bary}, grouptag+i*2+2);
+		local nodeslowbar = game.AddSpriteChild(spSlowBar, {toplayer, grouptag});
 		local nodebar = game.AddSpriteChild(spBar, {toplayer, grouptag});
+		game.SetAnchor(nodeslowbar, 0, 0);
 		game.SetAnchor(nodebar, 0, 0);
 		game.SetScale(nodebar, 0, 1);
 		
-		local spFrame = game.CreateSprite(SI_GUI_HP_Frame+i*2, {x, y});
+		local spFrame = game.CreateSprite(SI_GUI_HP_Frame+i*3, {x, y});
 		game.AddSpriteChild(spFrame, {toplayer, grouptag});
 		
-		local spTitle = game.CreateSprite(SI_GUI_HP+i, {x, y});
+		local spTitle = game.CreateSprite(SI_GUI_HP+i, {x+12, y-14});
 		game.AddSpriteChild(spTitle, {toplayer, grouptag});
 	end
 	
@@ -82,11 +88,11 @@ function PS_AddScoreItems(toplayer, toptag)
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_TopMessage_Score, grouptag});
 	
 	local x = 80;
-	local ybegin = 560;
+	local ybegin = 540;
 	local yoffset = 40;
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
-		local atlasnode = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCPSTM_TopMessage_Score, grouptag+i+1}, "", TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.5);
+		local atlasnode = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCPSTM_TopMessage_Score, grouptag+i+1}, "", TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.25);
 		game.SetAnchor(atlasnode, 0, 0);
 	end
 end

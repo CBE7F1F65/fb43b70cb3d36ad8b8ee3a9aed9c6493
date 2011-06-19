@@ -1,6 +1,6 @@
 LConst_FontSize = 40;
-LConst_AtlasFontWidth = 48;
-LConst_AtlasFontHeight = 64;
+LConst_AtlasFontWidth = 64;
+LConst_AtlasFontHeight = 128;
 
 LConst_SceneTransTime = 0.2;
 
@@ -8,7 +8,7 @@ LConst_ScoreDigitMax = 10;
 
 LConst_ButtonFadeTo = 0xEF;
 
-LConst_HPAPChangeTime = 0.5;
+LConst_HPAPChangeTime = 0.8;
 LConst_SPChangeTime = 0.5;
 
 LConst_CommandCount = 4;

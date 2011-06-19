@@ -15,25 +15,47 @@ function PS_SetHPAPSP(toplayer, toptag)
 	local layertag = toptag + CCPSTL_HPAPSP;
 	local grouptag = layertag + CCPSTM_HPAPSP_HPAP;
 	
-	local hpbar = game.GetNode({toplayer, grouptag+1});
-	local apbar = game.GetNode({toplayer, grouptag+2});
+	local hpslowbar = game.GetNode({toplayer, grouptag+1});
+	local hpbar = game.GetNode({toplayer, grouptag+2});
+	local apslowbar = game.GetNode({toplayer, grouptag+3});
+	local apbar = game.GetNode({toplayer, grouptag+4});
 	
 	if LGlobal_PlayData.nowhp ~= hp then
+		local oldhp = LGlobal_PlayData.nowhp;
 		LGlobal_PlayData.nowhp = hp;
 		if hp < 0 then
 			hp = 0;
 		end
-		local hpscaleaction = game.ActionScale(CCAF_To, hp/10000.0, 1, LConst_HPAPChangeTime, true);
-		game.RunAction(hpbar, hpscaleaction);
+		local hpscale = hp/10000.0;
+		local hpscaleaction = game.ActionScale(CCAF_To, hpscale, 1, LConst_HPAPChangeTime, true);
+		if oldhp > hp then
+			game.RunAction(hpslowbar, hpscaleaction);
+			game.StopAction(hpbar);
+			game.SetScale(hpbar, hpscale, 1);
+		else
+			game.RunAction(hpbar, hpscaleaction);
+			game.StopAction(hpslowbar);
+			game.SetScale(hpslowbar, hpscale, 1);
+		end
 	end
 	
 	if LGlobal_PlayData.nowap ~= ap then
+		local oldap = LGlobal_PlayData.nowap;
 		LGlobal_PlayData.nowap = ap;
 		if ap < 0 then
 			ap = 0;
 		end
-		local apscaleaction = game.ActionScale(CCAF_To, ap/10000.0, 1, LConst_HPAPChangeTime, true);
-		game.RunAction(apbar, apscaleaction);
+		local apscale = ap/10000.0;
+		local apscaleaction = game.ActionScale(CCAF_To, apscale, 1, LConst_HPAPChangeTime, true);
+		if oldap > ap then
+			game.RunAction(apslowbar, apscaleaction);
+			game.StopAction(apbar);
+			game.SetScale(apbar, apscale, 1);
+		else
+			game.RunAction(apbar, apscaleaction);
+			game.StopAction(apslowbar);
+			game.SetScale(apslowbar, apscale, 1);
+		end
 	end
 	
 	local grouptag = layertag + CCPSTM_HPAPSP_SP;
@@ -94,7 +116,8 @@ function PS_UpdateScoreDisplay(toplayer, toptag)
 	local layertag = toptag + CCPSTL_TopMessage;
 	local grouptag = layertag + CCPSTM_TopMessage_Score;
 	
-	local scorestr = LGlobal_TranslateGameStr_Score()..": "..score.." ("..scorerate..")";
+	local scorestr = LGlobal_TranslateGameStr_Score()..": "..score;
+	local scorestr = string.format("%s (%.1f)", scorestr, scorerate);
 	if score > hiscore then
 		hiscore = score;
 	end
