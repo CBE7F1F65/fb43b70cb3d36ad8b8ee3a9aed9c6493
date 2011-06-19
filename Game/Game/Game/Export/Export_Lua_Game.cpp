@@ -829,7 +829,7 @@ int Export_Lua_Game::LuaFn_Game_AddRenderTextureChild(LuaState * ls)
 			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
 		}
 
-		CCRenderTextureExpand * item = CCRenderTextureExpand::renderTextureWithWidthAndHeight(_width, _height);
+		CCRenderTextureExpand * item = CCRenderTextureExpand::renderTextureWithWidthAndHeight(_width, _height, kCCTexture2DPixelFormat_RGBA4444);
 //		nownode->addChild(item, _zOrder, _tag);
 		_LuaHelper_AddChild(nownode, item, _zOrder, _tag);
 		item->setPosition(BGlobal::TranslatePosition(_x, _y));

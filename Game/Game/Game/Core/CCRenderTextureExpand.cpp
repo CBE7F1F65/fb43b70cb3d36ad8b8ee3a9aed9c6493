@@ -26,15 +26,7 @@ namespace cocos2d{
 
 	CCRenderTextureExpand * CCRenderTextureExpand::renderTextureWithWidthAndHeight(int w, int h)
 	{
-		CCRenderTextureExpand *pRet = new CCRenderTextureExpand();
-
-		if(pRet && pRet->initWithWidthAndHeight(w, h, kCCTexture2DPixelFormat_RGBA8888))
-		{
-			pRet->autorelease();
-			return pRet;
-		}
-		CC_SAFE_DELETE(pRet)
-			return NULL;
+		return renderTextureWithWidthAndHeight(w, h, kCCTexture2DPixelFormat_Default);
 	}
 
 	void CCRenderTextureExpand::setColor(ccColor3B color)

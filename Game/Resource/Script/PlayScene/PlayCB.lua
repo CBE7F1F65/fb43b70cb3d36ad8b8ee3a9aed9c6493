@@ -630,8 +630,10 @@ function PS_CB_OnClickWait(toplayer, toptag)
 		end
 	end
 	if bFound then
-		LGlobal_PlayData.plangroup = plangroup+1;
-		PS_UpdatePlanGroup(toplayer, toptag);
+		if plangroup < LConst_PlanGroupMax-1 then
+			LGlobal_PlayData.plangroup = plangroup+1;
+			PS_UpdatePlanGroup(toplayer, toptag);
+		end
 	end
 end
 
