@@ -248,6 +248,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\CCLabelAtlasExpand.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\CCRenderTextureExpand.cpp"
 				>
 			</File>
@@ -378,6 +382,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\CCBaseNode.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\CCLabelAtlasExpand.h"
 				>
 			</File>
 			<File

@@ -7,7 +7,7 @@
 
 // TODO Update GameData from order version
 
-struct HiScoreData 
+struct SurvivalHiScoreData 
 {
 	int hiscore;
 	char username[M_USERNAMEMAX];
@@ -19,8 +19,14 @@ struct MissionScoreData
 	int clearcount;
 	int hiscore;
 	BYTE rank;
+	BYTE eggflag;
 	BYTE bestturn;
 	BYTE enabled;
+};
+
+struct TotalHiScoreData
+{
+	int hiscore;
 };
 
 struct StageScoreData
@@ -28,6 +34,10 @@ struct StageScoreData
 	MissionScoreData missions[M_STAGEMISSIONMAX];
 	BYTE opencount;
 	BYTE clearcount;
+};
+
+struct FunctionAccessData{
+	LONGLONG accessflag;
 };
 
 struct HelpAccessData{
@@ -38,10 +48,13 @@ struct ItemOwnedData{
 	int count;
 };
 
+
 struct GameData
 {
-	HiScoreData hiscores[M_HISCOREMAX];
+	SurvivalHiScoreData hiscores[M_HISCOREMAX];
+	TotalHiScoreData totalhiscore;
 	StageScoreData stages[M_STAGEMAX];
+	FunctionAccessData functionaccess;
 	HelpAccessData helps[M_HELPTYPEMAX];
 	ItemOwnedData items[M_ITEMTYPEMAX];
 	AchievementData achieves;

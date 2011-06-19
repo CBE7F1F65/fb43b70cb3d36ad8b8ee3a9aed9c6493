@@ -194,9 +194,6 @@ end
 
 function _MissionSelectScene_AddPageItems(toplayer, toptag)
 	local nowstage = game.GetNowStageMissionTurn();
-	if nowstage == LConst_ExtraStageIndex then
-		return;
-	end
 	
 	local layertag = toptag + CCMSSTL_Menu;
 	local grouptag = layertag + CCMSSTM_Menu_Page;

@@ -40,6 +40,7 @@ public:
 	static bool LuaRegistConst();
 	static bool _LuaRegistConst(LuaObject * obj);
 	static bool _LuaRegistCustomConst(LuaObject * obj);
+	static bool _LuaRegistTEX(LuaObject * obj);
 	static bool _LuaRegistSIID(LuaObject * obj);
 
 	static DWORD _LuaHelper_GetColor(LuaObject * obj);

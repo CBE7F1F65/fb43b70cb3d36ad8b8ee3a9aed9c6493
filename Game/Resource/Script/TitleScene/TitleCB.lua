@@ -43,7 +43,7 @@ end
 
 function TitleScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
 	
-	if selitemtag == 5 then
+	if selitemtag == 4 then
 		game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
 		return;
 	end
@@ -56,15 +56,19 @@ function TitleScene_CB_MainMenu(itemtag, toplayer, toptag, sublayertag, selgroup
 	local menu = game.GetNode({toplayer, grouptag});
 	game.SetTouchEnabled(menu, false);
 	
-	for i=0, 4 do
+	for i=0, 5 do
 	
 		menus[i+1] = game.GetNode({toplayer, grouptag+i+1});
 		
-		local fadetime = 0.3+(4-i)*0.05;
+		local fadetime = 0.3+(4-i)*0.04;
 		
 		if i+1 ~= selitemtag then
 			
-			local menumoveaction = game.ActionMove(CCAF_By, xmove, 0, fadetime);
+			local txmove = xmove;
+			if i > 3 then
+				txmove = - xmove;
+			end
+			local menumoveaction = game.ActionMove(CCAF_By, txmove, 0, fadetime);
 			menumoveaction = game.ActionEase(CCAF_Out, menumoveaction, 0.25);
 			local menualphaaction = game.ActionFade(CCAF_To, 0, fadetime);			
 			local menuaction = game.ActionSpawn({menumoveaction, menualphaaction});
@@ -98,13 +102,18 @@ function TitleScene_CBDelay_MainMenu(itemtag, toplayer, toptag, sublayertag, sel
 		game.ReplaceScene(ktag_StageSelectSceneLayer, LConst_SceneTransTime);
 	elseif selitemtag == 2 then
 		_TitleScene_LeaveMainLayer(toplayer, toptag);
-		_TitleScene_EnterHiScoreLayer(toplayer, toptag);
+		_TitleScene_EnterOptionLayer(toplayer, toptag);
 	elseif selitemtag == 3 then
 		_TitleScene_LeaveMainLayer(toplayer, toptag);
-		_TitleScene_EnterOptionLayer(toplayer, toptag);
-	elseif selitemtag == 4 then
-		_TitleScene_LeaveMainLayer(toplayer, toptag);
 		_TitleScene_EnterOnlineLayer(toplayer, toptag);
+	elseif selitemtag == 5 then
+		
+		game.TryStage(LConst_SurvivalStageIndex);
+		game.TryMission(LConst_SurvivalMissionIndex);
+		game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);
+	elseif selitemtag == 6 then
+		_TitleScene_LeaveMainLayer(toplayer, toptag);
+		_TitleScene_EnterHiScoreLayer(toplayer, toptag);
 	else
 		game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
 	end

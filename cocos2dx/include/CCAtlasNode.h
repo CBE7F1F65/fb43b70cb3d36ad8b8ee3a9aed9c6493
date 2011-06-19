@@ -73,8 +73,14 @@ public:
 	/** creates a CCAtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
 	static CCAtlasNode * atlasWithTileFile(const char* tile,int tileWidth, int tileHeight, int itemsToRender);
 
+	/** creates a CCAtlasNode  with an Atlas texture the width and height of each item and the quantity of items to render*/
+	static CCAtlasNode * atlasWithTileTexture(CCTexture2D* texture,int tileWidth, int tileHeight, int itemsToRender);
+
 	/** initializes an CCAtlasNode  with an Atlas file the width and height of each item and the quantity of items to render*/
 	bool initWithTileFile(const char* tile, int tileWidth, int tileHeight, int itemsToRender);
+
+	/** initializes an CCAtlasNode  with an Atlas texture the width and height of each item and the quantity of items to render*/
+	bool initWithTileTexture(CCTexture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
 
 	/** updates the Atlas (indexed vertex array).
 	* Shall be overriden in subclasses

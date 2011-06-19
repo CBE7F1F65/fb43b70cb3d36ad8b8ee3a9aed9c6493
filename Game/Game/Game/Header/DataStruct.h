@@ -23,6 +23,7 @@ struct customconstData{
 struct textureData
 {
 	char texfilename[M_STRMAX];
+	char texname[M_STRMAX];
 	int width;
 	int height;
 };

@@ -392,7 +392,7 @@ bool DataTable::ReadTextureDefineTable()
 
 	pbres->ClearTextureData();
 
-	_READSTRINGBUFFERLINE(5);
+	_READSTRINGBUFFERLINE(6);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -401,11 +401,11 @@ bool DataTable::ReadTextureDefineTable()
 		_CHECKEOF_DATATABLE;
 		textureData * item = &(pbres->texturedata[tindex]);
 
-		fscanf(file, "%s%d%d",
-			item->texfilename,
-			&(item->width),
-			&(item->height)
-			);
+		fscanf(file, "%s%s%d%d",
+			item->texname, 
+			item->texfilename, 
+			&(item->width), 
+			&(item->height));
 
 		_DOSWAPTINT;
 		_INITTINT;
@@ -433,13 +433,15 @@ bool DataTable::ReadSpriteDefineTable()
 		_CHECKEOF_DATATABLE;
 		spriteData * item = &(pbres->spritedata[tindex]);
 
-		fscanf(file, "%s%d%f%f%f%f", 
+		fscanf(file, "%s%s%f%f%f%f", 
 			item->spritename, 
-			&(item->tex),
+			strbuffer[0],
 			&(item->tex_x), 
 			&(item->tex_y), 
 			&(item->tex_w), 
 			&(item->tex_h));
+
+		item->tex = pbres->GetTextureIndexByName(strbuffer[0]);
 
 		_DOSWAPTINT;
 		_INITTINT;

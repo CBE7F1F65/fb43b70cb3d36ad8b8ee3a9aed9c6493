@@ -159,7 +159,12 @@ function PlayScene_CBDispatch_MainMenu_QuitRestart(callitemtag, toplayer, toptag
 --			game.PushScene(ktag_HelpSceneLayer, LConst_SceneTransTime);
 		--Quit
 		elseif selitemtag == 3 then
-			game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
+			local nowstage, nowmission, nowturn = game.GetNowStageMissionTurn();
+			if nowstage == LConst_SurvivalStageIndex and nowmission == LConst_SurvivalMissionIndex then
+				game.ReplaceScene(ktag_TitleSceneLayer, LConst_SceneTransTime);
+			else
+				game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
+			end
 		--Restart
 		else
 			game.ReplaceScene(ktag_PlaySceneLayer, LConst_SceneTransTime);

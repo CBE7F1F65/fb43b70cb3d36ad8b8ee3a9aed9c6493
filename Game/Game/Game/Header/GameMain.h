@@ -74,8 +74,9 @@ public:
 	void ReadIni();
 
 	void SaveData();
-	void ResetHiScore();
+	void ResetSurvivalHiScore();
 	void ReportHiScore();
+	void ReportSurvivalHiScore();
 
 	bool StageIsEnabled(int index);
 	bool MissionIsEnabled(int missionindex, int stageindex=-1);
@@ -100,6 +101,9 @@ public:
 	int GetItemData(BYTE type, int * siid=NULL);
 	int BuyItem(BYTE type);
 	bool UseItem(BYTE type);
+
+	void EnableFunctionAccess(BYTE index);
+	bool IsFunctionAccessEnabled(BYTE index);
 
 	void SetEnemyPositionRect(CCRect rect);
 
@@ -126,6 +130,8 @@ public:
 	EnemyInGameData * GetEnemyByIndex(int index, BYTE enemiesindex);
 	void GetEnemyXYScale(EnemyInGameData * item, float * x, float * y, float * scale);
 
+	void SetMissionRateScore(float scorerate, int score);
+
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
 
@@ -136,7 +142,7 @@ public:
 	void SetSEVol(int sevol);
 	void SetUsername(const char * username);
 
-	bool InsertScore(int score);
+	bool InsertSurvivalHiScore(int score);
 
 	GameData gamedata;
 	int bgmvol;
@@ -152,13 +158,14 @@ public:
 	int nowap;
 	int nowsp;
 
+	float nowscorerate;
+
 	CCRect enemypositionrect;
 
 	BYTE helptype;
 	BYTE helpindex;
 
 	int missionscore;
-	int totalscore;
 	int nowturn;
 
 	missionTargetData targetcount[M_MISSIONTARGETMAX];

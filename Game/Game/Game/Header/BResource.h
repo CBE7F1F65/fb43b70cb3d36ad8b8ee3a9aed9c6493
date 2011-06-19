@@ -46,6 +46,7 @@ public:
 
 	int GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex);
 	BYTE GetEnemyBaseType(BYTE etype);
+	int GetTextureIndexByName(const char * texname);
 
 	int Texture_GetWidth(HTEXTURE tex);
 	int Texture_GetHeight(HTEXTURE tex);

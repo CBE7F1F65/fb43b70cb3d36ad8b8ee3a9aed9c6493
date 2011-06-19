@@ -1,12 +1,12 @@
 130	h5nc	59																						
 Comment	Index	SIID	NormalFrame	IdleFrame	AttackFrame	WoundFrame	DeadFrame	SpecialFrame	SideSIID	SideArrowSIID	eLayer	eLayerAdvance	AttackFlag	HeadX	HeadY	HeadRH	HeadRV	BodyX	BodyY	BodyRH	BodyRV	BoxR	HeadShotScale	BlowDistance
--	0	SI_Enemy_Soldier	0	0	0	0	0	0	SI_EnemySide_Soldier	SI_EnemySide_Soldier_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	1.57	25	20.2336	25.0016	2.5	-25.9	32	38.096	60	1.5	120
--	1	SI_Enemy_Warrior	0	0	0	0	0	0	SI_EnemySide_Warrior	SI_EnemySide_Warrior_Arrow	CCZ_eLayer_02	CCZ_eLayer_01	0	5	19.5	19.8848	24	3.38	-24	35.3792	36	60	1.5	80
--	2	SI_Enemy_Magician	0	0	0	0	0	0	SI_EnemySide_Magician	SI_EnemySide_Magician_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	1	-9	28	19.0016	32	-6.25	-24.99	33.2512	42.9888	60	1.5	150
--	3	SI_Enemy_Rifle	0	0	0	0	0	0	SI_EnemySide_Rifle	SI_EnemySide_Rifle_Arrow	CCZ_eLayer_01	CCZ_eLayer_02	0	-2.93	21.5	24.4288	33.5008	-0.35	-35	35.9712	39.0016	60	1.5	120
--	4	SI_Enemy_Angel	0	0	0	0	0	0	SI_EnemySide_Angel	SI_EnemySide_Angel_Arrow	CCZ_eLayer_01	CCZ_eLayer_00	2	4	17.5	20.2496	25.5008	0	-32	31.5008	34.7488	60	1.5	200
--	5	SI_Enemy_Shield	0	0	0	0	0	0	SI_EnemySide_Shield	SI_EnemySide_Shield_Arrow	CCZ_eLayer_03	CCZ_eLayer_00	0	1	24.25	22	25.7504	3.5	-27.5	35.5008	36.4992	60	1.5	60
+-	0	SI_Enemy_Soldier	0	0	0	0	0	0	SI_EnemySide_Soldier	SI_EnemySide_Soldier_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	1.57	25	20.2336	25.0016	2.5	-25.9	32	38.096	60	1.5	180
+-	1	SI_Enemy_Warrior	0	0	0	0	0	0	SI_EnemySide_Warrior	SI_EnemySide_Warrior_Arrow	CCZ_eLayer_02	CCZ_eLayer_01	0	5	19.5	19.8848	24	3.38	-24	35.3792	36	60	1.5	120
+-	2	SI_Enemy_Magician	0	0	0	0	0	0	SI_EnemySide_Magician	SI_EnemySide_Magician_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	1	-9	28	19.0016	32	-6.25	-24.99	33.2512	42.9888	60	1.5	200
+-	3	SI_Enemy_Rifle	0	0	0	0	0	0	SI_EnemySide_Rifle	SI_EnemySide_Rifle_Arrow	CCZ_eLayer_01	CCZ_eLayer_02	0	-2.93	21.5	24.4288	33.5008	-0.35	-35	35.9712	39.0016	60	1.5	180
+-	4	SI_Enemy_Angel	0	0	0	0	0	0	SI_EnemySide_Angel	SI_EnemySide_Angel_Arrow	CCZ_eLayer_01	CCZ_eLayer_00	2	4	17.5	20.2496	25.5008	0	-32	31.5008	34.7488	60	1.5	240
+-	5	SI_Enemy_Shield	0	0	0	0	0	0	SI_EnemySide_Shield	SI_EnemySide_Shield_Arrow	CCZ_eLayer_03	CCZ_eLayer_00	0	1	24.25	22	25.7504	3.5	-27.5	35.5008	36.4992	60	1.5	120
 -	6	SI_Enemy_Ghost	0	0	0	0	0	0	SI_EnemySide_Ghost	SI_EnemySide_Ghost_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	-1.25	27.13	17.2512	20.8736	-1	-11	33.5008	34	60	1.5	0
 -	7	SI_Enemy_Ninja	0	0	0	0	0	0	SI_EnemySide_Ninja	SI_EnemySide_Ninja_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	-5.62	12.5	21.6256	27.5008	-2.5	-36	29.5008	34	60	1.5	0
 -	8	SI_Enemy_Archer	0	0	0	0	0	0	SI_EnemySide_Archer	SI_EnemySide_Archer_Arrow	CCZ_eLayer_01	CCZ_eLayer_00	0	0.84	20.89	21.5008	32	14	-31.25	34	32.7488	60	1.5	180
--	9	SI_Enemy_King	0	0	0	0	0	0	SI_EnemySide_King	SI_EnemySide_King_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	-13	64.5	27.0016	37.5008	-8	-37.11	67.0016	78.8928	120	1.5	40
+-	9	SI_Enemy_King	0	0	0	0	0	0	SI_EnemySide_King	SI_EnemySide_King_Arrow	CCZ_eLayer_01	CCZ_eLayer_01	0	-13	64.5	27.0016	37.5008	-8	-37.11	67.0016	78.8928	120	1.5	80

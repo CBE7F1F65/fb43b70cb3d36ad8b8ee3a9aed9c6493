@@ -1,40 +1,42 @@
-130	h5nc	54		
-Comment	Index	Texture	TexW	TexH
-#		Default(0~3)		
--	0	Graphic/white.png	1	1
-#		UI(4~11)		
--	4	Graphic/UI/GameUI.png	1024	1024
--	5	Graphic/UI/MissionOverUI.png	1024	1024
--	8	Graphic/UI/TitleUI.png	1024	1024
--	9	Graphic/UI/StageSelectUI.png	1024	1024
--	10	Graphic/UI/MissionSelectUI.png	512	512
--	11	Graphic/Help/HelpUI.png	1024	1024
-#		Sprite(12~23)		
--	16	Graphic/Sprite/EnemySide.png	512	512
--	20	Graphic/Sprite/AttackItem.png	512	512
-#		SpecialScene(24~31)		
--	24	Graphic/Scene/Special/Title.png	960	640
--	26	Graphic/Scene/Special/StageSelect.png	960	640
--	28	Graphic/Scene/Special/Help.png	960	640
-#		WorldScene(32~47)		
--	32	Graphic/Scene/World/World_01.png	1024	1024
--	33	Graphic/Scene/World/World_01.png	1024	1024
--	34	Graphic/Scene/World/World_01.png	1024	1024
--	35	Graphic/Scene/World/World_01.png	1024	1024
--	36	Graphic/Scene/World/World_01.png	1024	1024
--	37	Graphic/Scene/World/World_01.png	1024	1024
--	38	Graphic/Scene/World/World_01.png	1024	1024
--	39	Graphic/Scene/World/World_01.png	1024	1024
-#		Scene(48~63)		
--	48	Graphic/Scene/Scene/Scene_01_02.png	1024	1024
-#		Enemy(64~79)		
--	64	Graphic/Sprite/Enemy_Soldier.png	512	512
--	65	Graphic/Sprite/Enemy_Warrior.png	512	512
--	66	Graphic/Sprite/Enemy_Magician.png	512	512
--	67	Graphic/Sprite/Enemy_Rifle.png	512	512
--	68	Graphic/Sprite/Enemy_Angel.png	512	512
--	69	Graphic/Sprite/Enemy_Shield.png	512	512
--	70	Graphic/Sprite/Enemy_Ghost.png	512	512
--	71	Graphic/Sprite/Enemy_Ninja.png	512	512
--	72	Graphic/Sprite/Enemy_Archer.png	512	512
--	73	Graphic/Sprite/Enemy_King.png	1024	1024
+130	h5nc		54		
+Comment	Index	TexName	Texture	TexW	TexH
+#			Default(0~3)		
+-	0	TEX_White	Graphic/white.png	1	1
+-	1	TEX_Font	Graphic/font.png	768	1024
+#			UI(4~11)		
+-	4	TEX_GameUI	Graphic/UI/GameUI.png	1024	1024
+-	5	TEX_GameUI_Cockpit	Graphic/UI/GameUI_Cockpit.png	960	640
+-	6	TEX_MissionOverUI	Graphic/UI/MissionOverUI.png	1024	1024
+-	8	TEX_TitleUI	Graphic/UI/TitleUI.png	1024	1024
+-	9	TEX_StageSelectUI	Graphic/UI/StageSelectUI.png	1024	1024
+-	10	TEX_MissionSelectUI	Graphic/UI/MissionSelectUI.png	512	512
+-	11	TEX_HelpUI	Graphic/Help/HelpUI.png	1024	1024
+#			Sprite(12~23)		
+-	16	TEX_EnemySide	Graphic/Sprite/EnemySide.png	512	512
+-	20	TEX_AttackItem	Graphic/Sprite/AttackItem.png	512	512
+#			SpecialScene(24~31)		
+-	24	TEX_Title	Graphic/Scene/Special/Title.png	960	640
+-	26	TEX_StageSelect	Graphic/Scene/Special/StageSelect.png	960	640
+-	28	TEX_Help	Graphic/Scene/Special/Help.png	960	640
+#			WorldScene(32~47)		
+-	32	TEX_World_01	Graphic/Scene/World/World_01.png	1024	1024
+-	33	TEX_World_02	Graphic/Scene/World/World_01.png	1024	1024
+-	34	TEX_World_03	Graphic/Scene/World/World_01.png	1024	1024
+-	35	TEX_World_04	Graphic/Scene/World/World_01.png	1024	1024
+-	36	TEX_World_05	Graphic/Scene/World/World_01.png	1024	1024
+-	37	TEX_World_06	Graphic/Scene/World/World_01.png	1024	1024
+-	38	TEX_World_07	Graphic/Scene/World/World_01.png	1024	1024
+-	39	TEX_World_08	Graphic/Scene/World/World_01.png	1024	1024
+#			Scene(48~63)		
+-	48	TEX_Scene_01	Graphic/Scene/Scene/Scene_01_02.png	1024	1024
+#			Enemy(64~79)		
+-	64	TEX_Enemy_Soldier.png	Graphic/Sprite/Enemy_Soldier.png	512	512
+-	65	TEX_Enemy_Warrior.png	Graphic/Sprite/Enemy_Warrior.png	512	512
+-	66	TEX_Enemy_Magician.png	Graphic/Sprite/Enemy_Magician.png	512	512
+-	67	TEX_Enemy_Rifle.png	Graphic/Sprite/Enemy_Rifle.png	512	512
+-	68	TEX_Enemy_Angel.png	Graphic/Sprite/Enemy_Angel.png	512	512
+-	69	TEX_Enemy_Shield.png	Graphic/Sprite/Enemy_Shield.png	512	512
+-	70	TEX_Enemy_Ghost.png	Graphic/Sprite/Enemy_Ghost.png	512	512
+-	71	TEX_Enemy_Ninja.png	Graphic/Sprite/Enemy_Ninja.png	512	512
+-	72	TEX_Enemy_Archer.png	Graphic/Sprite/Enemy_Archer.png	512	512
+-	73	TEX_Enemy_King.png	Graphic/Sprite/Enemy_King.png	1024	1024

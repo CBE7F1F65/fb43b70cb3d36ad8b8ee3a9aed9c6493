@@ -88,3 +88,25 @@ function PS_SetTouchLayerRect(toplayer, toptag)
 	return x, y, width, height;
 	
 end
+
+function PS_UpdateScoreDisplay(toplayer, toptag)
+	local scorerate, score, hiscore = game.GetMissionRateScore();
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_Score;
+	
+	local scorestr = LGlobal_TranslateGameStr_Score()..": "..score.." ("..scorerate..")";
+	if score > hiscore then
+		hiscore = score;
+	end
+	local hiscorestr = LGlobal_TranslateGameStr_HiScore()..": "..hiscore;
+		
+	local hiscoreatlasnode = game.GetNode({toplayer, grouptag+1});
+	game.SetAtlasTextString(hiscoreatlasnode, hiscorestr);
+	local scoreatlasnode = game.GetNode({toplayer, grouptag+2});
+	game.SetAtlasTextString(scoreatlasnode, scorestr);
+end
+
+function PS_SetScore(toplayer, toptag, nowscore)
+	game.SetMissionRateScore(-1, nowscore);
+	PS_UpdateScoreDisplay(toplayer, toptag);
+end

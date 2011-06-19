@@ -1,4 +1,6 @@
 LConst_FontSize = 40;
+LConst_AtlasFontWidth = 48;
+LConst_AtlasFontHeight = 64;
 
 LConst_SceneTransTime = 0.2;
 
@@ -54,6 +56,9 @@ LConst_MissionIndex_End = LConst_MissionIndex_GoldenEggStart+LConst_MissionIndex
 LConst_MissionIndex_ExtraStage = 8;
 LConst_ExtraStageIndex = 7;
 
+LConst_SurvivalMissionIndex = LConst_MissionIndex_End;
+LConst_SurvivalStageIndex = LConst_ExtraStageIndex;
+
 
 LConst_EnemySideEdge = 64;
 
@@ -67,3 +72,11 @@ LConst_EnemySideREdgeCenter = 928;
 LConst_EnemySideBEdgeCenter = 608;
 
 LConst_BlowArrowDisplayR = 30;
+
+LConst_EnemyPositionRectYOffset = 100;
+
+
+LConst_TurnScoreRateMul	= 0.5;
+LConst_EnemyLifeCostScore = 1;
+LConst_ScoreRateComboPlus = 1;
+LConst_ScoreRateGoldenEggMul = 2;

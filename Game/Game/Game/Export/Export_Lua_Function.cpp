@@ -86,6 +86,10 @@ bool Export_Lua::LuaRegistConst()
 	{
 		return false;
 	}
+	if (!_LuaRegistTEX(&obj))
+	{
+		return false;
+	}
 	if (!_LuaRegistSIID(&obj))
 	{
 		return false;

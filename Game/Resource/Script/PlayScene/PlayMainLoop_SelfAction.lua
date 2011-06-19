@@ -41,7 +41,7 @@ function PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
 	
 	for i=0, enemyinscenecount-1 do
 		
-		local itemtag, enx, eny, etype, life, elayer, status = game.GetActiveEnemyData(i, ENEMY_InScene);
+		local itemtag, enx, eny, etype, life, elayer, angle, status = game.GetActiveEnemyData(i, ENEMY_InScene);
 		
 		if life > 0 then
 		
@@ -79,9 +79,11 @@ function PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
 					if atk > 0 then
 						costlife = costlife + atk;
 					end
-					blowx = blowx+tblowx;
-					blowy = blowy+tblowy;
-					bBlowed = true;
+					if costrate > 0 then
+						blowx = blowx+tblowx;
+						blowy = blowy+tblowy;
+						bBlowed = true;
+					end
 				end
 			end
 
@@ -105,7 +107,7 @@ function PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
 				life = life - costlife;
 				if not bBlowed then
 					LGlobal_PlayScene_RunShakeAction(enemynode, tx, ty);
-				end
+				end				
 			end
 			
 			if life <= 0 then
@@ -126,6 +128,10 @@ function PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn)
 				game.RunAction(enemynode, moveaction);
 			end
 			
+			if costlife > 0 then
+				PS_AddLifeCostScore(toplayer, toptag, i, costlife);
+			end
+			
 		end
 		
 	end
@@ -141,6 +147,9 @@ end
 function PS_EnemyDead(toplayer, toptag, index, enemynode, status)
 	
 	if status == ENEMYSTATUS_Blowed then
+		local scorerate = game.GetMissionRateScore();
+		scorerate = scorerate + LConst_ScoreRateComboPlus;
+		game.SetMissionRateScore(scorerate);
 		PS_ProduceEgg(toplayer, toptag, index);
 	end
 	
@@ -154,4 +163,12 @@ end
 
 function PS_ProduceEgg(toplayer, toptag, index)
 	local tx, ty = game.GetEnemyXYScale(index);
+end
+
+function PS_AddLifeCostScore(toplayer, toptag, index, costlife)
+	
+	local scorerate, score = game.GetMissionRateScore();
+	score = score + costlife*scorerate*LConst_EnemyLifeCostScore;
+	PS_SetScore(toplayer, toptag, score);
+	
 end

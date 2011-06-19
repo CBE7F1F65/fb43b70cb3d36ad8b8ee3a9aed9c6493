@@ -16,6 +16,7 @@
 #include "../Header/CCBaseNode.h"
 #include "../Header/CCRenderTextureExpand.h"
 #include "../Header/CCActionExpand.h"
+#include "../Header/CCLabelAtlasExpand.h"
 #include "../Header/SceneConst.h"
 
 
@@ -95,6 +96,7 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("MISSIONTYPE_Boss", M_MISSIONTYPE_BOSS);
 	obj->SetInteger("MISSIONTYPE_Free", M_MISSIONTYPE_FREE);
 	obj->SetInteger("MISSIONTYPE_GoldenEgg", M_MISSIONTYPE_GOLDENEGG);
+	obj->SetInteger("MISSIONTYPE_Survival", M_MISSIONTYPE_SURVIVAL);
 
 	obj->SetInteger("NODETYPE_RenderTexture", M_NODETYPE_RENDERTEXTURE);
 	obj->SetInteger("NODETYPE_BaseNode", M_NODETYPE_BASENODE);
@@ -151,6 +153,8 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 
 	// Text
 	_gameobj.Register("AddTextChild", LuaFn_Game_AddTextChild);
+	_gameobj.Register("AddAtlasTextChild", LuaFn_Game_AddAtlasTextChild);
+	_gameobj.Register("SetAtlasTextString", LuaFn_Game_SetAtlasTextString);
 
 	// Menu
 	_gameobj.Register("CreateMenuItem", LuaFn_Game_CreateMenuItem);
@@ -1087,6 +1091,92 @@ int Export_Lua_Game::LuaFn_Game_AddTextChild(LuaState * ls)
 			node.PDword((DWORD)item);
 		}
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddAtlasTextChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(6);
+
+	// {nodelist}, {XYZT}, str, TEX, w, h, scale, startchar
+
+	CCLabelAtlasExpand * item = NULL;
+	float _x = 0.0f;
+	float _y = 0.0f;
+	int _zOrder = 0;
+	int _tag = kCCNodeTagInvalid;
+
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode tcnode(ls, (node._obj), &node);
+		CCNode * nownode = _GetNowNode(&tcnode);
+		if (!nownode)
+		{
+			break;
+		}
+
+		node.jNextGet();
+		if (node.ObjIsTable())
+		{
+			_LObjNode cnode(ls, (node._obj), &node);
+			_GetXYZT(&cnode, &_x, &_y, &_zOrder, &_tag);
+		}
+
+		char * _labelstr = (char *)node.sNextGet();
+		int _texindex = node.iNextGet();
+		int _itemwidth = BGlobal::ScalerX(node.iNextGet());
+		int _itemheight = BGlobal::ScalerY(node.iNextGet());
+		float _scale = 1.0f;
+		char _startchar = ' ';
+
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_scale = node.fGet();
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_startchar = node.iGet();
+			}
+		}
+
+		HTEXTURE tex(_texindex, NULL);
+		SpriteItemManager::LoadTextureWhenNeeded(tex);
+		item = CCLabelAtlasExpand::labelWithString(_labelstr, (CCTexture2D *)(BResource::getInstance()->Texture_GetTexture(tex)), _itemwidth, _itemheight, _startchar);
+		if (item)
+		{
+			_LuaHelper_AddChild(nownode, item, _zOrder, _tag);
+			item->setPosition(BGlobal::TranslatePosition(_x, _y));
+			item->setScale(_scale);
+			node.PDword((DWORD)item);
+		}
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetAtlasTextString(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// item, str
+
+	CCLabelAtlasExpand * item = (CCLabelAtlasExpand * )node.dNextGet();
+	if (!item)
+	{
+		break;
+	}
+
+	char * _labelstr = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_labelstr = (char *)node.sGet();
+	}
+	item->setString(_labelstr?_labelstr:"");
+
 
 	_LEAVEFUNC_LUA;
 }

@@ -37,6 +37,11 @@ function MissionSelectScene_CB_PageMenu(itemtag, toplayer, toptag, sublayertag, 
 		
 	end
 	
+	local nowstage = game.GetNowStageMissionTurn();
+	if nowstage == LConst_ExtraStageIndex then
+		return;
+	end
+	
 	local layertag = toptag+sublayertag;
 	local grouptag = layertag+CCMSSTM_Menu_Main;
 	local menunode = game.GetNode({toplayer, grouptag});

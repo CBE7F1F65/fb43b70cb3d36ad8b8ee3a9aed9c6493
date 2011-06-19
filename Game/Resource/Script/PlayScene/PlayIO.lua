@@ -98,6 +98,10 @@ function PlayScene_OnInit(toplayer, toptag)
 	grouptag = layertag + CCPSTM_EnemyBlow_Arrow;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_EnemyBlow_Arrow, grouptag});
 	
+	-- Top Message
+	layertag = toptag + CCPSTL_TopMessage;
+	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_TopMessage, layertag});
+	
 	-- Menu
 	layertag = toptag + CCPSTL_Menu;
 	game.AddNullChild({toplayer, toptag}, {0, 0, CCPSTL_Menu, layertag});
@@ -126,6 +130,8 @@ function PlayScene_OnEnterTDF(toplayer, toptag)
 	PS_AddMainItems(toplayer, toptag);
 	PS_AddHPAPSPItems(toplayer, toptag);
 	PS_SetHPAPSP(toplayer, toptag);
+	PS_AddScoreItems(toplayer, toptag);
+	PS_SetScore(toplayer, toptag, 0);
 	
 	PS_AddTouchLayer(toplayer, toptag);
 end

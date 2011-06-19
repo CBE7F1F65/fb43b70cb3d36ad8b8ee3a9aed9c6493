@@ -59,6 +59,16 @@ bool GameAchievement::SurvivalTurnSet(int turn)
 	return false;
 }
 
+bool GameAchievement::SurvivalHiScoreSet(int hiscore)
+{
+	if (adata->survivalhiscore < hiscore)
+	{
+		adata->survivalhiscore = hiscore;
+		return UpdateAchievement();
+	}
+	return false;
+}
+
 bool GameAchievement::HiScoreSet(int hiscore)
 {
 	if (adata->hiscore < hiscore)
@@ -74,6 +84,22 @@ bool GameAchievement::HPCostInOneTurnSet(int hpcost)
 	if (adata->hpcostinoneturn < hpcost)
 	{
 		adata->hpcostinoneturn = hpcost;
+		return UpdateAchievement();
+	}
+	return false;
+}
+
+bool GameAchievement::EggCountAdd()
+{
+	adata->eggcount++;
+	return UpdateAchievement();
+}
+
+bool GameAchievement::BestScoreRateSet(float scorerate)
+{
+	if (adata->bestscorerate < scorerate)
+	{
+		adata->bestscorerate = scorerate;
 		return UpdateAchievement();
 	}
 	return false;
@@ -118,6 +144,16 @@ bool GameAchievement::BestTurnSet(int turn)
 	return false;
 }
 
+bool GameAchievement::GoldenEggCountAdd()
+{
+	if (adata->goldeneggcount < 0xff)
+	{
+		adata->goldeneggcount++;
+		return UpdateAchievement();
+	}
+	return false;
+}
+
 bool GameAchievement::BeatInOneTurnSet(int count)
 {
 	if (count > 0xff)
@@ -152,25 +188,11 @@ bool GameAchievement::HeadShotAdd()
 	return false;
 }
 
-bool GameAchievement::BlindBombAdd()
+bool GameAchievement::BlindHeadShotAdd()
 {
-	if (adata->blindbombcount < 0xff)
+	if (adata->blindheadshotcount < 0xff)
 	{
-		adata->blindbombcount++;
-		return UpdateAchievement();
-	}
-	return false;
-}
-
-bool GameAchievement::SlashOneEnemyCountSet(int count)
-{
-	if (count > 0xff)
-	{
-		count = 0xff;
-	}
-	if (adata->slashoneenemycount < count)
-	{
-		adata->slashoneenemycount = count;
+		adata->blindheadshotcount++;
 		return UpdateAchievement();
 	}
 	return false;

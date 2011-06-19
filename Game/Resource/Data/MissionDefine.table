@@ -365,11 +365,13 @@ Comment	Index	MissionType	Place	BGSIID	WeatherFlag	Sp	Rank01_Score	Rank02_Score	
 -	347	51	4	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	348	51	4	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 #		Extra								
--	350	10	1	SI_MissionBG_Pen	0	0	0	0	0	0
+-	350	21	1	SI_MissionBG_Pen	0	0	0	0	0	0
 -	351	21	2	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	352	21	3	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	353	21	4	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	354	21	5	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	355	21	6	SI_MissionBG_Pen	0	0	1000	2000	3000	0
 -	356	21	7	SI_MissionBG_Pen	0	0	1000	2000	3000	0
--	357	31	8	SI_MissionBG_Pen	0	0	1000	2000	3000	0
+-	357	34	8	SI_MissionBG_Pen	0	0	1000	2000	3000	0
+#		Survival								
+-	399	84	0	SI_Null	0	4	0	0	0	0

@@ -31,12 +31,13 @@ GameMain::GameMain()
 	helpindex = 0;
 
 	missionscore = 0;
-	totalscore = 0;
 	nowturn = 0;
 
 	nowhp = 0;
 	nowap = 0;
 	nowsp = 0;
+
+	nowscorerate = 1.0f;
 
 	itemtypecount = 0;
 	stateflag = GAMESTATE_ST_NULL;
@@ -98,6 +99,7 @@ void GameMain::Init()
 void GameMain::OnlineLinkedCallback()
 {
 	ReportHiScore();
+	ReportSurvivalHiScore();
 	GameAchievement::SubmitAchievement();
 }
 
@@ -157,7 +159,7 @@ bool GameMain::ReadData()
 	return bret;
 }
 
-bool GameMain::InsertScore(int score)
+bool GameMain::InsertSurvivalHiScore(int score)
 {
 	bool btopscore = false;
 	for (int i=0; i<M_HISCOREMAX; i++)
@@ -166,7 +168,7 @@ bool GameMain::InsertScore(int score)
 		{
 			for (int j=M_HISCOREMAX-1; j>i; j--)
 			{
-				memcpy(&(gamedata.hiscores[j]), &(gamedata.hiscores[j-1]), sizeof(HiScoreData));
+				memcpy(&(gamedata.hiscores[j]), &(gamedata.hiscores[j-1]), sizeof(SurvivalHiScoreData));
 			}
 			gamedata.hiscores[i].hiscore = score;
 			strcpy(gamedata.hiscores[i].username, username);
@@ -179,14 +181,19 @@ bool GameMain::InsertScore(int score)
 	}
 	if (btopscore)
 	{
-		ReportHiScore();
-		GameAchievement::HiScoreSet(score);
+		ReportSurvivalHiScore();
+		GameAchievement::SurvivalHiScoreSet(score);
 	}
 	SaveData();
 	return btopscore;
 }
 
 void GameMain::ReportHiScore()
+{
+	// TODO
+}
+
+void GameMain::ReportSurvivalHiScore()
 {
 	// TODO
 }
@@ -469,6 +476,29 @@ bool GameMain::UseItem(BYTE type)
 	return false;
 }
 
+void GameMain::EnableFunctionAccess(BYTE index)
+{
+	if (IsFunctionAccessEnabled(index))
+	{
+		return;
+	}
+	if (index < 32)
+	{
+		gamedata.functionaccess.accessflag |= (1<<index);
+		SaveData();
+	}
+}
+
+bool GameMain::IsFunctionAccessEnabled(BYTE index)
+{
+	if (index >= 32)
+	{
+		return false;
+	}
+	bool bret = (gamedata.functionaccess.accessflag) & (1<<index);
+	return bret;
+}
+
 void GameMain::SetEnemyPositionRect(CCRect rect)
 {
 	enemypositionrect = rect;
@@ -501,6 +531,8 @@ void GameMain::EnterMission()
 
 	missionscore = 0;
 	nowturn = 0;
+
+	nowscorerate = 1.0f;
 
 	for (int i=0; i<ENEMY_VECTORTYPEMAX; i++)
 	{
@@ -600,7 +632,9 @@ bool GameMain::ClearMission()
 
 	if (missionscore > item->hiscore)
 	{
-		totalscore += missionscore - item->hiscore;
+		gamedata.totalhiscore.hiscore += missionscore - item->hiscore;
+		ReportHiScore();
+
 		item->hiscore = missionscore;
 
 		int orank = item->rank;
@@ -615,8 +649,16 @@ bool GameMain::ClearMission()
 		{
 			GameAchievement::Rank3Add();
 		}
+		SaveData();
 	}
-	return InsertScore(totalscore);
+
+	if (missiontype == M_MISSIONTYPE_SURVIVAL)
+	{
+		return InsertSurvivalHiScore(missionscore);
+	}
+
+	return true;
+//	return InsertScore(totalscore);
 }
 
 void GameMain::SetHPAPSP(int hp, int ap, int sp)
@@ -688,9 +730,9 @@ void GameMain::SaveData()
 	bio->Data_Save((BYTE *)&gamedata, sizeof(GameData));
 }
 
-void GameMain::ResetHiScore()
+void GameMain::ResetSurvivalHiScore()
 {
-	ZeroMemory(&(gamedata.hiscores), sizeof(HiScoreData)*M_HISCOREMAX);
+	ZeroMemory(&(gamedata.hiscores), sizeof(SurvivalHiScoreData)*M_HISCOREMAX);
 }
 
 void GameMain::SetBGMVol(int _bgmvol)
@@ -842,6 +884,8 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	enemyBaseData * baseitem = &(pbres->enemybasedata[item->type]);
 
 	_edata.itemtag = itemtag;
+	_edata.x = M_SCREEN_WIDTH/2;
+	_edata.x = M_SCREEN_HEIGHT/2;
 	SetEnemyPosition(&_edata, x, y);
 //	_edata.x = x;
 //	_edata.y = y;
@@ -849,6 +893,7 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	_edata.life = item->life;
 	_edata.elayer = elayer;
 	_edata.angle = angle;
+	_edata.status = ENEMYSTATUS_NORMAL;
 
 	int retval = 0;
 	enemies[enemiesindex].push_back(_edata);
@@ -861,25 +906,38 @@ void GameMain::SetEnemyPosition(EnemyInGameData * edata, float x, float y)
 	{
 		return;
 	}
+
+	float oenx = edata->x;
+	float oeny = edata->y;
+
 	float minx = CCRect::CCRectGetMinX(enemypositionrect);
 	float maxx = CCRect::CCRectGetMaxX(enemypositionrect);
 	float miny = CCRect::CCRectGetMinY(enemypositionrect);
 	float maxy = CCRect::CCRectGetMaxY(enemypositionrect);
+
 	if (x < minx)
 	{
+		float tx = x;
 		x = minx;
+		y = INTER(oeny, y, (x-oenx)/(tx-oenx));
 	}
 	else if (x > maxx)
 	{
+		float tx = x;
 		x = maxx;
+		y = INTER(oeny, y, (x-oenx)/(tx-oenx));
 	}
 	if (y < miny)
 	{
+		float ty = y;
 		y = miny;
+		x = INTER(oenx, x, (y-oeny)/(ty-oeny));
 	}
 	else if (y > maxy)
 	{
+		float ty = y;
 		y = maxy;
+		x = INTER(oenx, x, (y-oeny)/(ty-oeny));
 	}
 	edata->x = x;
 	edata->y = y;
@@ -975,15 +1033,30 @@ void GameMain::GetEnemyXYScale(EnemyInGameData * item, float * x, float * y, flo
 	_scale = BIOInterface::getInstance()->Math_Transform3DPoint(_x, _y, _z, &(GameMain::getInstance()->ptfar));
 	if (x)
 	{
-		*x = _x;
+//		*x = _x;
+		*x = item->x;
 	}
 	if (y)
 	{
-		*y = _y;
+//		*y = _y;
+		*y = item->y;
 	}
 	if (scale)
 	{
 		*scale = _scale;
+	}
+}
+
+void GameMain::SetMissionRateScore(float scorerate, int score)
+{
+	if (scorerate >= 0)
+	{
+		nowscorerate = scorerate;
+		GameAchievement::BestScoreRateSet(nowscorerate);
+	}
+	if (score >= 0)
+	{
+		missionscore = score;
 	}
 }
 

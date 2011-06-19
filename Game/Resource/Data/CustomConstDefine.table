@@ -1,6 +1,11 @@
 130	h5nc	51	
 Comment	CustomConst	Name	Value
--	0	CC_jump	0
+#		FunctionAccess	
+-	0	CCFAFlag_Survival	0
+-	1	CCFAFlag_Command	1
+-	2	CCFAFlag_Wait	2
+-	3	CCFAFlag_Bomb	3
+-	4	CCFAFlag_Sniper	4
 #		Tag	
 -	40	CCTag_Debug_ReloadMenu	0x000fff00
 -	42	CCTag_Layer_00	0x00100000

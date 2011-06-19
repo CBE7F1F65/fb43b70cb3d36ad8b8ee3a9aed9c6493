@@ -16,7 +16,7 @@ function TitleScene_IO(eventtype, toplayer, toptag)
 end
 
 function TitleScene_OnInit(toplayer, toptag)
-	
+
 	local layertag = toptag;
 	
 	-- bg layer
@@ -63,22 +63,31 @@ function _TitleScene_AddMainItems(toplayer, toptag)
 	local xorig = 1180;
 	local xcen = 780;
 	local ybegin = 500;
-	local yoffset = 108;
+	local yoffset = 128;
 	
 	local spMenus = {};
 	local spSelectedMenus = {};
 	local menus = {};
 	local layertag = toptag + CCTSTL_Menu;
 	local grouptag = layertag + CCTSTM_Menu_Main;
-	for i=0, 4 do
+	for i=0, 5 do
 		local y = ybegin - i*yoffset;
+		
+		if i > 3 then
+			if not game.IsFunctionAccessEnabled(CCFAFlag_Survival) then
+				break;
+			end
+			xorig = -320;
+			xcen = 120;
+			y = ybegin - (i-1.5)*yoffset
+		end
 		
 		spMenus[i+1] = game.CreateSprite(SI_TUI_Play+i*2);
 		spSelectedMenus[i+1] = game.CreateSprite(SI_TUI_Play_Down+i*2);
 
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCTSTM_Menu_Main, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
 
-		local fadetime = 0.3+i*0.05;
+		local fadetime = 0.3+i*0.04;
 		local menumoveaction = game.ActionMove(CCAF_To, xcen, y, fadetime);
 		menumoveaction = game.ActionEase(CCAF_In, menumoveaction, 0.25);
 		

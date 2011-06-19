@@ -3,7 +3,8 @@ function PS_AddBGItems(toplayer, toptag)
 	local layertag = toptag+CCSTL_BG;
 	
 	local bgsiid = game.GetMissionBGData();
-	local spBG = game.CreateSprite(bgsiid, {480, 336});
+--	local spBG = game.CreateSprite(bgsiid, {480, 336});
+	local spBG = game.CreateSprite(bgsiid, {480, 320});
 	local bgitem = game.AddSpriteChild(spBG, {toplayer, layertag});
 	game.SetColor(bgitem, global.ARGB(0xff, 0xAFAFAF));
 		
@@ -11,15 +12,17 @@ end
 
 function PS_AddFrameItems(toplayer, toptag)
 	local layertag = toptag+CCPSTL_Frame;
+	local spPanel = game.CreateSprite(SI_GUI_Panel, {480, 320});
+	game.AddSpriteChild(spPanel, {toplayer, layertag});
 	
-	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608});
-	game.AddSpriteChild(spTopPanel, {toplayer, layertag});
-	local spBottomPanel = game.CreateSprite(SI_GUI_BottomPanel, {480, 48});
-	game.AddSpriteChild(spBottomPanel, {toplayer, layertag});
-	local spLeftPanel = game.CreateSprite(SI_GUI_LeftPanel, {32, 368});
-	game.AddSpriteChild(spLeftPanel, {toplayer, layertag});
-	local spRightPanel = game.CreateSprite(SI_GUI_RightPanel, {928, 368});
-	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
+--	local spTopPanel = game.CreateSprite(SI_GUI_TopPanel, {480, 608});
+--	game.AddSpriteChild(spTopPanel, {toplayer, layertag});
+--	local spBottomPanel = game.CreateSprite(SI_GUI_BottomPanel, {480, 48});
+--	game.AddSpriteChild(spBottomPanel, {toplayer, layertag});
+--	local spLeftPanel = game.CreateSprite(SI_GUI_LeftPanel, {32, 368});
+--	game.AddSpriteChild(spLeftPanel, {toplayer, layertag});
+--	local spRightPanel = game.CreateSprite(SI_GUI_RightPanel, {928, 368});
+--	game.AddSpriteChild(spRightPanel, {toplayer, layertag});
 end
 
 function PS_AddPlanningRenderTexture(toplayer, toptag)
@@ -71,6 +74,21 @@ function PS_AddHPAPSPItems(toplayer, toptag)
 		
 	end
 		
+end
+
+function PS_AddScoreItems(toplayer, toptag)
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_Score;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_TopMessage_Score, grouptag});
+	
+	local x = 80;
+	local ybegin = 560;
+	local yoffset = 40;
+	for i=0, 1 do
+		local y = ybegin - i*yoffset;
+		local atlasnode = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCPSTM_TopMessage_Score, grouptag+i+1}, "", TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.5);
+		game.SetAnchor(atlasnode, 0, 0);
+	end
 end
 
 function PS_AddMainItems(toplayer, toptag)
@@ -129,6 +147,6 @@ function PS_AddTouchLayer(toplayer, toptag)
 			{0, 0, CCPSTL_Touch, grouptag}
 		);
 	local x, y, width, height = PS_SetTouchLayerRect(toplayer, toptag);
-	game.SetEnemyPositionRect(x, y, width, height);
+	game.SetEnemyPositionRect(x, y+LConst_EnemyPositionRectYOffset, width, height-LConst_EnemyPositionRectYOffset);
 	
 end

@@ -102,7 +102,7 @@ CCPSTL_HPAPSP = CCTag_Layer_07;
 	
 CCPSTL_EnemyOnSide = CCTag_Layer_08;
 
-CCPSTL_Plan = CCTag_Layer_11;
+CCPSTL_Plan = CCTag_Layer_10;
 	CCPSTM_Plan_RenderTexture = CCTag_Menu_01;
 	CCPSTM_Plan_LinesFeather = CCTag_Menu_04;
 	CCPSTM_Plan_CirclesFeather = CCTag_Menu_05;
@@ -110,9 +110,13 @@ CCPSTL_Plan = CCTag_Layer_11;
 	CCPSTM_Plan_XFeather = CCTag_Menu_10;
 	CCPSTM_Plan_CallNode = CCTag_Menu_11;
 	
-CCPSTL_EnemyBlow = CCTag_Layer_12;
+CCPSTL_EnemyBlow = CCTag_Layer_11;
 	CCPSTM_EnemyBlow_EyeStart = CCTag_Menu_01;
 	CCPSTM_EnemyBlow_Arrow = CCTag_Menu_10;
+	
+CCPSTL_TopMessage = CCTag_Layer_12;
+	CCPSTM_TopMessage_Score = CCTag_Menu_01;
+	CCPSTM_TopMessage_Combo = CCTag_Menu_08;
 	
 CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_Main = CCTag_Menu_01;
@@ -126,6 +130,7 @@ CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_QuitRestartDelay = CCTag_Menu_11;
 	CCPSTM_Menu_SubLevel02Delay = CCTag_Menu_10;	--modify
 	CCPSTM_Menu_SubLevel03Delay = CCTag_Menu_09;	--use
+	
 --
 
 

@@ -62,6 +62,20 @@ bool Export_Lua::_LuaRegistCustomConst(LuaObject * obj)
 	return true;
 }
 
+bool Export_Lua::_LuaRegistTEX(LuaObject * obj)
+{
+	// TEX
+	BResource * pbres = BResource::getInstance();
+	for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+	{
+		if (strlen(pbres->texturedata[i].texname))
+		{
+			obj->SetInteger(pbres->texturedata[i].texname, i);
+		}
+	}
+	return true;
+}
+
 bool Export_Lua::_LuaRegistSIID(LuaObject * obj)
 {
 	// SIID

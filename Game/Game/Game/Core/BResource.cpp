@@ -187,6 +187,18 @@ BYTE BResource::GetEnemyBaseType(BYTE etype)
 	return enemydata[etype].type;
 }
 
+int BResource::GetTextureIndexByName(const char * texname)
+{
+	for (int i=0; i<DATASTRUCT_TEXMAX; i++)
+	{
+		if (!strcmp(texturedata[i].texname, texname))
+		{
+			return i;
+		}
+	}
+	return 0;
+}
+
 BResource * BResource::getInstance()
 {
 	if (!g_BResourceSingleton)
@@ -398,6 +410,7 @@ bool BResource::GainData()
 
 void BResource::InitTexinfo()
 {
+	FreeTexture();
 	for (int i=0; i<DATASTRUCT_TEXMAX; i++)
 	{
 		texinfo[i].tex = NULL;
@@ -444,6 +457,10 @@ bool BResource::LoadTexture(int texindex /* = -1 */)
 			CCImage image;
 			image.initWithImageData(content, size);
 			ptex->initWithImage(&image);
+			if (ptex)
+			{
+				ptex->retain();
+			}
 
 			tex[texindex] = (DWORD)ptex;
 

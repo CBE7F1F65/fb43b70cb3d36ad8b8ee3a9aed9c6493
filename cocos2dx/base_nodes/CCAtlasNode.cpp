@@ -60,6 +60,18 @@ CCAtlasNode * CCAtlasNode::atlasWithTileFile(const char *tile, int tileWidth, in
 	return NULL;
 }
 
+CCAtlasNode * CCAtlasNode::atlasWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
+{
+	CCAtlasNode * pRet = new CCAtlasNode();
+	if (pRet->initWithTileTexture(texture, tileWidth, tileHeight, itemsToRender))
+	{
+		pRet->autorelease();
+		return pRet;
+	}
+	CC_SAFE_DELETE(pRet);
+	return NULL;
+}
+
 bool CCAtlasNode::initWithTileFile(const char *tile, int tileWidth, int tileHeight, int itemsToRender)
 {
 	assert(tile != NULL);
@@ -78,6 +90,39 @@ bool CCAtlasNode::initWithTileFile(const char *tile, int tileWidth, int tileHeig
 	this->m_pTextureAtlas = new CCTextureAtlas();
 	m_pTextureAtlas->initWithFile(tile, itemsToRender);
     
+	if (! m_pTextureAtlas)
+	{
+		CCLOG("cocos2d: Could not initialize CCAtlasNode. Invalid Texture.");
+		delete this;
+		return false;
+	}
+
+	this->updateBlendFunc();
+	this->updateOpacityModifyRGB();
+
+	this->calculateMaxItems();
+
+	return true;
+}
+
+bool CCAtlasNode::initWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
+{
+	assert(texture != NULL);
+	m_nItemWidth  = (int) (tileWidth * CC_CONTENT_SCALE_FACTOR());
+	m_nItemHeight = (int) (tileHeight * CC_CONTENT_SCALE_FACTOR());
+
+	m_cOpacity = 255;
+	m_tColor = m_tColorUnmodified = ccWHITE;
+	m_bIsOpacityModifyRGB = true;
+
+	m_tBlendFunc.src = CC_BLEND_SRC;
+	m_tBlendFunc.dst = CC_BLEND_DST;
+
+	// double retain to avoid the autorelease pool
+	// also, using: self.textureAtlas supports re-initialization without leaking
+	this->m_pTextureAtlas = new CCTextureAtlas();
+	m_pTextureAtlas->initWithTexture(texture, itemsToRender);
+
 	if (! m_pTextureAtlas)
 	{
 		CCLOG("cocos2d: Could not initialize CCAtlasNode. Invalid Texture.");

@@ -16,6 +16,7 @@ function LoadingScene_IO(eventtype, toplayer, toptag)
 end
 
 function LoadingScene_OnInit(toplayer, toptag)
+		
 end
 
 function LoadingScene_OnEnter(toplayer, toptag)

@@ -3,7 +3,7 @@ Comment	Stage	Mission	Turn	EnemyType	X	Y	Elayer/Angle	Flag
 #		World_00						
 #		Mission_01						
 -	0	1	0	2	356	155	1	0
--	0	1	0	4	490	399	2	0
+-	0	1	0	4	490	399	2	1
 -	0	1	0	9	133	375	3	0
 -	0	1	0	8	134	295	3	0
 -	0	1	0	2	341	150	1	0

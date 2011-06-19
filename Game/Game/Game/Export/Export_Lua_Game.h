@@ -61,6 +61,8 @@ public:
 	static int LuaFn_Game_AddSpriteChild(LuaState * ls);
 
 	static int LuaFn_Game_AddTextChild(LuaState * ls);
+	static int LuaFn_Game_AddAtlasTextChild(LuaState * ls);
+	static int LuaFn_Game_SetAtlasTextString(LuaState * ls);
 
 	static int LuaFn_Game_CreateMenuItem(LuaState * ls);
 	static int LuaFn_Game_SetMenuEnabled(LuaState * ls);
@@ -122,8 +124,12 @@ public:
 	static int LuaFn_Game_GetUsername(LuaState * ls);
 	static int LuaFn_Game_SetUsername(LuaState * ls);
 
+	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
+	static int LuaFn_Game_SaveIni(LuaState * ls);
+	static int LuaFn_Game_ResetIni(LuaState * ls);
+
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
-	static int LuaFn_Game_InsertHiScore(LuaState * ls);
 	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
 
 	static int LuaFn_Game_GetItemData(LuaState * ls);
@@ -138,6 +144,9 @@ public:
 	static int LuaFn_Game_GetNowStageMissionTurn(LuaState * ls);
 
 	static int LuaFn_Game_SetEnemyPositionRect(LuaState * ls);
+
+	static int LuaFn_Game_IsFunctionAccessEnabled(LuaState * ls);
+	static int LuaFn_Game_EnableFunctionAccess(LuaState * ls);
 
 	// In Game
 
@@ -154,6 +163,9 @@ public:
 
 	static int LuaFn_Game_EnterMission(LuaState * ls);
 	static int LuaFn_Game_ClearMission(LuaState * ls);
+
+	static int LuaFn_Game_GetMissionRateScore(LuaState * ls);
+	static int LuaFn_Game_SetMissionRateScore(LuaState * ls);
 
 	static int LuaFn_Game_GetHelpAccessInfo(LuaState * ls);
 	static int LuaFn_Game_SetHelpIndex(LuaState * ls);
@@ -182,11 +194,6 @@ public:
 
 	static int LuaFn_Game_GetState(LuaState * ls);
 	static int LuaFn_Game_SetState(LuaState * ls);
-
-	static int LuaFn_Game_GetBGMSEVol(LuaState * ls);
-	static int LuaFn_Game_SetBGMSEVol(LuaState * ls);
-	static int LuaFn_Game_SaveIni(LuaState * ls);
-	static int LuaFn_Game_ResetIni(LuaState * ls);
 
 
 	static CCNode * _GetNowNode(_LObjNode * cnode, bool topnode=false, int * scenetag=NULL);

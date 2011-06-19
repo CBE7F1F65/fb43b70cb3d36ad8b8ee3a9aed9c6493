@@ -21,6 +21,13 @@ function PS_PreparePlanning(toplayer, toptag)
 	LGlobal_PlayData.plangroup = 0;
 	PS_UpdatePlanGroup(toplayer, toptag);
 	PS_SetMenuEnable(toplayer, toptag, true);
+	local scorerate = game.GetMissionRateScore();
+	scorerate = scorerate * LConst_TurnScoreRateMul;
+	if scorerate < 1.0 then
+		scorerate = 1.0;
+	end
+	game.SetMissionRateScore(scorerate);
+	PS_UpdateScoreDisplay(toplayer, toptag);
 end
 
 function PS_ExitPlanning(toplayer, toptag)

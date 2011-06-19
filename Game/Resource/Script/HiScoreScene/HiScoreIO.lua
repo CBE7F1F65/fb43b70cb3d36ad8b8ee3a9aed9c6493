@@ -50,7 +50,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 	
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCTSTM_HiScore_Display, grouptag});
 	
-	local spriteBG = game.CreateSprite(SI_White, {340, 230, 0, 600, 380});
+	local spriteBG = game.CreateSprite(SI_White, {350, 220, 0, 640, 380});
 	game.AddSpriteChild(spriteBG, {toplayer, grouptag});
 	game.SetColor(spriteBG, global.ARGB(0x1f, 0x808080));
 	
@@ -74,7 +74,11 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		text = text..(i+1)..'.'..username;
 
 		for j=0, namelengthmax - namelength do
-			text = text..'-'
+			if namelength > 0 then
+				text = text..'-'
+			else
+				text = text..' '
+			end
 		end
 		
 		local hiscoretext = hiscore;
@@ -84,7 +88,8 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..hiscoretext;
 		
-		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, LConst_FontSize*0.8);
+--		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, LConst_FontSize*0.8);
+		texts[i+1] = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.45);
 		game.SetAnchor(texts[i+1], 0, 0);
 	end
 	
