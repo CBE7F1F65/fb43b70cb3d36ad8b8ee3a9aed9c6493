@@ -33,19 +33,22 @@ function PS_DoShowOver(toplayer, toptag)
 	
 	local missionindex, stageindex = game.GetNextAvailableMission();
 	
-	for i=0, 2 do
-		if i==0 and missionindex == nil then
-			i = 1;
-		end
+	local j = 0;
+	if missionindex == nil then
+		j = 1;
+	end
+	for i=0, 2-j do
 		
-		local y = ybegin - i*yoffset;
+		local y = ybegin - j*yoffset;
 		
-		spMenus[i+1] = game.CreateSprite(SI_MOUI_Next+i*2);
-		spSelectedMenus[i+1] = game.CreateSprite(SI_MOUI_Next_Down+i*2);
+		spMenus[i+1] = game.CreateSprite(SI_MOUI_Next+j*2);
+		spSelectedMenus[i+1] = game.CreateSprite(SI_MOUI_Next_Down+j*2);
 		
-		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCPSTM_Message_OverMenu, grouptag+i+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {xorig, y, CCPSTM_Message_OverMenu, grouptag+j+1}, spMenus[i+1], spSelectedMenus[i+1]);
+		j = j + 1;
 
 	end
+		
 	local menu = game.AddMenuChild(menus, {toplayer, layertag}, {0, 0, CCPSTL_Message, grouptag});
 	
 	local moveupaction = game.ActionMove(CCAF_To, 0, 0, LConst_BoardMoveTime);

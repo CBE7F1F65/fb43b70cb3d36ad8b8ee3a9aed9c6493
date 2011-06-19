@@ -13,7 +13,7 @@ function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, ela
 	
 	local groupnode = game.GetNode({toplayer, grouptag});
 	if DtoI(groupnode) == NULL then
-		game.AddNullChild({toplayer, layertag}, {0, 0, menugroup+elayer, grouptag});
+		game.AddNullChild({toplayer, layertag}, {0, 0, CCZ_Max-(menugroup+elayer), grouptag}); --z=menugroup+elayer
 	end
 
 	local itemtag = grouptag+selitemtag;

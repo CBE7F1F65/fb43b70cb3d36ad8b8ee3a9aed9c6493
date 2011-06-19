@@ -68,6 +68,7 @@ function PS_AddHPAPSPItems(toplayer, toptag)
 		game.AddSpriteChild(spTitle, {toplayer, grouptag});
 	end
 	
+	y = y - 18;
 	grouptag = layertag + CCPSTM_HPAPSP_SP;
 	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_HPAPSP_SP, grouptag});
 	local xorig = 432;
