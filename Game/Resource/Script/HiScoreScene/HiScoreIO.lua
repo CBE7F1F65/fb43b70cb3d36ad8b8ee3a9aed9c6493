@@ -88,8 +88,7 @@ function _TitleScene_AddHiScoreDisplay(toplayer, toptag)
 		end
 		text = text..hiscoretext;
 		
---		texts[i+1] = game.AddTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, LConst_FontSize*0.8);
-		texts[i+1] = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.45);
+		texts[i+1] = LGlobal_AddAtlasTextChild({toplayer, grouptag}, {x, y, CCTSTM_HiScore_Display, grouptag+i+1}, text, 0.45);
 		game.SetAnchor(texts[i+1], 0, 0);
 	end
 	

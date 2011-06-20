@@ -299,8 +299,7 @@ function PS_AddBlowPosition(toplayer, toptag, plangroup, x, y, r)
 			local distscale = LConst_BlowArrowDisplayR / blowdistance;
 			tx = tx + blowx*distscale;
 			ty = ty + blowy*distscale;
-			
-			
+
 			local layertag = toptag + CCPSTL_EnemyBlow;
 			local grouptag = layertag + CCPSTM_EnemyBlow_Arrow;
 			local arrownode = game.GetNode({toplayer, grouptag+i+1});

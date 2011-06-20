@@ -59,6 +59,14 @@ function PlayScene_CB(itemtag, toplayer, toptag, sublayertag, selgrouptag, selit
 		elseif selgrouptag == CCPSTM_Message_TargetMenuDelay then
 			return PSCBDelay_TurnStartAndTarget(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
 		end
+		
+	-- Egg
+	elseif sublayertag == CCPSTL_TopMessage then
+		if selgrouptag == CCPSTM_TopMessage_EnemyEggMenu then
+			return PSCB_Egg(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		elseif selgrouptag == CCPSTM_TopMessage_EnemyEggMenuDelay then
+			return PSCB_EggDelay(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag);
+		end
 	end
 	
 end
@@ -742,5 +750,55 @@ function PSCBDelay_MissionOver(itemtag, toplayer, toptag, sublayertag, selgroupt
 	elseif selitemtag == 3 then
 		game.ReplaceScene(ktag_MissionSelectSceneLayer, LConst_SceneTransTime);
 	end
+	
+end
+
+function PSCB_Egg(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	local eggnode = game.GetNode({toplayer, itemtag});
+	game.StopAction(eggnode);
+	
+	game.SetColor(eggnode, global.ARGB(0xff, 0xffffff));
+	local scaleactionpre = game.ActionScale(CCAF_To, 1.05, 1.05, LConst_ScalePopTime);
+	local scaleactionpost = game.ActionScale(CCAF_To, 1, 1, LConst_ScalePopTime);
+	local delayaction = game.ActionDelay(LConst_ItemVanishTime);
+	
+	local layertag = toptag + sublayertag;
+	local grouptag = layertag + CCPSTM_TopMessage_RankEgg;
+	
+	local rankeggindex = selitemtag;
+	if selitemtag > MISSION_GoldenEggMax then
+		rankeggindex = MISSION_GoldenEggMax+1;
+	end
+	local rankeggnode = game.GetNode({toplayer, grouptag+rankeggindex});
+	local x, y = game.GetPosition(rankeggnode);
+	local moveaction = game.ActionMove(CCAF_To, x, y, LConst_EggMoveActionTime);
+	moveaction = game.ActionEase(CCAF_In, moveaction, 0.25);
+	local fadeaction = game.ActionFade(CCAF_To, 0, LConst_EggMoveActionTime);
+	local moveandfadeaction = game.ActionSpawn({moveaction, fadeaction});
+	local deleteaction = game.ActionDelete();
+	local eggaction = game.ActionSequence({scaleactionpre, scaleactionpost, delayaction, moveandfadeaction, deleteaction});
+	game.RunAction(eggnode, eggaction);
+	
+	local delaytime = LConst_ScalePopTime+LConst_ScalePopTime+LConst_ItemVanishTime+LConst_EggMoveActionTime;
+	local callfuncaction = game.ActionCallFunc({toplayer, toptag}, delaytime);
+	local callnode = game.AddNullChild({toplayer, layertag}, {0, 0, 0, layertag+CCPSTM_TopMessage_EnemyEggMenuDelay+selitemtag});
+	
+	game.RunAction(callnode, callfuncaction);
+end
+
+function PSCB_EggDelay(itemtag, toplayer, toptag, sublayertag, selgrouptag, selitemtag)
+	if selitemtag <= MISSION_GoldenEggMax then
+		PS_SetGoldenEggDisplay(toplayer, toptag, selitemtag);
+	else
+		LGlobal_PlayData.eggcount = LGlobal_PlayData.eggcount+1;
+		PS_UpdateEggDisplay(toplayer, toptag);
+	end
+	
+	game.EggGet(selitemtag);
+	
+	local scorerate, score, hiscore, rank = game.GetMissionRateScore();
+	scorerate = scorerate * LConst_ScoreRateGoldenEggMul;
+	game.SetMissionRateScore(scorerate);
+	PS_UpdateScoreDisplay(toplayer, toptag);
 	
 end

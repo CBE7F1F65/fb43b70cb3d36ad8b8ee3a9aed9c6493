@@ -68,6 +68,7 @@ public:
 	static int LuaFn_Game_SetMenuEnabled(LuaState * ls);
 	static int LuaFn_Game_SetMenuItemEnabled(LuaState * ls);
 	static int LuaFn_Game_AddMenuChild(LuaState * ls);
+	static int LuaFn_Game_AddMenuItemChild(LuaState * ls);
 
 	static int LuaFn_Game_AddOverlayChild(LuaState * ls);
 	static int LuaFn_Game_GetOverlayLayer(LuaState * ls);
@@ -132,6 +133,8 @@ public:
 	static int LuaFn_Game_GetHiScoreData(LuaState * ls);
 	static int LuaFn_Game_ResetHiScoreData(LuaState * ls);
 
+	static int LuaFn_Game_GetTotalScore(LuaState * ls);
+
 	static int LuaFn_Game_GetItemData(LuaState * ls);
 	static int LuaFn_Game_UseItem(LuaState * ls);
 	static int LuaFn_Game_BuyItem(LuaState * ls);
@@ -180,6 +183,9 @@ public:
 	static int LuaFn_Game_GetEnemyDEF(LuaState * ls);
 	static int LuaFn_Game_GetEnemyELayerAdvance(LuaState * ls);
 	static int LuaFn_Game_GetEnemyXYScale(LuaState * ls);
+	static int LuaFn_Game_GetEnemyEggIndex(LuaState * ls);
+
+	static int LuaFn_Game_EggGet(LuaState * ls);
 
 	static int LuaFn_Game_AttackEnemy(LuaState * ls);
 

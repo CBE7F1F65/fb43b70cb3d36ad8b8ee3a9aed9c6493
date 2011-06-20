@@ -8,6 +8,11 @@ function LGlobal_TranslateGameStr_HiScore()
 	return str;
 end
 
+function LGlobal_TranslateGameStr_TotalScore()
+	local str = "Total Score"
+	return str;
+end
+
 function LGlobal_TranslateGameStr_Score()
 	local str = "Score"
 	return str;

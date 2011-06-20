@@ -132,6 +132,7 @@ function PlayScene_OnEnterTDF(toplayer, toptag)
 	PS_SetHPAPSP(toplayer, toptag);
 	PS_AddScoreItems(toplayer, toptag);
 	PS_SetScore(toplayer, toptag, 0);
+	PS_AddRankEggItems(toplayer, toptag);
 	
 	PS_AddTouchLayer(toplayer, toptag);
 end

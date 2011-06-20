@@ -23,9 +23,9 @@ function PS_MoveSideEnemyToScene(toplayer, toptag, index, nowstage, nowmission, 
 		return true;
 	end
 	local selitemtag = index + 1;
-	local onsideitemtag, x, y, etype, life, elayer, angle = game.GetActiveEnemyData(index, ENEMY_OnSide);
+	local onsideitemtag, x, y, etype, life, elayer, angle, eggindex = game.GetActiveEnemyData(index, ENEMY_OnSide);
 	
-	local enemynode, layertag, grouptag, itemtag, eindex = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer);
+	local enemynode, layertag, grouptag, itemtag, eindex = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, eggindex, nowturn, elayer);
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	local enemyaction = game.ActionFade(CCAF_In, 0xFF, LConst_EnemySpriteFadeTime);
 	game.RunAction(enemynode, enemyaction);
@@ -72,7 +72,7 @@ function PS_EnemyEnter(toplayer, toptag, index)
 	return false;
 end
 
-function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn)
+function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, eggindex, nowturn)
 	local layertag = toptag + CCPSTL_EnemyOnSide;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
 	local grouptag = layertag + menugroup;
@@ -102,20 +102,20 @@ function PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, n
 
 	local tx, ty = PS_SidePosToScenePos(x, y, angle);
 
-	game.AddEnemy(itemtag, tx, ty, etype, elayer, ENEMY_OnSide, angle);
+	game.AddEnemy(itemtag, tx, ty, etype, elayer, eggindex, ENEMY_OnSide, angle);
 	
 	return enemynode, layertag, grouptag, itemtag;
 end
 
 function PS_AddEnemyToSide(toplayer, toptag, index, nowstage, nowmission, nowturn)
 
-	local missionenemyindex, x, y, etype, angle = game.GetMissionEnemy(1);
+	local missionenemyindex, x, y, etype, angle, eggindex = game.GetMissionEnemy(1);
 	
 	if missionenemyindex == nil then
 		return true;
 	end
 	
-	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, nowturn);
+	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySideSprite(toplayer, toptag, index, etype, x, y, angle, eggindex, nowturn);
 	
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));
 	

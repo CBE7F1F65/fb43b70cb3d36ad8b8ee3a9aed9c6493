@@ -58,12 +58,12 @@ public:
 	static bool HiScoreSet(int hiscore);
 	static bool SurvivalHiScoreSet(int hiscore);
 	static bool HPCostInOneTurnSet(int hpcost);	// TODO:
-	static bool EggCountAdd();	// TODO:
+	static bool EggCountAdd();
 	static bool BestScoreRateSet(float scorerate);
 	static bool WeaponUseAdd(BYTE weaponindex);	// TODO:
 	static bool WeaponBeatInOneTurnSet(BYTE weaponindex, int count);	// TODO:
 	static bool BestTurnSet(int turn);
-	static bool GoldenEggCountAdd();	// TODO:
+	static bool GoldenEggCountAdd();
 	static bool BeatInOneTurnSet(int count);
 	static bool WaitInOneTurnSet(BYTE count);	// TODO:
 	static bool HeadShotAdd();	// TODO:

@@ -20,6 +20,8 @@ LGlobal_PlayData =
 	
 	plangroup = 0;
 	
+	eggcount = 0;
+	
 	bZoomed = false;
 }
 
@@ -39,6 +41,7 @@ function LGlobalPS_InitGlobal(toplayer, toptag)
 	LGlobal_PlayData.planbrush.bomb = game.CreateSprite(SI_Game_PlanBrush_Bomb);
 	LGlobal_PlayData.planbrush.sniper = game.CreateSprite(SI_Game_PlanBrush_Sniper);
 	LGlobal_PlayData.plangroup = 0;
+	LGlobal_PlayData.eggcount = 0;
 	LGlobal_PlayData.bZoomed = false;
 end
 

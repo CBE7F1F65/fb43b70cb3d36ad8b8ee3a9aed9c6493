@@ -19,8 +19,8 @@ function PS_DoShowOver(toplayer, toptag)
 	local flagnode = game.AddSpriteChild(spflag, {toplayer, grouptag}, CCPSTM_Message_OverBoard);
 	
 	local str = LGlobal_TranslateGameStr_HiScore()..": "..hiscore;
-	local textnode = game.AddTextChild({toplayer, grouptag}, {280, 220, CCPSTM_Message_OverBoard}, str, LConst_FontSize);
-	game.SetAnchor(textnode, 0, 0.5);
+	local atlasnode = LGlobal_AddAtlasTextChild({toplayer, grouptag}, {280, 220, CCPSTM_Message_OverBoard}, str, 0.25);
+	game.SetAnchor(atlasnode, 0, 0.5);
 	
 	grouptag = layertag + CCPSTM_Message_OverMenu;
 	local xorig = 660;

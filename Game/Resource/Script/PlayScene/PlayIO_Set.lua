@@ -78,8 +78,7 @@ function PS_SetHPAPSP(toplayer, toptag)
 			end
 		end
 	end
-	
-	
+		
 end
 
 function PS_SetTouchLayerRect(toplayer, toptag)
@@ -112,7 +111,7 @@ function PS_SetTouchLayerRect(toplayer, toptag)
 end
 
 function PS_UpdateScoreDisplay(toplayer, toptag)
-	local scorerate, score, hiscore = game.GetMissionRateScore();
+	local scorerate, score, hiscore, rank = game.GetMissionRateScore();
 	local layertag = toptag + CCPSTL_TopMessage;
 	local grouptag = layertag + CCPSTM_TopMessage_Score;
 	
@@ -121,12 +120,31 @@ function PS_UpdateScoreDisplay(toplayer, toptag)
 	if score > hiscore then
 		hiscore = score;
 	end
-	local hiscorestr = LGlobal_TranslateGameStr_HiScore()..": "..hiscore;
 		
+	local hiscorestr = LGlobal_TranslateGameStr_HiScore()..": "..hiscore;
+	
 	local hiscoreatlasnode = game.GetNode({toplayer, grouptag+1});
 	game.SetAtlasTextString(hiscoreatlasnode, hiscorestr);
 	local scoreatlasnode = game.GetNode({toplayer, grouptag+2});
 	game.SetAtlasTextString(scoreatlasnode, scorestr);
+end
+
+function PS_SetGoldenEggDisplay(toplayer, toptag, index)
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_RankEgg;
+	local goldeneggnode = game.GetNode({toplayer, grouptag+index});
+	local fadeaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
+	local tintaction = game.ActionTint(CCAF_To, 0xffffff, LConst_ItemVanishTime);
+	local nodeaction = game.ActionSpawn({fadeaction, tintaction});
+	game.RunAction(goldeneggnode, nodeaction);
+end
+
+function PS_UpdateEggDisplay(toplayer, toptag)
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_RankEgg;
+	local atlasgnode = game.GetNode({toplayer, grouptag+MISSION_GoldenEggMax+1});
+	local str = string.format("%c*%d", LConst_AtlasIndex_Egg, LGlobal_PlayData.eggcount);
+	game.SetAtlasTextString(atlasgnode, str);
 end
 
 function PS_SetScore(toplayer, toptag, nowscore)

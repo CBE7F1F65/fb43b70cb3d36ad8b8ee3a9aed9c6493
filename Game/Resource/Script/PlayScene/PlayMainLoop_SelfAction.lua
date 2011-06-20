@@ -14,6 +14,7 @@ function PS_SelfAction(toplayer, toptag, index)
 		grouptag = layertag+CCPSTM_Plan_DotsFeather;
 		local groupnode = game.GetNode({toplayer, grouptag});
 		game.RemoveAllChildren(groupnode);
+		
 	end
 	
 	if PS_DoSelfAction(toplayer, toptag, index, nowstage, nowmission, nowturn) then
@@ -163,6 +164,38 @@ end
 
 function PS_ProduceEgg(toplayer, toptag, index)
 	local tx, ty = game.GetEnemyXYScale(index);
+	local eggindex = game.GetEnemyEggIndex(index);
+
+	local eggSIID = SI_GUI_GoldenEgg;
+	if eggindex == 0 then
+		eggindex = index + MISSION_GoldenEggMax+1;
+		eggSIID = SI_GUI_Egg;
+	end
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_EnemyEggMenu;
+	local spEgg = game.CreateSprite(eggSIID);
+	local spSelectedEgg = game.CreateSprite(eggSIID);
+	
+	local menuitem = game.CreateMenuItem({toplayer, grouptag}, {tx, ty, CCPSTM_TopMessage_EnemyEggMenu, grouptag+eggindex}, spEgg, spSelectedEgg);
+	game.SetColor(menuitem, global.ARGB(0, 0xffffff));
+	
+	local fadeinaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
+	local swingactionpre = game.ActionRotate(CCAF_To, 3000, LConst_EggSwingActionTime);
+	swingactionpre = game.ActionEase(CCAF_In, swingactionpre, 0.5);
+	local swingactionpost = game.ActionRotate(CCAF_To, -3000, LConst_EggSwingActionTime);
+	swingactionpost = game.ActionEase(CCAF_In, swingactionpost, 0.5);
+	local fadeoutaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
+	local deleteaction = game.ActionDelete();
+	local swingaction = game.ActionSequence({fadeinaction, swingactionpre, swingactionpost, fadeoutaction, deleteaction});
+	game.RunAction(menuitem, swingaction);
+	
+	local menunode = game.GetNode({toplayer, grouptag});
+	if DtoI(menunode) == NULL then
+		game.AddMenuChild({menuitem}, {toplayer, layertag}, {0, 0, CCPSTM_TopMessage_EnemyEggMenu, grouptag});
+	else
+		game.AddMenuItemChild(menuitem, {toplayer, grouptag});
+	end
+	
 end
 
 function PS_AddLifeCostScore(toplayer, toptag, index, costlife)

@@ -18,7 +18,8 @@ function PS_ShowTurnStartAndTarget(toplayer, toptag, bRequireClose)
 	
 	if nowturn > 0 then
 		local str = LGlobal_TranslateGameStr_NowTurn(nowturn);
-		game.AddTextChild({toplayer, grouptag}, {480, 280, CCPSTM_Message_TargetBoard}, str, 80);
+		local atlasnode = LGlobal_AddAtlasTextChild({toplayer, grouptag}, {480, 280, CCPSTM_Message_TargetBoard}, str, 1);
+		game.SetAnchor(atlasnode, 0.5, 0.5);
 	end
 	
 	local moveupaction = game.ActionMove(CCAF_To, 0, 0, LConst_BoardMoveTime);

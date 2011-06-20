@@ -19,6 +19,8 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("GetHiScoreData", LuaFn_Game_GetHiScoreData);
 	obj->Register("ResetHiScoreData", LuaFn_Game_ResetHiScoreData);
 
+	obj->Register("GetTotalScore", LuaFn_Game_GetTotalScore);
+
 	obj->Register("StageIsEnabled", LuaFn_Game_StageIsEnabled);
 	obj->Register("MissionIsEnabled", LuaFn_Game_MissionIsEnabled);
 	obj->Register("EnableMission", LuaFn_Game_EnableMission);
@@ -66,6 +68,9 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("GetEnemyDEF", LuaFn_Game_GetEnemyDEF);
 	obj->Register("GetEnemyELayerAdvance", LuaFn_Game_GetEnemyELayerAdvance);
 	obj->Register("GetEnemyXYScale", LuaFn_Game_GetEnemyXYScale);
+	obj->Register("GetEnemyEggIndex", LuaFn_Game_GetEnemyEggIndex);
+
+	obj->Register("EggGet", LuaFn_Game_EggGet);
 
 	obj->Register("AttackEnemy", LuaFn_Game_AttackEnemy);
 
@@ -208,6 +213,16 @@ int Export_Lua_Game::LuaFn_Game_ResetHiScoreData(LuaState * ls)
 	{
 		GameMain::getInstance()->SaveData();
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetTotalScore(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	int totalhiscore = GameMain::getInstance()->gamedata.totalhiscore.hiscore;
+	node.PInt(totalhiscore);
 
 	_LEAVEFUNC_LUA;
 }
@@ -459,7 +474,7 @@ int Export_Lua_Game::LuaFn_Game_GetMissionInfo(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
-	// missionindex -> hiscore, rank, missiontype, place
+	// missionindex -> hiscore, rank, missiontype, place, egg1, egg2, egg3
 
 	int _missionindex = -1;
 	node.jNextGet();
@@ -473,11 +488,16 @@ int Export_Lua_Game::LuaFn_Game_GetMissionInfo(LuaState * ls)
 	missionData * mitem = pgm->GetMissionData(_missionindex);
 	BYTE missiontype = (mitem->missiontype)&M_MISSIONTYPE_TYPEMASK;
 	BYTE place = mitem->placement;
+	bool egg1, egg2, egg3;
+	pgm->GetMissionGoldenEggData(&egg1, &egg2, &egg3, _missionindex);
 
 	node.PInt(hiscore);
 	node.PInt(rank);
 	node.PInt(missiontype);
 	node.PInt(place);
+	node.PBoolean(egg1);
+	node.PBoolean(egg2);
+	node.PBoolean(egg3);
 
 	_LEAVEFUNC_LUA;
 }
@@ -553,10 +573,12 @@ int Export_Lua_Game::LuaFn_Game_GetMissionRateScore(LuaState * ls)
 	float nowscorerate = pgm->nowscorerate;
 	int missionscore = pgm->missionscore;
 	int missionhiscore = pgm->GetMissionHiScore();
+	BYTE rank = pgm->GetMissionRank();
 
 	node.PFloat(nowscorerate);
 	node.PInt(missionscore);
 	node.PInt(missionhiscore);
+	node.PInt(rank);
 
 	_LEAVEFUNC_LUA;
 }
@@ -801,6 +823,40 @@ int Export_Lua_Game::LuaFn_Game_GetEnemyXYScale(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
+int Export_Lua_Game::LuaFn_Game_GetEnemyEggIndex(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// index -> eggindex
+	int _index = node.iNextGet();
+	GameMain * pgm = GameMain::getInstance();
+	EnemyInGameData * item = pgm->GetEnemyByIndex(_index, ENEMY_INSCENE);
+	if (!item)
+	{
+		break;
+	}
+	node.PInt(item->eggindex);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_EggGet(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// index -> bNew
+	int _index = node.iNextGet();
+	GameMain * pgm = GameMain::getInstance();
+	pgm->EggGet();
+	if (_index > 0 && _index <= M_MISSIONGOLDENEGGMAX)
+	{
+		bool bNew = pgm->GoldenEggGet(_index);
+		node.PBoolean(bNew);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
 int Export_Lua_Game::LuaFn_Game_AttackEnemy(LuaState * ls)
 {
 	_ENTERFUNC_LUA(4);
@@ -969,7 +1025,22 @@ int Export_Lua_Game::LuaFn_Game_GetMissionEnemy(LuaState * ls)
 	float y;
 	int etype;
 	int elayerangle;
-	int missionenemyindex = GameMain::getInstance()->GetMissionEnemy(&x, &y, &etype, &elayerangle, nowturnoffset);
+	BYTE flag;
+	int missionenemyindex = GameMain::getInstance()->GetMissionEnemy(&x, &y, &etype, &elayerangle, &flag, nowturnoffset);
+
+	BYTE eggindex = 0;
+	switch (flag)
+	{
+	case M_GOLDENEGGFLAG_01:
+		eggindex = 1;
+		break;
+	case M_GOLDENEGGFLAG_02:
+		eggindex = 2;
+		break;
+	case M_GOLDENEGGFLAG_03:
+		eggindex = 3;
+		break;
+	}
 	if (missionenemyindex >= 0)
 	{
 		node.PInt(missionenemyindex);
@@ -977,6 +1048,7 @@ int Export_Lua_Game::LuaFn_Game_GetMissionEnemy(LuaState * ls)
 		node.PFloat(y);
 		node.PInt(etype);
 		node.PInt(elayerangle);
+		node.PInt(eggindex);
 	}
 
 	_LEAVEFUNC_LUA;
@@ -984,15 +1056,16 @@ int Export_Lua_Game::LuaFn_Game_GetMissionEnemy(LuaState * ls)
 
 int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 {
-	_ENTERFUNC_LUA(5);
+	_ENTERFUNC_LUA(6);
 
-	// itemtag, etype, elayer, enemiesindex -> count
+	// itemtag, etype, elayer, eggindex, enemiesindex, angle -> count
 
 	int _itemtag = node.iNextGet();
 	float _x = node.fNextGet();
 	float _y = node.fNextGet();
 	BYTE _etype = node.iNextGet();
 	int _elayer = node.iNextGet();
+	BYTE _eggindex = node.iNextGet();
 	BYTE _enemiesindex = ENEMY_ONSIDE;
 	int _angle = 0;
 	node.jNextGet();
@@ -1006,7 +1079,7 @@ int Export_Lua_Game::LuaFn_Game_AddEnemy(LuaState * ls)
 		}
 	}
 
-	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _elayer, _enemiesindex, _angle);
+	int enemycount = GameMain::getInstance()->AddEnemy(_itemtag, _x, _y, _etype, _elayer, _eggindex, _enemiesindex, _angle);
 	node.PInt(enemycount-1);
 
 	_LEAVEFUNC_LUA;
@@ -1128,6 +1201,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		int elayer = item->elayer;
 		int angle = item->angle;
 		BYTE status = item->status;
+		BYTE eggindex = item->eggindex;
 
 		node.PInt(itemtag);
 		node.PFloat(x);
@@ -1137,6 +1211,7 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 		node.PInt(elayer);
 		node.PInt(angle);
 		node.PInt(status);
+		node.PInt(eggindex);
 	}
 
 	_LEAVEFUNC_LUA;

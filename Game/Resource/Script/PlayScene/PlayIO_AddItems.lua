@@ -93,9 +93,46 @@ function PS_AddScoreItems(toplayer, toptag)
 	local yoffset = 40;
 	for i=0, 1 do
 		local y = ybegin - i*yoffset;
-		local atlasnode = game.AddAtlasTextChild({toplayer, grouptag}, {x, y, CCPSTM_TopMessage_Score, grouptag+i+1}, "", TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, 0.25);
+		local atlasnode = LGlobal_AddAtlasTextChild({toplayer, grouptag}, {x, y, CCPSTM_TopMessage_Score, grouptag+i+1}, "", 0.25);
 		game.SetAnchor(atlasnode, 0, 0);
 	end
+end
+
+function PS_AddRankEggItems(toplayer, toptag)
+	local layertag = toptag + CCPSTL_TopMessage;
+	local grouptag = layertag + CCPSTM_TopMessage_RankEgg;
+	game.AddNullChild({toplayer, layertag}, {0, 0, CCPSTM_TopMessage_RankEgg, grouptag});
+	
+	local x = 800;
+	local y = 560;
+	local yoffset = 30;
+	
+	local hiscore, rank, missiontype, place, egg1, egg2, egg3 = game.GetMissionInfo();
+	for i=0, rank-1 do
+		local spStar = game.CreateSprite(SI_GUI_Star, {x+i*30, y, 0, 0.5, 0.5});
+		game.AddSpriteChild(spStar, {toplayer, grouptag});
+	end
+	
+	local atlasnode = LGlobal_AddAtlasTextChild({toplayer, grouptag}, {x+60, y-yoffset, CCPSTM_TopMessage_RankEgg, grouptag+MISSION_GoldenEggMax+1}, "", 0.3);
+	game.SetAnchor(atlasnode, 1, 0.5);
+	PS_UpdateEggDisplay(toplayer, toptag);
+	
+	for i=0, MISSION_GoldenEggMax-1 do
+		local spGoldenEgg = game.CreateSprite(SI_GUI_GoldenEgg, {x+i*30, y-yoffset*2, 0, 0.5, 0.5}, grouptag+i+1);
+		local goldeneggnode = game.AddSpriteChild(spGoldenEgg, {toplayer, grouptag});
+		game.SetColor(goldeneggnode, global.ARGB(0x80, 0x808080));
+	end
+	
+	if egg1 then
+		PS_SetGoldenEggDisplay(toplayer, toptag, 1);
+	end
+	if egg2 then
+		PS_SetGoldenEggDisplay(toplayer, toptag, 2);
+	end
+	if egg3 then
+		PS_SetGoldenEggDisplay(toplayer, toptag, 3);
+	end
+	
 end
 
 function PS_AddMainItems(toplayer, toptag)

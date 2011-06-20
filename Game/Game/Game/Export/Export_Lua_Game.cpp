@@ -109,6 +109,8 @@ bool Export_Lua_Game::_LuaRegistConst(LuaObject * obj)
 	obj->SetInteger("ENEMYSTATUS_Normal", ENEMYSTATUS_NORMAL);
 	obj->SetInteger("ENEMYSTATUS_Blowed", ENEMYSTATUS_BLOWED);
 
+	obj->SetInteger("MISSION_GoldenEggMax", M_MISSIONGOLDENEGGMAX);
+
 	return true;
 }
 
@@ -161,6 +163,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("SetMenuEnabled", LuaFn_Game_SetMenuEnabled);
 	_gameobj.Register("SetMenuItemEnabled", LuaFn_Game_SetMenuItemEnabled);
 	_gameobj.Register("AddMenuChild", LuaFn_Game_AddMenuChild);
+	_gameobj.Register("AddMenuItemChild", LuaFn_Game_AddMenuItemChild);
 	
 	// Overlay
 	_gameobj.Register("AddOverlayLayerChild", LuaFn_Game_AddOverlayChild);
@@ -419,7 +422,8 @@ CCNode * Export_Lua_Game::_GetNowNode(_LObjNode * cnode, bool topnode /* = false
 	cnode->jNextGet();
 	if (!cnode->bhavenext)
 	{
-		return NULL;
+//		return NULL;
+		return nownode;
 	}
 
 	int _ktag = cnode->iGet();
@@ -1338,6 +1342,8 @@ int Export_Lua_Game::LuaFn_Game_SetMenuItemEnabled(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
+	// item benable
+
 	CCMenuItem * _item = (CCMenuItem *)node.dNextGet();
 	if (!_item)
 	{
@@ -1414,6 +1420,27 @@ int Export_Lua_Game::LuaFn_Game_AddMenuChild(LuaState * ls)
 
 		}
 		node.PDword((DWORD)menu);
+	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_AddMenuItemChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	// menuitem, {nodelist}
+	CCMenuItem * item = (CCMenuItem *)node.dNextGet();
+	node.jNextGet();
+	if (node.ObjIsTable())
+	{
+		_LObjNode tcnode(ls, (node._obj), &node);
+		CCNode * nownode = _GetNowNode(&tcnode);
+		if (!nownode)
+		{
+			break;
+		}
+		nownode->addChild(item, item->getZOrder());
 	}
 
 	_LEAVEFUNC_LUA;
@@ -2111,6 +2138,10 @@ int Export_Lua_Game::LuaFn_Game_SetAnchor(LuaState * ls)
 
 	// item anchorx anchory
 	CCNode * _item = (CCNode *)node.dNextGet();
+	if (!_item)
+	{
+		break;
+	}
 	float _anchorx = _item->getAnchorPoint().x;
 	float _anchory = _item->getAnchorPoint().y;
 

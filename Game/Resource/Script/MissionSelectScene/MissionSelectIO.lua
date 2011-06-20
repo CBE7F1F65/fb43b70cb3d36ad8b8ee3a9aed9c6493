@@ -48,7 +48,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		
 	for i=0, missioncount-1 do
 		missioninfos[i+1] = {};
-		local hiscore, rank, missiontype, place = game.GetMissionInfo(i);
+		local hiscore, rank, missiontype, place, egg1, egg2, egg3 = game.GetMissionInfo(i);
 		
 		if i > 0 and missioninfos[i].place == place then
 			local ycountindex = 0;
@@ -70,6 +70,20 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		missioninfos[i+1].hiscore, missioninfos[i+1].rank, missioninfos[i+1].missiontype, missioninfos[i+1].place = hiscore, rank, missiontype, place;
 		missioninfos[i+1].enabled, missioninfos[i+1].triedtime = missionenabled, missiontriedtime;
 		
+		local eggcount = 0;
+		if egg1 then
+			eggcount = eggcount+1;
+		end
+		if egg2 then
+			eggcount = eggcount+1;
+		end
+		if egg3 then
+			eggcount = eggcount+1;
+		end
+		
+		missioninfos[i+1].rank = rank;
+		missioninfos[i+1].eggcount = eggcount;
+		
 		local placeindex;
 		if i < LConst_MissionIndex_FreeStart then
 			placeindex = 1;
@@ -86,19 +100,11 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 			missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Event);
 			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_Event_Down);
 		elseif missiontype == MISSIONTYPE_Boss then
-			if missionclearedtime > 0 then
-				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_BossMission_Cleared);
-			else
-				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_BossMission);
-			end
+			missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_BossMission);
 			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_BossMission_Down);
 			missioninfos[i+1].spDisabledMenu = game.CreateSprite(SI_MSUI_BossMission_Disabled);
 		else
-			if missionclearedtime > 0 then
-				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Mission_Cleared);
-			else
-				missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Mission);
-			end
+			missioninfos[i+1].spMenu = game.CreateSprite(SI_MSUI_Mission);
 			missioninfos[i+1].spSelectedMenu = game.CreateSprite(SI_MSUI_Mission_Down);
 			missioninfos[i+1].spDisabledMenu = game.CreateSprite(SI_MSUI_Mission_Disabled);
 		end
@@ -112,7 +118,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	
 	for i=1, 3 do
 		if i == 1 then
-			xlen[i] = 800;
+			xlen[i] = 860;
 		else
 			xlen[i] = 600;
 		end
@@ -123,7 +129,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 	end
 	
 	local layertag = toptag + CCSTL_BG;
-	local spriteBG = game.CreateSprite(SI_White, {480, 400, 0, xlen[1]+120, yspace*3+80});
+	local spriteBG = game.CreateSprite(SI_White, {480, 400, 0, xlen[1]+120, yspace*3+110});
 	game.AddSpriteChild(spriteBG, {toplayer, layertag});
 	game.SetColor(spriteBG, global.ARGB(0x3f, 0x808080));
 	
@@ -146,7 +152,7 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		end
 		
 		local x = placespace[placeindex]*(missioninfos[i+1].place-1) + xstart[placeindex] + xpageoffset;
-		local y = -(missioninfos[i+1].ycountindex - (missioninfos[i+1].ycount-1)/2) * yspace + 400;
+		local y = -(missioninfos[i+1].ycountindex - (missioninfos[i+1].ycount-1)/2) * yspace + 400 - global.SIGN(missioninfos[i+1].place)*10;
 		
 		if i==0 and nowstage ~= LConst_ExtraStageIndex then
 			x = x+placespace[placeindex];
@@ -154,6 +160,25 @@ function _MissionSelectScene_AddMainItems(toplayer, toptag)
 		end
 		
 		menus[i+1] = game.CreateMenuItem({toplayer, layertag}, {x-40, y+40, CCMSSTM_Menu_Main, grouptag+i+1}, missioninfos[i+1].spMenu, missioninfos[i+1].spSelectedMenu, missioninfos[i+1].spDisabledMenu);
+		
+		for j=1, missioninfos[i+1].rank do
+			local spStar = game.CreateSprite(SI_MSUI_Star, {j*20+8, 0, 0, 0.5, 0.5});
+			game.AddSpriteChild(spStar, {menus[i+1]});
+		end
+		for j=1, missioninfos[i+1].eggcount do
+			local eggx = j*24+12;
+			local eggy = 24;
+			if j == 3 then
+				eggx = 48;
+				eggy = 40;
+			end
+			local spGoldenEgg = game.CreateSprite(SI_MSUI_GoldenEgg, {eggx, eggy, 0, 0.6, 0.6});
+			game.AddSpriteChild(spGoldenEgg, {menus[i+1]});
+		end
+		if i~=0 or nowstage == LConst_ExtraStageIndex then
+			local atlasnode = LGlobal_AddAtlasTextChild({menus[i+1]}, {24, 48}, string.format("%02d", i), 0.4);
+		end
+		
 		if not missioninfos[i+1].enabled then
 			game.SetMenuItemEnabled(menus[i+1], false);
 		end
@@ -201,7 +226,7 @@ function _MissionSelectScene_AddPageItems(toplayer, toptag)
 	local xbegin = 280;
 	local xoffset = 300;
 	local yorig = -48;
-	local y = 96;
+	local y = 72;
 		
 	local spMenus = {};
 	local spSelectedMenus = {};
@@ -243,10 +268,18 @@ function _MissionSelectScene_AddPageItems(toplayer, toptag)
 	game.SetColor(menu, global.ARGB(0, 0xffffff));
 end
 
+function _MissionSelectScene_AddMessageItems(toplayer, toptag)
+	local totalscore = game.GetTotalScore();
+	local str = LGlobal_TranslateGameStr_TotalScore()..": "..totalscore;
+	local layertag = toptag + CCMSSTL_Message;
+	LGlobal_AddAtlasTextChild({toplayer, layertag}, {40, 120, CCMSSTL_Message}, str, 0.4);
+end
+
 function _MissionSelectScene_EnterMainLayer(toplayer, toptag)
 	LGlobal_MSS_NowPage = 0;
 	_MissionSelectScene_AddMainItems(toplayer, toptag);
 	_MissionSelectScene_AddPageItems(toplayer, toptag);
+	_MissionSelectScene_AddMessageItems(toplayer, toptag);
 end
 
 function _MissionSelectScene_LeaveMainLayer(toplayer, toptag)

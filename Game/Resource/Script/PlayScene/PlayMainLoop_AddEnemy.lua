@@ -1,4 +1,4 @@
-function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, elayer)
+function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, eggindex, nowturn, elayer)
 
 	local layertag = toptag + CCPSTL_Enemy;
 	local menugroup = CCTag_MenuSub_01*(nowturn+1);
@@ -17,7 +17,7 @@ function PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, nowturn, ela
 	end
 
 	local itemtag = grouptag+selitemtag;
-	local eindex = game.AddEnemy(itemtag, x, y, etype, elayer, ENEMY_InScene);
+	local eindex = game.AddEnemy(itemtag, x, y, etype, elayer, eggindex, ENEMY_InScene);
 
 	local tx, ty, scale = game.GetEnemyXYScale(eindex);
 	
@@ -29,14 +29,14 @@ end
 
 function PS_AddInitEnemyToScene(toplayer, toptag, index, nowstage, nowmission)
 	
-	local missionenemyindex, x, y, etype, elayerindex = game.GetMissionEnemy();
+	local missionenemyindex, x, y, etype, elayerindex, eggindex = game.GetMissionEnemy();
 	
 	if missionenemyindex == nil then
 		return true;
 	end
 	local elayer = elayerindex*CCZ_eLayer_01;
 	
-	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, 0, elayer);
+	local enemynode, layertag, grouptag, itemtag = PS_CreateEnemySprite(toplayer, toptag, index, etype, x, y, eggindex, 0, elayer);
 
 	game.SetColor(enemynode, global.ARGB(0, 0xffffff));	
 	local enemyaction = game.ActionFade(CCAF_To, 0xFF, LConst_EnemySpriteFadeTime);

@@ -295,6 +295,32 @@ BYTE GameMain::GetMissionRank(int missionindex/* =-1 */, int stageindex/* =-1 */
 	return gamedata.stages[stageindex].missions[missionindex].rank;
 }
 
+void GameMain::GetMissionGoldenEggData(bool * egg1, bool * egg2, bool * egg3, int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		missionindex = nowmission;
+	}
+
+	BYTE eggflag = gamedata.stages[stageindex].missions[missionindex].eggflag;
+	if (egg1)
+	{
+		*egg1 = eggflag & M_GOLDENEGGFLAG_01;
+	}
+	if (egg2)
+	{
+		*egg2 = eggflag & M_GOLDENEGGFLAG_02;
+	}
+	if (egg3)
+	{
+		*egg3 = eggflag & M_GOLDENEGGFLAG_03;
+	}
+}
+
 missionData * GameMain::GetMissionData(int missionindex/* =-1 */, int stageindex/* =-1 */)
 {
 	if (stageindex < 0 || stageindex >= M_STAGEMAX)
@@ -657,7 +683,7 @@ bool GameMain::ClearMission()
 		return InsertSurvivalHiScore(missionscore);
 	}
 
-	return true;
+	return false;
 //	return InsertScore(totalscore);
 }
 
@@ -777,6 +803,34 @@ const char * GameMain::GetHiScoreUsername(int index)
 	return gamedata.hiscores[index].username;
 }
 
+void GameMain::EggGet()
+{
+	GameAchievement::EggCountAdd();
+}
+
+bool GameMain::GoldenEggGet(int index)
+{
+	BYTE testflag = 0;
+	switch (index)
+	{
+	case 1:
+		testflag = M_GOLDENEGGFLAG_01;
+		break;
+	case 2:
+		testflag = M_GOLDENEGGFLAG_02;
+		break;
+	case 3:
+		testflag = M_GOLDENEGGFLAG_03;
+		break;
+	}
+	if (gamedata.stages[nowstage].missions[nowmission].eggflag & testflag)
+	{
+		return false;
+	}
+	gamedata.stages[nowstage].missions[nowmission].eggflag |= testflag;
+	GameAchievement::GoldenEggCountAdd();
+	return true;
+}
 
 BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 {
@@ -840,7 +894,7 @@ BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 	return M_MISSIONSTATE_PROGRESSING;
 }
 
-int GameMain::GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, int nowturnoffset/* =0 */)
+int GameMain::GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, BYTE * flag, int nowturnoffset/* =0 */)
 {
 	BResource * pbres = BResource::getInstance();
 	if (missionenemyindex >= pbres->missionenemymax)
@@ -871,11 +925,15 @@ int GameMain::GetMissionEnemy(float * x, float * y, int * etype, int * elayerang
 	{
 		*elayerangle = item->elayerangle;
 	}
+	if (flag)
+	{
+		*flag = item->flag;
+	}
 	missionenemyindex++;
 	return missionenemyindex;
 }
 
-int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle/*=0*/)
+int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE eggindex, BYTE enemiesindex, int angle/*=0*/)
 {
 	EnemyInGameData _edata;
 
@@ -892,6 +950,7 @@ int GameMain::AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BY
 	_edata.etype = etype;
 	_edata.life = item->life;
 	_edata.elayer = elayer;
+	_edata.eggindex = eggindex;
 	_edata.angle = angle;
 	_edata.status = ENEMYSTATUS_NORMAL;
 

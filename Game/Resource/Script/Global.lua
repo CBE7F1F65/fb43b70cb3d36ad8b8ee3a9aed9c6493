@@ -173,3 +173,7 @@ function LGlobal_GetData(dataindex, bremove)
 	end
 	return item;
 end
+
+function LGlobal_AddAtlasTextChild(nodelist, xyzt, str, scale)
+	return game.AddAtlasTextChild(nodelist, xyzt, str, TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, scale, LConst_AtlasIndexStart);
+end

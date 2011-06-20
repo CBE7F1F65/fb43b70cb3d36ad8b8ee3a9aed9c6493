@@ -1,6 +1,10 @@
 LConst_FontSize = 40;
 LConst_AtlasFontWidth = 64;
 LConst_AtlasFontHeight = 128;
+LConst_AtlasIndexStart = 32;
+LConst_AtlasIndex_Egg = LConst_AtlasIndexStart+112; --string.ascii(LConst_AtlasIndexStart)+112;
+LConst_AtlasIndex_GoldenEgg = LConst_AtlasIndexStart+113; --string.ascii(LConst_AtlasIndexStart)+113;
+LConst_AtlasIndex_Star = LConst_AtlasIndexStart+114; --string.ascii(LConst_AtlasIndexStart)+114;
 
 LConst_SceneTransTime = 0.2;
 
@@ -17,6 +21,7 @@ LConst_DelayActionTime = 0.3;
 LConst_ZoomActionTime = 0.2;
 
 LConst_ItemVanishTime = 0.3;
+LConst_ScalePopTime = 0.1;
 
 LConst_EnemySpriteFadeTime = 0.3;
 LConst_EnemyEnterDelayTime = 0.1;
@@ -80,3 +85,6 @@ LConst_TurnScoreRateMul	= 0.5;
 LConst_EnemyLifeCostScore = 1;
 LConst_ScoreRateComboPlus = 1;
 LConst_ScoreRateGoldenEggMul = 2;
+
+LConst_EggSwingActionTime = 0.5;
+LConst_EggMoveActionTime = 0.3;

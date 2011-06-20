@@ -61,6 +61,8 @@ CCMSSTL_Menu = CCTag_Layer_01;
 	--
 	CCMSSTM_Menu_MainDelay = CCTag_Menu_14;
 	CCMSSTM_Menu_PageDelay = CCTag_Menu_11;
+
+CCMSSTL_Message = CCTag_Layer_01;
 --
 
 -- HelpScene
@@ -116,7 +118,10 @@ CCPSTL_EnemyBlow = CCTag_Layer_11;
 	
 CCPSTL_TopMessage = CCTag_Layer_12;
 	CCPSTM_TopMessage_Score = CCTag_Menu_01;
-	CCPSTM_TopMessage_Combo = CCTag_Menu_08;
+	CCPSTM_TopMessage_RankEgg = CCTag_Menu_02;
+	CCPSTM_TopMessage_Combo = CCTag_Menu_04;
+	CCPSTM_TopMessage_EnemyEggMenu = CCTag_Menu_05;
+	CCPSTM_TopMessage_EnemyEggMenuDelay = CCTag_Menu_10;
 	
 CCPSTL_Menu = CCTag_Layer_13;
 	CCPSTM_Menu_Main = CCTag_Menu_01;

@@ -47,6 +47,10 @@ using namespace cocos2d;
 #define ENEMYSTATUS_CLEAR	0xf0
 #define ENEMYSTATUS_SETMASK	0xf0
 
+#define M_GOLDENEGGFLAG_01	0x01
+#define M_GOLDENEGGFLAG_02	0x02
+#define M_GOLDENEGGFLAG_03	0x04
+
 struct EnemyInGameData 
 {
 	int itemtag;
@@ -57,6 +61,7 @@ struct EnemyInGameData
 	int angle;
 	BYTE etype;
 	BYTE status;
+	BYTE eggindex;
 };
 
 class GameMain
@@ -86,6 +91,7 @@ public:
 
 	int GetMissionHiScore(int missionindex=-1, int stageindex=-1);
 	BYTE GetMissionRank(int missionindex=-1, int stageindex=-1);
+	void GetMissionGoldenEggData(bool * egg1, bool * egg2, bool * egg3, int missionindex=-1, int stageindex=-1);
 	missionData * GetMissionData(int missionindex=-1, int stageindex=-1);
 	missionAimHelpData * GetMissionAimHelpData(int missionindex=-1, int stageindex=-1);
 
@@ -122,8 +128,8 @@ public:
 	void Update();
 	BYTE CheckMissionOver(bool checkap=false);
 
-	int GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, int nowturnoffset=0);
-	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE enemiesindex, int angle=0);
+	int GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, BYTE * flag, int nowturnoffset=0);
+	int AddEnemy(int itemtag, float x, float y, BYTE etype, int elayer, BYTE eggindex, BYTE enemiesindex, int angle=0);
 	void SetEnemyPosition(EnemyInGameData * edata, float x, float y);
 	int DoRemoveEnemy(BYTE enemiesindex);
 	void RemoveEnemy(int index, BYTE enemiesindex);
@@ -134,6 +140,9 @@ public:
 
 	int GetHiScore(int index);
 	const char * GetHiScoreUsername(int index);
+
+	void EggGet();
+	bool GoldenEggGet(int index);
 
 	bool ResetIni(bool bresetname=false);
 	bool SaveIni();
