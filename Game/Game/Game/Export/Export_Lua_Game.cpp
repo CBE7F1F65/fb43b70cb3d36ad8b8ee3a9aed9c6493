@@ -140,6 +140,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("AddNullChild", LuaFn_Game_AddNullChild);
 	_gameobj.Register("RemoveChild", LuaFn_Game_RemoveChild);
 	_gameobj.Register("RemoveAllChildren", LuaFn_Game_RemoveAllChildren);
+	_gameobj.Register("GetChild", LuaFn_Game_GetChild);
 
 	// RenderTexture
 	_gameobj.Register("AddRenderTextureChild", LuaFn_Game_AddRenderTextureChild);
@@ -797,6 +798,43 @@ int Export_Lua_Game::LuaFn_Game_RemoveAllChildren(LuaState * ls)
 		_bcleanup = node.bGet();
 	}
 	nownode->removeAllChildrenWithCleanup(_bcleanup);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetChild(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	CCNode * item = (CCNode *)node.dNextGet();
+	if (!item)
+	{
+		break;
+	}
+	CCArray * pChildren = item->getChildren();
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		if (!pChildren)
+		{
+			break;
+		}
+		int _index = node.iGet();
+		if (_index < 0 || _index > pChildren->count())
+		{
+			break;
+		}
+		CCNode * pChild = (CCNode *)pChildren->objectAtIndex(_index);
+	}
+	if (!pChildren)
+	{
+		node.PInt(0);
+	}
+	else
+	{
+		int childrencount = pChildren->count();
+		node.PInt(childrencount);
+	}
 
 	_LEAVEFUNC_LUA;
 }

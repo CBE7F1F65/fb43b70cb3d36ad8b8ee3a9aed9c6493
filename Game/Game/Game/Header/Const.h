@@ -38,7 +38,6 @@ enum
 #define ASSERTSTR_SECONDSINGLETON	"Attempted to allocate a second instance of a singleton."
 
 #define ERRORSTR_TITLE				"Error!"
-#define ERRORSTR_NILCHECK			"Nil value!"
 
 #define M_SCREEN_WIDTH	960.0f
 #define M_SCREEN_HEIGHT	640.0f

@@ -110,16 +110,17 @@ function PS_UpdateState(toplayer, toptag)
 				stateST = STATE_ST_Finished;
 			end
 		end
+	-- Over cannot be quit normally
 	elseif stateAction == STATE_Over then
 		if stateST == STATE_ST_Null then
 			stateST  = STATE_ST_Standby;
-		elseif stateST == STATE_ST_Standby then
+		elseif stateST == STATE_ST_Standby or stateST == STATE_ST_Progressing then
 			stateST = STATE_ST_Progressing;
 			if PS_ShowOver(toplayer, toptag) then
-				stateST = STATE_ST_Finished;
+				stateST = STATE_ST_StepForward;
 			end
-		elseif stateST == STATE_ST_StepForward then
-			stateST = STATE_ST_Finished;
+--		elseif stateST == STATE_ST_StepForward then
+--			stateST = STATE_ST_Finished;
 		end
 	
 	end

@@ -91,6 +91,7 @@ public:
 
 	int GetMissionHiScore(int missionindex=-1, int stageindex=-1);
 	BYTE GetMissionRank(int missionindex=-1, int stageindex=-1);
+	BYTE GetMissionRankByScore(int score=-1, int missionindex=-1, int stageindex=-1);
 	void GetMissionGoldenEggData(bool * egg1, bool * egg2, bool * egg3, int missionindex=-1, int stageindex=-1);
 	missionData * GetMissionData(int missionindex=-1, int stageindex=-1);
 	missionAimHelpData * GetMissionAimHelpData(int missionindex=-1, int stageindex=-1);

@@ -164,36 +164,53 @@ end
 
 function PS_ProduceEgg(toplayer, toptag, index)
 	local tx, ty = game.GetEnemyXYScale(index);
-	local eggindex = game.GetEnemyEggIndex(index);
-
-	local eggSIID = SI_GUI_GoldenEgg;
-	if eggindex == 0 then
-		eggindex = index + MISSION_GoldenEggMax+1;
-		eggSIID = SI_GUI_Egg;
-	end
+	
 	local layertag = toptag + CCPSTL_TopMessage;
 	local grouptag = layertag + CCPSTM_TopMessage_EnemyEggMenu;
-	local spEgg = game.CreateSprite(eggSIID);
-	local spSelectedEgg = game.CreateSprite(eggSIID);
 	
-	local menuitem = game.CreateMenuItem({toplayer, grouptag}, {tx, ty, CCPSTM_TopMessage_EnemyEggMenu, grouptag+eggindex}, spEgg, spSelectedEgg);
-	game.SetColor(menuitem, global.ARGB(0, 0xffffff));
+	local eggindex = game.GetEnemyEggIndex(index);
+	local eggSIID;
+	
+	local item;
+	
+	local rectx, recty, rectw, recth = game.GetEnemyPositionRect();
+	local bBroken = not global.PointInRect(tx, ty, rectx, recty, rectw, recth, LConst_EggBrokenEdge, LConst_EggBrokenEdge);
+	if bBroken then
+		eggSIID = SI_GUI_BrokenGoldenEgg;
+		if eggindex == 0 then
+			eggSIID = SI_GUI_BrokenEgg;
+		end
+		local spEgg = game.CreateSprite(eggSIID, {tx, ty});
+		item = game.AddSpriteChild(spEgg, {toplayer, layertag});
+	else
+		eggSIID = SI_GUI_GoldenEgg;
+		if eggindex == 0 then
+			eggindex = index + MISSION_GoldenEggMax+1;
+			eggSIID = SI_GUI_Egg;
+		end
+		local spEgg = game.CreateSprite(eggSIID);
+		local spSelectedEgg = game.CreateSprite(eggSIID);
+	
+		item = game.CreateMenuItem({toplayer, grouptag}, {tx, ty, CCPSTM_TopMessage_EnemyEggMenu, grouptag+eggindex}, spEgg, spSelectedEgg);
+		game.SetColor(item, global.ARGB(0, 0xffffff));
+	end
 	
 	local fadeinaction = game.ActionFade(CCAF_To, 0xff, LConst_ItemVanishTime);
-	local swingactionpre = game.ActionRotate(CCAF_To, 3000, LConst_EggSwingActionTime);
-	swingactionpre = game.ActionEase(CCAF_In, swingactionpre, 0.5);
-	local swingactionpost = game.ActionRotate(CCAF_To, -3000, LConst_EggSwingActionTime);
-	swingactionpost = game.ActionEase(CCAF_In, swingactionpost, 0.5);
+	local bezieraction = game.ActionBezier(CCAF_To, LConst_EggJumpActionTime, tx, ty+30, tx, ty-30, tx, ty);
+	bezieraction = game.ActionEase(CCAF_In, bezieraction, 0.7);
+	fadeinaction = game.ActionSpawn({fadeinaction, bezieraction});
 	local fadeoutaction = game.ActionFade(CCAF_To, 0, LConst_ItemVanishTime);
 	local deleteaction = game.ActionDelete();
-	local swingaction = game.ActionSequence({fadeinaction, swingactionpre, swingactionpost, fadeoutaction, deleteaction});
-	game.RunAction(menuitem, swingaction);
+	local jumpaction = game.ActionSequence({fadeinaction, fadeoutaction, deleteaction});
+	game.RunAction(item, jumpaction);
 	
-	local menunode = game.GetNode({toplayer, grouptag});
-	if DtoI(menunode) == NULL then
-		game.AddMenuChild({menuitem}, {toplayer, layertag}, {0, 0, CCPSTM_TopMessage_EnemyEggMenu, grouptag});
-	else
-		game.AddMenuItemChild(menuitem, {toplayer, grouptag});
+	if not bBroken then
+		local menunode = game.GetNode({toplayer, grouptag});
+		if DtoI(menunode) == NULL then
+			game.AddMenuChild({item}, {toplayer, layertag}, {0, 0, CCPSTM_TopMessage_EnemyEggMenu, grouptag});
+		else
+			game.AddMenuItemChild(item, {toplayer, grouptag});
+		end
 	end
 	
 end

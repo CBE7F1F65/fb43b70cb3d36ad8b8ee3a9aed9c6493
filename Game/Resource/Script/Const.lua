@@ -86,5 +86,7 @@ LConst_EnemyLifeCostScore = 1;
 LConst_ScoreRateComboPlus = 1;
 LConst_ScoreRateGoldenEggMul = 2;
 
-LConst_EggSwingActionTime = 0.5;
+LConst_EggJumpActionTime = 0.8;
 LConst_EggMoveActionTime = 0.3;
+LConst_EggBrokenEdge = 40;
+LConst_EggResultScore = 1000;

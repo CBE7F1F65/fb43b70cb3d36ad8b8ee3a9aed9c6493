@@ -14,6 +14,7 @@ namespace cocos2d {
 	void CCActionDelete::startWithTarget(CCNode *pTarget)
 	{
 		CCActionInstant::startWithTarget(pTarget);
+//		pTarget->setIsVisible(false);
 		if (pTarget->getParent())
 		{
 			pTarget->removeFromParentAndCleanup(true);
@@ -34,6 +35,21 @@ namespace cocos2d {
 	void CCActionDeleteChildren::startWithTarget(CCNode *pTarget)
 	{
 		CCActionInstant::startWithTarget(pTarget);
+		/*
+		CCArray * m_pChildren = pTarget->getChildren();
+		if ( m_pChildren && m_pChildren->count() > 0 )
+		{
+			CCObject* child;
+			CCARRAY_FOREACH(m_pChildren, child)
+			{
+				CCNode* pNode = (CCNode*) child;
+				if (pNode)
+				{
+					pNode->setIsVisible(false);
+				}
+			}
+		}
+		*/
 		pTarget->removeAllChildrenWithCleanup(true);
 	}
 }

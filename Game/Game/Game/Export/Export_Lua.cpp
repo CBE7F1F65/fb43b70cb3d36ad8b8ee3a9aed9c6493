@@ -7,6 +7,9 @@
 #include "../Header/BIOInterface.h"
 
 LuaStateOwner Export_Lua::state;
+#ifdef _DEBUG
+lua_Debug Export_Lua::debug_ar;
+#endif
 
 using namespace cocos2d;
 
@@ -260,6 +263,7 @@ int Export_Lua::LoadPackedLuaFiles(LuaState * ls)
 void Export_Lua::ShowError(int errortype, const char * err)
 {
 	char msgtitle[M_MESSAGESTRMAX];
+	char msgerr[M_MESSAGESTRMAX];
 	switch (errortype)
 	{
 	case LUAERROR_LOADINGSCRIPT:
@@ -272,10 +276,21 @@ void Export_Lua::ShowError(int errortype, const char * err)
 		strcpy(msgtitle, "Error in parsing function!");
 		break;
 	case LUAERROR_DUMPINGSCRIPT:
-		strcpy(msgtitle, "Errpr in dumping Script!");
+		strcpy(msgtitle, "Error in dumping Script!");
+		break;
+	case LUAERROR_NILVALUE:
+		strcpy(msgtitle, "Error in getting Nil Value!");
+		break;
+	case LUAERROR_ARG:
+		strcpy(msgtitle, "Error in arguments count!");
 		break;
 	default:
 		strcpy(msgtitle, "Error!");
 	}
-	BIOInterface::getInstance()->System_MessageBox(err, msgtitle);
+#ifdef _DEBUG
+	sprintf(msgerr, "%s\n%s\n\t%s\n\tLine:\t%d", err, debug_ar.short_src, debug_ar.name, debug_ar.currentline);
+#else
+	strcpy(msgerr, err);
+#endif
+	BIOInterface::getInstance()->System_MessageBox(msgerr, msgtitle);
 }

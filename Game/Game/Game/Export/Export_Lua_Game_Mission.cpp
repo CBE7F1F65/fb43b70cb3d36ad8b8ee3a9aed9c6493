@@ -29,6 +29,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("GetNowStageMissionTurn", LuaFn_Game_GetNowStageMissionTurn);
 
 	obj->Register("SetEnemyPositionRect", LuaFn_Game_SetEnemyPositionRect);
+	obj->Register("GetEnemyPositionRect", LuaFn_Game_GetEnemyPositionRect);
 
 	obj->Register("IsFunctionAccessEnabled", LuaFn_Game_IsFunctionAccessEnabled);
 	obj->Register("EnableFunctionAccess", LuaFn_Game_EnableFunctionAccess);
@@ -81,6 +82,7 @@ bool Export_Lua_Game::_LuaRegistFunction_Mission(LuaObject * obj)
 	obj->Register("SetActiveEnemyData", LuaFn_Game_SetActiveEnemyData);
 	obj->Register("GetActiveEnemyData", LuaFn_Game_GetActiveEnemyData);
 
+	obj->Register("CheckMissionOver", LuaFn_Game_CheckMissionOver);
 	obj->Register("DoMissionOver", LuaFn_Game_DoMissionOver);
 
 	obj->Register("GetState", LuaFn_Game_GetState);
@@ -374,6 +376,20 @@ int Export_Lua_Game::LuaFn_Game_SetEnemyPositionRect(LuaState * ls)
 
 	CCRect rect = CCRectMake(_x, _y, _width, _height);
 	GameMain::getInstance()->SetEnemyPositionRect(rect);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_GetEnemyPositionRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	CCRect rect = GameMain::getInstance()->enemypositionrect;
+
+	node.PFloat(rect.origin.x);
+	node.PFloat(rect.origin.y);
+	node.PFloat(rect.size.width);
+	node.PFloat(rect.size.height);
 
 	_LEAVEFUNC_LUA;
 }
@@ -1217,11 +1233,11 @@ int Export_Lua_Game::LuaFn_Game_GetActiveEnemyData(LuaState * ls)
 	_LEAVEFUNC_LUA;
 }
 
-int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
+int Export_Lua_Game::LuaFn_Game_CheckMissionOver(LuaState * ls)
 {
 	_ENTERFUNC_LUA(0);
 
-	// bCheckAP -> missionstate, hiscore, rank, btop
+	// bCheckAP -> missionstate
 
 	bool _bCheckAP = false;
 	node.jNextGet();
@@ -1231,9 +1247,22 @@ int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
 	}
 
 	GameMain * pgm = GameMain::getInstance();
+	BYTE missionstate = pgm->CheckMissionOver(_bCheckAP);
+	node.PInt(missionstate);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	// missionstate -> hiscore, rank, btop
+
+	BYTE missionstate = node.iNextGet();
+	GameMain * pgm = GameMain::getInstance();
 
 	bool btop = false;
-	BYTE missionstate = pgm->CheckMissionOver(_bCheckAP);
 	switch (missionstate)
 	{
 	case M_MISSIONSTATE_PROGRESSING:
@@ -1246,10 +1275,11 @@ int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
 	}
 
 	int hiscore = pgm->GetMissionHiScore();
+	BYTE scorerank = pgm->GetMissionRankByScore();
 	BYTE rank = pgm->GetMissionRank();
 
-	node.PInt(missionstate);
 	node.PInt(hiscore);
+	node.PInt(scorerank);
 	node.PInt(rank);
 	node.PBoolean(btop);
 

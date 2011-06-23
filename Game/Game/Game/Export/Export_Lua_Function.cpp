@@ -7,6 +7,7 @@
 #include "../Header/Const.h"
 
 #include "../Header/BIOInterface.h"
+#include "../Header/BGlobal.h"
 
 using namespace std;
 
@@ -27,6 +28,7 @@ bool Export_Lua::_LuaRegistFunction(LuaObject * obj)
 	_globalobj.Register("HSVA", LuaFn_Global_HSVA);
 	_globalobj.Register("GetARGB", LuaFn_Global_GetARGB);
 	_globalobj.Register("SetARGB", LuaFn_Global_SetARGB);
+	_globalobj.Register("PointInRect", LuaFn_Global_PointInRect);
 	_globalobj.Register("GetLocalTime", LuaFn_Global_GetLocalTime);
 	_globalobj.Register("GetClipBoard", LuaFn_Global_GetClipBoard);
 	_globalobj.Register("GetPrivateProfileString", LuaFn_Global_GetPrivateProfileString);
@@ -112,19 +114,22 @@ DWORD Export_Lua::_LuaHelper_GetDWORD(LuaObject * obj)
 {
 	if (obj->IsNil())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0;
 	}
 	DWORD dret;
+	/*
 	if (obj->IsString())
 	{
 		sscanf(obj->GetString(), "%d", &dret);
 	}
 	else
 	{
+	*/
 		lua_Number lnval = obj->GetNumber();
 		dret = CUINTN(lnval);
-	}
+//	}
 	return dret;
 }
 
@@ -138,19 +143,22 @@ LONGLONG Export_Lua::_LuaHelper_GetLONGLONG(LuaObject * obj)
 {
 	if (obj->IsNil())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0;
 	}
 	LONGLONG llret;
+	/*
 	if (obj->IsString())
 	{
 		sscanf(obj->GetString(), "%I64d", &llret);
 	}
 	else
 	{
+	*/
 		lua_Number lnval = obj->GetNumber();
 		llret = CLONGLONGN(lnval);
-	}
+//	}
 	return llret;
 }
 
@@ -164,19 +172,22 @@ QWORD Export_Lua::_LuaHelper_GetQWORD(LuaObject * obj)
 {
 	if (obj->IsNil())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0;
 	}
 	QWORD qret;
+	/*
 	if (obj->IsString())
 	{
 		sscanf(obj->GetString(), "%I64u", &qret);
 	}
 	else
 	{
+	*/
 		lua_Number lnval = obj->GetNumber();
 		qret = CULONGLONGN(lnval);
-	}
+//	}
 	return qret;
 }
 
@@ -198,11 +209,22 @@ void Export_Lua::_LuaHelper_PushString(LuaState * ls, const char * sval)
 	}
 }
 
+void Export_Lua::_LuaHelper_PushTable(LuaState * ls, LuaStackObject tval)
+{
+	ls->PushValue(tval);
+}
+
+LuaStackObject Export_Lua::_LuaHelper_CreateTable(LuaState * ls)
+{
+	return ls->CreateTable();
+}
+
 DWORD Export_Lua::_LuaHelper_GetColor(LuaObject * obj)
 {
 	if (obj->IsNil())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0;
 	}
 	DWORD dret = 0;
@@ -225,7 +247,9 @@ void Export_Lua::_LuaHelper_GetCalculateValue(LuaObject * obj, char calchar, boo
 {
 	if (obj->IsNil() || !val)
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
+		return;
 	}
 	int _int;
 	DWORD _dword;
@@ -291,17 +315,25 @@ void Export_Lua::_LuaHelper_GetCalculateValue(LuaObject * obj, char calchar, boo
 
 int Export_Lua::LuaFn_Global_Calculate(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(3);
+
 	const char * calstr = 0;
 
-	calstr = args[1].GetString();
+//	calstr = args[1].GetString();
+	calstr = node.sNextGet();
+
 	if (!calstr || strlen(calstr) < 4)
 	{
-		ls->PushInteger(0);
-		return 1;
+//		ls->PushInteger(0);
+//		return 1;
+		node.PInt(0);
+		break;
 	}
 
-	LONGLONG l1, l2, lret;
+	LONGLONG l1 = 0;
+	LONGLONG l2 = 0;
+	LONGLONG lret;
 	QWORD q1, q2, qret;
 
 	bool buseq = false;
@@ -309,12 +341,14 @@ int Export_Lua::LuaFn_Global_Calculate(LuaState * ls)
 	{
 		buseq = true;
 	}
-	LuaObject _obj;
-	_obj = args[2];
+//	LuaObject _obj;
+//	_obj = args[2];
 
-	_LuaHelper_GetCalculateValue(&_obj, calstr[0], buseq, &l1);
-	_obj = args[3];
-	_LuaHelper_GetCalculateValue(&_obj, calstr[0], buseq, &l2);
+//	_LuaHelper_GetCalculateValue(&_obj, calstr[0], buseq, &l1);
+//	_obj = args[3];
+	//	_LuaHelper_GetCalculateValue(&_obj, calstr[2], buseq, &l2);
+	node.CalculateValueNextGet(calstr[0], buseq, &l1);
+	node.CalculateValueNextGet(calstr[2], buseq, &l2);
 
 	if (buseq)
 	{
@@ -377,192 +411,335 @@ int Export_Lua::LuaFn_Global_Calculate(LuaState * ls)
 	}
 	if (buseq)
 	{
-		_LuaHelper_PushQWORD(ls, qret);
+//		_LuaHelper_PushQWORD(ls, qret);
+		node.PQword(qret);
 	}
 	else
 	{
-		_LuaHelper_PushLONGLONG(ls, lret);
+//		_LuaHelper_PushLONGLONG(ls, lret);
+		node.PLongLong(lret);
 	}
-	return 1;
+//	return 1;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_AMA(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(4);
 	int iret;
 
+	float _orix = node.fNextGet();
+	float _oriy = node.fNextGet();
+	float _aimx = node.fNextGet();
+	float _aimy = node.fNextGet();
+
 	int _a = 0;
-
-	if (args.Count() > 4)
+//	if (args.Count() > 4)
+//	{
+//		_a = args[5].GetInteger();
+//	}
+	node.jNextGet();
+	if (node.bhavenext)
 	{
-		_a = args[5].GetInteger();
+		_a = node.iGet();
 	}
-	iret = aMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _a);
+//	iret = aMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _a);
+	iret = aMainAngle(_orix, _oriy, _aimx, _aimy, _a);
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_RMA(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(4);
 	int iret;
+
+	float _orix = node.fNextGet();
+	float _oriy = node.fNextGet();
+	float _aimx = node.fNextGet();
+	float _aimy = node.fNextGet();
 
 	float _r = 0.0f;
 
-	if (args.Count() > 4)
+//	if (args.Count() > 4)
+//	{
+//		_r = args[5].GetNumber();
+//	}
+	node.jNextGet();
+	if (node.bhavenext)
 	{
-		_r = args[5].GetNumber();
+		_r = node.fGet();
 	}
-	iret = rMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _r);
+//	iret = rMainAngle(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber(), _r);
+	iret = rMainAngle(_orix, _oriy, _aimx, _aimy, _r);
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_SINT(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	lua_Number lnret;
 
-	lnret = sint(args[1].GetInteger());
+	int _angle = node.iNextGet();
+//	lnret = sint(args[1].GetInteger());
+	lnret = sint(_angle);
 
-	ls->PushNumber(lnret);
-	return 1;
+//	ls->PushNumber(lnret);
+//	return 1;
+	node.PLuaNumber(lnret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_COST(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	lua_Number lnret;
 
-	lnret = cost(args[1].GetInteger());
+	int _angle = node.iNextGet();
+//	lnret = cost(args[1].GetInteger());
+	lnret = cost(_angle);
 
-	ls->PushNumber(lnret);
-	return 1;
+//	ls->PushNumber(lnret);
+//	return 1;
+	node.PLuaNumber(lnret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_DIST(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(4);
 	lua_Number lnret;
 
-	lnret = DIST(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber());
+	lua_Number _x1 = node.lnNextGet();
+	lua_Number _y1 = node.lnNextGet();
+	lua_Number _x2 = node.lnNextGet();
+	lua_Number _y2 = node.lnNextGet();
+//	lnret = DIST(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber());
+	lnret = DIST(_x1, _y1, _x2, _y2);
 
-	ls->PushNumber(lnret);
-	return 1;
+//	ls->PushNumber(lnret);
+//	return 1;
+	node.PLuaNumber(lnret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_DIST2(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(4);
 	lua_Number lnret;
 
-	lnret = DIST2(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber());
+	lua_Number _x1 = node.lnNextGet();
+	lua_Number _y1 = node.lnNextGet();
+	lua_Number _x2 = node.lnNextGet();
+	lua_Number _y2 = node.lnNextGet();
+//	lnret = DIST2(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber(), args[4].GetNumber());
+	lnret = DIST2(_x1, _y1, _x2, _y2);
 
-	ls->PushNumber(lnret);
-	return 1;
+//	ls->PushNumber(lnret);
+//	return 1;
+	node.PLuaNumber(lnret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_SIGN(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int iret;
 
-	iret = SIGN(args[1].GetInteger());
+	int _Xval = node.iNextGet();
+//	iret = SIGN(args[1].GetInteger());
+	iret = SIGN(_Xval);
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_ROLL(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = ROLL(args[1].GetInteger(), args[2].GetInteger());
+	int _Xval = node.iNextGet();
+	int _Tval = node.iNextGet();
+//	iret = ROLL(args[1].GetInteger(), args[2].GetInteger());
+	iret = ROLL(_Xval, _Tval);
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_INTER(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(3);
 	lua_Number lnret;
 
-	lnret = INTER(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber());
+	lua_Number _Aval = node.lnNextGet();
+	lua_Number _Bval = node.lnNextGet();
+	lua_Number _Xval = node.lnNextGet();
+//	lnret = INTER(args[1].GetNumber(), args[2].GetNumber(), args[3].GetNumber());
+	lnret = INTER(_Aval, _Bval, _Xval);
 
-	ls->PushNumber(lnret);
-	return 1;
+//	ls->PushNumber(lnret);
+//	return 1;
+	node.PLuaNumber(lnret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_ARGB(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	DWORD dret;
 
-	if (args.Count() > 2)
+//	if (args.Count() > 2)
+	if (node.argscount > 2)
 	{
-		dret = ARGB(args[1].GetInteger(), args[2].GetInteger(), args[3].GetInteger(), args[4].GetInteger());
-	}
-	else
-	{
-		if (args[1].IsTable())
+		BYTE _a = node.iNextGet();
+		BYTE _r = node.iNextGet();
+		BYTE _g = node.iNextGet();
+		BYTE _b = 0;
+		node.jNextGet();
+		if (node.bhavenext)
 		{
-			LuaObject _obj = args[1];
-			dret = _LuaHelper_GetColor(&_obj);
+			_b = node.iGet();
 		}
 		else
 		{
-			dret = (((DWORD)(args[1].GetInteger()))<<24) + (DWORD)(args[2].GetInteger());
+			_b = _g;
+			_g = _r;
+			_r = _a;
+			_a = 0;
+		}
+//		dret = ARGB(args[1].GetInteger(), args[2].GetInteger(), args[3].GetInteger(), args[4].GetInteger());
+		dret = ARGB(_a, _r, _g, _b);
+	}
+	else
+	{
+//		if (args[1].IsTable())
+		node.jNextGet();
+		if (node.ObjIsTable())
+		{
+//			LuaObject _obj = args[1];
+//			dret = _LuaHelper_GetColor(&_obj);
+			dret = node.cGet();
+		}
+		else
+		{
+			BYTE _a = node.iGet();
+			BYTE _r = 0;
+			BYTE _g = 0;
+			BYTE _b = 0;
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				int _diffuse = node.iGet();
+				_r = GETR(_diffuse);
+				_g = GETG(_diffuse);
+				_b = GETB(_diffuse);
+			}
+//			dret = (((DWORD)(args[1].GetInteger()))<<24) + (DWORD)(args[2].GetInteger());
+			dret = ARGB(_a, _r, _g, _b);
 		}
 	}
 
-	_LuaHelper_PushDWORD(ls, dret);
-	return 1;
+//	_LuaHelper_PushDWORD(ls, dret);
+//	return 1;
+	node.PDword(dret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_HSVA(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(3);
 	DWORD dret;
-	
-	float _a = 0;
-	if (args.Count() > 3)
-	{
-		_a = args[4].GetFloat();
-	}
-	dret = BIOInterface::getInstance()->Math_HSVAtoARGB(args[1].GetFloat(), args[2].GetFloat(), args[3].GetFloat(), _a);
 
-	_LuaHelper_PushDWORD(ls, dret);
-	return 1;
+	float _h = node.fNextGet();
+	float _s = node.fNextGet();
+	float _v = node.fNextGet();
+	float _a = 0;
+//	if (args.Count() > 3)
+//	{
+//		_a = args[4].GetFloat();
+//	}
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_a = node.fGet();
+	}
+//	dret = BIOInterface::getInstance()->Math_HSVAtoARGB(args[1].GetFloat(), args[2].GetFloat(), args[3].GetFloat(), _a);
+	dret = BIOInterface::getInstance()->Math_HSVAtoARGB(_h, _s, _v, _a);
+
+//	_LuaHelper_PushDWORD(ls, dret);
+//	return 1;
+	node.PDword(dret);
+	
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_GetARGB(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int a, r, g, b;
 
-	LuaObject _obj = args[1];
-	DWORD col = _LuaHelper_GetColor(&_obj);
-	a = GETA(col);
-	r = GETR(col);
-	g = GETG(col);
-	b = GETB(col);
+//	LuaObject _obj = args[1];
+//	DWORD col = _LuaHelper_GetColor(&_obj);
+	DWORD _col = node.cNextGet();
+	a = GETA(_col);
+	r = GETR(_col);
+	g = GETG(_col);
+	b = GETB(_col);
 
-	ls->PushInteger(a);
-	ls->PushInteger(r);
-	ls->PushInteger(g);
-	ls->PushInteger(b);
-	return 4;
+//	ls->PushInteger(a);
+//	ls->PushInteger(r);
+//	ls->PushInteger(g);
+//	ls->PushInteger(b);
+//	return 4;
+	node.PInt(a);
+	node.PInt(r);
+	node.PInt(g);
+	node.PInt(b);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_SetARGB(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	DWORD dret;
-
+/*
 	LuaObject _obj = args[1];
 	dret = _LuaHelper_GetColor(&_obj);
 	int argb=0;
@@ -599,14 +776,69 @@ int Export_Lua::LuaFn_Global_SetARGB(LuaState * ls)
 			}
 		}
 	}
+*/
+	dret = node.cNextGet();
+	BYTE _argb = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_argb = node.iGet();
+		dret = SETA(dret, _argb);
+		if (node.bhavenext)
+		{
+			_argb = node.iGet();
+			dret = SETR(dret, _argb);
+			if (node.bhavenext)
+			{
+				_argb = node.iGet();
+				dret = SETG(dret, _argb);
+				if (node.bhavenext)
+				{
+					_argb = node.iGet();
+					dret = SETB(dret, _argb);
+				}
+			}
+		}
+	}
+//	_LuaHelper_PushDWORD(ls, dret);
+//	return 1;
+	node.PDword(dret);
 
-	_LuaHelper_PushDWORD(ls, dret);
-	return 1;
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua::LuaFn_Global_PointInRect(LuaState * ls)
+{
+	_ENTERFUNC_LUA(6);
+
+	float _x = node.fNextGet();
+	float _y = node.fNextGet();
+	float _rectx = node.fNextGet();
+	float _recty = node.fNextGet();
+	float _rectw = node.fNextGet();
+	float _recth = node.fNextGet();
+	float _xmargin = 0;
+	float _ymargin = 0;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_xmargin = node.fGet();
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			_ymargin = node.fGet();
+		}
+	}
+	bool bret = BGlobal::PointInRect(_x, _y, _rectx+_rectw/2, _recty+_recth/2, _rectw/2-_xmargin, _recth/2-_ymargin);
+	node.PBoolean(bret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_GetLocalTime(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(0);
 	LuaStackObject table;
 	QWORD qret;
 
@@ -620,7 +852,8 @@ int Export_Lua::LuaFn_Global_GetLocalTime(LuaState * ls)
 	WORD wYear, wMonth, wDayOfWeek, wDay, wHour, wMinute, wSecond, wMilliseconds;
 	BIOInterface::getInstance()->Timer_GetSystemTime(&wYear, &wMonth, &wDayOfWeek, &wDay, &wHour, &wMinute, &wSecond, &wMilliseconds);
 
-	table = ls->CreateTable();
+//	table = ls->CreateTable();
+	table = _LuaHelper_CreateTable(ls);
 	table.SetInteger("wYear", wYear);
 	table.SetInteger("wMonth", wMonth);
 	table.SetInteger("wDayOfWeek", wDayOfWeek);
@@ -631,61 +864,96 @@ int Export_Lua::LuaFn_Global_GetLocalTime(LuaState * ls)
 	table.SetInteger("wMilliseconds", wMilliseconds);
 	qret = BIOInterface::getInstance()->Timer_GetFileTime();
 
-	ls->PushValue(table);
-	_LuaHelper_PushQWORD(ls, qret);
-	return 2;
+//	ls->PushValue(table);
+//	_LuaHelper_PushQWORD(ls, qret);
+//	return 2;
+	node.PTable(table);
+	node.PQword(qret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_GetClipBoard(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(0);
 
 #ifdef __WIN32
 	if (OpenClipboard(NULL))
 	{
 		HANDLE hData = GetClipboardData(CF_TEXT);
 		char * buffer = (char*)GlobalLock(hData);
-		_LuaHelper_PushString(ls, buffer);
+//		_LuaHelper_PushString(ls, buffer);
+		node.PString(buffer);
 		GlobalUnlock(hData);
 		CloseClipboard();
-		return 1;
+//		return 1;
 	}
 #endif // __WIN32
-	return 0;
+//	return 0;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_GetPrivateProfileString(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(3);
 	char sret[M_STRMAX];
 
-	strcpy(sret, BIOInterface::getInstance()->Ini_GetString(args[1].GetString(), args[2].GetString(), args[3].GetString(), (char *)args[4].GetString()));
-//	GetPrivateProfileString(args[1].GetString(), args[2].GetString(), args[3].GetString(), sret, M_STRINGMAX, args[4].GetString());
+	const char * _section = node.sNextGet();
+	const char * _name = node.sNextGet();
+	const char * _defval = node.sNextGet();
+	char * _inifilename = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_inifilename = (char *)node.sGet();
+	}
 
-	_LuaHelper_PushString(ls, sret);
-	return 1;
+//	strcpy(sret, BIOInterface::getInstance()->Ini_GetString(args[1].GetString(), args[2].GetString(), args[3].GetString(), (char *)args[4].GetString()));
+	strcpy(sret, BIOInterface::getInstance()->Ini_GetString(_section, _name, _defval, _inifilename));
+
+//	_LuaHelper_PushString(ls, sret);
+//	return 1;
+	node.PString(sret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_WritePrivateProfileString(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(3);
 
-	BIOInterface::getInstance()->Ini_SetString(args[1].GetString(), args[2].GetString(), args[3].GetString(), (char *)args[4].GetString());
-//	WritePrivateProfileString(args[1].GetString(), args[2].GetString(), args[3].GetString(), args[4].GetString());
+	const char * _section = node.sNextGet();
+	const char * _name = node.sNextGet();
+	const char * _value = node.sNextGet();
+	char * _inifilename = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_inifilename = (char *)node.sGet();
+	}
 
-	return 0;
+//	BIOInterface::getInstance()->Ini_SetString(args[1].GetString(), args[2].GetString(), args[3].GetString(), (char *)args[4].GetString());
+	BIOInterface::getInstance()->Ini_SetString(_section, _name, _value, _inifilename);
+
+//	return 0;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_MessageBox(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(0);
 	int iret;
 
-	char stext[M_MESSAGESTRMAX];
-	strcpy(stext, "");
-	char scaption[M_MESSAGESTRMAX];
-	strcpy(scaption, "");
-	int type = MB_OK;
+	char _stext[M_MESSAGESTRMAX];
+	strcpy(_stext, "");
+	char _scaption[M_MESSAGESTRMAX];
+	strcpy(_scaption, "");
+	int _type = MB_OK;
+	/*
 	int argscount = args.Count();
 	if (argscount > 0)
 	{
@@ -699,40 +967,71 @@ int Export_Lua::LuaFn_Global_MessageBox(LuaState * ls)
 			}
 		}
 	}
-	iret = BIOInterface::getInstance()->System_MessageBox(stext, scaption, (DWORD)type);
+	*/
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		strcpy(_stext, node.sGet());
+		node.jNextGet();
+		if (node.bhavenext)
+		{
+			strcpy(_scaption, node.sGet());
+			node.jNextGet();
+			if (node.bhavenext)
+			{
+				_type = node.iGet();
+			}
+		}
+	}
+	iret = BIOInterface::getInstance()->System_MessageBox(_stext, _scaption, (DWORD)_type);
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_Global_SystemLog(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 
-	BIOInterface::getInstance()->System_Log(args[1].GetString());
+	const char * _str = node.sNextGet();
+//	BIOInterface::getInstance()->System_Log(args[1].GetString());
+	BIOInterface::getInstance()->System_Log(_str);
 
-	return 0;
+//	return 0;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_DoFile(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int iret;
 
-	iret = Export_Lua::DoLuaFile(ls, args[1].GetString());
+	const char * _filename = node.sNextGet();
+//	iret = DoLuaFile(ls, args[1].GetString());
+	iret = DoLuaFile(ls, _filename);
 	if (iret != 0)
 	{
 		Export_Lua::ShowError(LUAERROR_LOADINGSCRIPT, ls->GetError(iret));
 	}
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_SetConst(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 
+	/*
 	LuaObject _obj;
 	if (args.Count() > 2)
 	{
@@ -759,15 +1058,68 @@ int Export_Lua::LuaFn_LuaState_SetConst(LuaState * ls)
 		_obj.SetNil(constname);
 		break;
 	}
+	*/
+	const char * _constname = node.sNextGet();
+	node.jNextGet();
+	int _type = node._obj->Type();
 
-	return 0;
+	bool _bval = false;
+	lua_Number _lnval = 0;
+	char * _sval = NULL;
+
+	node.jNextGet();
+	switch (_type)
+	{
+	case LUA_TBOOLEAN:
+		_bval = node.bGet();
+		break;
+	case LUA_TNUMBER:
+		_lnval = node.lnGet();
+		break;
+	case LUA_TSTRING:
+		_sval = (char *)node.sGet();
+		break;
+	default:
+		break;
+	}
+
+	LuaObject _obj;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_obj = *(node._obj);
+	}
+	else
+	{
+		_obj = ls->GetGlobals();
+	}
+	switch (_type)
+	{
+	case LUA_TBOOLEAN:
+		_obj.SetBoolean(_constname, _bval);
+		break;
+	case LUA_TNUMBER:
+		_obj.SetNumber(_constname, _lnval);
+		break;
+	case LUA_TSTRING:
+		_obj.SetString(_constname, _sval);
+		break;
+	default:
+		_obj.SetNil(_constname);
+		break;
+	}
+
+//	return 0;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_GetConst(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int iret;
 
+	/*
 	LuaObject _obj;
 	if (args.Count() > 1)
 	{
@@ -793,134 +1145,226 @@ int Export_Lua::LuaFn_LuaState_GetConst(LuaState * ls)
 		ls->PushNil();
 		break;
 	}
+	*/
+	const char * _constname = node.sNextGet();
 
-	return 1;
+	LuaObject _obj;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_obj = *(node._obj);
+	}
+	else
+	{
+		_obj = ls->GetGlobals();
+	}
+	_obj = _obj.GetByName(_constname);
+	switch (_obj.Type())
+	{
+	case LUA_TBOOLEAN:
+		node.PBoolean(_obj.GetBoolean());
+		break;
+	case LUA_TNUMBER:
+		node.PLuaNumber(_obj.GetNumber());
+		break;
+	case LUA_TSTRING:
+		node.PString(_obj.GetString());
+		break;
+	default:
+		node.PNil();
+//		ls->PushNil();
+		break;
+	}
+//	return 1;
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_GetPointer(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	DWORD dret = 0;
 
-	if (args[1].IsString())
+	node.jNextGet();
+//	if (args[1].IsString())
+	if (node.ObjIsString())
 	{
-		dret = (DWORD)(args[1].GetString());
+//		dret = (DWORD)(args[1].GetString());
+		dret = (DWORD)node.sGet();
 	}
-	else if (args[1].IsNumber())
+	else
 	{
 		static lua_Number _number;
-		_number = args[1].GetNumber();
+//		_number = args[1].GetNumber();
+		_number = node.lnGet();
 		dret = (DWORD)(&_number);
 	}
 
-	_LuaHelper_PushDWORD(ls, dret);
-	return 1;
+//	_LuaHelper_PushDWORD(ls, dret);
+//	return 1;
+	node.PDword(dret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_IntToDWORD(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	DWORD dret;
 
-	dret = args[1].GetInteger();
+//	dret = args[1].GetInteger();
+	dret = node.iNextGet();
 
-	_LuaHelper_PushDWORD(ls, dret);
-	return 1;
+//	_LuaHelper_PushDWORD(ls, dret);
+//	return 1;
+	node.PDword(dret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_DWORDToInt(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int iret;
 
-	LuaObject _obj = args[1];
-	iret = _LuaHelper_GetDWORD(&_obj);
+//	LuaObject _obj = args[1];
+//	iret = _LuaHelper_GetDWORD(&_obj);
+	iret = node.dNextGet();
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_And(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = (args[1].GetInteger()) & (args[2].GetInteger());
+//	iret = (args[1].GetInteger()) & (args[2].GetInteger());
+	int _ileft = node.iNextGet();
+	int _iright = node.iNextGet();
+	iret = _ileft & _iright;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_Or(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = (args[1].GetInteger()) | (args[2].GetInteger());
+//	iret = (args[1].GetInteger()) | (args[2].GetInteger());
+	int _ileft = node.iNextGet();
+	int _iright = node.iNextGet();
+	iret = _ileft | _iright;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_Xor(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = (args[1].GetInteger()) ^ (args[2].GetInteger());
+//	iret = (args[1].GetInteger()) ^ (args[2].GetInteger());
+	int _ileft = node.iNextGet();
+	int _iright = node.iNextGet();
+	iret = _ileft ^ _iright;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_Not(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(1);
 	int iret;
 
-	iret = ~(args[1].GetInteger());
+//	iret = ~(args[1].GetInteger());
+	int _ival = node.iNextGet();
+	iret = ~_ival;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_LShift(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = (args[1].GetInteger()) << (args[2].GetInteger());
+//	iret = (args[1].GetInteger()) << (args[2].GetInteger());
+	int _ileft = node.iNextGet();
+	int _iright = node.iNextGet();
+	iret = _ileft << _iright;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_RShift(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 	int iret;
 
-	iret = (args[1].GetInteger()) >> (args[2].GetInteger());
+//	iret = (args[1].GetInteger()) >> (args[2].GetInteger());
+	int _ileft = node.iNextGet();
+	int _iright = node.iNextGet();
+	iret = _ileft >> _iright;
 
-	ls->PushInteger(iret);
-	return 1;
+//	ls->PushInteger(iret);
+//	return 1;
+	node.PInt(iret);
+
+	_LEAVEFUNC_LUA;
 }
 
 int Export_Lua::LuaFn_LuaState_ReadLineInContent(LuaState * ls)
 {
-	LuaStack args(ls);
+//	LuaStack args(ls);
+	_ENTERFUNC_LUA(2);
 #ifdef __WIN32
 	string sret;
 	DWORD dret;
 
-	LuaObject _obj = args[1];
-	DWORD content = _LuaHelper_GetDWORD(&_obj);
-	dret = content;
-	_obj = args[2];
-	DWORD size = _LuaHelper_GetDWORD(&_obj);
+//	LuaObject _obj = args[1];
+//	DWORD content = _LuaHelper_GetDWORD(&_obj);
+	DWORD _content = node.dNextGet();
+	dret = _content;
+//	_obj = args[2];
+//	DWORD size = _LuaHelper_GetDWORD(&_obj);
+	DWORD _size = node.dNextGet();
 	int i=0;
 	sret = "";
-	if (dret < content + size)
+	if (dret < _content + _size)
 	{
 		char buffer = *(char*)dret;
 		while (buffer != '\r' && buffer != '\n')
@@ -928,9 +1372,9 @@ int Export_Lua::LuaFn_LuaState_ReadLineInContent(LuaState * ls)
 			sret += buffer;
 			i++;
 			dret++;
-			if (dret >= content + size)
+			if (dret >= _content + _size)
 			{
-				dret = content + size;
+				dret = _content + _size;
 				break;
 			}
 			buffer = *(char*)dret;
@@ -942,21 +1386,25 @@ int Export_Lua::LuaFn_LuaState_ReadLineInContent(LuaState * ls)
 				dret++;
 			}
 		}
-		if (dret < content + size)
+		if (dret < _content + _size)
 		{
 			dret++;
 		}
-		size -= dret - content;
+		_size -= dret - _content;
 	}
+	node.PString(sret.data());
+	node.PDword(dret);
+	node.PDword(_size);
 
-	_LuaHelper_PushString(ls, sret.data());
-	_LuaHelper_PushDWORD(ls, dret);
-	_LuaHelper_PushDWORD(ls, size);
-	return 3;
+//	_LuaHelper_PushString(ls, sret.data());
+//	_LuaHelper_PushDWORD(ls, dret);
+//	_LuaHelper_PushDWORD(ls, _size);
+//	return 3;
 
 #else
 
-	return 0;
+//	return 0;
 
 #endif // __WIN32
+	_LEAVEFUNC_LUA;
 }

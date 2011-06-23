@@ -1,9 +1,33 @@
 #ifndef __EXPORT_LUA_H__
 #define __EXPORT_LUA_H__
 
-#include "../Header/MainDependency.h"
-#include "../../../../LuaPlus/LuaPlus/LuaPlus.h"
-using namespace LuaPlus;
+#include "_LObjNode.h"
+#include "Export_Lua_Const.h"
+
+#ifdef _DEBUG
+#define _DEBUG_ENTERFUNC_LUA	state->GetStack(1, &debug_ar);\
+								state->GetInfo("nSl", &debug_ar)
+#else
+#define _DEBUG_ENTERFUNC_LUA
+#endif
+
+
+#define _ENTERFUNC_LUA(X)	_DEBUG_ENTERFUNC_LUA; \
+							LuaStack args(ls);\
+							node._init(ls, NULL, &args, &node);\
+							if (node.argscount >= (X))\
+							{\
+								do\
+								{
+
+#define _LEAVEFUNC_LUA			} while(false);\
+							}\
+							else\
+							{\
+								ShowError(LUAERROR_ARG, "");\
+								return 0;\
+							}\
+							return node.retcount
 
 class Export_Lua
 {
@@ -51,6 +75,8 @@ public:
 	static void _LuaHelper_PushQWORD(LuaState * ls, QWORD qval);
 	static QWORD _LuaHelper_GetQWORD(LuaObject * obj);
 	static void _LuaHelper_PushString(LuaState * ls, const char * sval);
+	static void _LuaHelper_PushTable(LuaState * ls, LuaStackObject tval);
+	static LuaStackObject _LuaHelper_CreateTable(LuaState * ls);
 
 	static void _LuaHelper_GetCalculateValue(LuaObject * obj, char calchar, bool buseq, void * val);
 
@@ -68,6 +94,7 @@ public:
 	static int LuaFn_Global_HSVA(LuaState * ls);
 	static int LuaFn_Global_GetARGB(LuaState * ls);
 	static int LuaFn_Global_SetARGB(LuaState * ls);
+	static int LuaFn_Global_PointInRect(LuaState * ls);
 	static int LuaFn_Global_GetLocalTime(LuaState * ls);
 	static int LuaFn_Global_GetClipBoard(LuaState * ls);
 	static int LuaFn_Global_GetPrivateProfileString(LuaState * ls);
@@ -91,6 +118,10 @@ public:
 
 public:
 	static LuaStateOwner state;
+#ifdef _DEBUG
+	static lua_Debug debug_ar;
+#endif
+	static _LObjNode node;
 };
 
 #endif

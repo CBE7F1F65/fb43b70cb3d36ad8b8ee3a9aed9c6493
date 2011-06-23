@@ -24,8 +24,11 @@ namespace LuaPlus
 
 	LUAPLUS_INLINE void LuaState::SetError(const char * _errorString)
 	{
-		strcpy(errorString, _errorString);
-		errorSet = true;
+		if (_errorString)
+		{
+			strcpy(errorString, _errorString);
+			errorSet = true;
+		}
 	}
 	LUAPLUS_INLINE bool LuaState::CheckError()
 	{

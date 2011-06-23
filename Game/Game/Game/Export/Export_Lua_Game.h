@@ -2,25 +2,9 @@
 #define __EXPORT_LUA_GAME_H__
 
 #include "Export_Lua.h"
-#include "_LObjNode.h"
 
 #include "cocos2d.h"
 using namespace cocos2d;
-
-#define _ENTERFUNC_LUA(X)	LuaStack args(ls);\
-							node._init(ls, NULL, &args, &node);\
-							if (node.argscount >= (X))\
-							{\
-								do\
-								{
-
-#define _LEAVEFUNC_LUA			} while(false);\
-							}\
-							else\
-							{\
-								return -1;\
-							}\
-							return node.retcount
 
 class Export_Lua_Game : Export_Lua
 {
@@ -49,6 +33,7 @@ public:
 	static int LuaFn_Game_AddNullChild(LuaState * ls);
 	static int LuaFn_Game_RemoveChild(LuaState * ls);
 	static int LuaFn_Game_RemoveAllChildren(LuaState * ls);
+	static int LuaFn_Game_GetChild(LuaState * ls);
 
 	static int LuaFn_Game_AddRenderTextureChild(LuaState * ls);
 	static int LuaFn_Game_RenderTextureBegin(LuaState * ls);
@@ -147,6 +132,7 @@ public:
 	static int LuaFn_Game_GetNowStageMissionTurn(LuaState * ls);
 
 	static int LuaFn_Game_SetEnemyPositionRect(LuaState * ls);
+	static int LuaFn_Game_GetEnemyPositionRect(LuaState * ls);
 
 	static int LuaFn_Game_IsFunctionAccessEnabled(LuaState * ls);
 	static int LuaFn_Game_EnableFunctionAccess(LuaState * ls);
@@ -196,6 +182,7 @@ public:
 	static int LuaFn_Game_SetActiveEnemyData(LuaState * ls);
 	static int LuaFn_Game_GetActiveEnemyData(LuaState * ls);
 
+	static int LuaFn_Game_CheckMissionOver(LuaState * ls);
 	static int LuaFn_Game_DoMissionOver(LuaState * ls);
 
 	static int LuaFn_Game_GetState(LuaState * ls);
@@ -208,7 +195,6 @@ public:
 
 public:
 
-	static _LObjNode node;
 };
 
 #endif

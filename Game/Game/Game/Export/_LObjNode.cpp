@@ -1,6 +1,9 @@
 #include "_LObjNode.h"
 #include "../Header/BIOInterface.h"
 
+#include "../Export/Export_Lua.h"
+#include "../Export/Export_Lua_Const.h"
+
 _LObjNode::_LObjNode()
 {
 	_init(NULL, NULL, NULL, NULL);
@@ -110,7 +113,8 @@ int _LObjNode::iGet()
 {
 	if (NilCheck())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		Export_Lua::ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0;
 	}
 	return _obj->GetInteger();
@@ -126,7 +130,8 @@ float _LObjNode::fGet()
 {
 	if (NilCheck())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		Export_Lua::ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return 0.0f;
 	}
 	return _obj->GetFloat();
@@ -138,11 +143,28 @@ float _LObjNode::fNextGet()
 	return fGet();
 }
 
+lua_Number _LObjNode::lnGet()
+{
+	if (NilCheck())
+	{
+		Export_Lua::ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
+		return 0.0;
+	}
+	return _obj->GetNumber();
+}
+
+lua_Number _LObjNode::lnNextGet()
+{
+	jNextGet();
+	return lnGet();
+}
+
 bool _LObjNode::bGet()
 {
 	if (NilCheck())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		Export_Lua::ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return false;
 	}
 	return _obj->GetBoolean();
@@ -158,7 +180,8 @@ const char * _LObjNode::sGet()
 {
 	if (NilCheck())
 	{
-		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+//		BIOInterface::getInstance()->System_MessageBox(ERRORSTR_NILCHECK, ERRORSTR_TITLE);
+		Export_Lua::ShowError(LUAERROR_NILVALUE, ERRORSTR_TITLE);
 		return NULL;
 	}
 	return _obj->GetString();
@@ -192,6 +215,39 @@ DWORD _LObjNode::dNextGet()
 	return dGet();
 }
 
+LONGLONG _LObjNode::llGet()
+{
+	return Export_Lua::_LuaHelper_GetLONGLONG(_obj);
+}
+
+LONGLONG _LObjNode::llNextGet()
+{
+	jNextGet();
+	return llGet();
+}
+
+QWORD _LObjNode::qGet()
+{
+	return Export_Lua::_LuaHelper_GetQWORD(_obj);
+}
+
+QWORD _LObjNode::qNextGet()
+{
+	jNextGet();
+	return qGet();
+}
+
+void _LObjNode::CalculateValueGet(char calchar, bool buseq, void * val)
+{
+	return Export_Lua::_LuaHelper_GetCalculateValue(_obj, calchar, buseq, val);
+}
+
+void _LObjNode::CalculateValueNextGet(char calchar, bool buseq, void * val)
+{
+	jNextGet();
+	return CalculateValueGet(calchar, buseq, val);
+}
+
 void _LObjNode::PInt(int ival)
 {
 	if (ls && root)
@@ -206,6 +262,15 @@ void _LObjNode::PFloat(float fval)
 	if (ls && root)
 	{
 		ls->PushNumber(fval);
+		root->retcount++;
+	}
+}
+
+void _LObjNode::PLuaNumber(lua_Number lnval)
+{
+	if (ls && root)
+	{
+		ls->PushNumber(lnval);
 		root->retcount++;
 	}
 }
@@ -242,6 +307,33 @@ void _LObjNode::PLongLong(LONGLONG llval)
 	if (ls && root)
 	{
 		Export_Lua::_LuaHelper_PushLONGLONG(ls, llval);
+		root->retcount++;
+	}
+}
+
+void _LObjNode::PQword(QWORD qval)
+{
+	if (ls && root)
+	{
+		Export_Lua::_LuaHelper_PushQWORD(ls, qval);
+		root->retcount++;
+	}
+}
+
+void _LObjNode::PNil()
+{
+	if (ls && root)
+	{
+		ls->PushNil();
+		root->retcount++;
+	}
+}
+
+void _LObjNode::PTable(LuaStackObject tval)
+{
+	if (ls && root)
+	{
+		Export_Lua::_LuaHelper_PushTable(ls, tval);
 		root->retcount++;
 	}
 }

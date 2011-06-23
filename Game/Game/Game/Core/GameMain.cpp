@@ -295,6 +295,34 @@ BYTE GameMain::GetMissionRank(int missionindex/* =-1 */, int stageindex/* =-1 */
 	return gamedata.stages[stageindex].missions[missionindex].rank;
 }
 
+BYTE GameMain::GetMissionRankByScore(int score/* =-1 */, int missionindex/* =-1 */, int stageindex/* =-1 */)
+{
+	if (score < 0)
+	{
+		score = missionscore;
+	}
+	if (stageindex < 0 || stageindex >= M_STAGEMAX)
+	{
+		stageindex = nowstage;
+	}
+	if (missionindex < 0 || missionindex >= M_STAGEMISSIONMAX)
+	{
+		missionindex = nowmission;
+	}
+
+	missionData * mitem = GetMissionData(missionindex, stageindex);
+
+	BYTE retval = 0;
+	for (int i=0; i<M_MISSIONRANKMAX; i++)
+	{
+		if (score >= mitem->ranks[i].hiscore)
+		{
+			retval = i+1;
+		}
+	}
+	return retval;
+}
+
 void GameMain::GetMissionGoldenEggData(bool * egg1, bool * egg2, bool * egg3, int missionindex/* =-1 */, int stageindex/* =-1 */)
 {
 	if (stageindex < 0 || stageindex >= M_STAGEMAX)
@@ -664,13 +692,7 @@ bool GameMain::ClearMission()
 		item->hiscore = missionscore;
 
 		int orank = item->rank;
-		for (int i=item->rank; i<M_MISSIONRANKMAX; i++)
-		{
-			if (missionscore >= mitem->ranks[i].hiscore)
-			{
-				item->rank = i+1;
-			}
-		}
+		item->rank = GetMissionRankByScore();
 		if (item->rank == M_MISSIONRANKMAX && item->rank > orank)
 		{
 			GameAchievement::Rank3Add();
