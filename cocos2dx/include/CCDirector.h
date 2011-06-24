@@ -34,9 +34,7 @@ THE SOFTWARE.
 #include "CCGeometry.h"
 #include "CCEGLView.h"
 #include "CCGL.h"
-#ifdef  ENABLE_LUA
-#include <string>
-#endif
+
 namespace   cocos2d {
 
 	enum  {
@@ -313,9 +311,10 @@ public:
 	/** Ends the execution, releases the running scene.
 	 It doesn't remove the OpenGL view from its parent. You have to do it manually.
 	 */
-#ifdef  ENABLE_LUA
+
+	/* end is key word of lua, use other name to export to lua. */
 	inline void endToLua(void){end();}
-#endif
+
 	void end(void);
 
 	/** Pauses the running scene.
@@ -430,10 +429,6 @@ public:
 	/** detach the cocos2d view from the view/window */
 	bool detach(void);
 
-#ifdef  ENABLE_LUA 
-	std::string m_luatick;
-	void registerTick(const char* szfn);
-#endif
 public:
 	/** returns a shared instance of the director */
 	static CCDirector* sharedDirector(void);
@@ -455,9 +450,7 @@ protected:
 	void showFPS(void) {}
 #endif // CC_DIRECTOR_FAST_FPS
 
-/** calculates delta time since last time it was called */	void calculateDeltaTime();
-//protected:
-public:
+/** calculates delta time since last time it was called */	void calculateDeltaTime();protected:
 	/* The CCEGLView, where everything is rendered */
     CC_GLVIEW	*m_pobOpenGLView;
 
@@ -474,7 +467,7 @@ public:
 #if	CC_DIRECTOR_FAST_FPS
 	CCLabelTTF *m_pFPSLabel;
 #endif
-	
+public:
 	/* is the running scene paused */
 	bool m_bPaused;
 	

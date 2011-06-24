@@ -66,6 +66,7 @@ platform/android/CCEGLView_android.cpp \
 platform/android/CCAccelerometer_android.cpp \
 platform/android/CCApplication_android.cpp \
 platform/android/Cocos2dJni.cpp \
+script_support/CCScriptSupport.cpp \
 sprite_nodes/CCAnimation.cpp \
 sprite_nodes/CCAnimationCache.cpp \
 sprite_nodes/CCSprite.cpp \
@@ -96,17 +97,8 @@ tileMap_parallax_nodes/CCTMXTiledMap.cpp \
 tileMap_parallax_nodes/CCTMXXMLParser.cpp \
 tileMap_parallax_nodes/CCTileMapAtlas.cpp \
 touch_dispatcher/CCTouchDispatcher.cpp \
-touch_dispatcher/CCTouchHandler.cpp 
+touch_dispatcher/CCTouchHandler.cpp \
 
-ifeq ($(ENABLE_LUA), true)
-    LOCAL_SRC_FILES += lua_support/CCLuaSrcipt.cpp \
-                       lua_support/LuaCocos2d.cpp
-                       
-    LOCAL_CFLAGS := -DENABLE_LUA -DUSE_FILE32API
-else
-    # define the macro to compile through support/zip_support/ioapi.c                
-    LOCAL_CFLAGS := -DUSE_FILE32API
-endif
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/ \
@@ -115,21 +107,9 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/ \
                     $(LOCAL_PATH)/platform/third_party/android/iconv \
                     $(LOCAL_PATH)/platform/third_party/android/libpng \
                     $(LOCAL_PATH)/platform/third_party/android/libxml2 \
-                    $(LOCAL_PATH)/platform/third_party/android/libjpeg \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/core \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/animator \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/config \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/effects \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/images \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/pdf \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/ports \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/svg \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/text \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/utils \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/views \
-                    $(LOCAL_PATH)/platform/third_party/android/skia/xml \
-		    $(LOCAL_PATH)/../lua/src \
-		    $(LOCAL_PATH)/../lua/tolua                    
+                    $(LOCAL_PATH)/platform/third_party/android/libjpeg                 
 
                                  
+LOCAL_CFLAGS := -DUSE_FILE32API  
+                              
 include $(BUILD_STATIC_LIBRARY)

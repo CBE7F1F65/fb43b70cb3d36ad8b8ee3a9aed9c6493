@@ -5,12 +5,14 @@
 USING_NS_CC;
 
 AppDelegate::AppDelegate()
+:m_pLuaEngine(NULL)
 {
-
 }
 
 AppDelegate::~AppDelegate()
 {
+    CCScriptEngineManager::sharedScriptEngineManager()->removeScriptEngine();
+    CC_SAFE_DELETE(m_pLuaEngine);
 }
 
 bool AppDelegate::initInstance()
@@ -82,27 +84,30 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// set FPS. the default value is 1.0/60 if you don't call this
 	pDirector->setAnimationInterval(1.0 / 60);
 
+	// register lua engine
+    m_pLuaEngine = new LuaEngine; 
+	CCScriptEngineManager::sharedScriptEngineManager()->setScriptEngine(m_pLuaEngine);
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        CCLog("1");
 	unsigned long size;
 	char *pFileContent = (char*)CCFileUtils::getFileData("hello.lua", "r", &size);
 
 	if (pFileContent)
 	{
 	    // copy the file contents and add '\0' at the end, or the lua parser can not parse it
-	    char *pTmp = new char[size + 1];
-	    pTmp[size] = '\0';
-	    memcpy(pTmp, pFileContent, size);
+	    char *pCodes = new char[size + 1];
+	    pCodes[size] = '\0';
+	    memcpy(pCodes, pFileContent, size);
 	    delete[] pFileContent;
 
-	    string code(pTmp);
-	    CCLuaScriptModule::sharedLuaScriptModule()->executeString(code);
-	    delete []pTmp;
+	    CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->executeString(pCodes);
+	    delete []pCodes;
 	}
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	CCLuaScriptModule::sharedLuaScriptModule()->executeScriptFile("./../../HelloLua/Resource/hello.lua");
+	// CCLuaScriptModule::sharedLuaScriptModule()->executeScriptFile("./../../HelloLua/Resource/hello.lua");
+	CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->executeScriptFile("./../../HelloLua/Resource/hello.lua");
 
 	/*
 	 * Another way to run lua script.
@@ -119,7 +124,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 		delete[] pFileContent;
 
 		string code(pTmp);
-		CCLuaScriptModule::sharedLuaScriptModule()->executeString(code);
+		CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->excuteScriptFile(code);
 		delete []pTmp;
 	}
 	*/
@@ -129,7 +134,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
 	string path = CCFileUtils::fullPathFromRelativePath("hello.lua");
-    CCLuaScriptModule::sharedLuaScriptModule()->executeScriptFile(path.c_str());
+    printf("%s", path.c_str());
+    CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->executeScriptFile(path.c_str());
 #endif 
 
 	return true;

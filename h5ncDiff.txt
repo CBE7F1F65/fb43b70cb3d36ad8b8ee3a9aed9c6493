@@ -1,0 +1,5 @@
+CCDirector.h	:	CCScene *m_pNextScene;	->	public: CCScene *m_pNextScene;
+CCAtlasNode.h	:	+static CCAtlasNode * atlasWithTileTexture(CCTexture2D* texture,int tileWidth, int tileHeight, int itemsToRender);
+CCAtlasNode.h	:	+bool initWithTileTexture(CCTexture2D* texture, int tileWidth, int tileHeight, int itemsToRender);
+CCAtlasNode.cpp	:	+CCAtlasNode * CCAtlasNode::atlasWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
+CCAtlasNode.cpp	:	+bool CCAtlasNode::initWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
