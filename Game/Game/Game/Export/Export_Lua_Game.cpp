@@ -32,7 +32,7 @@
 
 using namespace cocos2d;
 
-_LObjNode Export_Lua_Game::node;
+_LObjNode Export_Lua::node;
 
 #define M_NODETYPE_BASENODE			0x00
 #define M_NODETYPE_RENDERTEXTURE	0x01
