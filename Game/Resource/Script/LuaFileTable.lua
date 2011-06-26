@@ -1,6 +1,7 @@
 luaFileTable	=	{
 									"Script/Const.lua",
 									"Script/Global.lua",
+									"Script/SoundGlobal.lua",
 									"Script/Language.lua",
 									"Script/LoadingScene/*.lua",
 									"Script/TitleScene/*.lua",

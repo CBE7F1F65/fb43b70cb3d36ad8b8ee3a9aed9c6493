@@ -142,6 +142,9 @@ function _TitleScene_UpdateBGMSE(toplayer, toptag)
 	game.SetTexRect(sebar, texx, texy, texw*sevol/100.0, texh);
 --	game.SetScale(sebar, sevol/100.0, 1);
 	
+	LGlobal_SetBGMVol();
+	LGlobal_SetSEVol();
+	
 end
 
 function _TitleScene_CB_BGMTouch_SetValue(toplayer, toptag, touchlayer, index, flag)

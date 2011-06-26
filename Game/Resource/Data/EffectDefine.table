@@ -1,3 +1,3 @@
-130	h5nc	56
-Comment	Index	Effect
--	0	EffectSys/EffectSystem_000.effect
+130	h5nc	56	
+Comment	Index	effName	Effect
+-	0	EFF_Default	EffectSys/EffectSystem_000.effect

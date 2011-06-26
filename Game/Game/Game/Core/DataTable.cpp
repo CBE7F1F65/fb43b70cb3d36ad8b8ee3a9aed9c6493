@@ -364,7 +364,7 @@ bool DataTable::ReadSEDefineTable()
 
 	pbres->ClearSEData();
 
-	_READSTRINGBUFFERLINE(3);
+	_READSTRINGBUFFERLINE(4);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -373,7 +373,7 @@ bool DataTable::ReadSEDefineTable()
 		seData * item = &(pbres->sedata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s", item->filename);
+		fscanf(file, "%s%s",item->sename, item->sefilename);
 
 		_DOSWAPTINT;
 		_INITTINT;
@@ -460,7 +460,7 @@ bool DataTable::ReadEffectDefineTable()
 
 	pbres->ClearEffectData();
 
-	_READSTRINGBUFFERLINE(3);
+	_READSTRINGBUFFERLINE(4);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -469,7 +469,7 @@ bool DataTable::ReadEffectDefineTable()
 		effectData * item = &(pbres->effdata[tindex]);
 		_CHECKEOF_DATATABLE;
 
-		fscanf(file, "%s", item->filename);
+		fscanf(file, "%s%s", item->effname, item->efffilename);
 
 		_DOSWAPTINT;
 		_INITTINT;

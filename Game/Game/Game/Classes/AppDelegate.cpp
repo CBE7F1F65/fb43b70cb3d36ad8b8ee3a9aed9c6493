@@ -1,12 +1,13 @@
 #include "AppDelegate.h"
 
 #include "cocos2d.h"
-#include "SimpleAudioEngine.h"
-using namespace CocosDenshion;
+//#include "SimpleAudioEngine.h"
 
 #include "HelloWorldScene.h"
 
 #include "../Header/Const.h"
+#include "../Header/SimpleAudioEngineExpand.h"
+using namespace CocosDenshion;
 
 using namespace cocos2d;
 
@@ -17,7 +18,7 @@ AppDelegate::AppDelegate()
 
 AppDelegate::~AppDelegate()
 {
-    SimpleAudioEngine::end();
+	SimpleAudioEngineExpand::end();
 }
 
 bool AppDelegate::initInstance()
@@ -97,7 +98,7 @@ void AppDelegate::applicationDidEnterBackground()
 {
     CCDirector::sharedDirector()->pause();
 
-    SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
+    SimpleAudioEngineExpand::sharedEngine()->pauseBackgroundMusic();
 }
 
 // this function will be called when the app is active again
@@ -105,5 +106,5 @@ void AppDelegate::applicationWillEnterForeground()
 {
     CCDirector::sharedDirector()->resume();
 
-    SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+    SimpleAudioEngineExpand::sharedEngine()->resumeBackgroundMusic();
 }

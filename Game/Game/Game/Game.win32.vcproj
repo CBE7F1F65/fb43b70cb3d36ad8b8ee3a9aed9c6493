@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Core\BIOInterface_Sound.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Core\BIOInterface_System.cpp"
 				>
 			</File>
@@ -321,6 +325,10 @@
 			</File>
 			<File
 				RelativePath=".\Classes\PlayScene.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Core\SimpleAudioEngineExpand.cpp"
 				>
 			</File>
 			<File
@@ -482,6 +490,10 @@
 			</File>
 			<File
 				RelativePath=".\Header\SceneConst.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Header\SimpleAudioEngineExpand.h"
 				>
 			</File>
 			<File

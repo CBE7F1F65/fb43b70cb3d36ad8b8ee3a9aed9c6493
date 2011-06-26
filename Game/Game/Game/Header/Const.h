@@ -8,6 +8,7 @@
 
 #define M_PATHMAX		260	//_MAX_PATH
 #define M_STRMAX		0x80
+#define M_STRKEYMAX		0x40
 #define M_MESSAGESTRMAX 0x100
 #define M_STRITOAMAX	0x10
 

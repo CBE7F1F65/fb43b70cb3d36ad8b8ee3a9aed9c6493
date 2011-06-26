@@ -183,6 +183,7 @@ end
 
 
 function TitleScene_OnEnterTDF(toplayer, toptag)
+	LGlobal_PlayBGM(true);
 	_TitleScene_EnterMainLayer(toplayer, toptag);	
 end
 function TitleScene_OnExit(toplayer, toptag)

@@ -90,4 +90,46 @@ bool Export_Lua::_LuaRegistSIID(LuaObject * obj)
 	return true;
 }
 
+bool Export_Lua::_LuaRegistMUSICID(LuaObject * obj)
+{
+	// MusicID
+	BResource * pbres = BResource::getInstance();
+	for (int i=0; i<DATASTRUCT_MUSICMAX; i++)
+	{
+		if (strlen(pbres->musdata[i].musicname))
+		{
+			obj->SetInteger(pbres->musdata[i].musicname, i);
+		}
+	}
+	return true;
+}
+
+bool Export_Lua::_LuaRegistSEID(LuaObject * obj)
+{
+	// SEID
+	BResource * pbres = BResource::getInstance();
+	for (int i=0; i<DATASTRUCT_SEMAX; i++)
+	{
+		if (strlen(pbres->sedata[i].sename))
+		{
+			obj->SetInteger(pbres->sedata[i].sename, i);
+		}
+	}
+	return true;
+}
+
+bool Export_Lua::_LuaRegistEFFID(LuaObject * obj)
+{
+	// EffID
+	BResource * pbres = BResource::getInstance();
+	for (int i=0; i<DATASTRUCT_EFFECTMAX; i++)
+	{
+		if (strlen(pbres->effdata[i].effname))
+		{
+			obj->SetInteger(pbres->effdata[i].effname, i);
+		}
+	}
+	return true;
+}
+
 #endif

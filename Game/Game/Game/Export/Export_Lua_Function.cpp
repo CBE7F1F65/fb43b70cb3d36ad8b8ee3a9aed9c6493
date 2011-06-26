@@ -96,6 +96,18 @@ bool Export_Lua::LuaRegistConst()
 	{
 		return false;
 	}
+	if (!_LuaRegistMUSICID(&obj))
+	{
+		return false;
+	}
+	if (!_LuaRegistSEID(&obj))
+	{
+		return false;
+	}
+	if (!_LuaRegistEFFID(&obj))
+	{
+		return false;
+	}
 
 	if (!Export_Lua_Game::_LuaRegistConst(&obj))
 	{

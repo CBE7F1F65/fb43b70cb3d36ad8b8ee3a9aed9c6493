@@ -4,6 +4,8 @@
 using namespace cocos2d;
 
 #include "../Header/Const.h"
+#include "../Header/SimpleAudioEngineExpand.h"
+using namespace CocosDenshion;
 
 static BIOInterface * g_BIOInterface = NULL;
 
@@ -93,6 +95,8 @@ BIOInterface::BIOInterface()
 	strcpy(szLogFile, "");
 	strcpy(szIniFile, "");
 	strcpy(szDataFile, "");
+
+	_listSoundFileKey.clear();
 }
 
 BIOInterface::~BIOInterface()
@@ -103,6 +107,7 @@ BIOInterface::~BIOInterface()
 		delete g_BIOInterface;
 		g_BIOInterface = NULL;
 	}
+	SimpleAudioEngineExpand::end();
 }
 
 BIOInterface* BIOInterface::getInstance()

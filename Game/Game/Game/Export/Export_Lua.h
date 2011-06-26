@@ -66,6 +66,9 @@ public:
 	static bool _LuaRegistCustomConst(LuaObject * obj);
 	static bool _LuaRegistTEX(LuaObject * obj);
 	static bool _LuaRegistSIID(LuaObject * obj);
+	static bool _LuaRegistMUSICID(LuaObject * obj);
+	static bool _LuaRegistSEID(LuaObject * obj);
+	static bool _LuaRegistEFFID(LuaObject * obj);
 
 	static DWORD _LuaHelper_GetColor(LuaObject * obj);
 	static void _LuaHelper_PushDWORD(LuaState * ls, DWORD dval);

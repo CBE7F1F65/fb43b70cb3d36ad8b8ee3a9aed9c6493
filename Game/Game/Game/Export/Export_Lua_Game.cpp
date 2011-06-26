@@ -129,6 +129,18 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("FreeTexture", LuaFn_Game_LoadTexture);
 	_gameobj.Register("FreeTexture", LuaFn_Game_FreeTexture);
 
+	// Sound
+	_gameobj.Register("LoadMusic", LuaFn_Game_LoadMusic);
+	_gameobj.Register("FreeMusic", LuaFn_Game_FreeMusic);
+	_gameobj.Register("PlayMusic", LuaFn_Game_PlayMusic);
+	_gameobj.Register("LoadSE", LuaFn_Game_LoadSE);
+	_gameobj.Register("FreeSE", LuaFn_Game_FreeSE);
+	_gameobj.Register("PlaySE", LuaFn_Game_PlaySE);
+	_gameobj.Register("StopChannel", LuaFn_Game_StopChannel);
+	_gameobj.Register("PauseChannel", LuaFn_Game_PauseChannel);
+	_gameobj.Register("ResumeChannel", LuaFn_Game_ResumeChannel);
+	_gameobj.Register("SetChannelInfo", LuaFn_Game_SetChannelInfo);
+
 	// Scene
 	_gameobj.Register("PushScene", LuaFn_Game_PushScene);
 	_gameobj.Register("PopScene", LuaFn_Game_PopScene);
@@ -386,6 +398,144 @@ int Export_Lua_Game::LuaFn_Game_FreeTexture(LuaState * ls)
 
 	bool bret = BResource::getInstance()->FreeTexture(_texindex);
 	node.PBoolean(bret);
+
+	_LEAVEFUNC_LUA;
+}
+
+/************************************************************************/
+/* Sound                                                                */
+/************************************************************************/
+
+int Export_Lua_Game::LuaFn_Game_LoadMusic(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	int _musicindex = node.iNextGet();
+	DWORD retval = (DWORD)BIOInterface::getInstance()->Stream_Load(BResource::getInstance()->musdata[_musicindex].musicfilename);
+
+	node.PDword(retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_FreeMusic(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	HSTREAM _stream = (HSTREAM)node.dNextGet();
+	BIOInterface::getInstance()->Stream_Free(_stream);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_PlayMusic(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	HSTREAM _stream = (HSTREAM)node.dNextGet();
+	bool _bloop = false;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_bloop = node.bGet();
+	}
+	DWORD retval = (DWORD)BIOInterface::getInstance()->Stream_Play(_stream, _bloop);
+
+	node.PDword(retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_LoadSE(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	int _seindex = node.iNextGet();
+	DWORD retval = (DWORD)BIOInterface::getInstance()->Stream_Load(BResource::getInstance()->sedata[_seindex].sefilename);
+
+	node.PDword(retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_FreeSE(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	HEFFECT _eff = (HEFFECT)node.dNextGet();
+	BIOInterface::getInstance()->Effect_Free(_eff);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_PlaySE(LuaState * ls)
+{
+	_ENTERFUNC_LUA(1);
+
+	HEFFECT _eff = (HEFFECT)node.dNextGet();
+	DWORD retval = (DWORD)BIOInterface::getInstance()->Effect_Play(_eff);
+
+	node.PDword(retval);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_StopChannel(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	HCHANNEL _chn = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_chn = (HCHANNEL)node.dGet();
+	}
+
+	BIOInterface::getInstance()->Channel_Stop(_chn);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_PauseChannel(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	HCHANNEL _chn = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_chn = (HCHANNEL)node.dGet();
+	}
+
+	BIOInterface::getInstance()->Channel_Pause(_chn);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ResumeChannel(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	HCHANNEL _chn = NULL;
+	node.jNextGet();
+	if (node.bhavenext)
+	{
+		_chn = (HCHANNEL)node.dGet();
+	}
+
+	BIOInterface::getInstance()->Channel_Resume(_chn);
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_SetChannelInfo(LuaState * ls)
+{
+	_ENTERFUNC_LUA(2);
+
+	HCHANNEL _chn = (HCHANNEL)node.dNextGet();
+	int vol = node.iNextGet();
+
+	BIOInterface::getInstance()->Channel_SetVolume(_chn, vol);
 
 	_LEAVEFUNC_LUA;
 }

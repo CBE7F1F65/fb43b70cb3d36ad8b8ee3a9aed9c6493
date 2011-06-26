@@ -23,6 +23,17 @@ public:
 	static int LuaFn_Game_LoadTexture(LuaState * ls);
 	static int LuaFn_Game_FreeTexture(LuaState * ls);
 
+	static int LuaFn_Game_LoadMusic(LuaState * ls);
+	static int LuaFn_Game_FreeMusic(LuaState * ls);
+	static int LuaFn_Game_PlayMusic(LuaState * ls);
+	static int LuaFn_Game_LoadSE(LuaState * ls);
+	static int LuaFn_Game_FreeSE(LuaState * ls);
+	static int LuaFn_Game_PlaySE(LuaState * ls);
+	static int LuaFn_Game_StopChannel(LuaState * ls);
+	static int LuaFn_Game_PauseChannel(LuaState * ls);
+	static int LuaFn_Game_ResumeChannel(LuaState * ls);
+	static int LuaFn_Game_SetChannelInfo(LuaState * ls);
+
 	static int LuaFn_Game_PushScene(LuaState * ls);
 	static int LuaFn_Game_PopScene(LuaState * ls);
 	static int LuaFn_Game_ReplaceScene(LuaState * ls);

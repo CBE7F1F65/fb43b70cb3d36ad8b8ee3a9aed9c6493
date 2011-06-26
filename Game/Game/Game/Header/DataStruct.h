@@ -16,21 +16,21 @@
 #define DATASTRUCT_MISSIONENEMYMAX	0x1000
 
 struct customconstData{
-	char name[M_STRMAX];
+	char name[M_STRKEYMAX];
 	int value;
 };
 
 struct textureData
 {
 	char texfilename[M_STRMAX];
-	char texname[M_STRMAX];
+	char texname[M_STRKEYMAX];
 	int width;
 	int height;
 };
 
 struct musicData{
-	char musicname[M_STRMAX];
 	char musicfilename[M_PATHMAX];
+	char musicname[M_STRKEYMAX];
 #ifdef __IPHONE
 	char _unused[4];
 #endif
@@ -41,7 +41,7 @@ struct musicData{
 
 struct spriteData 
 {
-	char spritename[M_STRMAX];
+	char spritename[M_STRKEYMAX];
 	float tex_x;
 	float tex_y;
 	float tex_w;
@@ -51,12 +51,14 @@ struct spriteData
 
 struct seData
 {
-	char filename[M_STRMAX];
+	char sefilename[M_STRMAX];
+	char sename[M_STRKEYMAX];
 };
 
 struct effectData
 {
-	char filename[M_STRMAX];
+	char efffilename[M_STRMAX];
+	char effname[M_STRKEYMAX];
 };
 
 struct weaponData 

@@ -3,6 +3,10 @@
 
 #include "MainDependency.h"
 
+typedef DWORD HEFFECT;
+typedef DWORD HSTREAM;
+typedef DWORD HCHANNEL;
+
 #define BIO_PATHMAX		0x100
 #define BIO_STRINGMAX	0x100
 
@@ -53,6 +57,13 @@ typedef D3DXMATRIX BIOMATRIX;
 #define USE_D3D
 #endif
 
+struct bioChannelSyncInfo 
+{
+	QWORD startPos;
+	QWORD allLength;
+	QWORD introLength;
+	DWORD/*HSYNC*/ sync;
+};
 
 #define BIO_PACK_SIGNATURE		0x6850434B
 #define BIO_PACK_HEADEROFFSET	0x08
@@ -64,6 +75,15 @@ typedef D3DXMATRIX BIOMATRIX;
 /* size filename content                                                */
 /* XOR total size                                                       */
 /************************************************************************/
+
+
+struct _SoundFileKey 
+{
+	char filename[M_PATHMAX];
+	unsigned int effID;
+};
+
+#define _SOUNDID_BGM	0xffffffff
 
 class BIOInterface
 {
@@ -159,11 +179,48 @@ public:
 	void		Ini_SetString(const char *section, const char *name, const char *value, char * inifilename=NULL);
 	char*		Ini_GetString(const char *section, const char *name, const char *def_val, char * inifilename=NULL);
 
+	/************************************************************************/
+	/* Sound                                                                */
+	/************************************************************************/
+	
+	HEFFECT		Effect_Load(const char *filename, DWORD size=0);
+	void		Effect_Free(HEFFECT eff);
+	HCHANNEL	Effect_Play(HEFFECT eff);
+	HCHANNEL	Effect_PlayEx(HEFFECT eff, int volume=100, int pan=0, float pitch=1.0f, bool loop=false);
+
+	HSTREAM		Stream_Load(const char *filename, DWORD size=0, bool bLoad=true);
+	void		Stream_Free(HSTREAM stream);
+	HCHANNEL	Stream_Play(HSTREAM stream, bool loop, int volume = 100);
+
+	void		Channel_SetPanning(HCHANNEL chn, int pan);
+	void		Channel_SetVolume(HCHANNEL chn, int volume);
+	void		Channel_SetPitch(HCHANNEL chn, float pitch);
+	void		Channel_Pause(HCHANNEL chn);
+	void		Channel_Resume(HCHANNEL chn);
+	void		Channel_Stop(HCHANNEL chn);
+	void		Channel_PauseAll();
+	void		Channel_ResumeAll();
+	void		Channel_StopAll();
+	bool		Channel_IsPlaying(HCHANNEL chn);
+	QWORD		Channel_GetLength(HCHANNEL chn);
+	QWORD		Channel_GetPos(HCHANNEL chn);
+	void		Channel_SetPos(HCHANNEL chn, QWORD pos);
+	void		Channel_SetStartPos(HCHANNEL chn, bioChannelSyncInfo * pcsi);
+	void		Channel_SlideTo(HCHANNEL channel, float time, int volume, int pan = -101, float pitch = -1);
+	bool		Channel_IsSliding(HCHANNEL channel);
+	void		Channel_SetLoop(HCHANNEL channel, bioChannelSyncInfo * pcsi);
+	void		Channel_RemoveLoop(HCHANNEL channel, bioChannelSyncInfo * pcsi);
+
 
 private:
 
 	DWORD	_IniGetPrivateProfileString(const char * appname, const char * keyname, const char * defval, char * retstr, DWORD size, const char * filename);
 	bool	_IniWritePrivateProfileString(const char * appname, const char * keyname, const char * val, const char * filename);
+
+	DWORD _FindSoundFileKeyByName(const char * filename);
+	const char * _FindSoundFileKeyByID(DWORD soundID);
+	DWORD _PushSoundFileKey(const char * filename);
+	bool _RemoveSoundFileKey(DWORD soundID);
 
 
 
@@ -189,6 +246,9 @@ private:
 	char			szDataFile[BIO_PATHMAX];
 
 	char			szIniString[BIO_STRINGMAX];
+
+private:
+	list<_SoundFileKey> _listSoundFileKey;
 
 };
 
