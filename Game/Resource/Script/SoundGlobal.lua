@@ -1,10 +1,19 @@
+LGlobal_BGMmusid = 0;
 LGlobal_BGMStream = NULL;
 LGlobal_BGMChannel = NULL;
 
 LGlobal_SEInfos = {};
 
-function LGlobal_LoadBGM(musid)
+function LGlobal_LoadBGM(musid, bForce)
 	
+	if bForce == nil then
+		bForce = false;
+	end
+	
+	if LGlobal_BGMmusid == musid and not bForce then
+		return;
+	end
+		
 	if LGlobal_BGMChannel ~= NULL then
 	
 		if LGlobal_BGMStream ~= NULL then
@@ -19,17 +28,26 @@ function LGlobal_LoadBGM(musid)
 	local stream = game.LoadMusic(musid);
 	LGlobal_BGMStream = stream;
 	
+	LGlobal_BGMmusid = musid;
+	
 	return stream;
 end
 
-function LGlobal_PlayBGM(bLoop)
+function LGlobal_PlayBGM(bLoop, bForce)
 	
-	if LGlobal_BGMChannel ~= NULL then
+	if bForce == nil then
+		bForce = false;
+	end
+	
+	if LGlobal_BGMChannel ~= NULL and bForce then
 		LGlobal_StopBGM();
 	end
 	
-	local channel = game.PlayMusic(LGlobal_BGMStream, bLoop);
-	LGlobal_BGMChannel = channel;
+	local channel = LGlobal_BGMChannel;
+	if channel == NULL then
+		local channel = game.PlayMusic(LGlobal_BGMStream, bLoop);
+		LGlobal_BGMChannel = channel;
+	end
 	
 	LGlobal_SetBGMVol();
 	
