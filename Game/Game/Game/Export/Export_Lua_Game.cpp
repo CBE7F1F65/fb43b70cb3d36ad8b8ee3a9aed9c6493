@@ -233,6 +233,7 @@ bool Export_Lua_Game::_LuaRegistFunction(LuaObject * obj)
 	_gameobj.Register("ActionDelete", LuaFn_Game_ActionDelete);
 	_gameobj.Register("ActionDeleteChildren", LuaFn_Game_ActionDeleteChildren);
 	_gameobj.Register("ActionCallFunc", LuaFn_Game_ActionCallFunc);
+	_gameobj.Register("ActionBreakPoint", LuaFn_Game_ActionBreakPoint);
 
 	return true;
 }
@@ -2913,6 +2914,16 @@ int Export_Lua_Game::LuaFn_Game_ActionCallFunc(LuaState * ls)
 			node.PDword((DWORD)callfuncaction);
 		}
 	}
+
+	_LEAVEFUNC_LUA;
+}
+
+int Export_Lua_Game::LuaFn_Game_ActionBreakPoint(LuaState * ls)
+{
+	_ENTERFUNC_LUA(0);
+
+	CCAction * retval = CCActionBreakPoint::action();
+	node.PDword((DWORD)retval);
 
 	_LEAVEFUNC_LUA;
 }

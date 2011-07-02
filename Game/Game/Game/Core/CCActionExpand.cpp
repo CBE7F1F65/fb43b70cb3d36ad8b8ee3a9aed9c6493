@@ -4,6 +4,18 @@
 
 namespace cocos2d {
 
+	// CCActionBreakPoint
+	CCActionBreakPoint* CCActionBreakPoint::action()
+	{
+		CCActionBreakPoint* pRet = new CCActionBreakPoint();
+		pRet->autorelease();
+		return pRet;
+	}
+	void CCActionBreakPoint::startWithTarget(CCNode *pTarget)
+	{
+		CCActionInstant::startWithTarget(pTarget);
+	}
+
 	// CCActionDelete
 	CCActionDelete* CCActionDelete::action()
 	{

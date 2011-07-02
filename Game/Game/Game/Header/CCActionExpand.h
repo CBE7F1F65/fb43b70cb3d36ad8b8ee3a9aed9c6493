@@ -5,6 +5,19 @@
 
 namespace cocos2d {
 
+	class CCActionBreakPoint : public CCActionInstant
+	{
+	public:
+		CCActionBreakPoint(){};
+		virtual ~CCActionBreakPoint(){};
+		//super methods
+		virtual void startWithTarget(CCNode *pTarget);
+	public:
+		//override static method
+		/** Allocates and initializes the action */
+		static CCActionBreakPoint * action();
+	};
+
 	class CCActionDelete : public CCActionInstant
 	{
 	public:
@@ -17,10 +30,6 @@ namespace cocos2d {
 		/** Allocates and initializes the action */
 		static CCActionDelete * action();
 	};
-
-}
-
-namespace cocos2d {
 
 	class CCActionDeleteChildren : public CCActionInstant
 	{

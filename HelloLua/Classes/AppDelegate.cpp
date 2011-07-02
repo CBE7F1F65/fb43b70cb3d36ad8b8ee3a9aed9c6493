@@ -74,7 +74,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     pDirector->setOpenGLView(&CCEGLView::sharedOpenGLView());
 
     // enable High Resource Mode(2x, such as iphone4) and maintains low resource on other devices.
-//     pDirector->enableRetinaDisplay(true);
+    // pDirector->enableRetinaDisplay(true);
 
 	// turn on display FPS
 	pDirector->setDisplayFPS(true);
@@ -105,36 +105,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 	}
 #endif
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
-	// CCLuaScriptModule::sharedLuaScriptModule()->executeScriptFile("./../../HelloLua/Resource/hello.lua");
-	CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->executeScriptFile("./../../HelloLua/Resource/hello.lua");
-
-	/*
-	 * Another way to run lua script.
-	 * Load the file into memory and run it.
-	 *
-	unsigned long size;
-	char *pFileContent = (char*)CCFileUtils::getFileData("./../../HelloLua/Resource/hello.lua", "r", &size);
-	if (pFileContent)
-	{
-		// copy the file contents and add '\0' at the end, or the lua parser can not parse it
-		char *pTmp = new char[size + 1];
-		pTmp[size] = '\0';
-		memcpy(pTmp, pFileContent, size);
-		delete[] pFileContent;
-
-		string code(pTmp);
-		CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->excuteScriptFile(code);
-		delete []pTmp;
-	}
-	*/
-	
-#endif
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    pDirector->setDeviceOrientation(kCCDeviceOrientationLandscapeLeft);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	string path = CCFileUtils::fullPathFromRelativePath("hello.lua");
-    printf("%s", path.c_str());
     CCScriptEngineManager::sharedScriptEngineManager()->getScriptEngine()->executeScriptFile(path.c_str());
 #endif 
 

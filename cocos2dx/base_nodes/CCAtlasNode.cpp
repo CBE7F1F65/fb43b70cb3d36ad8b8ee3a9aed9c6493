@@ -1,6 +1,7 @@
 /****************************************************************************
 Copyright (c) 2010-2011 cocos2d-x.org
 Copyright (c) 2008-2010 Ricardo Quesada
+Copyright (c) 2011      Zynga Inc.
  
 http://www.cocos2d-x.org
 
@@ -33,10 +34,10 @@ namespace   cocos2d {
 // CCAtlasNode - Creation & Init
 
 CCAtlasNode::CCAtlasNode()
-: m_nItemsPerRow(0)
-, m_nItemsPerColumn(0)
-, m_nItemWidth(0)
-, m_nItemHeight(0)
+: m_uItemsPerRow(0)
+, m_uItemsPerColumn(0)
+, m_uItemWidth(0)
+, m_uItemHeight(0)
 , m_pTextureAtlas(NULL)
 , m_bIsOpacityModifyRGB(false)
 , m_cOpacity(0)
@@ -48,7 +49,8 @@ CCAtlasNode::~CCAtlasNode()
 	CC_SAFE_RELEASE(m_pTextureAtlas);
 }
 
-CCAtlasNode * CCAtlasNode::atlasWithTileFile(const char *tile, int tileWidth, int tileHeight, int itemsToRender)
+CCAtlasNode * CCAtlasNode::atlasWithTileFile(const char *tile, unsigned int tileWidth, unsigned int tileHeight, 
+											 unsigned int itemsToRender)
 {
 	CCAtlasNode * pRet = new CCAtlasNode();
 	if (pRet->initWithTileFile(tile, tileWidth, tileHeight, itemsToRender))
@@ -60,7 +62,8 @@ CCAtlasNode * CCAtlasNode::atlasWithTileFile(const char *tile, int tileWidth, in
 	return NULL;
 }
 
-CCAtlasNode * CCAtlasNode::atlasWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
+CCAtlasNode * CCAtlasNode::atlasWithTileTexture(CCTexture2D *texture, unsigned int tileWidth, unsigned int tileHeight, 
+											 unsigned int itemsToRender)
 {
 	CCAtlasNode * pRet = new CCAtlasNode();
 	if (pRet->initWithTileTexture(texture, tileWidth, tileHeight, itemsToRender))
@@ -72,11 +75,12 @@ CCAtlasNode * CCAtlasNode::atlasWithTileTexture(CCTexture2D *texture, int tileWi
 	return NULL;
 }
 
-bool CCAtlasNode::initWithTileFile(const char *tile, int tileWidth, int tileHeight, int itemsToRender)
+bool CCAtlasNode::initWithTileFile(const char *tile, unsigned int tileWidth, unsigned int tileHeight, 
+								   unsigned int itemsToRender)
 {
 	assert(tile != NULL);
-	m_nItemWidth  = (int) (tileWidth * CC_CONTENT_SCALE_FACTOR());
-	m_nItemHeight = (int) (tileHeight * CC_CONTENT_SCALE_FACTOR());
+	m_uItemWidth  = (int) (tileWidth * CC_CONTENT_SCALE_FACTOR());
+	m_uItemHeight = (int) (tileHeight * CC_CONTENT_SCALE_FACTOR());
 
 	m_cOpacity = 255;
 	m_tColor = m_tColorUnmodified = ccWHITE;
@@ -105,11 +109,12 @@ bool CCAtlasNode::initWithTileFile(const char *tile, int tileWidth, int tileHeig
 	return true;
 }
 
-bool CCAtlasNode::initWithTileTexture(CCTexture2D *texture, int tileWidth, int tileHeight, int itemsToRender)
+bool CCAtlasNode::initWithTileTexture(CCTexture2D *texture, unsigned int tileWidth, unsigned int tileHeight, 
+									unsigned int itemsToRender)
 {
 	assert(texture != NULL);
-	m_nItemWidth  = (int) (tileWidth * CC_CONTENT_SCALE_FACTOR());
-	m_nItemHeight = (int) (tileHeight * CC_CONTENT_SCALE_FACTOR());
+	m_uItemWidth  = (int) (tileWidth * CC_CONTENT_SCALE_FACTOR());
+	m_uItemHeight = (int) (tileHeight * CC_CONTENT_SCALE_FACTOR());
 
 	m_cOpacity = 255;
 	m_tColor = m_tColorUnmodified = ccWHITE;
@@ -144,8 +149,8 @@ bool CCAtlasNode::initWithTileTexture(CCTexture2D *texture, int tileWidth, int t
 void CCAtlasNode::calculateMaxItems()
 {
 	CCSize s = m_pTextureAtlas->getTexture()->getContentSizeInPixels();
-	m_nItemsPerColumn = (int)(s.height / m_nItemHeight);
-	m_nItemsPerRow = (int)(s.width / m_nItemWidth);
+	m_uItemsPerColumn = (int)(s.height / m_uItemHeight);
+	m_uItemsPerRow = (int)(s.width / m_uItemWidth);
 }
 
 void CCAtlasNode::updateAtlasValues()

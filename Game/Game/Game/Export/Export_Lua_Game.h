@@ -115,6 +115,7 @@ public:
 	static int LuaFn_Game_ActionDelete(LuaState * ls);
 	static int LuaFn_Game_ActionDeleteChildren(LuaState * ls);
 	static int LuaFn_Game_ActionCallFunc(LuaState * ls);
+	static int LuaFn_Game_ActionBreakPoint(LuaState * ls);
 
 public:
 

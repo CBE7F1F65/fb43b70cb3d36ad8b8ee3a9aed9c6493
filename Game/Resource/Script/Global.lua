@@ -177,3 +177,7 @@ end
 function LGlobal_AddAtlasTextChild(nodelist, xyzt, str, scale)
 	return game.AddAtlasTextChild(nodelist, xyzt, str, TEX_Font, LConst_AtlasFontWidth, LConst_AtlasFontHeight, scale, LConst_AtlasIndexStart);
 end
+
+function LGlobal_ActionBreakPoint()
+	return game.ActionBreakPoint();
+end
