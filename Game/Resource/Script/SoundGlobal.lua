@@ -45,7 +45,7 @@ function LGlobal_PlayBGM(bLoop, bForce)
 	
 	local channel = LGlobal_BGMChannel;
 	if channel == NULL then
---		channel = game.PlayMusic(LGlobal_BGMStream, bLoop);
+		channel = game.PlayMusic(LGlobal_BGMStream, bLoop);
 		LGlobal_BGMChannel = channel;
 	end
 	

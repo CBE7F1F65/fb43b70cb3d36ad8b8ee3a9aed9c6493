@@ -173,8 +173,31 @@ namespace cocos2d{
 		CCAssert(m_eState == kCCMenuStateTrackingTouch, "[Menu ccTouchEnded] -- invalid state");
 		if (m_pSelectedItem)
 		{
-			m_pSelectedItem->unselected();
-			m_pSelectedItem->activate();
+			bool bIsChild = false;
+			CCArray * pChildren = this->getChildren();
+			if (pChildren)
+			{
+				CCObject* child;
+				CCARRAY_FOREACH(pChildren, child)
+				{
+					CCMenuItem* pNode = (CCMenuItem*) child;
+					if (m_pSelectedItem == pNode)
+					{
+						bIsChild = true;
+						break;
+					}
+				}
+			}
+			
+			if (bIsChild)
+			{
+				m_pSelectedItem->unselected();
+				m_pSelectedItem->activate();
+			}
+			else
+			{
+				m_pSelectedItem = NULL;
+			}
 		}
 		m_eState = kCCMenuStateWaiting;
 	}
@@ -186,7 +209,30 @@ namespace cocos2d{
 		CCAssert(m_eState == kCCMenuStateTrackingTouch, "[Menu ccTouchCancelled] -- invalid state");
 		if (m_pSelectedItem)
 		{
-			m_pSelectedItem->unselected();
+			bool bIsChild = false;
+			CCArray * pChildren = this->getChildren();
+			if (pChildren)
+			{
+				CCObject* child;
+				CCARRAY_FOREACH(pChildren, child)
+				{
+					CCMenuItem* pNode = (CCMenuItem*) child;
+					if (m_pSelectedItem == pNode)
+					{
+						bIsChild = true;
+						break;
+					}
+				}
+			}
+
+			if (bIsChild)
+			{
+				m_pSelectedItem->unselected();
+			}
+			else
+			{
+				m_pSelectedItem = NULL;
+			}
 		}
 		m_eState = kCCMenuStateWaiting;
 	}
@@ -200,7 +246,25 @@ namespace cocos2d{
 		{
 			if (m_pSelectedItem)
 			{
-				m_pSelectedItem->unselected();
+				bool bIsChild = false;
+				CCArray * pChildren = this->getChildren();
+				if (pChildren)
+				{
+					CCObject* child;
+					CCARRAY_FOREACH(pChildren, child)
+					{
+						CCMenuItem* pNode = (CCMenuItem*) child;
+						if (m_pSelectedItem == pNode)
+						{
+							bIsChild = true;
+							break;
+						}
+					}
+				}
+				if (bIsChild)
+				{
+					m_pSelectedItem->unselected();
+				}
 			}
 			m_pSelectedItem = currentItem;
 			if (m_pSelectedItem)
