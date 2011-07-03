@@ -97,6 +97,8 @@ BIOInterface::BIOInterface()
 	strcpy(szDataFile, "");
 
 	_listSoundFileKey.clear();
+
+	bMute = false;
 }
 
 BIOInterface::~BIOInterface()

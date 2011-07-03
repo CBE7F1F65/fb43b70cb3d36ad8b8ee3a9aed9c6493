@@ -182,7 +182,10 @@ public:
 	/************************************************************************/
 	/* Sound                                                                */
 	/************************************************************************/
-	
+
+	void		Sound_SetMute(bool bMute);
+	bool		Sound_IsMute();
+
 	HEFFECT		Effect_Load(const char *filename, DWORD size=0);
 	void		Effect_Free(HEFFECT eff);
 	HCHANNEL	Effect_Play(HEFFECT eff);
@@ -246,6 +249,8 @@ private:
 	char			szDataFile[BIO_PATHMAX];
 
 	char			szIniString[BIO_STRINGMAX];
+
+	bool			bMute;
 
 private:
 	list<_SoundFileKey> _listSoundFileKey;

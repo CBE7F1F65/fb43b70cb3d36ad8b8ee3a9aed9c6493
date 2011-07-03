@@ -7,6 +7,15 @@
 using namespace cocos2d;
 using namespace CocosDenshion;
 
+void BIOInterface::Sound_SetMute(bool _bMute)
+{
+	bMute = _bMute;
+}
+
+bool BIOInterface::Sound_IsMute()
+{
+	return bMute;
+}
 
 const char * BIOInterface::_FindSoundFileKeyByID(DWORD soundID)
 {
@@ -109,6 +118,10 @@ void BIOInterface::Effect_Free(HEFFECT eff)
 
 HCHANNEL BIOInterface::Effect_Play(HEFFECT eff)
 {
+	if (bMute)
+	{
+		return NULL;
+	}
 	const char * filename = _FindSoundFileKeyByID(eff);
 	if (filename)
 	{
@@ -120,6 +133,10 @@ HCHANNEL BIOInterface::Effect_Play(HEFFECT eff)
 
 HCHANNEL BIOInterface::Effect_PlayEx(HEFFECT eff, int volume/* =100 */, int pan/* =0 */, float pitch/* =1.0f */, bool loop/* =false */)
 {
+	if (bMute)
+	{
+		return NULL;
+	}
 	const char * filename = _FindSoundFileKeyByID(eff);
 	if (filename)
 	{
@@ -152,6 +169,10 @@ void BIOInterface::Stream_Free(HSTREAM stream)
 
 HCHANNEL BIOInterface::Stream_Play(HSTREAM stream, bool loop, int volume /* = 100 */)
 {
+	if (bMute)
+	{
+		return NULL;
+	}
 	const char * filename = _FindSoundFileKeyByID(stream);
 	if (filename)
 	{

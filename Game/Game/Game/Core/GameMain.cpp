@@ -14,6 +14,12 @@ static GameMain * g_GameMainSingleton = NULL;
 #define ININAME_USERNAME	"Username"
 #define INIDEFAULT_USERNAME	""
 
+#ifdef _DEBUG
+#define INISECTION_DEBUG	"Debug"
+#define ININAME_FORCEMUTE	"ForceMute"
+#define INIDEFAULT_FORCEMUTE	0
+#endif
+
 #define M_CCZ_ELAYER_01		"CCZ_eLayer_01"
 
 GameMain::GameMain()
@@ -55,6 +61,10 @@ GameMain::GameMain()
 	enemyelayerbase = 0;
 
 	GameAchievement::Init(&(gamedata.achieves));
+
+#ifdef _DEBUG
+	debug_bForceMute = false;
+#endif
 }
 
 GameMain::~GameMain()
@@ -118,6 +128,10 @@ void GameMain::ReadIni()
 		sevol = INIDEFAULT_SEVOL;
 	}
 	strcpy(username, bio->Ini_GetString(INISECTION_CUSTOM, ININAME_USERNAME, INIDEFAULT_USERNAME));
+#ifdef _DEBUG
+	debug_bForceMute = (bool)(bio->Ini_GetInt(INISECTION_DEBUG, ININAME_FORCEMUTE, INIDEFAULT_FORCEMUTE));
+	BIOInterface::getInstance()->Sound_SetMute(debug_bForceMute);
+#endif
 }
 
 bool GameMain::ResetIni(bool bresetname/* =false */)

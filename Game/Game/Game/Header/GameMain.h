@@ -158,6 +158,9 @@ public:
 	int bgmvol;
 	int sevol;
 	char username[M_USERNAMEMAX];
+#ifdef _DEBUG
+	bool debug_bForceMute;
+#endif
 
 	int nowstage;
 	int nowmission;
