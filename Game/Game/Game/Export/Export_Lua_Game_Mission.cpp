@@ -1257,7 +1257,7 @@ int Export_Lua_Game::LuaFn_Game_DoMissionOver(LuaState * ls)
 {
 	_ENTERFUNC_LUA(1);
 
-	// missionstate -> hiscore, rank, btop
+	// missionstate -> hiscore, scorerank, rank, btop
 
 	BYTE missionstate = node.iNextGet();
 	GameMain * pgm = GameMain::getInstance();

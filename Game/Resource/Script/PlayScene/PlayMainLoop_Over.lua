@@ -48,16 +48,16 @@ function PS_DoShowOver(toplayer, toptag)
 	
 	local spflag = game.CreateSprite(flagsiid, {440, 320});
 	local flagnode = game.AddSpriteChild(spflag, {toplayer, grouptag}, CCPSTM_Message_OverBoard);
-	
+
 	local starxbegin = 400;
 	local starxoffset = 60;
 	local stary = 360;
 	for i=0, 2 do
 		local spStar = game.CreateSprite(SI_GUI_Star, {starxbegin+i*starxoffset, stary});
 		local starnode = game.AddSpriteChild(spStar, {toplayer, grouptag}, CCPSTM_Message_OverBoard);
-		if i > rank then
+		if i+1 > rank then
 			game.SetColor(starnode, global.ARGB(0xff, 0x404040));
-		elseif i > scorerank then
+		elseif i+1 > scorerank or missionstate ~= MISSIONSTATE_Clear then
 			game.SetColor(starnode, global.ARGB(0xff, 0x808080));
 		end
 	end

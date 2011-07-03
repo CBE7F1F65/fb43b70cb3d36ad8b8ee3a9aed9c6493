@@ -6,7 +6,7 @@ function PS_AddBGItems(toplayer, toptag)
 --	local spBG = game.CreateSprite(bgsiid, {480, 336});
 	local spBG = game.CreateSprite(bgsiid, {480, 320});
 	local bgitem = game.AddSpriteChild(spBG, {toplayer, layertag});
-	game.SetColor(bgitem, global.ARGB(0xff, 0xAFAFAF));
+--	game.SetColor(bgitem, global.ARGB(0xff, 0xAFAFAF));
 		
 end
 

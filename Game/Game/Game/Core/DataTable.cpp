@@ -663,7 +663,7 @@ bool DataTable::ReadMissionDefineTable()
 
 	pbres->ClearMissionData();
 
-	_READSTRINGBUFFERLINE(11);
+	_READSTRINGBUFFERLINE(10);
 	while (!feof(file))
 	{
 		_INITTINT;
@@ -672,13 +672,12 @@ bool DataTable::ReadMissionDefineTable()
 		_CHECKEOF_DATATABLE;
 		missionData * item = &(pbres->missiondata[tindex]);
 
-		fscanf(file, "%x%d%s%x%d%d%d%d%d", 
+		fscanf(file, "%x%d%s%x%d%d%d%d", 
 			_SAVETINT,
 			_SAVETINT, 
 			strbuffer[0],
 			&(item->weatherflag), 
 			_SAVETINT,
-			&(item->ranks[0].hiscore), 
 			&(item->ranks[1].hiscore), 
 			&(item->ranks[2].hiscore), 
 			_SAVETINT
