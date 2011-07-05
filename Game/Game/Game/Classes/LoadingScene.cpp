@@ -7,6 +7,7 @@
 
 #include "../Header/SpriteItemManager.h"
 #include "../Header/BIOInterface.h"
+#include "../Header/BGlobal.h"
 
 CCScene* LoadingScene::scene()
 {
@@ -55,13 +56,15 @@ bool LoadingScene::init()
 		
 		BResource * pbres = BResource::getInstance();
 		BIOInterface * bio = BIOInterface::getInstance();
-		CCSize size = CCDirector::sharedDirector()->getWinSize();
+		CCSize size = BGlobal::GetWinSize();
+//		CCSize size = CCDirector::sharedDirector()->getWinSize();
 		CCSprite * pLoadingSprite = CCSprite::spriteWithFile(bio->Resource_MakePath(pbres->getLoadingFileName()));
 		
 		if (pLoadingSprite) {
 			pLoadingSprite->setPosition(ccp(size.width/2, size.height/2));
-			pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSize().width);
-			pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSize().height);
+//			pLoadingSprite->setScaleX(size.width/pLoadingSprite->getContentSize().width);
+//			pLoadingSprite->setScaleY(size.height/pLoadingSprite->getContentSize().height);
+			pLoadingSprite->setScale(BGlobal::Scaler(1.0f));
 			CCActionInterval* color_sub_action = CCFadeTo::actionWithDuration(0.5f, 0xaf);
 			CCActionInterval* color_add_action = CCFadeTo::actionWithDuration(1.0f, 0xff);
 			CCFiniteTimeAction* color_seq = CCSequence::actions(color_sub_action, color_add_action, NULL);

@@ -11,6 +11,8 @@ using namespace cocos2d;
 class BGlobal
 {
 public:
+	static CCSize GetWinSize();
+
 	static CCPoint TranslatePosition(float x, float y);
 
 	static float ScalerX(float val);

@@ -4,9 +4,14 @@
 
 int BGlobal::pushedscenecount = 0;
 
+CCSize BGlobal::GetWinSize()
+{
+	return CCDirector::sharedDirector()->getWinSize();
+}
+
 CCPoint BGlobal::TranslatePosition(float x, float y)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	x = x * size.width / M_SCREEN_WIDTH;
 	y = y * size.height / M_SCREEN_HEIGHT;
 	return ccp(x, y);
@@ -14,13 +19,13 @@ CCPoint BGlobal::TranslatePosition(float x, float y)
 
 float BGlobal::ScalerX(float val)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	return val * size.width / M_SCREEN_WIDTH;
 }
 
 float BGlobal::ScalerY(float val)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	return val * size.height / M_SCREEN_HEIGHT;
 }
 
@@ -48,7 +53,7 @@ CCRect BGlobal::ScalerRect(CCRect rect)
 
 CCPoint BGlobal::RTranslatePosition(float x, float y)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	x = x * M_SCREEN_WIDTH / size.width;
 	y = y * M_SCREEN_HEIGHT / size.height;
 	return ccp(x, y);
@@ -56,13 +61,13 @@ CCPoint BGlobal::RTranslatePosition(float x, float y)
 
 float BGlobal::RScalerX(float val)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	return val * M_SCREEN_WIDTH / size.width;
 }
 
 float BGlobal::RScalerY(float val)
 {
-	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	CCSize size = GetWinSize();
 	return val * M_SCREEN_HEIGHT / size.height;
 }
 
