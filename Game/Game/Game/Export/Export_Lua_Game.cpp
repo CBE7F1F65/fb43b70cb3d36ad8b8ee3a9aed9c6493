@@ -1319,8 +1319,10 @@ int Export_Lua_Game::LuaFn_Game_AddAtlasTextChild(LuaState * ls)
 
 		char * _labelstr = (char *)node.sNextGet();
 		int _texindex = node.iNextGet();
-		int _itemwidth = BGlobal::ScalerX(node.iNextGet());
-		int _itemheight = BGlobal::ScalerY(node.iNextGet());
+//		int _itemwidth = BGlobal::ScalerX(node.iNextGet());
+//		int _itemheight = BGlobal::ScalerY(node.iNextGet());
+		int _itemwidth = node.iNextGet()*SpriteItemManager::contentfactor;
+		int _itemheight = node.iNextGet()*SpriteItemManager::contentfactor;
 		float _scale = 1.0f;
 		char _startchar = ' ';
 
