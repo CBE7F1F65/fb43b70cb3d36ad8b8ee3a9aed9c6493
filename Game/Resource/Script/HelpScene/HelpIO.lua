@@ -78,7 +78,7 @@ function _HelpScene_AddHelpItems(toplayer, toptag)
 		game.RunAction(menus[i+1], menuaction);
 		
 		if helptype == 0 and i < 3 then
-			game.SetTouchEnabled(menus[i+1], false);
+--			game.SetTouchEnabled(menus[i+1], false);
 			game.SetIsVisible(menus[i+1], false);
 		end
 		
@@ -157,7 +157,7 @@ function _HelpScene_EnterSubLayer(toplayer, toptag, helptype, helpindex)
 	local grouptag = layertag + CCHSTM_Menu_Main;
 	for i=0, 2 do
 		local menuitem = game.GetNode({toplayer, grouptag+i+1});
-		game.SetTouchEnabled(menuitem, true);
+--		game.SetTouchEnabled(menuitem, true);
 		game.SetIsVisible(menuitem, true);
 	end
 	_HelpScene_ChangeSubLayerItems(toplayer, toptag, helptype, helpindex);
@@ -172,7 +172,7 @@ function _HelpScene_LeaveSubLayer(toplayer, toptag)
 	local grouptag = layertag + CCHSTM_Menu_Main;
 	for i=0, 2 do
 		local menuitem = game.GetNode({toplayer, grouptag+i+1});
-		game.SetTouchEnabled(menuitem, false);
+--		game.SetTouchEnabled(menuitem, false);
 		game.SetIsVisible(menuitem, false);
 	end
 	
