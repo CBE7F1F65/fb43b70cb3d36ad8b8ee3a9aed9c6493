@@ -60,7 +60,7 @@ bool BResource::Init()
 	
 	CCFileUtils::setResourcePath(CCFileUtils::fullPathFromRelativePath(RESOURCE_PATH));
 
-	SpriteItemManager::SetContentFactor(BGlobal::Scaler(1.0f));
+	ClearSettingData();
 	
 	BIOInterface * bio = BIOInterface::getInstance();
 	bio->Resource_SetCurrentDirectory(RESOURCE_PATH);
@@ -77,6 +77,7 @@ bool BResource::Init()
 	bio->Ini_SetIniFile((writablepath+INI_FILENAME).c_str());
 	bio->Data_SetDataFile((writablepath+DATA_FILENAME).c_str());
 #endif
+
 	
 	return true;
 
@@ -174,7 +175,11 @@ void BResource::ClearMissionAimHelpData()
 void BResource::ClearMissionEnemyData()
 {
 	ZeroMemory(missionenemydata, RSIZE_MISSIONENEMY);
-	missionenemymax = 0;
+}
+
+void BResource::ClearSettingData()
+{
+	ZeroMemory(&settingdata, RSIZE_SETTING);
 }
 
 int BResource::GetMissionDataIndexByStageMission(BYTE stageindex, BYTE missionindex)
@@ -258,6 +263,8 @@ bool BResource::ReadAllTable()
 
 bool BResource::PackData()
 {
+	settingdata.contentscale = BGlobal::Scaler(1.0f);
+
 	DWORD size =
 		RSIZE_CUSTOMCONST + 
 		RSIZE_MUSIC + 
@@ -272,7 +279,7 @@ bool BResource::PackData()
 		RSIZE_MISSION + 
 		RSIZE_MISSIONAIMHELP + 
 		RSIZE_MISSIONENEMY + 
-		RSIZE_MISSIONENEMYMAX;
+		RSIZE_SETTING;
 	BYTE * content = (BYTE *)malloc(size);
 
 	DWORD offset = 0;
@@ -303,8 +310,8 @@ bool BResource::PackData()
 	offset += RSIZE_MISSIONAIMHELP;
 	memcpy(content+offset, missionenemydata, RSIZE_MISSIONENEMY);
 	offset += RSIZE_MISSIONENEMY;
-	memcpy(content+offset, &missionenemymax, RSIZE_MISSIONENEMYMAX);
-	offset += RSIZE_MISSIONENEMYMAX;
+	memcpy(content+offset, &settingdata, RSIZE_SETTING);
+	offset += RSIZE_SETTING;
 
 	BIOMemoryFile memfile;
 	memfile.data = content;
@@ -326,6 +333,7 @@ bool BResource::PackData()
 	ClearMissionData();
 	ClearMissionAimHelpData();
 	ClearMissionEnemyData();
+	ClearSettingData();
 
 	free(content);
 	return bret;
@@ -369,7 +377,7 @@ bool BResource::GainData()
 		RSIZE_MISSION + 
 		RSIZE_MISSIONAIMHELP + 
 		RSIZE_MISSIONENEMY + 
-		RSIZE_MISSIONENEMYMAX)
+		RSIZE_SETTING)
 	{
 		return false;
 	}
@@ -400,10 +408,12 @@ bool BResource::GainData()
 	offset += RSIZE_MISSIONAIMHELP;
 	memcpy(missionenemydata, content+offset, RSIZE_MISSIONENEMY);
 	offset += RSIZE_MISSIONENEMY;
-	memcpy(&missionenemymax, content+offset, RSIZE_MISSIONENEMYMAX);
-	offset += RSIZE_MISSIONENEMYMAX;
+	memcpy(&settingdata, content+offset, RSIZE_SETTING);
+	offset += RSIZE_SETTING;
 
 	pbres->Resource_Free(content);
+
+	SpriteItemManager::SetContentFactor(settingdata.contentscale);
 
 	return true;
 }

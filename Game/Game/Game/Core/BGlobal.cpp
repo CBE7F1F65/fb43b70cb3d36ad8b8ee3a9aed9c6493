@@ -1,12 +1,19 @@
 #include "../Header/BGlobal.h"
 #include "../Header/Const.h"
 #include "../Header/BIOInterface.h"
+#include "../Header/BResource.h"
 
 int BGlobal::pushedscenecount = 0;
 
 CCSize BGlobal::GetWinSize()
 {
-	return CCDirector::sharedDirector()->getWinSize();
+	CCSize size = CCDirector::sharedDirector()->getWinSize();
+	float contentscale = BResource::getInstance()->settingdata.contentscale;
+	if (!contentscale)
+	{
+		return size;
+	}
+	return size;
 }
 
 CCPoint BGlobal::TranslatePosition(float x, float y)

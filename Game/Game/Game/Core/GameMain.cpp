@@ -621,7 +621,7 @@ void GameMain::EnterMission()
 
 	BResource * pbres = BResource::getInstance();
 	missionenemyindex = 0;
-	for (int i=0; i<pbres->missionenemymax; i++)
+	for (int i=0; i<pbres->settingdata.missionenemymax; i++)
 	{
 		if (pbres->missionenemydata[i].stageindex != nowstage)
 		{
@@ -933,7 +933,7 @@ BYTE GameMain::CheckMissionOver(bool checkap /*= false */)
 int GameMain::GetMissionEnemy(float * x, float * y, int * etype, int * elayerangle, BYTE * flag, int nowturnoffset/* =0 */)
 {
 	BResource * pbres = BResource::getInstance();
-	if (missionenemyindex >= pbres->missionenemymax)
+	if (missionenemyindex >= pbres->settingdata.missionenemymax)
 	{
 		return -1;
 	}

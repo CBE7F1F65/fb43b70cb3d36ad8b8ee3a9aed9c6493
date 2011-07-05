@@ -795,6 +795,6 @@ bool DataTable::ReadMissionEnemyDefineTable()
 
 		tindex++;
 	}
-	pbres->missionenemymax = tindex;
+	pbres->settingdata.missionenemymax = tindex;
 	return true;
 }

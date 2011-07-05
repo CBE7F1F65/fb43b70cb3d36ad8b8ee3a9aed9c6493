@@ -164,6 +164,12 @@ struct missionEnemyData{
 	BYTE flag;
 };
 
+struct settingData 
+{
+	int missionenemymax;
+	float contentscale;
+};
+
 #define RSIZE_CUSTOMCONST	(sizeof(customconstData) * DATASTRUCT_CUSTOMCONSTMAX)
 #define RSIZE_TEXTURE		(sizeof(textureData) * DATASTRUCT_TEXMAX)
 #define RSIZE_MUSIC			(sizeof(musicData) * DATASTRUCT_MUSICMAX)
@@ -177,6 +183,6 @@ struct missionEnemyData{
 #define RSIZE_MISSION		(sizeof(missionData) * DATASTRUCT_MISSIONMAX)
 #define RSIZE_MISSIONAIMHELP	(sizeof(missionTargetData) * DATASTRUCT_MISSIONAIMHELPMAX)
 #define RSIZE_MISSIONENEMY	(sizeof(missionEnemyData) * DATASTRUCT_MISSIONENEMYMAX)
-#define RSIZE_MISSIONENEMYMAX	(sizeof(int))
+#define RSIZE_SETTING		(sizeof(settingData))
 
 #endif
